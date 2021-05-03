@@ -9,6 +9,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from app import forms
-from app import models
+from app import forms, models
+
 
