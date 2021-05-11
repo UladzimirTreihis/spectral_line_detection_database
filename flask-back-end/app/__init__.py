@@ -1,13 +1,14 @@
-from flask import Flask, jsonify, make_response, render_template
-from flask_api import FlaskAPI
-import flask
-from flask_cors import cross_origin, CORS
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
 
-app = FlaskAPI(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+from app import forms, models
 
 
-@app.route('/login')
-def login():
-    return render_template("auth/login.html")
