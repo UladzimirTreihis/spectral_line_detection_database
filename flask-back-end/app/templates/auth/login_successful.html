@@ -1,0 +1,23 @@
+<!-- temporal page for redirection once logged-in -->
+
+{% extends "./base.html" %}
+
+{% block title %}
+    Sign-in successful 
+{% endblock %}
+
+{% block content %}
+
+<!-- flashes out the message of type: Login requested for user "user", remember_me=False-->
+<hr>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+
+{% endblock %}
