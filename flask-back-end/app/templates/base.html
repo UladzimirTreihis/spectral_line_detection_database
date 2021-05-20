@@ -7,24 +7,24 @@
     </head>
     <body>
         <nav class="navbar navbar-dark bg-dark">
-            <div class="navbar-nav mr-auto">
-                <ul class="list-inline" >
+            <div class="navbar-nav mr-auto text-right">
+                <ul class="list-inline text-right" >
                   <li class="list-inline-item">
-                  <a class= "btn btn-info " role="button" href="{{ url_for ('main') }} "> View Database  </a>
+                  <a class= "navbar-brand btn btn-info text-right" role="button" href="{{ url_for ('main') }} "> View Database  </a>
                   </li>
                   {% if current_user.is_anonymous %} 
                   <li class="list-inline-item">
-                  <a href="{{ url_for('login') }}" class="btn btn-info" role="button">Login</a>
+                  <a href="{{ url_for('login') }}" class="btn btn-info text-right" role="button">Login</a>
                   </li>
                   <li class="list-inline-item">
-                  <a href="{{ url_for('register') }}" class="btn btn-info" role="button">Register</a>
+                  <a href="{{ url_for('register') }}" class="btn btn-info text-right" role="button">Register</a>
                   </li>
                   {% else %}
                   <li class="list-inline-item">
-                  <a href="{{ url_for('logout') }}" class="btn btn-info" role="button">Logout</a>
+                  <a href="{{ url_for('logout') }}" class="btn btn-info text-right" role="button">Logout</a>
                   </li>
                   <li class="list-inline-item">
-                  <a href="{{ url_for('user', username=current_user.username) }}" class = "btn btn-info" role = "button"> My Profile</a> 
+                  <a href="{{ url_for('user', username=current_user.username) }}" class = "btn btn-info float-right" role = "button"> My Profile</a> 
                   </li>
                 </ul>
                 {% endif %}
