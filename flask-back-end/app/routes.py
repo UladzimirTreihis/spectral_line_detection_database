@@ -6,7 +6,7 @@ from app.forms import LoginForm, RegistrationForm, EditProfileForm
 from werkzeug.urls import url_parse
 from datetime import datetime
 
-#The last-seen functionality (if necessary), otherwise it could still be usefull of any before_request functionality
+#The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 @app.before_request
 def before_request():
     if current_user.is_authenticated:
@@ -16,7 +16,6 @@ def before_request():
 #default route
 @app.route("/")
 @app.route("/home")
-@login_required
 def home():
     return render_template("/home.html")
 
@@ -25,11 +24,10 @@ def home():
 def login():
     #if user is already authenticated, the log-in address redirects to home
     if current_user.is_authenticated: 
-        return redirect(url_for('home'))
+      return redirect(url_for('home'))
     #form becomes an instance of LoginForm function
     form = LoginForm()
     if form.validate_on_submit():
-
         #creating local user object
         user = User.query.filter_by(username=form.username.data).first()
         #If user does not exist or username/password incorrect -> redirect to log-in again
@@ -41,10 +39,30 @@ def login():
         #the code for redirection back to @index once logged-in successfully
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('home')
+            next_page = url_for('main')
         return redirect(next_page)
     return render_template("./auth/login.html", title='Sign In', form=form)
 
+@app.route("/main")
+@login_required
+def main():
+    return render_template("/main.html")
+
+@app.route("/entry_file")
+@login_required
+def entry_file():
+    return render_template("/entry_file.html")
+
+@app.route("/entry_form")
+@login_required
+def entry_form():
+    return render_template("/entry_form.html")
+
+@app.route("/query")
+@login_required
+def query():
+    return render_template("/query.html")
+    
 @app.route("/logout")
 def logout():
     logout_user()
@@ -53,7 +71,7 @@ def logout():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+      return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -63,7 +81,6 @@ def register():
         flash ('You have been successfully registered!')
         return redirect(url_for('login'))
     return render_template('./auth/register.html', title= 'Register', form=form)
-
 
 @app.route('/user/<username>')
 @login_required
