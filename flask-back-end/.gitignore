@@ -1,1 +1,18 @@
-venv
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+#logs
+**/logs
+
+
+# pyenv
+.python-version
+
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+
