@@ -16,6 +16,20 @@
             {% endfor %}
         </p>
         <p>
+            {{ form.university.label }}<br>
+            {{ form.university(size=32) }}<br>
+            {% for error in form.university.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.website.label }}<br>
+            {{ form.website(size=32) }}<br>
+            {% for error in form.website.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.about_me.label }}<br>
             {{ form.about_me(cols=50, rows=4) }}<br>
             {% for error in form.username.errors %}

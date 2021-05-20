@@ -18,7 +18,21 @@
         <p>
             {{ form.email.label }}<br>
             {{ form.email(size=32) }}<br>
-            {% for error in form.username.errors %}
+            {% for error in form.email.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.university.label }}<br>
+            {{ form.university(size=32) }}<br>
+            {% for error in form.university.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.website.label }}<br>
+            {{ form.website(size=32) }}<br>
+            {% for error in form.website.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
