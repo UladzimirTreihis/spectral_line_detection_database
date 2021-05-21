@@ -46,7 +46,7 @@ def login():
 @app.route("/main")
 @login_required
 def main():
-    return render_template("/main.html")
+    return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all())
 
 @app.route("/entry_file")
 @login_required
