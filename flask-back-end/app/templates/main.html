@@ -1,0 +1,16 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Main 
+{% endblock %}
+
+{% block content %}
+
+<hr>
+<h1> Main Page </h1>
+<p> This is the content for the main page. View the database. </p>
+<a href="{{ url_for('entry_form') }}" class="btn btn-info" role="button">Enter Values Through a Form</a>
+<a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
+<a href="{{ url_for('query') }}" class="btn btn-info" role="button">Query the Database</a>
+
+{% endblock %}

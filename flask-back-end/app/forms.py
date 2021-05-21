@@ -3,7 +3,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 from app.models import User
 
-#creting a log-in form
+#creating a log-in form
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
@@ -12,7 +12,9 @@ class LoginForm(FlaskForm):
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Official Email', validators=[DataRequired(), Email()])
+    university = StringField('University Affiliation', validators= [DataRequired()])
+    website = StringField('Website', validators= [DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Register')
@@ -29,6 +31,8 @@ class RegistrationForm(FlaskForm):
             
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
+    university = StringField('University Affiliation', validators= [DataRequired()])
+    website = StringField('Website', validators= [DataRequired()])
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
 

@@ -14,12 +14,13 @@
                 {% if user.about_me %}
                 <p>{{ user.about_me }}</p>
                 {% endif %}
-                {% if user.last_seen %}
-                <p>Last seen on: {{ user.last_seen }}</p>
-                {% endif %}
 
                 {% if user == current_user %}
                 <p><a href="{{ url_for('edit_profile') }}">Edit your profile</a></p>
+                {% endif %}
+
+                {% if user == current_user %}
+                <p><a href="{{ url_for('main') }}">Back to database</a></p>
                 {% endif %}
 
             </td>
@@ -27,9 +28,8 @@
     </table>
 
     <hr>
-
-    <img src="https://lh3.googleusercontent.com/proxy/MEfaBCwRAwNjjZKwbcCx8D04VoLFDFV-lQadG-jxgn_9m7WAZx4NPVUy64Uajt3IUVp5LkqceGVx4F6QtcAZbKqGpKtsLY8" width="100" height="100">
-
-    <p1> here it will be integrated info about each user (email/uni/name)</p1>
+    
+    <p> University : {{user.university }} </p>
+    <p> Website : {{ user.website }} </p>
 
 {% endblock %}
