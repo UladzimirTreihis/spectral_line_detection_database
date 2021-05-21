@@ -47,6 +47,22 @@ def login():
 @login_required
 def main():
     return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all())
+def download_table_as_csv (table):
+    for element in table:
+            sub_data = []
+            for sub_element in element:
+                try:
+                    sub_data.append(sub_element.get_text())
+                except:
+                    continue
+            data.append(sub_data) 
+    dataFrame = pd.DataFrame(data = data, columns = list_header)
+    file = dataFrame.to_csv('File.csv')
+    return Response(
+        file,
+        mimetype="text/csv",
+        headers={"Content-disposition":
+                 "attachment; filename=file.csv"})
 
 @app.route("/entry_file")
 @login_required
