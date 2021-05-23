@@ -9,14 +9,18 @@
 <hr>
 <h1> Main Page </h1>
 <p> This is the content for the main page. </p>
+<br>
 
 <a href="{{ url_for('galaxy_entry_form') }}" class="btn btn-info" role="button">Enter Galaxy Information Through a Form</a>
 <a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Enter Line Information Through a Form</a>
 <a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
 <a href="{{ url_for('query') }}" class="btn btn-info" role="button">Query the Database</a>
 
+<br> 
+<br>
+
 <h2> Galaxy </h2>
-<table class = "table">
+<table class = "table" id = "Galaxy">
          <thead>
             <tr>
                <th>ID</th>
@@ -48,11 +52,13 @@
          </tbody>
       </table>
 
-<a href="#" class="btn btn-info" onclick= "download_table_as_csv('Galaxy')" role="button">Download as CSV</a>
+<a href="{{ url_for ('convert_to_CSV', table = "Galaxy") }}" class="btn btn-info" role="button">Download as CSV</a>
+
+<br> 
+<br>
 
 <h2> Line </h2>
-
-    <table class = "table">
+    <table class = "table" id = "Line">
          <thead>
             <tr>
                <th>Galaxy ID</th>
@@ -108,6 +114,6 @@
          </tbody>
       </table>
 
-<a href="#" class="btn btn-info" onclick= "download_table_as_csv('Line')" role="button">Download as CSV</a>
+<a href="{{ url_for ('convert_to_CSV', table = "Line") }}" class="btn btn-info" role="button">Download as CSV</a>
 
 {% endblock %}
