@@ -8,6 +8,9 @@ from datetime import datetime
 import pandas as pd
 import csv
 from werkzeug.wrappers import Response
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 @app.before_request
@@ -139,27 +142,28 @@ def convert_to_CSV(table):
     if table == "Galaxy":
         f = open('galaxy.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['id', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes'])
+        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes'])
         for item in Galaxy.query.all():
-            out.writerow([item.id, item.right_ascension, item.declination, item.coordinate_system, item.redshift, item.lensing_flag, item.classification, item.notes])
-        response = make_response('/galaxy.csv')
+            out.writerow([item.id, item.name, item.right_ascension, item.declination, item.coordinate_system, item.redshift, item.lensing_flag, item.classification, item.notes])
+        f.close()
+        with open('./galaxy.csv', 'r') as file:
+            galaxy_csv = file.read()
+        response = make_response(galaxy_csv)
         cd = 'attachment; filename=galaxy.csv'
-        response.headers['Content-Disposition'] = cd 
-        response.mimetype='text/csv'
-        return response
     else:
         f = open('line.csv', 'w')
         out = csv.writer(f)
         out.writerow(['galaxy_id', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         for item in Line.query.all():
             out.writerow([item.galaxy_id, item.line_id_type, item.integrated_line_flux, item.integrated_line_flux_uncertainty_positive, item.integrated_line_flux_uncertainty_negative, item.peak_line_flux, item.peak_line_flux_uncertainty_positive, item.peak_line_flux_uncertainty_negative, item.line_width, item.line_width_uncertainty_positive, item.line_width_uncertainty_negative, item.observed_line_frequency, item.observed_line_frequency_uncertainty_positive, item.observed_line_frequency_uncertainty_negative, item.detection_type, item.observed_beam_major, item.observed_beam_minor, item.observed_beam_angle, item.reference, item.notes])
-        with open('line.csv', 'r') as file:
-            reader = csv.reader(file)
-        response = make_response(file)
+        f.close()
+        with open('./line.csv', 'r') as file:
+            line_csv = file.read()
+        response = make_response(line_csv)
         cd = 'attachment; filename=line.csv'
-        response.headers['Content-Disposition'] = cd 
-        response.mimetype='text/csv'
-        return response
+    response.headers['Content-Disposition'] = cd 
+    response.mimetype='text/csv'
+    return response
 
 @app.route('/download_CSV/<file>')  
 def download_CSV(file):   
