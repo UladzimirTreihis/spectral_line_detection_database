@@ -132,12 +132,13 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
-#route for galaxy/line form submission, the form yet to be developed    
 @app.route("/submit")
+@login_required
 def submit():
     return render_template("submit.html")
 
 @app.route("/convert_to_CSV/<table>", methods=['GET', 'POST'])
+@login_required
 def convert_to_CSV(table):
     if table == "Galaxy":
         f = open('galaxy.csv', 'w')
@@ -166,6 +167,7 @@ def convert_to_CSV(table):
     return response
 
 @app.route('/download_CSV/<file>')  
+@login_required
 def download_CSV(file):   
     response = make_response(file)
     cd = 'attachment; filename=file.csv'
