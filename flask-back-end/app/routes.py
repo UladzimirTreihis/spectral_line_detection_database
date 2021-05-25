@@ -166,12 +166,4 @@ def convert_to_CSV(table):
     response.mimetype='text/csv'
     return response
 
-@app.route('/download_CSV/<file>')  
-@login_required
-def download_CSV(file):   
-    response = make_response(file)
-    cd = 'attachment; filename=file.csv'
-    response.headers['Content-Disposition'] = cd 
-    response.mimetype='text/csv'
-    return response
     

@@ -3,3 +3,4 @@ id,name,right_ascension,declination,coordinate_system,redshift,lensing_flag,clas
 2,g2,123.0,123.0,123,123.0,123,123,123
 3,,,,,,,,
 4,,,,,,,,
+5,g5,,,,,,,
