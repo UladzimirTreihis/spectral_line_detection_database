@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Galaxy Entry Form
+{% endblock %}
+
+{% block content %}
+    <h1> Galaxy Entry Form</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.right_ascension.label }}<br>
+            {{ form.right_ascension(size=32) }}<br>
+            {% for error in form.right_ascension.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.declination.label }}<br>
+            {{ form.declination(size=32) }}<br>
+            {% for error in form.declination.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.coordinate_system.label }}<br>
+            {{ form.coordinate_system(size=32) }}<br>
+            {% for error in form.coordinate_system.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.redshift.label }}<br>
+            {{ form.redshift(size=32) }}<br>
+            {% for error in form.redshift.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.lensing_flag.label }}<br>
+            {{ form.lensing_flag(size=32) }}<br>
+            {% for error in form.lensing_flag.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.classification.label }}<br>
+            {{ form.classification(size=32) }}<br>
+            {% for error in form.classification.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes(size=32) }}<br>
+            {% for error in form.notes.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
