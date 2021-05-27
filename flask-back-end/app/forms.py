@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms.fields.core import SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional
 from app.models import User
+from flask import request
 
 #creating a log-in form
 class LoginForm(FlaskForm):
@@ -46,3 +48,16 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username')
+
+#The simple search form to desplay options also. Will need to redevelop to be either advanced or just simple search.
+class SearchForm(FlaskForm):
+    search = StringField('')
+    submit = SubmitField('Search', validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'csrf_enabled' not in kwargs:
+            kwargs['csrf_enabled'] = False
+        super(SearchForm, self).__init__(*args, **kwargs)
+

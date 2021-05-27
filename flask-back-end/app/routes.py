@@ -1,8 +1,8 @@
 from app import app, db
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, g
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
-from app.forms import LoginForm, RegistrationForm, EditProfileForm
+from app.models import Galaxy, User, Line
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, SearchForm
 from werkzeug.urls import url_parse
 from datetime import datetime
 
@@ -12,6 +12,7 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+        g.search_form = SearchForm()
 
 #default route
 @app.route("/")
@@ -57,11 +58,19 @@ def entry_file():
 @login_required
 def entry_form():
     return render_template("/entry_form.html")
-
-@app.route("/query")
+    
+#Is expected to redirect here to display the results. 
+@app.route("/query_results", methods=['GET', 'POST'])
 @login_required
-def query():
-    return render_template("/query.html")
+def query_results():
+    if not g.search_form.validate():
+        return render_template("/home.html")
+    if g.search_form.search:
+        galaxies = Galaxy.query.filter(Galaxy.name.contains(g.search_form.search.data) | Galaxy.notes.contains(g.search_form.search.data))
+    else:
+        galaxies = Galaxy.query.all()
+    return render_template("/query_results.html", galaxies=galaxies)
+
     
 @app.route("/logout")
 def logout():

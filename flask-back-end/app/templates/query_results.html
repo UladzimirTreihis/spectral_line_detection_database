@@ -1,0 +1,16 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Query
+{% endblock %}
+
+{% block content %}
+
+<hr>
+<h1> Query Results </h1>
+<!--Supposed to desplay the results. In the development stage-->
+{% for galaxy in galaxies %}
+<p> {{ galaxy.name }} with notes {{ galaxy.notes }}</p>
+{% endfor %}
+
+{% endblock %}

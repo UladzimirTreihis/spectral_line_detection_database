@@ -26,7 +26,18 @@
                   <li class="list-inline-item">
                   <a href="{{ url_for('user', username=current_user.username) }}" class = "btn btn-info " role = "button"> My Profile</a> 
                   </li>
+                  {% endif %}
                 </ul>
+                {% if g.search_form %}
+                <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
+                  <div class="form-group">
+                    {{ g.search_form.search(size=20, class='form-control',placeholder=g.search_form.search.label.text) }}
+                  </div>
+                  <button type="submit" value="Search">
+                    {{ g.search_form.submit() }}
+                  </button>
+                </form>
+                <p1>HELLO</p1>
                 {% endif %}
             </div> 
         </nav>
