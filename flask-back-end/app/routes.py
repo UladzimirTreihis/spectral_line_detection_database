@@ -118,6 +118,12 @@ def line_entry_form():
         return redirect(url_for('main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
+@app.route('/galaxy/<name>')
+@login_required
+def galaxy(name):
+    galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+    return render_template('galaxy.html', galaxy=galaxy)
+
 @app.route('/user/<username>')
 @login_required
 def user(username):

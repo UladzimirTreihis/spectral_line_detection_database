@@ -1,0 +1,40 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Galaxy {{ galaxy.name }} 
+{% endblock %}
+
+{% block content %}
+
+<h2> Galaxy </h2>
+<table class = "table" id = "Galaxy">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Right Ascension</th>
+        <th>Declination</th>
+        <th>Coordinate System</th>
+        <th>Redshift</th>
+        <th>Lensing Flag</th>
+        <th>Classification</th>
+        <th>Notes</th>
+    </tr>
+    </thead>
+    
+    <tbody>
+        <tr>
+            <td>{{ galaxy.id }}</td>
+            <td>{{ galaxy.name }}</td>
+            <td>{{ galaxy.right_ascension }}</td>
+            <td>{{ galaxy.declination }}</td>
+            <td>{{ galaxy.coordinate_system }}</td>
+            <td>{{ galaxy.redshift }}</td>
+            <td>{{ galaxy.lensing_flag }}</td>
+            <td>{{ galaxy.classification }}</td>
+            <td>{{ galaxy.notes }}</td>
+        </tr>
+    </tbody>
+</table>
+
+{% endblock %}
