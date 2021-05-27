@@ -9,8 +9,36 @@
 <hr>
 <h1> Query Results </h1>
 <!--Supposed to desplay the results. In the development stage-->
-{% for galaxy in galaxies %}
-<p> {{ galaxy.name }} with notes {{ galaxy.notes }}</p>
-{% endfor %}
+<table class = "table" id = "Galaxy">
+    <thead>
+       <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Right Ascension</th>
+          <th>Declination</th>
+          <th>Coordinate System</th>
+          <th>Redshift</th>
+          <th>Lensing Flag</th>
+          <th>Classification</th>
+          <th>Notes</th>
+       </tr>
+    </thead>
+    
+    <tbody>
+       {% for g in galaxies %}
+          <tr>
+             <td>{{ g.id }}</td>
+             <td>{{ g.name }}</td>
+             <td>{{ g.right_ascension }}</td>
+             <td>{{ g.declination }}</td>
+             <td>{{ g.coordinate_system }}</td>
+             <td>{{ g.redshift }}</td>
+             <td>{{ g.lensing_flag }}</td>
+             <td>{{ g.classification }}</td>
+             <td>{{ g.notes }}</td>
+          </tr>
+       {% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
