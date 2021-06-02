@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/bin/python3",
+    "python.pythonPath": "venv\\Scripts\\python.exe",
     "python.analysis.extraPaths": ["./flask-back-end/app"]
 }
 

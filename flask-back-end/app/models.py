@@ -32,7 +32,7 @@ class Line(db.Model):
     line_width = db.Column(db.Float(32))
     line_width_uncertainty_positive = db.Column(db.Float(32))
     line_width_uncertainty_negative = db.Column(db.Float(32))
-    observed_line_frequency = db.Column(db.Float(32))
+    observed_line_frequency = db.Column(db.Float(32)) 
     observed_line_frequency_uncertainty_positive = db.Column(db.Float(32))
     observed_line_frequency_uncertainty_negative = db.Column(db.Float(32))
     detection_type = db.Column(db.String(32))
