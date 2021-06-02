@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.fields.core import SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional
-from app.models import User
+from app.models import User, Galaxy, Line
 from flask import request
 
 #creating a log-in form
@@ -86,8 +86,11 @@ class AddGalaxyForm(FlaskForm):
     classification = StringField('Classification', validators = [Optional ()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
+    new_line = SubmitField ('Add Line to this Galaxy')
+
 
 class AddLineForm(FlaskForm):
+    galaxy_name = SelectField (u'Galaxy Name', choices = Galaxy.query.with_entities(Galaxy.name).all())
     galaxy_id = IntegerField('Galaxy ID (from database) ')
     j_upper = IntegerField('J Upper', validators = [Optional ()])
     line_id_type = StringField('Line ID Type', validators = [Optional ()])

@@ -9,6 +9,13 @@
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
+            {{ form.galaxy_name.label }}<br>
+            {{ form.galaxy_name(size= 1) }}<br>
+            {% for error in form.galaxy_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.galaxy_id.label }}<br>
             {{ form.galaxy_id(size=32) }}<br>
             {% for error in form.galaxy_id.errors %}
