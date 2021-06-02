@@ -89,7 +89,7 @@ class AddGalaxyForm(FlaskForm):
     new_line = SubmitField ('Add Line to this Galaxy')
 
 class AddLineForm(FlaskForm):
-    galaxy_name = SelectField (u'Galaxy Name', choices = Galaxy.query.with_entities(Galaxy.name).all())
+    galaxy_name = SelectField (u'Galaxy Name')
     galaxy_id = IntegerField('Galaxy ID (from database) ')
     j_upper = IntegerField('J Upper', validators = [DataRequired (), NumberRange(min = 0)])
     line_id_type = StringField('Line ID Type', validators = [Optional ()])
