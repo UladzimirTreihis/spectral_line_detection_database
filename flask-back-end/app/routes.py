@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, flash, redirect, url_for, request, g, make_response
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Galaxy, User, Line
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, ButtonForm, AdvancedSearchForm
 from werkzeug.urls import url_parse
 from datetime import datetime
 import csv
@@ -10,12 +10,13 @@ from werkzeug.wrappers import Response
 from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy import or_, and_
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        g.search_form = SearchForm()
+#@app.before_request
+#def before_request():
+    #if current_user.is_authenticated:
+        #g.search_form = SearchForm()
 
 #default route
 @app.route("/")
@@ -47,10 +48,18 @@ def login():
         return redirect(next_page)
     return render_template("./auth/login.html", title='Sign In', form=form)
 
-@app.route("/main")
+@app.route("/main", methods=['GET', 'POST'])
 @login_required
 def main():
-    return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all())
+    if current_user.is_authenticated:
+        form = SearchForm()
+        form_button = ButtonForm()
+        form_advanced = AdvancedSearchForm()
+
+    if request.method == 'POST':
+        if request.form['advanced_search'] == 'Advanced Search':
+            return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form, form_button=form_button, form_advanced=form_advanced)
+    return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form, form_button=form_button)
 
 @app.route("/entry_file")
 @login_required
@@ -66,13 +75,54 @@ def entry_form():
 @app.route("/query_results", methods=['GET', 'POST'])
 @login_required
 def query_results():
-    if not g.search_form.validate():
-        return render_template("/home.html")
-    if g.search_form.search:
-        galaxies = Galaxy.query.filter(Galaxy.name.contains(g.search_form.search.data) | Galaxy.notes.contains(g.search_form.search.data))
-    else:
-        galaxies = Galaxy.query.all()
-    return render_template("/query_results.html", galaxies=galaxies)
+    #if request.method == 'POST' or 'GET':
+        #return 'It was a post request'
+    if current_user.is_authenticated:
+        form = SearchForm()
+        form_advanced = AdvancedSearchForm()
+        form_button = ButtonForm()
+    
+    if request.method == 'POST':
+        #if request.form['advanced_search'] == 'Advanced Search':
+            #return render_template("/query_results.html", form=form, form_button=form_button, form_advanced=form_advanced)
+        if form_advanced.name.data == None:
+            form_advanced.name.data = ''
+        if form_advanced.right_ascension_min.data == None:
+            form_advanced.right_ascension_min.data = float('-inf')
+        if form_advanced.right_ascension_max.data == None:
+            form_advanced.right_ascension_max.data = float('inf')
+        if form_advanced.declination_min.data == None:
+            form_advanced.declination_min.data = float('-inf')
+        if form_advanced.declination_max.data == None:
+            form_advanced.declination_max.data = float('inf')
+        if form_advanced.redshift_min.data == None:
+            form_advanced.redshift_min.data = float('-inf')
+        if form_advanced.redshift_max.data == None:
+            form_advanced.redshift_max.data = float('inf')
+        if form_advanced.lensing_flag.data == None:
+            form_advanced.lensing_flag.data = ''
+        
+
+        if form_advanced.submit:
+            galaxies = Galaxy.query.filter(Galaxy.name.contains(form_advanced.name.data), (or_(Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data), Galaxy.right_ascension == None )), (or_(Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data), Galaxy.declination == None )), (or_(Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data), Galaxy.redshift == None )), (or_(Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data), Galaxy.lensing_flag == None)))
+            #return str(form_advanced.name.data)+' '+str(form_advanced.right_ascension_min.data)+' '+str(form_advanced.right_ascension_max.data)+' '+str(form_advanced.declination_min.data)+' '+str(form_advanced.declination_max.data)+' '+str(form_advanced.redshift_min.data)+' '+str(form_advanced.redshift_max.data)+' '+str(form_advanced.lensing_flag.data)
+        
+    
+            
+        elif form.submit:
+            galaxies = Galaxy.query.filter(Galaxy.name.contains(form.search.data) | Galaxy.notes.contains(form.search.data))
+        else:
+            galaxies = Galaxy.query.all()
+        return render_template("/query_results.html", galaxies=galaxies, form = form, form_advanced=form_advanced)
+
+    if request.method == 'GET':
+        if form.submit:
+            galaxies = Galaxy.query.filter(Galaxy.name.contains(form.search.data) | Galaxy.notes.contains(form.search.data))
+        elif form_advanced.submit:
+            galaxies = Galaxy.query.filter(Galaxy.name.contains(form_advanced.name.data) | Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data) | Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data) | Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data))
+
+    
+    return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
 
     
 @app.route("/logout")

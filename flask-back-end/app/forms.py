@@ -61,6 +61,21 @@ class SearchForm(FlaskForm):
             kwargs['csrf_enabled'] = False
         super(SearchForm, self).__init__(*args, **kwargs)
 
+class ButtonForm(FlaskForm):
+    submit = SubmitField('Advanced Search', validators=[DataRequired()])
+
+class AdvancedSearchForm(FlaskForm):
+    name = StringField('Galaxy Name', validators = [Optional ()])
+    right_ascension_min = FloatField('Right Ascension from:', validators = [Optional ()])
+    right_ascension_max = FloatField('Right Ascension to:', validators = [Optional ()])
+    declination_min = FloatField('Declination from:', validators = [Optional ()])
+    declination_max = FloatField('Declination to:', validators = [Optional ()])
+    redshift_min = FloatField('Redshift from:', validators = [Optional ()])
+    redshift_max = FloatField('Redshift to:', validators = [Optional ()])
+    lensing_flag = SelectField(u'Lensing Flag',
+        choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed ')], validate_choice=False)
+    submit = SubmitField('Submit')
+    
 class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [Optional ()])
     right_ascension = FloatField('Right Ascension', validators = [Optional ()])

@@ -15,7 +15,96 @@
 <a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Enter Line Information Through a Form</a>
 <a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
 <a href="{{ url_for('query_results') }}" class="btn btn-info" role="button">Query the Database</a>
+<br>
+{% if form %}
+<li class="list-inline-item">
+   <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
+     <ul class="list-inline text-right" >
+         <li class="list-inline-item">
+            <div class="form-group">
+               {{ form.search(size=20, class='form-control',placeholder=form.search.label.text) }}
+            </div>
+         </li>
+         <li class="list-inline-item">
+            <button type="submit" value="Search">
+               {{ form.submit() }}
+            </button>
+         </li>
+     </ul>
+   </form> 
+</li>
+{% endif %}
+{% if form_button %}
+<br>
+<form action= {{url_for('main')}} method='POST'>
+   <input type="submit" name="advanced_search" value="Advanced Search">
+</form>
+{% endif %}
+{% if form_advanced %}
+<form action= {{url_for('query_results')}} method='POST'>
+   {{form_advanced.hidden_tag() }}
+        <p>
+            {{ form_advanced.name.label }}<br>
+            {{ form_advanced.name(size=32) }}<br>
+            {% for error in form_advanced.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form_advanced.right_ascension_min.label }}<br>
+            {{ form_advanced.right_ascension_min(size=32) }}<br>
+            {% for error in form_advanced.right_ascension_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form_advanced.right_ascension_max.label }}<br>
+            {{ form_advanced.right_ascension_max(size=32) }}<br>
+            {% for error in form_advanced.right_ascension_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form_advanced.declination_min.label }}<br>
+            {{ form_advanced.declination_min(size=32) }}<br>
+            {% for error in form_advanced.declination_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form_advanced.declination_max.label }}<br>
+            {{ form_advanced.declination_max(size=32) }}<br>
+            {% for error in form_advanced.declination_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form_advanced.redshift_min.label }}<br>
+            {{ form_advanced.redshift_min(size=32) }}<br>
+            {% for error in form_advanced.redshift_min.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
 
+        </p>
+        <p>
+            {{ form_advanced.redshift_max.label }}<br>
+            {{ form_advanced.redshift_max(size=32) }}<br>
+            {% for error in form_advanced.redshift_max.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form_advanced.lensing_flag.label }}<br>
+            {{ form_advanced.lensing_flag(size=2) }}<br>
+            {% for error in form_advanced.lensing_flag.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+     </p>
+        <p>{{ form_advanced.submit() }}</p>
+
+</form>
+{% endif %}
 <br> 
 <br>
 
