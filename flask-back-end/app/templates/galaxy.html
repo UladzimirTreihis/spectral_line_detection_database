@@ -37,6 +37,63 @@
     </tbody>
 </table>
 
-<a href="{{ url_for ('main') }}" class="btn btn-info" role="button">Back</a>
+<h2> Line </h2>
+    <table class = "table" id = "Line">
+         <thead>
+            <tr>
+               <th>Galaxy ID</th>
+               <th>J Upper</th>
+               <th>Line ID Type</th>
+               <th>Integrated Line Flux</th>
+               <th>Integrated Line Flux Positive Uncertainty</th>
+               <th>Integrated Line Flux Negative Uncertainty</th>
+               <th>Peak Line Flux</th>
+               <th>Peak Line Flux Positive Uncertainty</th>
+               <th>Peak Line Flux Negative Uncertainty</th>
+               <th>Line Width</th>
+               <th>Line Width Positive Uncertainty</th>
+               <th>Line Width Negative Uncertainty</th>
+               <th>Observed Line Frequency</th>
+               <th>Observed Line Frequency Positive Uncertainty</th>
+               <th>Observed Line Frequency Negative Uncertainty</th>
+               <th>Detection Type</th>
+               <th>Observed Beam Major</th>
+               <th>Observed Beam Minor</th>
+               <th>Observed Beam Angle</th>
+               <th>Reference</th>
+               <th>Notes</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for l in line %}
+               <tr>
+                  <td>{{ l.galaxy_id }}</td>
+                  <td>{{ l.j_upper }}</td>
+                  <td>{{ l.line_id_type }}</td>
+                  <td>{{ l.integrated_line_flux }}</td>
+                  <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
+                  <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
+                  <td>{{ l.peak_line_flux }}</td>
+                  <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
+                  <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
+                  <td>{{ l.line_width }}</td>
+                  <td>{{ l.line_width_uncertainty_positive }}</td>
+                  <td>{{ l.line_width_uncertainty_negative }}</td>
+                  <td>{{ l.observed_line_frequency }}</td>
+                  <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
+                  <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
+                  <td>{{ l.detection_type }}</td>
+                  <td>{{ l.observed_beam_major }}</td>
+                  <td>{{ l.observed_beam_minor }}</td>
+                  <td>{{ l.observed_beam_angle }}</td>
+                  <td>{{ l.reference }}</td>
+                  <td>{{ l.notes }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+
+<a href="{{ url_for ('main') }}" class="btn btn-info" role="button"> Back </a>
 
 {% endblock %}

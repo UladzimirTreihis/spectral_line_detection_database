@@ -180,8 +180,10 @@ def line_entry_form():
 @app.route('/galaxy/<name>')
 @login_required
 def galaxy(name):
+    session = Session ()
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
-    return render_template('galaxy.html', galaxy=galaxy)
+    line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
+    return render_template('galaxy.html', galaxy=galaxy, line = line)
 
 @app.route('/user/<username>')
 @login_required
