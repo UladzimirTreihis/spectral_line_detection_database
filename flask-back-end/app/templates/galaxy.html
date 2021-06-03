@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<h2> Galaxy </h2>
+<h2> Galaxy Details </h2>
 <table class = "table" id = "Galaxy">
     <thead>
     <tr>
@@ -37,11 +37,10 @@
     </tbody>
 </table>
 
-<h2> Line </h2>
+<h2> Lines in this Galaxy </h2>
     <table class = "table" id = "Line">
          <thead>
             <tr>
-               <th>Galaxy ID</th>
                <th>J Upper</th>
                <th>Line ID Type</th>
                <th>Integrated Line Flux</th>
@@ -68,7 +67,6 @@
          <tbody>
             {% for l in line %}
                <tr>
-                  <td>{{ l.galaxy_id }}</td>
                   <td>{{ l.j_upper }}</td>
                   <td>{{ l.line_id_type }}</td>
                   <td>{{ l.integrated_line_flux }}</td>
