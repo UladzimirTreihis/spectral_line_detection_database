@@ -16,13 +16,6 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.galaxy_id.label }}<br>
-            {{ form.galaxy_id(size=32) }}<br>
-            {% for error in form.galaxy_id.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
             {{ form.j_upper.label }}<br>
             {{ form.j_upper(size=32) }}<br>
             {% for error in form.j_upper.errors %}

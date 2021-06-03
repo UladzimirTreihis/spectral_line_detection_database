@@ -1,4 +1,4 @@
-from app import app, db
+from app import app, db, Session
 from flask import render_template, flash, redirect, url_for, request, g, make_response
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Galaxy, User, Line
@@ -158,14 +158,18 @@ def galaxy_entry_form():
             return redirect(url_for('line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
-@app.route("/line_entry_form/", methods=['GET', 'POST'])
+@app.route("/line_entry_form", methods=['GET', 'POST'])
 @login_required
 def line_entry_form():
     form = AddLineForm()
-    form.galaxy_name.choices = Galaxy.query.with_entities(Galaxy.name).all()
+    choices = [g for g in Galaxy.query.with_entities(Galaxy.name).all()]
+    form.galaxy_name.choices = choices
+    session = Session ()
     if form.validate_on_submit():
-        galaxy_name = form.galaxy_name.data
-        galaxy_id = select([Galaxy.id]).where(Galaxy.name == galaxy_name)
+        g_name = form.galaxy_name.data
+        last_index = len(g_name) - 3
+        string = g_name[2:last_index]
+        galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==string).scalar()
         line = Line(galaxy_id=galaxy_id, j_upper=form.j_upper.data, line_id_type = form.line_id_type.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = form.observed_line_frequency.data, observed_line_frequency_uncertainty_positive = form.observed_line_frequency_uncertainty_positive.data, observed_line_frequency_uncertainty_negative = form.observed_line_frequency_uncertainty_negative.data, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data)
         db.session.add(line)
         db.session.commit()

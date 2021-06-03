@@ -6,6 +6,8 @@ from flask_login import LoginManager
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 
 #create the instance of flask app
@@ -48,5 +50,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
+engine = create_engine('sqlite:///app.db', echo=False)
+Session = sessionmaker()
+Session.configure(bind=engine)
 
 from app import forms, models, routes
