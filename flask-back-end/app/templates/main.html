@@ -16,6 +16,7 @@
 <a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
 <a href="{{ url_for('query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
 <br>
+<br>
 {% if form %}
 <li class="list-inline-item">
    <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
