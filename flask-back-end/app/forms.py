@@ -61,8 +61,9 @@ class SearchForm(FlaskForm):
             kwargs['csrf_enabled'] = False
         super(SearchForm, self).__init__(*args, **kwargs)
 
-class ButtonForm(FlaskForm):
-    submit = SubmitField('Advanced Search', validators=[DataRequired()])
+#Will delete if won't need anymore
+#class ButtonForm(FlaskForm):
+    #submit = SubmitField('Advanced Search', validators=[DataRequired()])
 
 class AdvancedSearchForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [Optional ()])
@@ -73,7 +74,31 @@ class AdvancedSearchForm(FlaskForm):
     redshift_min = FloatField('Redshift from:', validators = [Optional ()])
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
     lensing_flag = SelectField(u'Lensing Flag',
-        choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed ')], validate_choice=False)
+        choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validate_choice=False)
+    #line data
+
+    j_upper_min = IntegerField('J Upper from:', validators = [Optional (), NumberRange(min = 0)])
+    j_upper_max = IntegerField('J Upper to:', validators = [Optional (), NumberRange(min = 0)])
+    line_id_type = StringField('Line ID Type', validators = [Optional ()])
+    integrated_line_flux_min = FloatField('Integrated Line Flux from:', validators = [Optional(), NumberRange(min = 0)])
+    integrated_line_flux_max = FloatField('Integrated Line Flux to:', validators = [Optional(), NumberRange(min = 0)])
+    peak_line_flux_min = FloatField('Peak Line Flux from:', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_max = FloatField('Peak Line Flux to:', validators = [Optional (), NumberRange(min = 0)])
+    line_width_min = FloatField('Line Width from:', validators = [Optional (), NumberRange(min = 0)])
+    line_width_max = FloatField('Line Width to:', validators = [Optional (), NumberRange(min = 0)])
+
+    observed_line_frequency_min = FloatField('Observable Line Frequency from:', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_max = FloatField('Observable Line Frequency to:', validators = [Optional (), NumberRange(min = 0)])
+
+    detection_type = SelectField(u'Detection Type',
+        choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric'), ('Either', 'Either')], validate_choice=False)
+    observed_beam_major_min = FloatField('Observed Beam Major from:', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_major_max = FloatField('Observed Beam Major to:', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor_min = FloatField('Observed Beam Minor from:', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor_max = FloatField('Observed Beam Minor to:', validators = [Optional (), NumberRange(min = 0)])
+
+    reference = StringField('Reference', validators = [Optional()])
+
     submit = SubmitField('Submit')
     
 class AddGalaxyForm(FlaskForm):

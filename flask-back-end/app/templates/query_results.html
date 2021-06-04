@@ -8,70 +8,203 @@
 
 <hr>
 <h1> Advanced Search </h1>
+<div style="display: flex;">
+   <form action= {{url_for('query_results')}} method='POST'>
+      {{form_advanced.hidden_tag() }}
+         <p>
+               {{ form_advanced.name.label }}<br>
+               {{ form_advanced.name(size=32) }}<br>
+               {% for error in form_advanced.name.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.right_ascension_min.label }}<br>
+               {{ form_advanced.right_ascension_min(size=32) }}<br>
+               {% for error in form_advanced.right_ascension_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.right_ascension_max.label }}<br>
+               {{ form_advanced.right_ascension_max(size=32) }}<br>
+               {% for error in form_advanced.right_ascension_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.declination_min.label }}<br>
+               {{ form_advanced.declination_min(size=32) }}<br>
+               {% for error in form_advanced.declination_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.declination_max.label }}<br>
+               {{ form_advanced.declination_max(size=32) }}<br>
+               {% for error in form_advanced.declination_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.redshift_min.label }}<br>
+               {{ form_advanced.redshift_min(size=32) }}<br>
+               {% for error in form_advanced.redshift_min.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
 
-<form action= {{url_for('query_results')}} method='POST'>
-   {{form_advanced.hidden_tag() }}
-        <p>
-            {{ form_advanced.name.label }}<br>
-            {{ form_advanced.name(size=32) }}<br>
-            {% for error in form_advanced.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form_advanced.right_ascension_min.label }}<br>
-            {{ form_advanced.right_ascension_min(size=32) }}<br>
-            {% for error in form_advanced.right_ascension_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form_advanced.right_ascension_max.label }}<br>
-            {{ form_advanced.right_ascension_max(size=32) }}<br>
-            {% for error in form_advanced.right_ascension_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form_advanced.declination_min.label }}<br>
-            {{ form_advanced.declination_min(size=32) }}<br>
-            {% for error in form_advanced.declination_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form_advanced.declination_max.label }}<br>
-            {{ form_advanced.declination_max(size=32) }}<br>
-            {% for error in form_advanced.declination_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form_advanced.redshift_min.label }}<br>
-            {{ form_advanced.redshift_min(size=32) }}<br>
-            {% for error in form_advanced.redshift_min.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.redshift_max.label }}<br>
+               {{ form_advanced.redshift_max(size=32) }}<br>
+               {% for error in form_advanced.redshift_max.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
+         </p>
+         <p>
+               {{ form_advanced.lensing_flag.label }}<br>
+               {{ form_advanced.lensing_flag(size=3) }}<br>
+               {% for error in form_advanced.lensing_flag.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
 
-        </p>
-        <p>
-            {{ form_advanced.redshift_max.label }}<br>
-            {{ form_advanced.redshift_max(size=32) }}<br>
-            {% for error in form_advanced.redshift_max.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form_advanced.lensing_flag.label }}<br>
-            {{ form_advanced.lensing_flag(size=2) }}<br>
-            {% for error in form_advanced.lensing_flag.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
+      </p>
+         <p>{{ form_advanced.submit() }}</p>
 
-     </p>
-        <p>{{ form_advanced.submit() }}</p>
+   </form>
+   <form action= {{url_for('query_results')}} method='POST'>
+      {{form_advanced.hidden_tag() }}
+         <p>
+            {{ form_advanced.j_upper_min.label }}<br>
+            {{ form_advanced.j_upper_min(size=32) }}<br>
+            {% for error in form_advanced.j_upper_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.j_upper_max.label }}<br>
+            {{ form_advanced.j_upper_max(size=32) }}<br>
+            {% for error in form_advanced.j_upper_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.line_id_type.label }}<br>
+            {{ form_advanced.line_id_type(size=32) }}<br>
+            {% for error in form_advanced.line_id_type.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.integrated_line_flux_min.label }}<br>
+            {{ form_advanced.integrated_line_flux_min(size=32) }}<br>
+            {% for error in form_advanced.integrated_line_flux_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.integrated_line_flux_max.label }}<br>
+            {{ form_advanced.integrated_line_flux_max(size=32) }}<br>
+            {% for error in form_advanced.integrated_line_flux_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.peak_line_flux_min.label }}<br>
+            {{ form_advanced.peak_line_flux_min(size=32) }}<br>
+            {% for error in form_advanced.peak_line_flux_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.peak_line_flux_max.label }}<br>
+            {{ form_advanced.peak_line_flux_max(size=32) }}<br>
+            {% for error in form_advanced.peak_line_flux_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.peak_line_flux_max.label }}<br>
+            {{ form_advanced.peak_line_flux_max(size=32) }}<br>
+            {% for error in form_advanced.peak_line_flux_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.line_width_min.label }}<br>
+            {{ form_advanced.line_width_min(size=32) }}<br>
+            {% for error in form_advanced.line_width_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.line_width_max.label }}<br>
+            {{ form_advanced.line_width_max(size=32) }}<br>
+            {% for error in form_advanced.line_width_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_line_frequency_min.label }}<br>
+            {{ form_advanced.observed_line_frequency_min(size=32) }}<br>
+            {% for error in form_advanced.observed_line_frequency_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_line_frequency_max.label }}<br>
+            {{ form_advanced.observed_line_frequency_max(size=32) }}<br>
+            {% for error in form_advanced.observed_line_frequency_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.detection_type.label }}<br>
+            {{ form_advanced.detection_type(size=3) }}<br>
+            {% for error in form_advanced.detection_type.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_beam_major_min.label }}<br>
+            {{ form_advanced.observed_beam_major_min(size=32) }}<br>
+            {% for error in form_advanced.observed_beam_major_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_beam_major_max.label }}<br>
+            {{ form_advanced.observed_beam_major_max(size=32) }}<br>
+            {% for error in form_advanced.observed_beam_major_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_beam_minor_min.label }}<br>
+            {{ form_advanced.observed_beam_minor_min(size=32) }}<br>
+            {% for error in form_advanced.observed_beam_minor_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_beam_minor_max.label }}<br>
+            {{ form_advanced.observed_beam_minor_max(size=32) }}<br>
+            {% for error in form_advanced.observed_beam_minor_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.reference.label }}<br>
+            {{ form_advanced.reference(size=32) }}<br>
+            {% for error in form_advanced.reference.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+            
+         
+   </form>
 
-</form>
+</div>
 
 <!--Supposed to desplay the results. In the development stage-->
 <table class = "table" id = "Galaxy">

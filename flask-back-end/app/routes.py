@@ -2,7 +2,7 @@ from app import app, db, Session
 from flask import render_template, flash, redirect, url_for, request, g, make_response
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Galaxy, User, Line
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, ButtonForm, AdvancedSearchForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, AdvancedSearchForm
 from werkzeug.urls import url_parse
 from datetime import datetime
 import csv
@@ -54,13 +54,7 @@ def login():
 def main():
     if current_user.is_authenticated:
         form = SearchForm()
-        form_button = ButtonForm()
-        form_advanced = AdvancedSearchForm()
-
-    if request.method == 'POST':
-        if request.form['advanced_search'] == 'Advanced Search':
-            return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form, form_button=form_button, form_advanced=form_advanced)
-    return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form, form_button=form_button)
+    return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form)
 
 @app.route("/entry_form")
 @login_required
@@ -71,16 +65,12 @@ def entry_form():
 @app.route("/query_results", methods=['GET', 'POST'])
 @login_required
 def query_results():
-    #if request.method == 'POST' or 'GET':
-        #return 'It was a post request'
     if current_user.is_authenticated:
         form = SearchForm()
         form_advanced = AdvancedSearchForm()
-        form_button = ButtonForm()
     
-    if request.method == 'POST':
-        #if request.form['advanced_search'] == 'Advanced Search':
-            #return render_template("/query_results.html", form=form, form_button=form_button, form_advanced=form_advanced)
+    if form_advanced.validate_on_submit():
+
         if form_advanced.name.data == None:
             form_advanced.name.data = ''
         if form_advanced.right_ascension_min.data == None:
@@ -95,29 +85,23 @@ def query_results():
             form_advanced.redshift_min.data = float('-inf')
         if form_advanced.redshift_max.data == None:
             form_advanced.redshift_max.data = float('inf')
-        if form_advanced.lensing_flag.data == None:
+        if form_advanced.lensing_flag.data == None or form_advanced.lensing_flag.data == 'Either':
             form_advanced.lensing_flag.data = ''
         
 
         if form_advanced.submit:
             galaxies = Galaxy.query.filter(Galaxy.name.contains(form_advanced.name.data), (or_(Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data), Galaxy.right_ascension == None )), (or_(Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data), Galaxy.declination == None )), (or_(Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data), Galaxy.redshift == None )), (or_(Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data), Galaxy.lensing_flag == None)))
-            #return str(form_advanced.name.data)+' '+str(form_advanced.right_ascension_min.data)+' '+str(form_advanced.right_ascension_max.data)+' '+str(form_advanced.declination_min.data)+' '+str(form_advanced.declination_max.data)+' '+str(form_advanced.redshift_min.data)+' '+str(form_advanced.redshift_max.data)+' '+str(form_advanced.lensing_flag.data)
-        
-    
-            
-        elif form.submit:
-            galaxies = Galaxy.query.filter(Galaxy.name.contains(form.search.data) | Galaxy.notes.contains(form.search.data))
+
+        #don't need if we take away the general search bar    
+        #elif form.submit:
+            #galaxies = Galaxy.query.filter(Galaxy.name.contains(form.search.data) | Galaxy.notes.contains(form.search.data))
         else:
             galaxies = Galaxy.query.all()
         return render_template("/query_results.html", galaxies=galaxies, form = form, form_advanced=form_advanced)
-
-    if request.method == 'GET':
-        if form.submit:
-            galaxies = Galaxy.query.filter(Galaxy.name.contains(form.search.data) | Galaxy.notes.contains(form.search.data))
-        elif form_advanced.submit:
-            galaxies = Galaxy.query.filter(Galaxy.name.contains(form_advanced.name.data) | Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data) | Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data) | Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data))
-
     
+    else:
+        galaxies = Galaxy.query.all()
+
     return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
 
 @app.route("/entry_file")

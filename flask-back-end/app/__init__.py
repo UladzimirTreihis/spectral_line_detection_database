@@ -50,6 +50,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
+login.init_app(app)
 engine = create_engine('sqlite:///app.db', echo=False)
 Session = sessionmaker()
 Session.configure(bind=engine)

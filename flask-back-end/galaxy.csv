@@ -1,6 +1,0 @@
-id,name,right_ascension,declination,coordinate_system,redshift,lensing_flag,classification,notes
-1,g1,1.0,2.0,abc,1.0,true,yes,hello
-2,g2,123.0,123.0,123,123.0,123,123,123
-3,,,,,,,,
-4,,,,,,,,
-5,g5,,,,,,,
