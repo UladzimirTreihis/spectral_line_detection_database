@@ -1,3 +1,4 @@
+from flask.globals import session
 from app import app, db, Session
 from flask import render_template, flash, redirect, url_for, request, g, make_response
 from flask_login import current_user, login_user, logout_user, login_required
@@ -68,6 +69,7 @@ def query_results():
     if current_user.is_authenticated:
         form = SearchForm()
         form_advanced = AdvancedSearchForm()
+        session=Session()
     
     if form_advanced.validate_on_submit():
 
@@ -87,20 +89,55 @@ def query_results():
             form_advanced.redshift_max.data = float('inf')
         if form_advanced.lensing_flag.data == None or form_advanced.lensing_flag.data == 'Either':
             form_advanced.lensing_flag.data = ''
+        if form_advanced.j_upper_min.data == None:
+            form_advanced.j_upper_min.data = float('-inf')
+        if form_advanced.j_upper_max.data == None:
+            form_advanced.j_upper_max.data = float('inf')
+        if form_advanced.line_id_type.data == None:
+            form_advanced.line_id_type.data = ''
+        if form_advanced.integrated_line_flux_min.data == None:
+            form_advanced.integrated_line_flux_min.data = float('-inf')
+        if form_advanced.integrated_line_flux_max.data == None:
+            form_advanced.integrated_line_flux_max.data = float('inf')
+        if form_advanced.peak_line_flux_min.data == None:
+            form_advanced.peak_line_flux_min.data = float('-inf')
+        if form_advanced.peak_line_flux_max.data == None:
+            form_advanced.peak_line_flux_max.data = float('inf')
+        if form_advanced.line_width_min.data == None:
+            form_advanced.line_width_min.data = float('-inf')
+        if form_advanced.line_width_max.data == None:
+            form_advanced.line_width_max.data = float('inf')
+        if form_advanced.observed_line_frequency_min.data == None:
+            form_advanced.observed_line_frequency_min.data = float('-inf')
+        if form_advanced.observed_line_frequency_max.data == None:
+            form_advanced.observed_line_frequency_max.data = float('inf')
+        if form_advanced.detection_type.data == None or form_advanced.detection_type.data == 'Either':
+            form_advanced.detection_type.data = ''
+        if form_advanced.observed_beam_major_min.data == None:
+            form_advanced.observed_beam_major_min.data = float('-inf')
+        if form_advanced.observed_beam_major_max.data == None:
+            form_advanced.observed_beam_major_max.data = float('inf')
+        if form_advanced.observed_beam_minor_min.data == None:
+            form_advanced.observed_beam_minor_min.data = float('-inf')
+        if form_advanced.observed_beam_minor_max.data == None:
+            form_advanced.observed_beam_minor_max.data = float('inf')
+        if form_advanced.reference.data == None:
+            form_advanced.reference.data = ''
         
+        #query displaying galaxies based on the data from form_advanced
 
         if form_advanced.submit:
-            galaxies = Galaxy.query.filter(Galaxy.name.contains(form_advanced.name.data), (or_(Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data), Galaxy.right_ascension == None )), (or_(Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data), Galaxy.declination == None )), (or_(Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data), Galaxy.redshift == None )), (or_(Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data), Galaxy.lensing_flag == None)))
+            galaxies=session.query(Galaxy, Line).outerjoin(Line).filter(Galaxy.name.contains(form_advanced.name.data), (or_(Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data), Galaxy.right_ascension == None )), (or_(Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data), Galaxy.declination == None )), (or_(Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data), Galaxy.redshift == None )), (or_(Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data), Galaxy.lensing_flag == None)), (or_(Line.j_upper.between(form_advanced.j_upper_min.data, form_advanced.j_upper_max.data), Line.j_upper == None )), Line.line_id_type.contains(form_advanced.line_id_type.data), (or_(Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data), Line.integrated_line_flux == None )), (or_(Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data), Line.peak_line_flux == None )), (or_(Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data), Line.line_width == None )), (or_(Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data), Line.observed_line_frequency == None )), (or_(Line.detection_type.contains(form_advanced.detection_type.data), Line.detection_type == None)), (or_(Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data), Line.observed_beam_major == None )), (or_(Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data), Line.observed_beam_minor == None )), (or_(Line.reference.contains(form_advanced.reference.data), Line.reference == None))).distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
         #don't need if we take away the general search bar    
         #elif form.submit:
             #galaxies = Galaxy.query.filter(Galaxy.name.contains(form.search.data) | Galaxy.notes.contains(form.search.data))
         else:
-            galaxies = Galaxy.query.all()
+            galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
         return render_template("/query_results.html", galaxies=galaxies, form = form, form_advanced=form_advanced)
     
     else:
-        galaxies = Galaxy.query.all()
+        galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
     return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
 
