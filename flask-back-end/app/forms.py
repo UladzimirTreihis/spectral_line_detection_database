@@ -99,7 +99,8 @@ class AdvancedSearchForm(FlaskForm):
 
     reference = StringField('Reference', validators = [Optional()])
 
-    submit = SubmitField('Submit')
+    galaxySearch = SubmitField(label='Search for Galaxies')
+    lineSearch = SubmitField(label="Search for Lines")
     
 class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
