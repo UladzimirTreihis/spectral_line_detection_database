@@ -280,9 +280,7 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('galaxy_lines.csv', 'w')
         out = csv.writer(f)
-
         galaxy_lines = session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier, Line.galaxy_id == identifier)
-                
         out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         for item in galaxy_lines:
             l = item [1]
@@ -292,8 +290,16 @@ def convert_to_CSV(table, identifier):
         with open('./galaxy_lines.csv', 'r') as file:
             galaxy_lines_csv = file.read()
         response = make_response(galaxy_lines_csv)
-        cd = 'attachment; filename=galaxy_lines.csv'
-
+    elif table == "Empty":
+        session = Session ()
+        f = open('sample.csv', 'w')
+        out = csv.writer(f)
+        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        f.close()
+        with open('./sample.csv', 'r') as file:
+            sample_csv = file.read()
+        response = make_response(sample_csv)
+        cd = 'attachment; filename=sample.csv'
     response.headers['Content-Disposition'] = cd 
     response.mimetype='text/csv'
     return response
