@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import FileField, IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.fields.core import SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
 from app.models import User, Galaxy, Line
@@ -136,4 +136,8 @@ class AddLineForm(FlaskForm):
     observed_beam_angle = FloatField('Observed Beam Angle (strongly recommend) ', validators = [Optional ()])
     reference = StringField('Reference', validators = [DataRequired()])
     notes = StringField('Notes', validators = [Optional ()])
+    submit = SubmitField('Submit')
+
+class UploadFileForm(FlaskForm):
+    file = FileField('File')
     submit = SubmitField('Submit')

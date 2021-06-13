@@ -55,4 +55,7 @@ engine = create_engine('sqlite:///app.db', echo=False)
 Session = sessionmaker()
 Session.configure(bind=engine)
 
+UPLOAD_FOLDER = 'static/files'
+app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
+
 from app import forms, models, routes
