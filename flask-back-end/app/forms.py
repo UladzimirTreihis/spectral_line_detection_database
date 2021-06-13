@@ -106,7 +106,7 @@ class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
     right_ascension = FloatField('Right Ascension', validators = [DataRequired (), NumberRange(min = 0)])
     declination = FloatField('Declination', validators = [DataRequired ()])
-    coordinate_system = StringField('Coordinate System', validators = [DataRequired ()])
+    coordinate_system = SelectField(u'Coordinate System', validators = [DataRequired ()])
     redshift = FloatField('Redshift', validators = [Optional (), NumberRange(min = 0)])
     lensing_flag = StringField('Lensing Flag', validators = [DataRequired ()])
     classification = StringField('Classification', validators = [DataRequired ()])
