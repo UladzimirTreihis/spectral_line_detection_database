@@ -159,7 +159,7 @@ def query_results():
 @app.route("/entry_file")
 @login_required
 def entry_file():
-    return redirect(url_for('entry_file'))
+    return render_template ("/entry_file.html")
 
 @app.route("/logout")
 def logout():
