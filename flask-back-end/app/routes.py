@@ -1,5 +1,5 @@
 from flask.globals import session
-from sqlalchemy.sql.expression import true
+from sqlalchemy.sql.expression import outerjoin, true
 from app import app, db, Session
 from flask import render_template, flash, redirect, url_for, request, g, make_response
 from flask_login import current_user, login_user, logout_user, login_required
@@ -159,7 +159,7 @@ def query_results():
 @app.route("/entry_file")
 @login_required
 def entry_file():
-    return render_template ("/entry_file.html")
+    return redirect(url_for('entry_file'))
 
 @app.route("/logout")
 def logout():
@@ -251,9 +251,9 @@ def edit_profile():
 def submit():
     return render_template("submit.html")
 
-@app.route("/convert_to_CSV/<table>", methods=['GET', 'POST'])
+@app.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
 @login_required
-def convert_to_CSV(table):
+def convert_to_CSV(table, identifier):
     if table == "Galaxy":
         f = open('galaxy.csv', 'w')
         out = csv.writer(f)
@@ -280,7 +280,9 @@ def convert_to_CSV(table):
         session = Session ()
         f = open('galaxy_lines.csv', 'w')
         out = csv.writer(f)
+
         galaxy_lines = session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier, Line.galaxy_id == identifier)
+                
         out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         for item in galaxy_lines:
             l = item [1]
@@ -291,15 +293,7 @@ def convert_to_CSV(table):
             galaxy_lines_csv = file.read()
         response = make_response(galaxy_lines_csv)
         cd = 'attachment; filename=galaxy_lines.csv'
-    elif table == "Empty":
-        f = open('sample.csv', 'w')
-        out = csv.writer(f)
-        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
-        f.close()
-        with open('./sample.csv', 'r') as file:
-            sample_csv = file.read()
-        response = make_response(sample_csv)
-        cd = 'attachment; filename=sample.csv'
+
     response.headers['Content-Disposition'] = cd 
     response.mimetype='text/csv'
     return response
