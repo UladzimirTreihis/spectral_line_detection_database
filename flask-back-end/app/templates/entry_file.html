@@ -4,10 +4,11 @@
     <h1> Entry File </h1>
 
     <p> Click here to download sample CSV </p>
-
-    <a href="{{ url_for ('convert_to_CSV', table = "Empty", identifier = "None") }}" class="btn btn-info" role="button">Download as CSV</a>
     <br>
+
+    <a href="{{ url_for ('convert_to_CSV', table = "Empty", identifier = "None") }}" class="btn btn-info" role="button">Download sample CSV</a>
     <form method="POST" action="" enctype="multipart/form-data">
+      <br>
       <p><input type="file" name="file"></p>
       <br>
       <p><input type="submit" value="Submit"></p>

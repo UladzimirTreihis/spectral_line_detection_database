@@ -174,8 +174,10 @@ def entry_file():
 def parseCSV(filePath):
       col_names = ['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes']
       csvData = pd.read_csv(filePath,names=col_names, header=None)
-
-
+      for i,row in csvData.iterrows():
+          galaxy = (i, row ['name'], row ['right_ascension'], row ['declination'], row['coordinate_system'], row ['redshift'], row ['lensing_flag'], row ['classification'], row ['notes'])
+          db.session.add(galaxy)
+          db.session.commit()
 
 @app.route("/logout")
 def logout():
