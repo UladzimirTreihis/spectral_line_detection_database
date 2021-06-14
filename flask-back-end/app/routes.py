@@ -14,6 +14,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import or_, and_
 from sqlalchemy import select
+from config import EMITTED_FREQUENCY
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 #@app.before_request
@@ -212,6 +213,52 @@ def galaxy_entry_form():
             return redirect(url_for('line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
+def update_redshift(session, galaxy_id):
+    line_redshift = session.query(
+            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all() 
+
+    sum_upper = sum_lower = 0
+    for l in line_redshift:
+        delta_nu = l.observed_line_frequency_uncertainty_positive - l.observed_line_frequency_uncertainty_negative
+        J_UPPER = l.j_upper
+        if J_UPPER > 30 or J_UPPER < 1:
+            continue
+        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        sum_upper = sum_upper =+ (z/delta_z)
+        sum_lower = sum_lower =+ (1/delta_z)
+
+    redshift_weighted = sum_upper / sum_lower
+    session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift": redshift_weighted})
+    session.commit()
+    
+    return sum_upper
+
+def update_redshift_error(session, galaxy_id, sum_upper):
+    redshift_error_weighted = 0
+    line_redshift = session.query(
+            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all() 
+    for l in line_redshift:
+        delta_nu = l.observed_line_frequency_uncertainty_positive - l.observed_line_frequency_uncertainty_negative
+        J_UPPER = l.j_upper
+        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        weight = (z/delta_z)/sum_upper
+        redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
+    session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift_error": redshift_error_weighted})
+    session.commit()
+
+
 @app.route("/line_entry_form", methods=['GET', 'POST'])
 @login_required
 def line_entry_form():
@@ -227,6 +274,10 @@ def line_entry_form():
         line = Line(galaxy_id=galaxy_id, j_upper=form.j_upper.data, line_id_type = form.line_id_type.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = form.observed_line_frequency.data, observed_line_frequency_uncertainty_positive = form.observed_line_frequency_uncertainty_positive.data, observed_line_frequency_uncertainty_negative = form.observed_line_frequency_uncertainty_negative.data, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data)
         db.session.add(line)
         db.session.commit()
+        
+        total = update_redshift(session, galaxy_id)
+        update_redshift_error(session, galaxy_id, total)
+
         flash ('Line has been added. ')
         return redirect(url_for('main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)

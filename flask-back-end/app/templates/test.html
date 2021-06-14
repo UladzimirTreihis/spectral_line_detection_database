@@ -1,0 +1,32 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Test
+{% endblock %}
+
+{% block content %}
+
+<hr>
+<h1> Test </h1>
+
+<table class = "table" id = "Galaxy">
+    <tbody>
+        {% for g in line_redshift %}
+           <tr>
+              <td>{{ g.j_upper }}</td>
+              <td>{{ g.observed_line_frequency }}</td>
+              <td>{{ g.observed_line_frequency_uncertainty_negative }}</td>
+              <td>{{ g.observed_line_frequency_uncertainty_positive }}</td>
+
+           </tr>
+        {% endfor %}
+     </tbody>
+
+
+
+</table>
+<p>
+    {{ line_list }}
+</p>
+
+{% endblock %}

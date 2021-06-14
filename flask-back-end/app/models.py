@@ -12,6 +12,7 @@ class Galaxy(db.Model):
     declination = db.Column(db.Float(32), nullable = False) 
     coordinate_system = db.Column(db.String(128), nullable = False)
     redshift = db.Column(db.Float(32))
+    redshift_error = db.Column(db.Float(32))
     lensing_flag = db.Column(db.String(32), nullable = False)
     classification = db.Column(db.String(128), nullable = False)   
     notes = db.Column(db.String(128))
