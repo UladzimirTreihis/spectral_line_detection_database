@@ -202,10 +202,12 @@ def update_redshift(session, galaxy_id):
             Galaxy.id == galaxy_id
         ).all() 
 
-    sum_upper = sum_lower = redshift_error_weighted = 0
+    sum_upper = sum_lower = 0
     for l in line_redshift:
         delta_nu = l.observed_line_frequency_uncertainty_positive - l.observed_line_frequency_uncertainty_negative
         J_UPPER = l.j_upper
+        if J_UPPER > 30 or J_UPPER < 1:
+            continue
         z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
         delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
         sum_upper = sum_upper =+ (z/delta_z)
@@ -220,6 +222,7 @@ def update_redshift(session, galaxy_id):
     return sum_upper
 
 def update_redshift_error(session, galaxy_id, sum_upper):
+    redshift_error_weighted = 0
     line_redshift = session.query(
             Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
         ).outerjoin(Galaxy).filter(
