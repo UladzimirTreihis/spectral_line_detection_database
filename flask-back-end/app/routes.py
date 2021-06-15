@@ -200,6 +200,9 @@ def entry_file():
                         )
             db.session.add(line)
             db.session.commit()
+            session = Session ()
+            total = update_redshift(session, id)
+            update_redshift_error(session, id, total)
            
         flash ("File has been uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
