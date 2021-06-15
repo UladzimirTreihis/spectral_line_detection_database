@@ -58,11 +58,6 @@ def main():
     if current_user.is_authenticated:
         form = SearchForm()
     return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form)
-
-@app.route("/entry_form")
-@login_required
-def entry_form():
-    return render_template("/entry_form.html")
     
 #Is expected to redirect here to display the results. 
 @app.route("/query_results", methods=['GET', 'POST'])
