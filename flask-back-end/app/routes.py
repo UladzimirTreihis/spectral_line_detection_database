@@ -163,48 +163,73 @@ def entry_file():
         csv_file = TextIOWrapper(csvfile, encoding='utf-8')
         reader = csv.DictReader(csv_file)
         data = [row for row in reader]
+        validated = True
         for row in data:
-            galaxy = Galaxy(name = row['name'],
-                            right_ascension = row['right_ascension'],
-                            declination = row['declination'],
-                            coordinate_system = row['coordinate_system'],
-                            redshift = row['redshift'],
-                            lensing_flag = row ['lensing_flag'],
-                            classification = row ['classification'],
-                            notes = row ['notes'])
-            db.session.add(galaxy)
-            db.session.commit()
-            new_id = db.session.query(func.max(Galaxy.id)).first()
-            id = new_id [0]
-            line = Line (galaxy_id = id,
-                         j_upper= row ['j_upper'], 
-                         line_id_type = row ['line_id_type'], 
-                         integrated_line_flux = row ['integrated_line_flux'], 
-                         integrated_line_flux_uncertainty_positive = row ['integrated_line_flux_uncertainty_positive'], 
-                         integrated_line_flux_uncertainty_negative = row ['integrated_line_flux_uncertainty_negative'], 
-                         peak_line_flux = row ['peak_line_flux'],
-                         peak_line_flux_uncertainty_positive = row ['peak_line_flux_uncertainty_positive'],
-                         peak_line_flux_uncertainty_negative= row ['peak_line_flux_uncertainty_negative'], 
-                         line_width= row ['line_width'],
-                         line_width_uncertainty_positive = row ['line_width_uncertainty_positive'],
-                         line_width_uncertainty_negative = row ['line_width_uncertainty_negative'],
-                         observed_line_frequency = row ['observed_line_frequency'],
-                         observed_line_frequency_uncertainty_positive = row ['observed_line_frequency_uncertainty_positive'],
-                         observed_line_frequency_uncertainty_negative = row ['observed_line_frequency_uncertainty_negative'],
-                         detection_type = row ['detection_type'],
-                         observed_beam_major = row ['observed_beam_major'], 
-                         observed_beam_minor = row ['observed_beam_minor'],
-                         observed_beam_angle = row ['observed_beam_angle'],
-                         reference = row ['reference'],
-                         notes = row ['notes']
-                        )
-            db.session.add(line)
-            db.session.commit()
-            session = Session ()
-            total = update_redshift(session, id)
-            update_redshift_error(session, id, total)
-           
-        flash ("File has been uploaded. ")
+            if row['name'] == "":
+                validated = False
+                flash ("Galaxy Name is Mandatory")
+            if row['coordinate_system'] != "ICRS" or row['coordinate_system'] != "J2000":
+                validated = False
+                flash ("Coordinate System can be ICRS or J2000 only.")
+            if row['lensing_flag'] != "Lensed" or row['coordinate_system'] != "Unlensed" or row['coordinate_system'] != "Either":
+                validated = False
+                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\" under Lensing Flag.")
+            if row['classification'] == "":
+                validated = False
+                flash ("Classification is Mandatory")
+            if row['right_ascension'] == "":
+                validated = False
+                flash ("Right Ascension is Mandatory")
+            if row['declination'] == "":
+                validated = False
+                flash ("Declination is Mandatory")
+            if row['redshift'] == "":
+                validated = False
+                flash ("Redshift is Mandatory.")
+            if int(row['redshift']) <1 :
+                validated = False
+                flash ("Redshift cannot be negative.")
+            if validated == True:
+                galaxy = Galaxy(name = row['name'],
+                                right_ascension = row['right_ascension'],
+                                declination = row['declination'],
+                                coordinate_system = row['coordinate_system'],
+                                redshift = row['redshift'],
+                                lensing_flag = row ['lensing_flag'],
+                                classification = row ['classification'],
+                                notes = row ['notes'])
+                db.session.add(galaxy)
+                db.session.commit()
+                new_id = db.session.query(func.max(Galaxy.id)).first()
+                id = new_id [0]
+                line = Line (galaxy_id = id,
+                            j_upper= row ['j_upper'], 
+                            line_id_type = row ['line_id_type'], 
+                            integrated_line_flux = row ['integrated_line_flux'], 
+                            integrated_line_flux_uncertainty_positive = row ['integrated_line_flux_uncertainty_positive'], 
+                            integrated_line_flux_uncertainty_negative = row ['integrated_line_flux_uncertainty_negative'], 
+                            peak_line_flux = row ['peak_line_flux'],
+                            peak_line_flux_uncertainty_positive = row ['peak_line_flux_uncertainty_positive'],
+                            peak_line_flux_uncertainty_negative= row ['peak_line_flux_uncertainty_negative'], 
+                            line_width= row ['line_width'],
+                            line_width_uncertainty_positive = row ['line_width_uncertainty_positive'],
+                            line_width_uncertainty_negative = row ['line_width_uncertainty_negative'],
+                            observed_line_frequency = row ['observed_line_frequency'],
+                            observed_line_frequency_uncertainty_positive = row ['observed_line_frequency_uncertainty_positive'],
+                            observed_line_frequency_uncertainty_negative = row ['observed_line_frequency_uncertainty_negative'],
+                            detection_type = row ['detection_type'],
+                            observed_beam_major = row ['observed_beam_major'], 
+                            observed_beam_minor = row ['observed_beam_minor'],
+                            observed_beam_angle = row ['observed_beam_angle'],
+                            reference = row ['reference'],
+                            notes = row ['notes']
+                            )
+                db.session.add(line)
+                db.session.commit()
+                session = Session ()
+                total = update_redshift(session, id)
+                update_redshift_error(session, id, total)
+                flash ("File has been uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
      
 @app.route("/logout")
