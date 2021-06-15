@@ -11,10 +11,11 @@
 <p> This is the content for the main page. </p>
 <br>
 
-<a href="{{ url_for('galaxy_entry_form') }}" class="btn btn-info" role="button">Enter Galaxy Information Through a Form</a>
-<a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Enter Line Information Through a Form</a>
+<a href="{{ url_for('galaxy_entry_form') }}" class="btn btn-info" role="button">Create a New Galaxy</a>
+<a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Add a Line to an Existing Galaxy</a>
 <a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
 <a href="{{ url_for('query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
+
 <br>
 <br>
 {% if form %}

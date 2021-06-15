@@ -18,6 +18,9 @@ class Galaxy(db.Model):
     notes = db.Column(db.String(128))
     lines = db.relationship('Line', backref='galaxy', lazy='dynamic')  
 
+    def as_dict(self):
+        return {'name': self.name}
+
 class Line(db.Model):
     __tablename__ = 'line'
     id = db.Column(db.Integer, primary_key=True)

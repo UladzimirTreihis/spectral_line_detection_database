@@ -6,15 +6,19 @@
 
 {% block content %}
     <h1>Line Entry Form</h1>
-    <form action="" method="post" novalidate>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <form class="form-inline" action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
             {{ form.galaxy_name.label }}<br>
-            {{ form.galaxy_name(size= 1) }}<br>
+            {{ form.galaxy_name(size=32) }}<br>
             {% for error in form.galaxy_name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
+        <div id="result"></div>
         <p>
             {{ form.j_upper.label }}<br>
             {{ form.j_upper(size=32) }}<br>
@@ -174,4 +178,36 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+    <script>
+
+        $(document).ready(function(){
+        var galaxy_name = [];
+        function loadGalaxies(){
+        $.getJSON('/galaxies', function(data, status, xhr)
+        {
+        for (var i = 0; i < data.length; i++ ) {
+            galaxy_name.push(data[i].name);
+        }
+        });
+        };
+        loadGalaxies();
+        
+        $('#galaxy_name').autocomplete({
+        source: galaxy_name, 
+        }); 
+
+        $.ajax({
+        data: {galaxy_name:$('#galaxy_name').val()},
+        type: 'POST',
+        url : '/process'
+        })
+        .done(function(data){ 
+        })
+        e.preventDefault();
+        
+        }); 
+    </script>
+    <style>
+
+</style>
 {% endblock %}
