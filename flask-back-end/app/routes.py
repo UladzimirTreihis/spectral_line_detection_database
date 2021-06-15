@@ -15,6 +15,8 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import or_, and_
 from sqlalchemy import select
 from config import EMITTED_FREQUENCY
+from io import TextIOWrapper
+from sqlalchemy import func
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 #@app.before_request
@@ -156,25 +158,52 @@ def query_results():
 @login_required
 def entry_file():
     form = UploadFileForm()
-    if form.validate_on_submit():
-      uploaded_file = request.files['file']
-      if uploaded_file.filename != '':
-           file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
-          # set the file path
-           uploaded_file.save(file_path)
-      return render_template ("/parse_csv", file_path = file_path)
+    if request.method == 'POST':
+        csvfile = request.files['file']
+        csv_file = TextIOWrapper(csvfile, encoding='utf-8')
+        reader = csv.DictReader(csv_file)
+        data = [row for row in reader]
+        for row in data:
+            galaxy = Galaxy(name = row['name'],
+                            right_ascension = row['right_ascension'],
+                            declination = row['declination'],
+                            coordinate_system = row['coordinate_system'],
+                            redshift = row['redshift'],
+                            lensing_flag = row ['lensing_flag'],
+                            classification = row ['classification'],
+                            notes = row ['notes'])
+            db.session.add(galaxy)
+            db.session.commit()
+            new_id = db.session.query(func.max(Galaxy.id)).first()
+            id = new_id [0]
+            line = Line (galaxy_id = id,
+                         j_upper= row ['j_upper'], 
+                         line_id_type = row ['line_id_type'], 
+                         integrated_line_flux = row ['integrated_line_flux'], 
+                         integrated_line_flux_uncertainty_positive = row ['integrated_line_flux_uncertainty_positive'], 
+                         integrated_line_flux_uncertainty_negative = row ['integrated_line_flux_uncertainty_negative'], 
+                         peak_line_flux = row ['peak_line_flux'],
+                         peak_line_flux_uncertainty_positive = row ['peak_line_flux_uncertainty_positive'],
+                         peak_line_flux_uncertainty_negative= row ['peak_line_flux_uncertainty_negative'], 
+                         line_width= row ['line_width'],
+                         line_width_uncertainty_positive = row ['line_width_uncertainty_positive'],
+                         line_width_uncertainty_negative = row ['line_width_uncertainty_negative'],
+                         observed_line_frequency = row ['observed_line_frequency'],
+                         observed_line_frequency_uncertainty_positive = row ['observed_line_frequency_uncertainty_positive'],
+                         observed_line_frequency_uncertainty_negative = row ['observed_line_frequency_uncertainty_negative'],
+                         detection_type = row ['detection_type'],
+                         observed_beam_major = row ['observed_beam_major'], 
+                         observed_beam_minor = row ['observed_beam_minor'],
+                         observed_beam_angle = row ['observed_beam_angle'],
+                         reference = row ['reference'],
+                         notes = row ['notes']
+                        )
+            db.session.add(line)
+            db.session.commit()
+           
+        flash ("File has been uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
-
-@app.route("/parse_csv/<file_path>")
-@login_required
-def parseCSV(filePath):
-      col_names = ['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes']
-      csvData = pd.read_csv(filePath,names=col_names, header=None)
-      for i,row in csvData.iterrows():
-          galaxy = (i, row ['name'], row ['right_ascension'], row ['declination'], row['coordinate_system'], row ['redshift'], row ['lensing_flag'], row ['classification'], row ['notes'])
-          db.session.add(galaxy)
-          db.session.commit()
-
+     
 @app.route("/logout")
 def logout():
     logout_user()
@@ -368,7 +397,7 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'line_id_type', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()

@@ -139,5 +139,5 @@ class AddLineForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class UploadFileForm(FlaskForm):
-    file = FileField('File')
+    file = FileField('')
     submit = SubmitField('Submit')

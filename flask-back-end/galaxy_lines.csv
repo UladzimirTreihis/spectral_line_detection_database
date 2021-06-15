@@ -1,4 +1,4 @@
 id,name,right_ascension,declination,coordinate_system,redshift,lensing_flag,classification,notes,j_upper,line_id_type,integrated_line_flux,integrated_line_flux_uncertainty_positive,integrated_line_flux_uncertainty_negative,peak_line_flux,peak_line_flux_uncertainty_positive,peak_line_flux_uncertainty_negative,line_width,line_width_uncertainty_positive,line_width_uncertainty_negative,observed_line_frequency,observed_line_frequency_uncertainty_positive,observed_line_frequency_uncertainty_negative,detection_type,observed_beam_major,observed_beam_minor,observed_beam_angle,reference,notes
-1,g1,1.0,2.0,J2000,1.0,Lensed,yes,hello,1,,1.0,1.0,-1.0,,,,,,,,,,,,,,no,
-1,g1,1.0,2.0,J2000,1.0,Lensed,yes,hello,1,,1.0,1.0,-1.0,,,,,,,,,,,,,,no,
-1,g1,1.0,2.0,J2000,1.0,Lensed,yes,hello,2,,2.0,2.0,-2.0,,,,,,,,,,,,,,2,
+3,g3,2.0,3.0,J2000,2.0,Either,6,,2,,2.0,2.0,-2.0,,,,,,,,,,,,,,no,
+3,g3,2.0,3.0,J2000,2.0,Either,6,,2,,2.0,2.0,-2.0,,,,,,,,,,,,,,2,
+3,g3,2.0,3.0,J2000,2.0,Either,6,,2,,2.0,2.0,-2.0,,,,,,,,,,,,,,no,
