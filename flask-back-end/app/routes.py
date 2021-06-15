@@ -221,6 +221,30 @@ def entry_file():
                 if int (row['integrated_line_flux_uncertainty_negative']) > 0:
                     l_validated = False
                     flash ("Integrated Line Flux Negative Uncertainty must be Negative")
+                if row ['peak_line_flux_uncertainty_positive'] != "":
+                    if int (row ['peak_line_flux_uncertainty_positive']) < 0:
+                        l_validated = False
+                        flash ("Peak Line Flux Positive Uncertainty must be Positive")
+                if row ['peak_line_flux_uncertainty_negative'] != "":
+                    if int (row ['peak_line_flux_uncertainty_negative']) > 0:
+                        l_validated = False
+                        flash ("Peak Line Flux Negative Uncertainty must be Negative")
+                if row ['line_width_uncertainty_positive'] != "":
+                    if int (row ['line_width_uncertainty_positive']) < 0:
+                        l_validated = False
+                        flash ("Line Width Positive Uncertainty must be Positive")
+                if row ['line_width_uncertainty_negative'] != "":
+                    if int (row ['line_width_uncertainty_negative']) > 0:
+                        l_validated = False
+                        flash ("Line Width Negative Uncertainty must be Negative")
+                if row ['observed_line_frequency_uncertainty_positive'] != "":
+                    if int (row ['observed_line_frequency_uncertainty_positive']) < 0:
+                        l_validated = False
+                        flash ("Observed Line Frequency Positive Uncertainty must be Positive")
+                if row ['observed_line_frequency_uncertainty_negative'] != "":
+                    if int (row ['observed_line_frequency_uncertainty_negative']) > 0:
+                        l_validated = False
+                        flash ("Observed Line Frequency Negative Uncertainty must be Negative")
                 if l_validated == True:
                     line = Line (galaxy_id = id,
                                 j_upper= row ['j_upper'], 
