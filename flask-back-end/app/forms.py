@@ -119,6 +119,7 @@ class DynamicSearchForm(FlaskForm):
 
 class AddLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
+    galaxy_form = SubmitField('Add a New Galaxy ')
     j_upper = IntegerField('J Upper', validators = [DataRequired (), NumberRange(min = 1, max=30, message="The database accepts J Upper between %(min)s and %(max)s")])
     line_id_type = StringField('Line ID Type', validators = [Optional ()])
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])

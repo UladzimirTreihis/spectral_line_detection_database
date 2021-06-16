@@ -18,7 +18,8 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <div id="result"></div>
+        <p> If the Galaxy you're looking for does not exist, go to the Add a New Galaxy Page. </p>
+        <p>{{ form.galaxy_form() }}</p>
         <p>
             {{ form.j_upper.label }}<br>
             {{ form.j_upper(size=32) }}<br>
