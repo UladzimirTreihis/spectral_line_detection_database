@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import FileField, IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.fields.core import SelectField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
+from wtforms.validators import Regexp, ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
 from app.models import User, Galaxy, Line
 from flask import request
+import re
 
 #creating a log-in form
 class LoginForm(FlaskForm):
@@ -67,10 +68,18 @@ class SearchForm(FlaskForm):
 
 class AdvancedSearchForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [Optional ()])
-    right_ascension_min = FloatField('Right Ascension from:', validators = [Optional ()])
-    right_ascension_max = FloatField('Right Ascension to:', validators = [Optional ()])
-    declination_min = FloatField('Declination from:', validators = [Optional ()])
-    declination_max = FloatField('Declination to:', validators = [Optional ()])
+    right_ascension_min = StringField('Right Ascension', validators = [Regexp('([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+)', message="Input in the format 00h00m00s or as a float"), Optional ()])
+    right_ascension_max = StringField('Right Ascension', validators = [Regexp('([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+)', message="Input in the format 00h00m00s or as a float"), Optional ()])
+    declination_min = StringField('Declination', validators = [Regexp('([-]*[+]*[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+)', message="Input in the format (+/-)00d00m00s or as a float"), Optional ()])
+    declination_max = StringField('Declination', validators = [Regexp('([-]*[+]*[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+)', message="Input in the format (+/-)00d00m00s or as a float"), Optional ()])
+
+    right_ascension_point = StringField('Right Ascension', validators = [Regexp('([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+)', message="Input in the format 00h00m00s or as a float"), Optional ()])
+    declination_point = StringField('Declination', validators = [Regexp('([-]*[+]*[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+)', message="Input in the format (+/-)00d00m00s or as a float"), Optional ()])
+
+    radius_d = FloatField('deg', validators = [Optional (), NumberRange(min = 0, max = 180)])
+    radius_m = FloatField('arcmin', validators = [Optional (), NumberRange(min = 0, max = 60)])
+    radius_s = FloatField('arcsec', validators = [Optional (), NumberRange(min = 0, max = 60)])
+
     redshift_min = FloatField('Redshift from:', validators = [Optional ()])
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
     lensing_flag = SelectField(u'Lensing Flag',
@@ -104,9 +113,9 @@ class AdvancedSearchForm(FlaskForm):
     
 class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
-    right_ascension = FloatField('Right Ascension', validators = [DataRequired (), NumberRange(min = 0)])
-    declination = FloatField('Declination', validators = [DataRequired ()])
-    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS')], validators = [DataRequired ()])
+    right_ascension = StringField('Right Ascension', validators = [Regexp('([0-2][0-9]h[0-5][0-9]m[0-5][0-9]s)|([0-9.]+)', message="Input in the format 00h00m00s or as a float"), DataRequired ()])
+    declination = StringField('Declination', validators = [Regexp('([-]*[+]*[0-9][0-9]d[0-5][0-9]m[0-5][0-9]s)|([0-9.]+)', message="Input in the format (+/-)00d00m00s or as a float"), DataRequired ()])
+    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS'), ('Enter as a float', 'Enter as a float')], validators = [DataRequired ()])
     redshift = FloatField('Redshift', validators = [Optional (), NumberRange(min = 0)])
     lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validators = [DataRequired ()])
     classification = StringField('Classification', validators = [DataRequired ()])
