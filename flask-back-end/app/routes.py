@@ -1,6 +1,6 @@
 from flask.globals import session
 from sqlalchemy.sql.expression import outerjoin, true
-from app import app, db, Session
+from app import app, db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import Galaxy, User, Line
@@ -9,14 +9,16 @@ from werkzeug.urls import url_parse
 from datetime import datetime
 import csv
 from werkzeug.wrappers import Response
-from sqlalchemy import Column, Integer, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
-from sqlalchemy import or_, and_
-from sqlalchemy import select
+from sqlalchemy import func
+from sqlalchemy.sql import text
 from config import EMITTED_FREQUENCY
+<<<<<<< HEAD
 from io import TextIOWrapper
 from sqlalchemy import func
+=======
+import math
+>>>>>>> origin/feat-coordinates
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 #@app.before_request
@@ -30,6 +32,14 @@ from sqlalchemy import func
 def home():
     return render_template("/home.html")
 
+@app.route('/test')
+@login_required
+def test():
+    #conn = engine.connect()    
+    #session = Session(bind=conn)
+    session = Session()
+    galaxies = session.query(Galaxy).filter(text('cos(Galaxy.declination)<0.8')).all()
+    return render_template("/test.html", galaxies=galaxies)
 #log-in route
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -60,28 +70,52 @@ def main():
     if current_user.is_authenticated:
         form = SearchForm()
     return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form)
-    
+
+def to_empty(entry):
+    if entry == None:
+        entry = ''
+    else:
+        entry = entry
+    return entry
+
+def to_m_inf(entry):
+    if entry == None:
+        entry = float('-inf')
+    elif entry == '':
+        entry = '-inf'
+    else:
+        entry = entry
+    return entry
+
+def to_p_inf(entry):
+    if entry == None:
+        entry = float('inf')
+    elif entry == '':
+        entry = 'inf'
+    else:
+        entry = entry
+    return entry
+
+def to_zero(entry):
+    if entry == None:
+        entry = 0
+    else:
+        entry = entry
+    return entry
+
 #Is expected to redirect here to display the results. 
 @app.route("/query_results", methods=['GET', 'POST'])
 @login_required
 def query_results():
-    if current_user.is_authenticated:
-        form = SearchForm()
-        form_advanced = AdvancedSearchForm()
-        session=Session()
+    form = SearchForm()
+    form_advanced = AdvancedSearchForm()
+    conn = engine.connect()    
+    session = Session(bind=conn)
     
     if form_advanced.validate_on_submit():
 
         if form_advanced.name.data == None:
             form_advanced.name.data = ''
-        if form_advanced.right_ascension_min.data == None:
-            form_advanced.right_ascension_min.data = float('-inf')
-        if form_advanced.right_ascension_max.data == None:
-            form_advanced.right_ascension_max.data = float('inf')
-        if form_advanced.declination_min.data == None:
-            form_advanced.declination_min.data = float('-inf')
-        if form_advanced.declination_max.data == None:
-            form_advanced.declination_max.data = float('inf')
         if form_advanced.redshift_min.data == None:
             form_advanced.redshift_min.data = float('-inf')
         if form_advanced.redshift_max.data == None:
@@ -127,20 +161,43 @@ def query_results():
 
 
         if form_advanced.galaxySearch.data:
-            galaxies=session.query(Galaxy, Line).outerjoin(Line).filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data) | (Galaxy.right_ascension == None )) & (Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data) | (Galaxy.declination == None )) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None) ) & (Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (Galaxy.lensing_flag == None)))
+            
+            #Additional filter if radius is specified
+            if (form_advanced.right_ascension_point.data != None) and (form_advanced.declination_point.data != None) and ((form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (form_advanced.radius_s.data != None)):
+                distance=math.radians(to_zero(form_advanced.radius_d.data)+to_zero(form_advanced.radius_m.data)/60+to_zero(form_advanced.radius_s.data)/3600) 
+                galaxies=session.query(Galaxy, Line).outerjoin(Line).filter(func.acos(func.sin(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_advanced.declination_point.data) - Galaxy.declination)))   ) < distance)
+                
+            else:
+                galaxies=session.query(Galaxy, Line).outerjoin(Line)
 
+            #Filters in respect to galaxy parameters
+            galaxies=galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)), ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (Galaxy.declination.between(dec_to_float(to_m_inf(form_advanced.declination_min.data)), dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None) ) & (Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (Galaxy.lensing_flag == None)))
+
+            #Filters in respect to line parameters or if galaxy has no lines
             galaxies = galaxies.filter((Line.id == None) | ((Line.j_upper.between(form_advanced.j_upper_min.data, form_advanced.j_upper_max.data) | (Line.j_upper == None )) & (Line.line_id_type.contains(form_advanced.line_id_type.data) | (Line.line_id_type == None)) & (Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (Line.integrated_line_flux == None)) & (Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data) | (Line.peak_line_flux == None)) & (Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data) | (Line.line_width == None )) & (Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data) | (Line.observed_line_frequency == None )) & (Line.detection_type.contains(form_advanced.detection_type.data) | (Line.detection_type == None)) & (Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data) | (Line.observed_beam_major == None )) & (Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data) | (Line.observed_beam_minor == None )) & (Line.reference.contains(form_advanced.reference.data) | (Line.reference == None)) ))
 
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
+            return render_template("/query_results.html", galaxies=galaxies, form = form, form_advanced=form_advanced)   
+
             
         
         elif form_advanced.lineSearch.data:
-            galaxies=session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(form_advanced.right_ascension_min.data, form_advanced.right_ascension_max.data) | (Galaxy.right_ascension == None )) & (Galaxy.declination.between(form_advanced.declination_min.data, form_advanced.declination_max.data) | (Galaxy.declination == None )) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None) ) & (Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (Galaxy.lensing_flag == None)))
+            if (form_advanced.right_ascension_point.data != None) and (form_advanced.declination_point.data != None) and ((form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (form_advanced.radius_s.data != None)):
+                distance=math.radians(to_zero(form_advanced.radius_d.data)+to_zero(form_advanced.radius_m.data)/60+to_zero(form_advanced.radius_s.data)/3600) 
+                galaxies=session.query(Galaxy, Line).outerjoin(Galaxy).filter(func.acos(func.sin(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_advanced.declination_point.data) - Galaxy.declination)))   ) < distance)
+                
+            else:
+                galaxies=session.query(Galaxy, Line).outerjoin(Galaxy)
+
+
+            galaxies=galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)), ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (Galaxy.declination.between(dec_to_float(to_m_inf(form_advanced.declination_min.data)), dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None) ) & (Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (Galaxy.lensing_flag == None)))
 
             galaxies=galaxies.filter((Line.j_upper.between(form_advanced.j_upper_min.data, form_advanced.j_upper_max.data) | (Line.j_upper == None )) & (Line.line_id_type.contains(form_advanced.line_id_type.data) | (Line.line_id_type == None)) & (Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (Line.integrated_line_flux == None)) & (Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data) | (Line.peak_line_flux == None)) & (Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data) | (Line.line_width == None )) & (Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data) | (Line.observed_line_frequency == None )) & (Line.detection_type.contains(form_advanced.detection_type.data) | (Line.detection_type == None)) & (Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data) | (Line.observed_beam_major == None )) & (Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data) | (Line.observed_beam_minor == None )) & (Line.reference.contains(form_advanced.reference.data) | (Line.reference == None)) )
             
-            galaxies=galaxies.group_by(Galaxy.name).order_by(Galaxy.name).all()
+            galaxies=galaxies.order_by(Galaxy.name).all()
+
+            return render_template("/query_results.html", galaxies=galaxies, form = form, form_advanced=form_advanced)
 
         #don't need if we take away the general search bar    
         #elif form.submit:
@@ -151,7 +208,7 @@ def query_results():
     
     else:
         galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
-
+    
     return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
 
 @app.route("/entry_file", methods=['GET', 'POST'])
@@ -295,13 +352,51 @@ def register():
         return redirect(url_for('login'))
     return render_template('./auth/register.html', title= 'Register', form=form)
 
+def ra_to_float(coordinates):
+    if coordinates.find('s') != -1:
+        h = float(coordinates[0:2])
+        m = float(coordinates[3:5])
+        s = float(coordinates[coordinates.find('m')+1:coordinates.find('s')])
+        return h*15+m/4+s/240
+    elif coordinates == '-inf':
+        return float('-inf')
+    elif coordinates == 'inf':
+        return float('inf')
+    else:
+        ra = coordinates
+        return float(ra) 
+def dec_to_float(coordinates):
+    if coordinates.find('s') != -1:
+        d = float(coordinates[1:3])
+        m = float(coordinates[4:6])
+        s = float(coordinates[coordinates.find('m')+1:coordinates.find('s')])
+        if coordinates[0] == "-":
+            return (-1)*(d+m/60+s/3600)
+        else:
+            return d+m/60+s/3600
+    elif coordinates == '-inf':
+        return float('-inf')
+    elif coordinates == 'inf':
+        return float('inf')
+    else:
+        dec = coordinates
+        return float(dec)
+
+
+
 @app.route("/galaxy_entry_form", methods=['GET', 'POST'])
 @login_required
 def galaxy_entry_form():
     form = AddGalaxyForm()
     if form.validate_on_submit ():
         if form.submit.data:
-            galaxy = Galaxy(name=form.name.data, right_ascension=form.right_ascension.data, declination = form.declination.data, coordinate_system = form.coordinate_system.data, redshift = form.redshift.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data)
+            try:
+                DEC = dec_to_float(form.declination.data)
+                RA = ra_to_float(form.right_ascension.data)
+            except:
+                DEC = form.declination.data
+                RA = form.right_ascension.data 
+            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, redshift = form.redshift.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been added. ')

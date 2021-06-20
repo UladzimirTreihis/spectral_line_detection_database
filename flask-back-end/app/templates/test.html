@@ -10,23 +10,38 @@
 <h1> Test </h1>
 
 <table class = "table" id = "Galaxy">
+    <thead>
+       <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Right Ascension</th>
+          <th>Declination</th>
+          <th>Coordinate System</th>
+          <th>Redshift</th>
+          <th>Lensing Flag</th>
+          <th>Classification</th>
+          <th>Notes</th>
+       </tr>
+    </thead>
+     
     <tbody>
-        {% for g in line_redshift %}
-           <tr>
-              <td>{{ g.j_upper }}</td>
-              <td>{{ g.observed_line_frequency }}</td>
-              <td>{{ g.observed_line_frequency_uncertainty_negative }}</td>
-              <td>{{ g.observed_line_frequency_uncertainty_positive }}</td>
-
-           </tr>
-        {% endfor %}
-     </tbody>
-
-
-
-</table>
+       {% for g in galaxies %}
+          <tr>
+             <td>{{ g.id }}</td>
+             <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+             <td>{{ g.right_ascension }}</td>
+             <td>{{ g.declination }}</td>
+             <td>{{ g.coordinate_system }}</td>
+             <td>{{ g.redshift }}</td>
+             <td>{{ g.lensing_flag }}</td>
+             <td>{{ g.classification }}</td>
+             <td>{{ g.notes }}</td>
+          </tr>
+       {% endfor %}
+    </tbody>
+ </table>
 <p>
-    {{ line_list }}
+    Test
 </p>
 
 {% endblock %}

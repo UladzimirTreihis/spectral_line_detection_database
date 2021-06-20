@@ -49,6 +49,44 @@
             {% endfor %}
          </p>
       </div>
+      <p>Alternatively, you can search within a radius</p>
+      <div style="display: flex;">
+         <p>
+            {{ form_advanced.right_ascension_point.label }}<br>
+            {{ form_advanced.right_ascension_point(size=20) }}<br>
+            {% for error in form_advanced.right_ascension_point.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.declination_point.label }}<br>
+            {{ form_advanced.declination_point(size=20) }}<br>
+            {% for error in form_advanced.declination_point.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.radius_d.label }}<br>
+            {{ form_advanced.radius_d(size=3) }}<br>
+            {% for error in form_advanced.radius_d.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.radius_m.label }}<br>
+            {{ form_advanced.radius_m(size=3) }}<br>
+            {% for error in form_advanced.radius_m.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.radius_s.label }}<br>
+            {{ form_advanced.radius_s(size=4) }}<br>
+            {% for error in form_advanced.radius_s.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+      </div>
       <div style="display: flex;">
          <p>
             {{ form_advanced.redshift_min.label }}<br>

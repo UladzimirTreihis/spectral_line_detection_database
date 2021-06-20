@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import FileField, IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.fields.core import SelectField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
+from wtforms.validators import Regexp, ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
 from app.models import User, Galaxy, Line
 from flask import request
+from config import dec_reg_exp, ra_reg_exp
 
 #creating a log-in form
 class LoginForm(FlaskForm):
@@ -42,7 +43,7 @@ class EditProfileForm(FlaskForm):
     def __init__(self, original_username, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
         self.original_username = original_username
-    #if the username has changed to something but original_uername, then query if new username is not in the database, if it is, raise ValidationError
+    #if the username has changed to something but original_us  ername, then query if new username is not in the database, if it is, raise ValidationError
     def validate_username(self, username):
         if username.data != self.original_username:
             user = User.query.filter_by(username=self.username.data).first()
@@ -65,12 +66,21 @@ class SearchForm(FlaskForm):
 #class ButtonForm(FlaskForm):
     #submit = SubmitField('Advanced Search', validators=[DataRequired()])
 
+
 class AdvancedSearchForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [Optional ()])
-    right_ascension_min = FloatField('Right Ascension from:', validators = [Optional ()])
-    right_ascension_max = FloatField('Right Ascension to:', validators = [Optional ()])
-    declination_min = FloatField('Declination from:', validators = [Optional ()])
-    declination_max = FloatField('Declination to:', validators = [Optional ()])
+    right_ascension_min = StringField('Right Ascension from:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
+    right_ascension_max = StringField('Right Ascension to:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
+    declination_min = StringField('Declination from:', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), Optional ()])
+    declination_max = StringField('Declination to:', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), Optional ()])
+
+    right_ascension_point = StringField('Right Ascension', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
+    declination_point = StringField('Declination', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), Optional ()])
+
+    radius_d = FloatField('deg', validators = [Optional (), NumberRange(min = 0, max = 180)])
+    radius_m = FloatField('arcmin', validators = [Optional (), NumberRange(min = 0, max = 60)])
+    radius_s = FloatField('arcsec', validators = [Optional (), NumberRange(min = 0, max = 60)])
+
     redshift_min = FloatField('Redshift from:', validators = [Optional ()])
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
     lensing_flag = SelectField(u'Lensing Flag',
@@ -101,12 +111,12 @@ class AdvancedSearchForm(FlaskForm):
 
     galaxySearch = SubmitField(label='Search for Galaxies')
     lineSearch = SubmitField(label="Search for Lines")
-    
+
 class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
-    right_ascension = FloatField('Right Ascension', validators = [DataRequired (), NumberRange(min = 0)])
-    declination = FloatField('Declination', validators = [DataRequired ()])
-    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS')], validators = [DataRequired ()])
+    right_ascension = StringField('Right Ascension', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), DataRequired ()])
+    declination = StringField('Declination', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), DataRequired ()])
+    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS'), ('Enter as a float', 'Enter as a float')], validators = [DataRequired ()])
     redshift = FloatField('Redshift', validators = [Optional (), NumberRange(min = 0)])
     lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validators = [DataRequired ()])
     classification = StringField('Classification', validators = [DataRequired ()])

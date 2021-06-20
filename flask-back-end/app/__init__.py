@@ -8,6 +8,8 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import math
+from sqlalchemy import event
 
 
 #create the instance of flask app
@@ -47,11 +49,17 @@ if not app.debug:
 
 #the instance and migration of db
 db = SQLAlchemy(app)
+engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
+@event.listens_for(engine, 'connect')
+def create_math_functions_on_connect(dbapi_connection, connection_record):
+    dbapi_connection.create_function('sin', 1, math.sin)
+    dbapi_connection.create_function('cos', 1, math.cos)
+    dbapi_connection.create_function('acos', 1, math.acos)
+    dbapi_connection.create_function('radians', 1, math.radians)
 migrate = Migrate(app, db)
 login = LoginManager(app)
 login.login_view = 'login'
 login.init_app(app)
-engine = create_engine('sqlite:///app.db', echo=False)
 Session = sessionmaker()
 Session.configure(bind=engine)
 
