@@ -1,37 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms import FileField, IntegerField, FloatField, StringField, SubmitField, TextAreaField
 from wtforms.fields.core import SelectField
 from wtforms.validators import Regexp, ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
-from app.models import User, Galaxy, Line
 from flask import request
 from config import dec_reg_exp, ra_reg_exp
+from app.models import User
 
-#creating a log-in form
-class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember_me = BooleanField('Remember Me')
-    submit = SubmitField('Sign In')
 
-class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Official Email', validators=[DataRequired(), Email()])
-    university = StringField('University Affiliation', validators=[Optional()])
-    website = StringField('Website', validators=[Optional(), URL ()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Register')
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user is not None:
-            raise ValidationError('Please use a different username.')
-    
-    def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('Please use a different email address.')
-            
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     university = StringField('University Affiliation', validators=[Optional()])

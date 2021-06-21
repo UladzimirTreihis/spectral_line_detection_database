@@ -91,7 +91,7 @@
             {% endfor %}
          </tbody>
       </table>
-<a href="{{ url_for ('convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id) }}" class="btn btn-info" role="button">Download as CSV</a>
-<a href="{{ url_for ('main') }}" class="btn btn-info" role="button"> Back </a>
+<a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id) }}" class="btn btn-info" role="button">Download as CSV</a>
+<a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button"> Back </a>
 
 {% endblock %}

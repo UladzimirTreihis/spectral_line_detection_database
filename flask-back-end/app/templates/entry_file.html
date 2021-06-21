@@ -9,7 +9,7 @@
     <p> Click here to download sample CSV </p>
     <br>
 
-    <a href="{{ url_for ('convert_to_CSV', table = "Empty", identifier = "None") }}" class="btn btn-info" role="button">Download sample CSV</a>
+    <a href="{{ url_for ('main.convert_to_CSV', table = "Empty", identifier = "None") }}" class="btn btn-info" role="button">Download sample CSV</a>
     
     <form action="" method="post" novalidate enctype="multipart/form-data">
       <p>

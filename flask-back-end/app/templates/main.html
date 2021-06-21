@@ -11,16 +11,16 @@
 <p> This is the content for the main page. </p>
 <br>
 
-<a href="{{ url_for('galaxy_entry_form') }}" class="btn btn-info" role="button">Create a New Galaxy</a>
-<a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Add a Line to an Existing Galaxy</a>
-<a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
-<a href="{{ url_for('query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
+<a href="{{ url_for('main.galaxy_entry_form') }}" class="btn btn-info" role="button">Create a New Galaxy</a>
+<a href="{{ url_for('main.line_entry_form') }}" class="btn btn-info" role="button">Add a Line to an Existing Galaxy</a>
+<a href="{{ url_for('main.entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
+<a href="{{ url_for('main.query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
 
 <br>
 <br>
 {% if form %}
 <li class="list-inline-item">
-   <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
+   <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.query_results') }}">
      <ul class="list-inline text-right" >
          <li class="list-inline-item">
             <div class="form-group">
@@ -61,7 +61,7 @@
             {% for g in galaxy %}
                <tr>
                   <td>{{ g.id }}</td>
-                  <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+                  <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
                   <td>{{ g.right_ascension }}</td>
                   <td>{{ g.declination }}</td>
                   <td>{{ g.coordinate_system }}</td>
@@ -75,7 +75,7 @@
          </tbody>
       </table>
 
-<a href="{{ url_for ('convert_to_CSV', table = "Galaxy", identifier = "None") }}" class="btn btn-info" role="button">Download as CSV</a>
+<a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy", identifier = "None") }}" class="btn btn-info" role="button">Download as CSV</a>
 
 <br> 
 <br>
@@ -137,6 +137,6 @@
          </tbody>
       </table>
 
-<a href="{{ url_for ('convert_to_CSV', table = "Line", identifier = "None") }}" class="btn btn-info" role="button">Download as CSV</a>
+<a href="{{ url_for ('main.convert_to_CSV', table = "Line", identifier = "None") }}" class="btn btn-info" role="button">Download as CSV</a>
 
 {% endblock %}

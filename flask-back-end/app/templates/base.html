@@ -12,26 +12,26 @@
             <div class="navbar-nav mr-auto text-right">
                 <ul class="list-inline text-right" >
                   <li class="list-inline-item">
-                  <a class= "navbar-brand btn btn-info " role="button" href="{{ url_for ('main') }} "> View Database  </a>
+                  <a class= "navbar-brand btn btn-info " role="button" href="{{ url_for ('main.main') }} "> View Database  </a>
                   </li>
                   {% if current_user.is_anonymous %} 
                   <li class="list-inline-item">
-                  <a href="{{ url_for('login') }}" class="btn btn-info " role="button">Login</a>
+                  <a href="{{ url_for('auth.login') }}" class="btn btn-info " role="button">Login</a>
                   </li>
                   <li class="list-inline-item">
-                  <a href="{{ url_for('register') }}" class="btn btn-info " role="button">Register</a>
+                  <a href="{{ url_for('auth.register') }}" class="btn btn-info " role="button">Register</a>
                   </li>
                   {% else %}
                   <li class="list-inline-item">
-                  <a href="{{ url_for('logout') }}" class="btn btn-info " role="button">Logout</a>
+                  <a href="{{ url_for('auth.logout') }}" class="btn btn-info " role="button">Logout</a>
                   </li>
                   <li class="list-inline-item">
-                  <a href="{{ url_for('user', username=current_user.username) }}" class = "btn btn-info " role = "button"> My Profile</a> 
+                  <a href="{{ url_for('main.user', username=current_user.username) }}" class = "btn btn-info " role = "button"> My Profile</a> 
                   </li>
                   {% endif %}
                   {% if g.search_form %}
                   <li class="list-inline-item">
-                    <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
+                    <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.query_results') }}">
                       <ul class="list-inline text-right" >
                         <li class="list-inline-item">
                           <div class="form-group">

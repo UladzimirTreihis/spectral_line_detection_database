@@ -8,7 +8,7 @@
 
 <hr>
 <h1> Advanced Search </h1>
-<form action= {{url_for('query_results')}} method='POST' id='galaxyForm'>
+<form action= {{url_for('main.query_results')}} method='POST' id='galaxyForm'>
    {{form_advanced.hidden_tag() }}
       <p>
             {{ form_advanced.name.label }}<br>
@@ -280,7 +280,7 @@
          {% set g = element[0] %}
          <tr>
             <td>{{ g.id }}</td>
-            <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+            <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ g.right_ascension }}</td>
             <td>{{ g.declination }}</td>
             <td>{{ g.coordinate_system }}</td>
@@ -328,7 +328,7 @@
          {% set l = element[1] %}  
          {% set g = element[0] %}
          <tr>
-            <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+            <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ l.j_upper }}</td>
             <td>{{ l.line_id_type }}</td>
             <td>{{ l.integrated_line_flux }}</td>

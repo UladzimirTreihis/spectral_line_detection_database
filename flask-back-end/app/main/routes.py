@@ -1,24 +1,17 @@
-from flask.globals import session
 from sqlalchemy.sql.expression import outerjoin, true
-from app import app, db, Session, engine
+from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_required
 from app.models import Galaxy, User, Line
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
+from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
-from datetime import datetime
 import csv
-from werkzeug.wrappers import Response
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import func
 from sqlalchemy.sql import text
 from config import EMITTED_FREQUENCY
-<<<<<<< HEAD
 from io import TextIOWrapper
-from sqlalchemy import func
-=======
 import math
->>>>>>> origin/feat-coordinates
+from app.main import bp
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 #@app.before_request
@@ -27,12 +20,31 @@ import math
         #g.search_form = SearchForm()
 
 #default route
-@app.route("/")
-@app.route("/home")
+@bp.route("/")
+@bp.route("/home")
 def home():
     return render_template("/home.html")
 
-@app.route('/test')
+@bp.route('/edit_profile', methods=['GET', 'POST'])
+@login_required
+def edit_profile():
+    form = EditProfileForm(current_user.username)
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.university = form.university.data
+        current_user.website = form.website.data
+        current_user.about_me = form.about_me.data
+        db.session.commit()
+        flash ("Your changes have been submitted")
+        return redirect(url_for('main'))
+    elif request.method == 'GET':
+        form.username.data = current_user.username
+        form.university.data = current_user.university
+        form.website.data = current_user.website
+        form.about_me.data = current_user.about_me
+    return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
+
+@bp.route('/test')
 @login_required
 def test():
     #conn = engine.connect()    
@@ -40,31 +52,8 @@ def test():
     session = Session()
     galaxies = session.query(Galaxy).filter(text('cos(Galaxy.declination)<0.8')).all()
     return render_template("/test.html", galaxies=galaxies)
-#log-in route
-@app.route("/login", methods=['GET', 'POST'])
-def login():
-    #if user is already authenticated, the log-in address redirects to home
-    if current_user.is_authenticated: 
-      return redirect(url_for('home'))
-    #form becomes an instance of LoginForm function
-    form = LoginForm()
-    if form.validate_on_submit():
-        #creating local user object
-        user = User.query.filter_by(username=form.username.data).first()
-        #If user does not exist or username/password incorrect -> redirect to log-in again
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        #If the condition above was false, it logs-in the user and checks the remember me info; redicrects to the temporal login_successful page.
-        login_user(user, remember=form.remember_me.data)
-        #the code for redirection back to @index once logged-in successfully
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main')
-        return redirect(next_page)
-    return render_template("./auth/login.html", title='Sign In', form=form)
 
-@app.route("/main", methods=['GET', 'POST'])
+@bp.route("/main", methods=['GET', 'POST'])
 @login_required
 def main():
     if current_user.is_authenticated:
@@ -104,7 +93,7 @@ def to_zero(entry):
     return entry
 
 #Is expected to redirect here to display the results. 
-@app.route("/query_results", methods=['GET', 'POST'])
+@bp.route("/query_results", methods=['GET', 'POST'])
 @login_required
 def query_results():
     form = SearchForm()
@@ -211,7 +200,7 @@ def query_results():
     
     return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
 
-@app.route("/entry_file", methods=['GET', 'POST'])
+@bp.route("/entry_file", methods=['GET', 'POST'])
 @login_required
 def entry_file():
     form = UploadFileForm()
@@ -333,24 +322,7 @@ def entry_file():
                     flash ("File has been uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
      
-@app.route("/logout")
-def logout():
-    logout_user()
-    return redirect(url_for('home'))
 
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-      return redirect(url_for('home'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, university = form.university.data, website = form.website.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash ('You have been successfully registered!')
-        return redirect(url_for('login'))
-    return render_template('./auth/register.html', title= 'Register', form=form)
 
 def ra_to_float(coordinates):
     if coordinates.find('s') != -1:
@@ -384,7 +356,7 @@ def dec_to_float(coordinates):
 
 
 
-@app.route("/galaxy_entry_form", methods=['GET', 'POST'])
+@bp.route("/galaxy_entry_form", methods=['GET', 'POST'])
 @login_required
 def galaxy_entry_form():
     form = AddGalaxyForm()
@@ -449,7 +421,7 @@ def update_redshift_error(session, galaxy_id, sum_upper):
     ).update({"redshift_error": redshift_error_weighted})
     session.commit()
 
-@app.route("/line_entry_form", methods=['GET', 'POST'])
+@bp.route("/line_entry_form", methods=['GET', 'POST'])
 @login_required
 def line_entry_form():
     form = AddLineForm()
@@ -468,21 +440,22 @@ def line_entry_form():
             return redirect(url_for('main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
-@app.route('/galaxies')
+@bp.route('/galaxies')
 @login_required
 def galaxydic():
     res = Galaxy.query.all()
     list_galaxies = [r.as_dict() for r in res]
     return jsonify(list_galaxies)
   
-@app.route('/process', methods=['POST'])
+@bp.route('/process', methods=['POST'])
+@login_required
 def process():
     galaxy_name = request.form['galaxy_name']
     if galaxy_name:
         return jsonify({'galaxy_name':galaxy_name})
     return jsonify({'error': 'missing data..'})
 
-@app.route('/galaxy/<name>')
+@bp.route('/galaxy/<name>')
 @login_required
 def galaxy(name):
     session = Session ()
@@ -490,37 +463,19 @@ def galaxy(name):
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
     return render_template('galaxy.html', galaxy=galaxy, line = line)
 
-@app.route('/user/<username>')
+@bp.route('/user/<username>')
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     return render_template('user.html', user=user)
 
-@app.route('/edit_profile', methods=['GET', 'POST'])
-@login_required
-def edit_profile():
-    form = EditProfileForm(current_user.username)
-    if form.validate_on_submit():
-        current_user.username = form.username.data
-        current_user.university = form.university.data
-        current_user.website = form.website.data
-        current_user.about_me = form.about_me.data
-        db.session.commit()
-        flash ("Your changes have been submitted")
-        return redirect(url_for('main'))
-    elif request.method == 'GET':
-        form.username.data = current_user.username
-        form.university.data = current_user.university
-        form.website.data = current_user.website
-        form.about_me.data = current_user.about_me
-    return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
-@app.route("/submit")
+@bp.route("/submit")
 @login_required
 def submit():
     return render_template("submit.html")
 
-@app.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
+@bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
 @login_required
 def convert_to_CSV(table, identifier):
     if table == "Galaxy":

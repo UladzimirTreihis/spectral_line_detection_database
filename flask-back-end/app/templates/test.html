@@ -28,7 +28,7 @@
        {% for g in galaxies %}
           <tr>
              <td>{{ g.id }}</td>
-             <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
              <td>{{ g.right_ascension }}</td>
              <td>{{ g.declination }}</td>
              <td>{{ g.coordinate_system }}</td>
