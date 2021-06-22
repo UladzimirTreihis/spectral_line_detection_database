@@ -37,10 +37,6 @@ class SearchForm(FlaskForm):
             kwargs['csrf_enabled'] = False
         super(SearchForm, self).__init__(*args, **kwargs)
 
-#Will delete if won't need anymore
-#class ButtonForm(FlaskForm):
-    #submit = SubmitField('Advanced Search', validators=[DataRequired()])
-
 
 class AdvancedSearchForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [Optional ()])
@@ -91,7 +87,7 @@ class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
     right_ascension = StringField('Right Ascension', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), DataRequired ()])
     declination = StringField('Declination', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), DataRequired ()])
-    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS'), ('Enter as a float', 'Enter as a float')], validators = [DataRequired ()])
+    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS')], validators = [DataRequired ()])
     redshift = FloatField('Redshift', validators = [Optional (), NumberRange(min = 0)])
     lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validators = [DataRequired ()])
     classification = StringField('Classification', validators = [DataRequired ()])
