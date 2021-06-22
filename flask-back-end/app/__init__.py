@@ -11,6 +11,7 @@ from sqlalchemy.orm import sessionmaker
 import math
 from sqlalchemy import event
 
+
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()

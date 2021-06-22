@@ -15,7 +15,7 @@ from app.models import User
 def login():
     #if user is already authenticated, the log-in address redirects to home
     if current_user.is_authenticated: 
-      return redirect(url_for('home'))
+      return redirect(url_for('main.home'))
     #form becomes an instance of LoginForm function
     form = LoginForm()
     if form.validate_on_submit():
@@ -24,13 +24,13 @@ def login():
         #If user does not exist or username/password incorrect -> redirect to log-in again
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
         #If the condition above was false, it logs-in the user and checks the remember me info; redicrects to the temporal login_successful page.
         login_user(user, remember=form.remember_me.data)
         #the code for redirection back to @index once logged-in successfully
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main')
+            next_page = url_for('main.main')
         return redirect(next_page)
     return render_template("./auth/login.html", title='Sign In', form=form)
 
@@ -39,12 +39,12 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('main.home'))
 
 @bp.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-      return redirect(url_for('home'))
+      return redirect(url_for('main.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, university = form.university.data, website = form.website.data)
@@ -52,7 +52,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash ('You have been successfully registered!')
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
     return render_template('./auth/register.html', title= 'Register', form=form)
 
 
