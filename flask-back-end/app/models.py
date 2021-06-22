@@ -16,6 +16,8 @@ class Galaxy(db.Model):
     lensing_flag = db.Column(db.String(32), nullable = False)
     classification = db.Column(db.String(128), nullable = False)   
     notes = db.Column(db.String(128))
+    user = db.Column(db.String(128))
+    user_email = db.Column(db.String(128))
     lines = db.relationship('Line', backref='galaxy', lazy='dynamic')  
 
     def as_dict(self):
@@ -45,6 +47,8 @@ class Line(db.Model):
     observed_beam_angle = db.Column(db.Float(32))
     reference = db.Column(db.String(128))
     notes = db.Column(db.String(128))
+    user = db.Column(db.String(128))
+    user_email = db.Column(db.String(128))
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'

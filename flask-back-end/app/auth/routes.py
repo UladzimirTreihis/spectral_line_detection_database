@@ -6,10 +6,6 @@ from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm
 from app.models import User
 
-
-
-
-
 #log-in route
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
