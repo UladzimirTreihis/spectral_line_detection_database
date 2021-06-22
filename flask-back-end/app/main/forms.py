@@ -115,7 +115,7 @@ class AddLineForm(FlaskForm):
     observed_line_frequency = FloatField('Observable Line Frequency', validators = [Optional (), NumberRange(min = 0)])
     observed_line_frequency_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     observed_line_frequency_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(max = 0)])
-    detection_type = StringField('Detection Type (strongly recommend) ', validators = [Optional ()])
+    detection_type = SelectField(u'Detection Type', choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric'), ('Either', 'Either')], validators = [Optional ()])
     observed_beam_major = FloatField('Observed Beam Major (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
     observed_beam_minor = FloatField('Observed Beam Minor (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
     observed_beam_angle = FloatField('Observed Beam Angle (strongly recommend) ', validators = [Optional ()])
