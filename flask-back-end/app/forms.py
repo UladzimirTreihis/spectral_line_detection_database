@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional
-from app.models import User
+from wtforms import IntegerField, FloatField, StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms.fields.core import SelectField
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
+from app.models import User, Galaxy, Line
+from flask import request
 
 #creating a log-in form
 class LoginForm(FlaskForm):
@@ -46,3 +48,92 @@ class EditProfileForm(FlaskForm):
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username')
+
+#The simple search form to desplay options also. Will need to redevelop to be either advanced or just simple search.
+class SearchForm(FlaskForm):
+    search = StringField('')
+    submit = SubmitField('Search', validators=[DataRequired()])
+
+    def __init__(self, *args, **kwargs):
+        if 'formdata' not in kwargs:
+            kwargs['formdata'] = request.args
+        if 'csrf_enabled' not in kwargs:
+            kwargs['csrf_enabled'] = False
+        super(SearchForm, self).__init__(*args, **kwargs)
+
+#Will delete if won't need anymore
+#class ButtonForm(FlaskForm):
+    #submit = SubmitField('Advanced Search', validators=[DataRequired()])
+
+class AdvancedSearchForm(FlaskForm):
+    name = StringField('Galaxy Name', validators = [Optional ()])
+    right_ascension_min = FloatField('Right Ascension from:', validators = [Optional ()])
+    right_ascension_max = FloatField('Right Ascension to:', validators = [Optional ()])
+    declination_min = FloatField('Declination from:', validators = [Optional ()])
+    declination_max = FloatField('Declination to:', validators = [Optional ()])
+    redshift_min = FloatField('Redshift from:', validators = [Optional ()])
+    redshift_max = FloatField('Redshift to:', validators = [Optional ()])
+    lensing_flag = SelectField(u'Lensing Flag',
+        choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validate_choice=False)
+    #line data
+
+    j_upper_min = IntegerField('J Upper from:', validators = [Optional (), NumberRange(min = 0)])
+    j_upper_max = IntegerField('J Upper to:', validators = [Optional (), NumberRange(min = 0)])
+    line_id_type = StringField('Line ID Type', validators = [Optional ()])
+    integrated_line_flux_min = FloatField('Integrated Line Flux from:', validators = [Optional(), NumberRange(min = 0)])
+    integrated_line_flux_max = FloatField('Integrated Line Flux to:', validators = [Optional(), NumberRange(min = 0)])
+    peak_line_flux_min = FloatField('Peak Line Flux from:', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_max = FloatField('Peak Line Flux to:', validators = [Optional (), NumberRange(min = 0)])
+    line_width_min = FloatField('Line Width from:', validators = [Optional (), NumberRange(min = 0)])
+    line_width_max = FloatField('Line Width to:', validators = [Optional (), NumberRange(min = 0)])
+
+    observed_line_frequency_min = FloatField('Observable Line Frequency from:', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_max = FloatField('Observable Line Frequency to:', validators = [Optional (), NumberRange(min = 0)])
+
+    detection_type = SelectField(u'Detection Type',
+        choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric'), ('Either', 'Either')], validate_choice=False)
+    observed_beam_major_min = FloatField('Observed Beam Major from:', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_major_max = FloatField('Observed Beam Major to:', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor_min = FloatField('Observed Beam Minor from:', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor_max = FloatField('Observed Beam Minor to:', validators = [Optional (), NumberRange(min = 0)])
+
+    reference = StringField('Reference', validators = [Optional()])
+
+    galaxySearch = SubmitField(label='Search for Galaxies')
+    lineSearch = SubmitField(label="Search for Lines")
+    
+class AddGalaxyForm(FlaskForm):
+    name = StringField('Galaxy Name', validators = [DataRequired ()])
+    right_ascension = FloatField('Right Ascension', validators = [DataRequired (), NumberRange(min = 0)])
+    declination = FloatField('Declination', validators = [DataRequired ()])
+    coordinate_system = StringField('Coordinate System', validators = [DataRequired ()])
+    redshift = FloatField('Redshift', validators = [Optional (), NumberRange(min = 0)])
+    lensing_flag = StringField('Lensing Flag', validators = [DataRequired ()])
+    classification = StringField('Classification', validators = [DataRequired ()])
+    notes = StringField('Notes', validators = [Optional ()])
+    submit = SubmitField('Submit')
+    new_line = SubmitField ('Add Line to this Galaxy')
+
+class AddLineForm(FlaskForm):
+    galaxy_name = SelectField (u'Galaxy Name')
+    j_upper = IntegerField('J Upper', validators = [DataRequired (), NumberRange(min = 0)])
+    line_id_type = StringField('Line ID Type', validators = [Optional ()])
+    integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [DataRequired (), NumberRange(max = 0)])
+    peak_line_flux = FloatField('Peak Line Flux', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(max = 0)])
+    line_width = FloatField('Line Width', validators = [Optional (), NumberRange(min = 0)])
+    line_width_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    line_width_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(max = 0)])
+    observed_line_frequency = FloatField('Observable Line Frequency', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(max = 0)])
+    detection_type = StringField('Detection Type (strongly recommend) ', validators = [Optional ()])
+    observed_beam_major = FloatField('Observed Beam Major (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor = FloatField('Observed Beam Minor (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_angle = FloatField('Observed Beam Angle (strongly recommend) ', validators = [Optional ()])
+    reference = StringField('Reference', validators = [DataRequired()])
+    notes = StringField('Notes', validators = [Optional ()])
+    submit = SubmitField('Submit')

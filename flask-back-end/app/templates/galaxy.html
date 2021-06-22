@@ -1,87 +1,46 @@
 {% extends "./base.html" %}
 
 {% block title %}
-    Main 
+    Galaxy {{ galaxy.name }} 
 {% endblock %}
 
 {% block content %}
 
-<hr>
-<h1> Main Page </h1>
-<p> This is the content for the main page. </p>
-<br>
-
-<a href="{{ url_for('galaxy_entry_form') }}" class="btn btn-info" role="button">Enter Galaxy Information Through a Form</a>
-<a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Enter Line Information Through a Form</a>
-<a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
-<a href="{{ url_for('query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
-<br>
-<br>
-{% if form %}
-<li class="list-inline-item">
-   <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
-     <ul class="list-inline text-right" >
-         <li class="list-inline-item">
-            <div class="form-group">
-               {{ form.search(size=20, class='form-control',placeholder=form.search.label.text) }}
-            </div>
-         </li>
-         <li class="list-inline-item">
-            <button type="submit" value="Search">
-               {{ form.submit() }}
-            </button>
-         </li>
-     </ul>
-   </form> 
-</li>
-{% endif %}
-
-<br> 
-<br>
-
-<h2> Galaxy (click on each galaxy name to view associated lines) </h2>
+<h2> Galaxy Details </h2>
 <table class = "table" id = "Galaxy">
-         <thead>
-            <tr>
-               <th>ID</th>
-               <th>Name</th>
-               <th>Right Ascension</th>
-               <th>Declination</th>
-               <th>Coordinate System</th>
-               <th>Redshift</th>
-               <th>Lensing Flag</th>
-               <th>Classification</th>
-               <th>Notes</th>
-            </tr>
-         </thead>
-         
-         <tbody>
-            {% for g in galaxy %}
-               <tr>
-                  <td>{{ g.id }}</td>
-                  <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
-                  <td>{{ g.right_ascension }}</td>
-                  <td>{{ g.declination }}</td>
-                  <td>{{ g.coordinate_system }}</td>
-                  <td>{{ g.redshift }}</td>
-                  <td>{{ g.lensing_flag }}</td>
-                  <td>{{ g.classification }}</td>
-                  <td>{{ g.notes }}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Right Ascension</th>
+        <th>Declination</th>
+        <th>Coordinate System</th>
+        <th>Redshift</th>
+        <th>Lensing Flag</th>
+        <th>Classification</th>
+        <th>Notes</th>
+    </tr>
+    </thead>
+    
+    <tbody>
+        <tr>
+            <td>{{ galaxy.id }}</td>
+            <td>{{ galaxy.name }}</td>
+            <td>{{ galaxy.right_ascension }}</td>
+            <td>{{ galaxy.declination }}</td>
+            <td>{{ galaxy.coordinate_system }}</td>
+            <td>{{ galaxy.redshift }}</td>
+            <td>{{ galaxy.lensing_flag }}</td>
+            <td>{{ galaxy.classification }}</td>
+            <td>{{ galaxy.notes }}</td>
+        </tr>
+    </tbody>
+</table>
 
-<a href="{{ url_for ('convert_to_CSV', table = "Galaxy") }}" class="btn btn-info" role="button">Download as CSV</a>
-
-<br> 
-<br>
-
-<h2> Line </h2>
+<h2> Lines in this Galaxy </h2>
     <table class = "table" id = "Line">
          <thead>
             <tr>
-               <th>Galaxy ID</th>
                <th>J Upper</th>
                <th>Line ID Type</th>
                <th>Integrated Line Flux</th>
@@ -108,7 +67,6 @@
          <tbody>
             {% for l in line %}
                <tr>
-                  <td>{{ l.galaxy_id }}</td>
                   <td>{{ l.j_upper }}</td>
                   <td>{{ l.line_id_type }}</td>
                   <td>{{ l.integrated_line_flux }}</td>
@@ -134,6 +92,6 @@
          </tbody>
       </table>
 
-<a href="{{ url_for ('convert_to_CSV', table = "Line") }}" class="btn btn-info" role="button">Download as CSV</a>
+<a href="{{ url_for ('main') }}" class="btn btn-info" role="button"> Back </a>
 
 {% endblock %}
