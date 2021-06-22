@@ -11,7 +11,8 @@ from sqlalchemy.orm import sessionmaker
 import math
 from sqlalchemy import event
 from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
+
+#from app.models import User, Galaxy, Line
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -19,7 +20,8 @@ login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page'
 engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
-    
+admin = Admin()
+
 Session = sessionmaker()
 Session.configure(bind=engine)
 
@@ -39,6 +41,9 @@ def create_app(config_class = DevelopmentConfig):
     db.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
+
+    admin.init_app(app)
+    
     
     engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
     
@@ -52,6 +57,8 @@ def create_app(config_class = DevelopmentConfig):
     app.register_blueprint(auth_bp, url_prefix='/auth')
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
+    from app.adm import bp as adm_bp
+    app.register_blueprint(adm_bp)
 
     UPLOAD_FOLDER = 'static/files'
     app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
