@@ -209,6 +209,8 @@ def entry_file():
         csv_file = TextIOWrapper(csvfile, encoding='utf-8')
         reader = csv.DictReader(csv_file)
         data = [row for row in reader]
+        if data == []:
+            flash ("CSV File is empty. ")
         g_validated = True
         for row in data:
             if row['name'] == "":
@@ -245,10 +247,9 @@ def entry_file():
                                 classification = row ['classification'],
                                 notes = row ['notes'])
                 db.session.add(galaxy)
-                db.session.commit()
                 new_id = db.session.query(func.max(Galaxy.id)).first()
                 id = new_id [0]
-                l_validated = False
+                l_validated = True
                 if row['j_upper'] == "":
                     l_validated = False
                     flash ("J Upper is Mandatory")
@@ -319,7 +320,7 @@ def entry_file():
                     session = Session ()
                     total = update_redshift(session, id)
                     update_redshift_error(session, id, total)
-                    flash ("File has been uploaded. ")
+                    flash ("File has been successfully uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
      
 
