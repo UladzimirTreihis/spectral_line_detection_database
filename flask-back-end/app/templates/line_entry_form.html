@@ -28,13 +28,6 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.line_id_type.label }}<br>
-            {{ form.line_id_type(size=32) }}<br>
-            {% for error in form.line_id_type.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
             {{ form.integrated_line_flux.label }}<br>
             {{ form.integrated_line_flux(size=32) }}<br>
             {% for error in form.integrated_line_flux.errors %}

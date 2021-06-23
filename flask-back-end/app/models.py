@@ -28,7 +28,6 @@ class Line(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id'), nullable = False) 
     j_upper = db.Column(db.Integer, nullable = False)  
-    line_id_type = db.Column(db.String(32))
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32), nullable = False)
