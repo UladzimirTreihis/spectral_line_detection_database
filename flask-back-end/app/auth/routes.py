@@ -21,13 +21,16 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
-        #If the condition above was false, it logs-in the user and checks the remember me info; redicrects to the temporal login_successful page.
-        login_user(user, remember=form.remember_me.data)
-        #the code for redirection back to @index once logged-in successfully
-        next_page = request.args.get('next')
-        if not next_page or url_parse(next_page).netloc != '':
-            next_page = url_for('main.main')
-        return redirect(next_page)
+        #If the condition above was false, it logs-in the user and checks the remember me info; redirects to the temporal login_successful page.
+        if not is_admin (form.username.data):
+            login_user(user, remember=form.remember_me.data)
+            #the code for redirection back to @index once logged-in successfully
+            next_page = request.args.get('next')
+            if not next_page or url_parse(next_page).netloc != '':
+                next_page = url_for('main.main')
+            return redirect(next_page)
+        else:
+            return redirect (url_for ('admin.index'))
     return render_template("./auth/login.html", title='Sign In', form=form)
 
 
@@ -51,4 +54,6 @@ def register():
         return redirect(url_for('auth.login'))
     return render_template('./auth/register.html', title= 'Register', form=form)
 
-
+def is_admin(username):
+    if username == "admin":
+        return True
