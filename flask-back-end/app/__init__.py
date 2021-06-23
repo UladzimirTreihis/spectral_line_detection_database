@@ -11,8 +11,8 @@ from sqlalchemy.orm import sessionmaker
 import math
 from sqlalchemy import event
 from flask_admin import Admin
-
-#from app.models import User, Galaxy, Line
+from flask_admin.contrib.sqla import ModelView
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -20,7 +20,14 @@ login = LoginManager()
 login.login_view = 'auth.login'
 login.login_message = 'Please log in to access this page'
 engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
-admin = Admin()
+admin = Admin (template_mode='bootstrap3')
+
+@event.listens_for(engine, 'connect')
+def create_math_functions_on_connect(dbapi_connection, connection_record):
+    dbapi_connection.create_function('sin', 1, math.sin)
+    dbapi_connection.create_function('cos', 1, math.cos)
+    dbapi_connection.create_function('acos', 1, math.acos)
+    dbapi_connection.create_function('radians', 1, math.radians)
 
 Session = sessionmaker()
 Session.configure(bind=engine)
@@ -102,4 +109,4 @@ def create_math_functions_on_connect(dbapi_connection, connection_record):
 
 
 
-from app import models
+
