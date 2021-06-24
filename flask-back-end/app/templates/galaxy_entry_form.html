@@ -37,14 +37,6 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.redshift.label }}<br>
-            {{ form.redshift(size=32) }}<br>
-            {% for error in form.redshift.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
-
-        </p>
-        <p>
             {{ form.lensing_flag.label }}<br>
             {{ form.lensing_flag(size=3) }}<br>
             {% for error in form.lensing_flag.errors %}
