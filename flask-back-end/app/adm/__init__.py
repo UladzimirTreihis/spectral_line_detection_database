@@ -12,13 +12,13 @@ bp = Blueprint('adm', __name__)
 class TempGalaxyView(ModelView):
     @action('approve', 'Approve')
     def action_approve(self, ids):
-        pass
+        flash ("Approved :) ")
         
 
 class TempLineView(ModelView):
     @action('approve', 'Approve')
     def action_approve(self, ids):
-        pass
+        flash ("Approved :) ")
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Galaxy, db.session))
