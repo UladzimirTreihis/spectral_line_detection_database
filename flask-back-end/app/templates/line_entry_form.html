@@ -99,6 +99,14 @@
 
         </p>
         <p>
+            {{ form.freq_type.label }}<br>
+            {{ form.freq_type(size=2) }}<br>
+            {% for error in form.freq_type.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
             {{ form.observed_line_frequency.label }}<br>
             {{ form.observed_line_frequency(size=32) }}<br>
             {% for error in form.observed_line_frequency.errors %}

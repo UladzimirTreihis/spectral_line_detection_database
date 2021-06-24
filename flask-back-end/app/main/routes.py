@@ -368,12 +368,12 @@ def galaxy_entry_form():
                 RA = ra_to_float(form.right_ascension.data)
             except:
                 RA = form.right_ascension.data 
-            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, redshift = form.redshift.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user = current_user.username, user_email = current_user.email)
+            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, redshift = form.redshift.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been added. ')
         if form.new_line.data:
-            return redirect(url_for('line_entry_form'))
+            return redirect(url_for('main.line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
 def update_redshift(session, galaxy_id):
@@ -385,7 +385,7 @@ def update_redshift(session, galaxy_id):
 
     sum_upper = sum_lower = 0
     for l in line_redshift:
-        delta_nu = l.observed_line_frequency_uncertainty_positive - l.observed_line_frequency_uncertainty_negative
+        delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
         J_UPPER = l.j_upper
         if J_UPPER > 30 or J_UPPER < 1:
             continue
@@ -410,7 +410,7 @@ def update_redshift_error(session, galaxy_id, sum_upper):
             Galaxy.id == galaxy_id
         ).all() 
     for l in line_redshift:
-        delta_nu = l.observed_line_frequency_uncertainty_positive - l.observed_line_frequency_uncertainty_negative
+        delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
         J_UPPER = l.j_upper
         z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
         delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
@@ -426,18 +426,18 @@ def update_redshift_error(session, galaxy_id, sum_upper):
 def line_entry_form():
     form = AddLineForm()
     if form.galaxy_form.data:
-        return redirect(url_for('galaxy_entry_form'))
+        return redirect(url_for('main.galaxy_entry_form'))
     if form.validate_on_submit():
         if form.submit.data:
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
-            line = Line(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = form.observed_line_frequency.data, observed_line_frequency_uncertainty_positive = form.observed_line_frequency_uncertainty_positive.data, observed_line_frequency_uncertainty_negative = form.observed_line_frequency_uncertainty_negative.data, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user = current_user.username, user_email = current_user.email)
+            line = Line(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = form.observed_line_frequency.data, observed_line_frequency_uncertainty_positive = form.observed_line_frequency_uncertainty_positive.data, observed_line_frequency_uncertainty_negative = form.observed_line_frequency_uncertainty_negative.data, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(line)
             db.session.commit()
             total = update_redshift(session, galaxy_id)
             update_redshift_error(session, galaxy_id, total)
             flash ('Line has been added. ')
-            return redirect(url_for('main'))
+            return redirect(url_for('main.main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
 @bp.route('/galaxies')
