@@ -5,9 +5,54 @@ from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
 from app.models import User, Galaxy, Line, TempGalaxy, TempLine
 from app import admin, db, Session
-
+from config import EMITTED_FREQUENCY
 
 bp = Blueprint('adm', __name__)
+
+def update_redshift(session, galaxy_id):
+    line_redshift = session.query(
+            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all() 
+
+    sum_upper = sum_lower = 0
+    for l in line_redshift:
+        delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+        J_UPPER = l.j_upper
+        if J_UPPER > 30 or J_UPPER < 1:
+            continue
+        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        sum_upper = sum_upper =+ (z/delta_z)
+        sum_lower = sum_lower =+ (1/delta_z)
+
+    redshift_weighted = sum_upper / sum_lower
+    session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift": redshift_weighted})
+    session.commit()
+    
+    return sum_upper
+
+def update_redshift_error(session, galaxy_id, sum_upper):
+    redshift_error_weighted = 0
+    line_redshift = session.query(
+            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all() 
+    for l in line_redshift:
+        delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+        J_UPPER = l.j_upper
+        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        weight = (z/delta_z)/sum_upper
+        redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
+    session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift_error": redshift_error_weighted})
+    session.commit()
 
 class TempGalaxyView(ModelView):
     @action('approve', 'Approve')
@@ -29,8 +74,11 @@ class TempLineView(ModelView):
         session = Session ()
         for id in ids:
             line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes).filter(TempLine.id==id).all()
-            l = Line (galaxy_id = line [0][0], j_upper = line [0][1], integrated_line_flux = line [0][2], integrated_line_flux_uncertainty_positive = line [0][3], integrated_line_flux_uncertainty_negative = line [0][4], peak_line_flux = line [0][5], peak_line_flux_uncertainty_positive = line [0][6], peak_line_flux_uncertainty_negative = line [0][7], line_width = line [0][8], line_width_uncertainty_positive = line [0][9], line_width_uncertainty_negative = line [0][10], observed_line_frequency = line [0][11], observed_line_frequency_uncertainty_positive = line [0][12], observed_line_frequency_uncertainty_negative = line [0][13], detection_type = line [0][14], observed_beam_major = line [0][15], observed_beam_minor = line [0][16], observed_beam_angle = line [0][17], reference = line [0][18], notes = line [0][19])
+            g_id = line [0][0]
+            l = Line (galaxy_id = g_id, j_upper = line [0][1], integrated_line_flux = line [0][2], integrated_line_flux_uncertainty_positive = line [0][3], integrated_line_flux_uncertainty_negative = line [0][4], peak_line_flux = line [0][5], peak_line_flux_uncertainty_positive = line [0][6], peak_line_flux_uncertainty_negative = line [0][7], line_width = line [0][8], line_width_uncertainty_positive = line [0][9], line_width_uncertainty_negative = line [0][10], observed_line_frequency = line [0][11], observed_line_frequency_uncertainty_positive = line [0][12], observed_line_frequency_uncertainty_negative = line [0][13], detection_type = line [0][14], observed_beam_major = line [0][15], observed_beam_minor = line [0][16], observed_beam_angle = line [0][17], reference = line [0][18], notes = line [0][19])
             db.session.add (l)
+            total = update_redshift(session, g_id)
+            update_redshift_error(session, g_id, total)
             db.session.commit ()
             l_temp = TempLine.query.filter_by(id=id).first()
             db.session.delete (l_temp)
