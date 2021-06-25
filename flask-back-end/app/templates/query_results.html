@@ -4,10 +4,16 @@
     Advanced Search
 {% endblock %}
 
+{% block script %}
+
+{% endblock %}
+
 {% block content %}
 
 <hr>
 <h1> Advanced Search </h1>
+<br>
+
 <form action= {{url_for('main.query_results')}} method='POST' id='galaxyForm'>
    {{form_advanced.hidden_tag() }}
       <p>
@@ -130,13 +136,6 @@
             {% endfor %}
          </p>
       </div>
-      <p>
-         {{ form_advanced.line_id_type.label }}<br>
-         {{ form_advanced.line_id_type(size=32) }}<br>
-         {% for error in form_advanced.line_id_type.errors %}
-         <span style="color: red;">[{{ error }}]</span>
-         {% endfor %}
-      </p>
       <div style="display: flex;">
          <p>
             {{ form_advanced.integrated_line_flux_min.label }}<br>
@@ -301,7 +300,6 @@
       <tr>
          <th>Galaxy Name</th>
          <th>J Upper</th>
-         <th>Line ID Type</th>
          <th>Integrated Line Flux</th>
          <th>Integrated Line Flux Positive Uncertainty</th>
          <th>Integrated Line Flux Negative Uncertainty</th>
@@ -330,19 +328,42 @@
          <tr>
             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ l.j_upper }}</td>
-            <td>{{ l.line_id_type }}</td>
             <td>{{ l.integrated_line_flux }}</td>
             <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-            <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
+            <td>
+               {% if l.integrated_line_flux_uncertainty_negative == None %}
+                  {{ l.integrated_line_flux_uncertainty_positive }}
+               {% else %}
+                  {{ l.integrated_line_flux_uncertainty_negative }}
+               {% endif %}
+            </td>
             <td>{{ l.peak_line_flux }}</td>
             <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-            <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
+            <td>
+               {% if l.peak_line_flux_uncertainty_negative == None %}
+                  {{ l.peak_line_flux_uncertainty_positive }}
+               {% else %}
+                  {{ l.peak_line_flux_uncertainty_negative }}
+               {% endif %}
+            </td>
             <td>{{ l.line_width }}</td>
             <td>{{ l.line_width_uncertainty_positive }}</td>
-            <td>{{ l.line_width_uncertainty_negative }}</td>
+            <td>
+               {% if l.line_width_uncertainty_negative == None %}
+                  {{ l.line_width_uncertainty_positive }}
+               {% else %}
+                  {{ l.line_width_uncertainty_negative }}
+               {% endif %}
+            </td>
             <td>{{ l.observed_line_frequency }}</td>
             <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
-            <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
+            <td>
+               {% if l.observed_line_frequency_uncertainty_negative == None %}
+                  {{ l.observed_line_frequency_uncertainty_positive }}
+               {% else %}
+                  {{ l.observed_line_frequency_uncertainty_negative }}
+               {% endif %}
+            </td>                
             <td>{{ l.detection_type }}</td>
             <td>{{ l.observed_beam_major }}</td>
             <td>{{ l.observed_beam_minor }}</td>
@@ -354,5 +375,4 @@
    </tbody>
 </table> 
 {% endif %}
-
 {% endblock %}
