@@ -1,4 +1,5 @@
 from operator import ne
+from flask.globals import session
 from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
@@ -93,6 +94,18 @@ def to_zero(entry):
         entry = entry
     return entry
 
+
+def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False):
+    if based_on_beam_angle == False:
+        galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < distance)
+        return galaxies
+    else:
+        subqry = session.query(func.max(Line.observed_beam_angle))
+        galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry)))
+        return galaxies
+    
+
+
 #Is expected to redirect here to display the results. 
 @bp.route("/query_results", methods=['GET', 'POST'])
 @login_required
@@ -153,7 +166,8 @@ def query_results():
             #Additional filter if radius is specified
             if (form_advanced.right_ascension_point.data != None) and (form_advanced.declination_point.data != None) and ((form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (form_advanced.radius_s.data != None)):
                 distance=math.radians(to_zero(form_advanced.radius_d.data)+to_zero(form_advanced.radius_m.data)/60+to_zero(form_advanced.radius_s.data)/3600) 
-                galaxies=session.query(Galaxy, Line).outerjoin(Line).filter(func.acos(func.sin(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_advanced.declination_point.data) - Galaxy.declination)))   ) < distance)
+                galaxies=session.query(Galaxy, Line).outerjoin(Line)
+                galaxies = within_distance(session, galaxies, form_advanced.right_ascension_point.data, form_advanced.declination_point.data, distance=distance)
                 
             else:
                 galaxies=session.query(Galaxy, Line).outerjoin(Line)
@@ -173,7 +187,8 @@ def query_results():
         elif form_advanced.lineSearch.data:
             if (form_advanced.right_ascension_point.data != None) and (form_advanced.declination_point.data != None) and ((form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (form_advanced.radius_s.data != None)):
                 distance=math.radians(to_zero(form_advanced.radius_d.data)+to_zero(form_advanced.radius_m.data)/60+to_zero(form_advanced.radius_s.data)/3600) 
-                galaxies=session.query(Galaxy, Line).outerjoin(Galaxy).filter(func.acos(func.sin(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_advanced.declination_point.data) - Galaxy.declination)))   ) < distance)
+                galaxies=session.query(Galaxy, Line).outerjoin(Galaxy)
+                galaxies = within_distance(session, galaxies, form_advanced.right_ascension_point.data, form_advanced.declination_point.data, distance=distance)
                 
             else:
                 galaxies=session.query(Galaxy, Line).outerjoin(Galaxy)
@@ -324,8 +339,10 @@ def entry_file():
 
 
 def ra_to_float(coordinates):
+    if isinstance(coordinates, float) or isinstance(coordinates, int):
+        coordinates = str(coordinates)
     if coordinates.find('s') != -1:
-        h = float(coordinates[0:2])
+        h = float(coordinates[0:2])                      
         m = float(coordinates[3:5])
         s = float(coordinates[coordinates.find('m')+1:coordinates.find('s')])
         return h*15+m/4+s/240
@@ -337,6 +354,8 @@ def ra_to_float(coordinates):
         ra = coordinates
         return float(ra) 
 def dec_to_float(coordinates):
+    if isinstance(coordinates, float) or isinstance(coordinates, int):
+        coordinates = str(coordinates)
     if coordinates.find('s') != -1:
         d = float(coordinates[1:3])
         m = float(coordinates[4:6])
@@ -359,6 +378,7 @@ def dec_to_float(coordinates):
 @login_required
 def galaxy_entry_form():
     form = AddGalaxyForm()
+    session=Session()
     if form.validate_on_submit ():
         if form.submit.data:
             try:
@@ -369,7 +389,13 @@ def galaxy_entry_form():
                 RA = ra_to_float(form.right_ascension.data)
             except:
                 RA = form.right_ascension.data 
-            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, redshift = form.redshift.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+            if galaxies.first() != None:
+                another_exists = True
+                return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=another_exists)
+            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been added. ')
@@ -502,7 +528,7 @@ def submit():
 
 @bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
 @login_required
-def convert_to_CSV(table, identifier):
+def convert_to_CSV(table, identifier, symmetrical):
     if table == "Galaxy":
         f = open('galaxy.csv', 'w')
         out = csv.writer(f)
@@ -553,7 +579,10 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        if symmetrical:
+            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        else:
+            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()

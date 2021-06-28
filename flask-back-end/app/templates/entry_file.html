@@ -9,7 +9,9 @@
     <p> Click here to download sample CSV </p>
     <br>
 
-    <a href="{{ url_for ('main.convert_to_CSV', table = "Empty", identifier = "None") }}" class="btn btn-info" role="button">Download sample CSV</a>
+    <a href="{{ url_for ('main.convert_to_CSV', table = "Empty", identifier = "None", symmetrical = False) }}" class="btn btn-info" role="button">Download sample CSV</a>
+    <p>ALternatively, here you can download the sample for entries with symmetrical uncertainties (Negative uncertainty assumed equal to positive)</p>
+    <a href="{{ url_for ('main.convert_to_CSV', table = "Empty", identifier = "None", symmetrical = True) }}" class="btn btn-info" role="button">Download sample CSV for symmetrical</a>
     
     <form action="" method="post" novalidate enctype="multipart/form-data">
       <p>

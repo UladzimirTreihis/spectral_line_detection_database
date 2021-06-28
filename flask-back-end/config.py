@@ -92,5 +92,36 @@ EMITTED_FREQUENCY = {
     29:3325.00528270,
     30:3438.36461100}
 
+COL_NAMES = {
+    'name':'',
+    'ra' : '',
+    'dec':'',
+    'c_sys':'',
+    'redshift':'',
+    'len_flag':'',
+    'class':'',
+    'g_notes':'',
+    'j_upper':'',
+    'int_flux':'',
+    'int_flux_pos':'',
+    'int_flux_neg':'',
+    'peak_flux':'',
+    'peak_flux_pos':'',
+    'peak_flux_neg':'',
+    'width':'',
+    'width_pos':'',
+    'width_neg':'',
+    'freq_type':'',
+    'freq':'',
+    'freq_pos':'',
+    'freq_neg':'',
+    'dec_type':'',
+    'beam_major':'',
+    'beam_minor':'',
+    'beam_angle':'',
+    'ref':'',
+    'l_notes':''
+}
+
 dec_reg_exp = '((([+]+)|([-]+))[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|((([+]+)|([-]+))[0-9.]+[.]*[0-9]*)'
 ra_reg_exp = '([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+[.]*[0-9]*)'
