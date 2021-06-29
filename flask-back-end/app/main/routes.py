@@ -228,18 +228,11 @@ def entry_file():
             if row['declination'] == "":
                 g_validated = False
                 flash ("Declination is Mandatory")
-            if row['redshift'] == "":
-                g_validated = False
-                flash ("Redshift is Mandatory.")
-            if int(row['redshift']) <1 :
-                g_validated = False
-                flash ("Redshift cannot be negative.")
             if g_validated == True:
                 galaxy = Galaxy(name = row['name'],
                                 right_ascension = row['right_ascension'],
                                 declination = row['declination'],
                                 coordinate_system = row['coordinate_system'],
-                                redshift = row['redshift'],
                                 lensing_flag = row ['lensing_flag'],
                                 classification = row ['classification'],
                                 notes = row ['notes'],
@@ -437,9 +430,9 @@ def convert_to_CSV(table, identifier):
     if table == "Galaxy":
         f = open('galaxy.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes'])
+        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes'])
         for item in Galaxy.query.all():
-            out.writerow([item.id, item.name, item.right_ascension, item.declination, item.coordinate_system, item.redshift, item.lensing_flag, item.classification, item.notes])
+            out.writerow([item.id, item.name, item.right_ascension, item.declination, item.coordinate_system, item.lensing_flag, item.classification, item.notes])
         f.close()
         with open('./galaxy.csv', 'r') as file:
             galaxy_csv = file.read()
@@ -467,11 +460,11 @@ def convert_to_CSV(table, identifier):
         f = open('galaxy_lines.csv', 'w')
         out = csv.writer(f)
         galaxy_lines = session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier, Line.galaxy_id == identifier)
-        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['id', 'name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         for item in galaxy_lines:
             l = item [1]
             g = item [0]
-            out.writerow([g.id, g.name, g.right_ascension, g.declination, g.coordinate_system, g.redshift, g.lensing_flag, g.classification, g.notes, l.j_upper, l.integrated_line_flux, l.integrated_line_flux_uncertainty_positive, l.integrated_line_flux_uncertainty_negative, l.peak_line_flux, l.peak_line_flux_uncertainty_positive, l.peak_line_flux_uncertainty_negative, l.line_width, l.line_width_uncertainty_positive, l.line_width_uncertainty_negative, l.observed_line_frequency, l.observed_line_frequency_uncertainty_positive, l.observed_line_frequency_uncertainty_negative, l.detection_type, l.observed_beam_major, l.observed_beam_minor, l.observed_beam_angle, l.reference, l.notes])
+            out.writerow([g.id, g.name, g.right_ascension, g.declination, g.coordinate_system, g.lensing_flag, g.classification, g.notes, l.j_upper, l.integrated_line_flux, l.integrated_line_flux_uncertainty_positive, l.integrated_line_flux_uncertainty_negative, l.peak_line_flux, l.peak_line_flux_uncertainty_positive, l.peak_line_flux_uncertainty_negative, l.line_width, l.line_width_uncertainty_positive, l.line_width_uncertainty_negative, l.observed_line_frequency, l.observed_line_frequency_uncertainty_positive, l.observed_line_frequency_uncertainty_negative, l.detection_type, l.observed_beam_major, l.observed_beam_minor, l.observed_beam_angle, l.reference, l.notes])
         f.close()
         with open('./galaxy_lines.csv', 'r') as file:
             galaxy_lines_csv = file.read()
@@ -484,7 +477,7 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()
