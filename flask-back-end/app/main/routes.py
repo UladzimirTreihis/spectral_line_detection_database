@@ -1,3 +1,5 @@
+from operator import ne
+from flask.globals import session
 from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
@@ -8,9 +10,11 @@ from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
 from sqlalchemy.sql import text
+from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp
 from io import TextIOWrapper
 import math
 from app.main import bp
+import re
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 #@app.before_request
@@ -91,6 +95,18 @@ def to_zero(entry):
         entry = entry
     return entry
 
+
+def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False):
+    if based_on_beam_angle == False:
+        galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < distance)
+        return galaxies
+    else:
+        subqry = session.query(func.max(Line.observed_beam_angle))
+        galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry)))
+        return galaxies
+    
+
+
 #Is expected to redirect here to display the results. 
 @bp.route("/query_results", methods=['GET', 'POST'])
 @login_required
@@ -151,7 +167,8 @@ def query_results():
             #Additional filter if radius is specified
             if (form_advanced.right_ascension_point.data != None) and (form_advanced.declination_point.data != None) and ((form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (form_advanced.radius_s.data != None)):
                 distance=math.radians(to_zero(form_advanced.radius_d.data)+to_zero(form_advanced.radius_m.data)/60+to_zero(form_advanced.radius_s.data)/3600) 
-                galaxies=session.query(Galaxy, Line).outerjoin(Line).filter(func.acos(func.sin(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_advanced.declination_point.data) - Galaxy.declination)))   ) < distance)
+                galaxies=session.query(Galaxy, Line).outerjoin(Line)
+                galaxies = within_distance(session, galaxies, form_advanced.right_ascension_point.data, form_advanced.declination_point.data, distance=distance)
                 
             else:
                 galaxies=session.query(Galaxy, Line).outerjoin(Line)
@@ -171,7 +188,8 @@ def query_results():
         elif form_advanced.lineSearch.data:
             if (form_advanced.right_ascension_point.data != None) and (form_advanced.declination_point.data != None) and ((form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (form_advanced.radius_s.data != None)):
                 distance=math.radians(to_zero(form_advanced.radius_d.data)+to_zero(form_advanced.radius_m.data)/60+to_zero(form_advanced.radius_s.data)/3600) 
-                galaxies=session.query(Galaxy, Line).outerjoin(Galaxy).filter(func.acos(func.sin(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_advanced.right_ascension_point.data))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_advanced.declination_point.data) - Galaxy.declination)))   ) < distance)
+                galaxies=session.query(Galaxy, Line).outerjoin(Galaxy)
+                galaxies = within_distance(session, galaxies, form_advanced.right_ascension_point.data, form_advanced.declination_point.data, distance=distance)
                 
             else:
                 galaxies=session.query(Galaxy, Line).outerjoin(Galaxy)
@@ -210,103 +228,109 @@ def entry_file():
             flash ("CSV File is empty. ")
         g_validated = True
         for row in data:
-            if row['name'] == "":
+            if row[COL_NAMES['name']] == "":
                 g_validated = False
                 flash ("Galaxy Name is Mandatory")
-            if row['coordinate_system'] != "ICRS" and row['coordinate_system'] != "J2000":
+            if row[COL_NAMES['coordinate_system']] != "ICRS" and row[COL_NAMES['coordinate_system']] != "J2000":
                 g_validated = False
                 flash ("Coordinate System can be ICRS or J2000 only.")
-            if row['lensing_flag'] != "Lensed" and row['coordinate_system'] != "Unlensed" and row['coordinate_system'] != "Either":
+            if row[COL_NAMES['lensing_flag']] != "l" and row[COL_NAMES['lensing_flag']] != "u" and row[COL_NAMES['lensing_flag']] != "L" and row[COL_NAMES['lensing_flag']] != "U":
                 g_validated = False
-                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\" under Lensing Flag.")
-            if row['classification'] == "":
+                flash ("Please enter either \"L\", \"U\" or \"l\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
+            if row[COL_NAMES['classification']] == "":
                 g_validated = False
                 flash ("Classification is Mandatory")
-            if row['right_ascension'] == "":
+            if row[COL_NAMES['right_ascension']] == "":
                 g_validated = False
                 flash ("Right Ascension is Mandatory")
-            if row['declination'] == "":
+            if re.search(ra_reg_exp, row[COL_NAMES['right_ascension']]) == None:
+                g_validated = False
+                flash ("Enter Right Ascension in a proper format")
+            if row[COL_NAMES['declination']] == "":
                 g_validated = False
                 flash ("Declination is Mandatory")
+            if re.search(dec_reg_exp, row[COL_NAMES['declination']]) == None:
+                g_validated = False
+                flash ("Enter Declination in a proper format")
             if g_validated == True:
-                galaxy = Galaxy(name = row['name'],
-                                right_ascension = row['right_ascension'],
-                                declination = row['declination'],
-                                coordinate_system = row['coordinate_system'],
-                                lensing_flag = row ['lensing_flag'],
-                                classification = row ['classification'],
-                                notes = row ['notes'],
-                                user_submitted = current_user.username,
-                                user_email = current_user.email)
+                galaxy = Galaxy(name = row[COL_NAMES['name']],
+                                right_ascension = ra_to_float(row[COL_NAMES['right_ascension']]),
+                                declination = dec_to_float(row[COL_NAMES['declination']]),
+                                coordinate_system = row[COL_NAMES['coordinate_system']],
+                                lensing_flag = row [COL_NAMES['lensing_flag']],
+                                classification = row [COL_NAMES['classification']],
+                                notes = row [COL_NAMES['g_notes']])
                 db.session.add(galaxy)
                 new_id = db.session.query(func.max(Galaxy.id)).first()
                 id = new_id [0]
                 l_validated = True
-                if row['j_upper'] == "":
+                if row[COL_NAMES['j_upper']] == "":
                     l_validated = False
                     flash ("J Upper is Mandatory")
-                if row['integrated_line_flux'] == "":
+                if row[COL_NAMES['integrated_line_flux']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux is Mandatory")
-                if row['integrated_line_flux_uncertainty_positive'] == "":
+                if row[COL_NAMES['integrated_line_flux_uncertainty_positive']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux Positive Uncertainty is Mandatory")
-                if row['integrated_line_flux_uncertainty_negative'] == "":
+                if row[COL_NAMES['integrated_line_flux_uncertainty_negative']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux Negative Uncertainty is Mandatory")
-                if int (row['integrated_line_flux_uncertainty_positive']) < 0:
+                if float (row[COL_NAMES['integrated_line_flux_uncertainty_positive']]) < 0:
                     l_validated = False
-                    flash ("Integrated Line Flux Positive Uncertainty must be Positive")
-                if int (row['integrated_line_flux_uncertainty_negative']) > 0:
+                    flash ("Integrated Line Flux Positive Uncertainty must be greater than 0")
+                if float (row[COL_NAMES['integrated_line_flux_uncertainty_negative']]) < 0:
                     l_validated = False
-                    flash ("Integrated Line Flux Negative Uncertainty must be Negative")
-                if row ['peak_line_flux_uncertainty_positive'] != "":
-                    if int (row ['peak_line_flux_uncertainty_positive']) < 0:
+                    flash ("Integrated Line Flux Negative Uncertainty must be greater than 0")
+                if row [COL_NAMES['peak_line_flux_uncertainty_positive']] != "":
+                    if float (row [COL_NAMES['peak_line_flux_uncertainty_positive']]) < 0:
                         l_validated = False
-                        flash ("Peak Line Flux Positive Uncertainty must be Positive")
-                if row ['peak_line_flux_uncertainty_negative'] != "":
-                    if int (row ['peak_line_flux_uncertainty_negative']) > 0:
+                        flash ("Peak Line Flux Positive Uncertainty must be greater than 0")
+                if row [COL_NAMES['peak_line_flux_uncertainty_negative']] != "":
+                    if float (row [COL_NAMES['peak_line_flux_uncertainty_negative']]) < 0:
                         l_validated = False
-                        flash ("Peak Line Flux Negative Uncertainty must be Negative")
-                if row ['line_width_uncertainty_positive'] != "":
-                    if int (row ['line_width_uncertainty_positive']) < 0:
+                        flash ("Peak Line Flux Negative Uncertainty must be greater than 0")
+                if row [COL_NAMES['line_width_uncertainty_positive']] != "":
+                    if float (row [COL_NAMES['line_width_uncertainty_positive']]) < 0:
                         l_validated = False
-                        flash ("Line Width Positive Uncertainty must be Positive")
-                if row ['line_width_uncertainty_negative'] != "":
-                    if int (row ['line_width_uncertainty_negative']) > 0:
+                        flash ("Line Width Positive Uncertainty must be greater than 0")
+                if row [COL_NAMES['line_width_uncertainty_negative']] != "":
+                    if float (row [COL_NAMES['line_width_uncertainty_negative']]) < 0:
                         l_validated = False
-                        flash ("Line Width Negative Uncertainty must be Negative")
-                if row ['observed_line_frequency_uncertainty_positive'] != "":
-                    if int (row ['observed_line_frequency_uncertainty_positive']) < 0:
+                        flash ("Line Width Negative Uncertainty must be greater than 0")
+                if row[COL_NAMES['freq_type']] != "z" and row[COL_NAMES['freq_type']] != "f":
+                    l_validated = False
+                    flash ("Please enter either \"z\", \"f\" under {}.".format(COL_NAMES['freq_type']))
+                if row [COL_NAMES['observed_line_frequency_uncertainty_positive']] != "":
+                    if float (row [COL_NAMES['observed_line_frequency_uncertainty_positive']]) < 0:
                         l_validated = False
-                        flash ("Observed Line Frequency Positive Uncertainty must be Positive")
-                if row ['observed_line_frequency_uncertainty_negative'] != "":
-                    if int (row ['observed_line_frequency_uncertainty_negative']) > 0:
+                        flash ("Observed Line Frequency Positive Uncertainty must be greater than 0")
+                if row [COL_NAMES['observed_line_frequency_uncertainty_negative']] != "":
+                    if float (row [COL_NAMES['observed_line_frequency_uncertainty_negative']]) < 0:
                         l_validated = False
-                        flash ("Observed Line Frequency Negative Uncertainty must be Negative")
+                        flash ("Observed Line Frequency Negative Uncertainty must be greater than 0")
                 if l_validated == True:
                     line = Line (galaxy_id = id,
-                                j_upper= row ['j_upper'], 
-                                integrated_line_flux = row ['integrated_line_flux'], 
-                                integrated_line_flux_uncertainty_positive = row ['integrated_line_flux_uncertainty_positive'], 
-                                integrated_line_flux_uncertainty_negative = row ['integrated_line_flux_uncertainty_negative'], 
-                                peak_line_flux = row ['peak_line_flux'],
-                                peak_line_flux_uncertainty_positive = row ['peak_line_flux_uncertainty_positive'],
-                                peak_line_flux_uncertainty_negative= row ['peak_line_flux_uncertainty_negative'], 
-                                line_width= row ['line_width'],
-                                line_width_uncertainty_positive = row ['line_width_uncertainty_positive'],
-                                line_width_uncertainty_negative = row ['line_width_uncertainty_negative'],
-                                observed_line_frequency = row ['observed_line_frequency'],
-                                observed_line_frequency_uncertainty_positive = row ['observed_line_frequency_uncertainty_positive'],
-                                observed_line_frequency_uncertainty_negative = row ['observed_line_frequency_uncertainty_negative'],
-                                detection_type = row ['detection_type'],
-                                observed_beam_major = row ['observed_beam_major'], 
-                                observed_beam_minor = row ['observed_beam_minor'],
-                                observed_beam_angle = row ['observed_beam_angle'],
-                                reference = row ['reference'],
-                                notes = row ['notes'],
-                                user_submitted = current_user.username,
-                                user_email = current_user.email
+                                j_upper= row [COL_NAMES['j_upper']], 
+                                integrated_line_flux = row [COL_NAMES['integrated_line_flux']], 
+                                integrated_line_flux_uncertainty_positive = row [COL_NAMES['integrated_line_flux_uncertainty_positive']], 
+                                integrated_line_flux_uncertainty_negative = row [COL_NAMES['integrated_line_flux_uncertainty_negative']], 
+                                peak_line_flux = row [COL_NAMES['peak_line_flux']],
+                                peak_line_flux_uncertainty_positive = row [COL_NAMES['peak_line_flux_uncertainty_positive']],
+                                peak_line_flux_uncertainty_negative= row [COL_NAMES['peak_line_flux_uncertainty_negative']], 
+                                line_width= row [COL_NAMES['line_width']],
+                                line_width_uncertainty_positive = row [COL_NAMES['line_width_uncertainty_positive']],
+                                line_width_uncertainty_negative = row [COL_NAMES['line_width_uncertainty_negative']],
+                                observed_line_frequency = row [COL_NAMES['observed_line_frequency']],
+                                observed_line_frequency_uncertainty_positive = row [COL_NAMES['observed_line_frequency_uncertainty_positive']],
+                                observed_line_frequency_uncertainty_negative = row [COL_NAMES['observed_line_frequency_uncertainty_negative']],
+                                detection_type = row [COL_NAMES['detection_type']],
+                                observed_beam_major = row [COL_NAMES['observed_beam_major']], 
+                                observed_beam_minor = row [COL_NAMES['observed_beam_minor']],
+                                observed_beam_angle = row [COL_NAMES
+                                ['observed_beam_angle']],
+                                reference = row [COL_NAMES['reference']],
+                                notes = row [COL_NAMES['l_notes']]
                                 )
                     db.session.add(line)
                     db.session.commit()
@@ -319,8 +343,10 @@ def entry_file():
 
 
 def ra_to_float(coordinates):
+    if isinstance(coordinates, float) or isinstance(coordinates, int):
+        coordinates = str(coordinates)
     if coordinates.find('s') != -1:
-        h = float(coordinates[0:2])
+        h = float(coordinates[0:2])                      
         m = float(coordinates[3:5])
         s = float(coordinates[coordinates.find('m')+1:coordinates.find('s')])
         return h*15+m/4+s/240
@@ -332,6 +358,8 @@ def ra_to_float(coordinates):
         ra = coordinates
         return float(ra) 
 def dec_to_float(coordinates):
+    if isinstance(coordinates, float) or isinstance(coordinates, int):
+        coordinates = str(coordinates)
     if coordinates.find('s') != -1:
         d = float(coordinates[1:3])
         m = float(coordinates[4:6])
@@ -354,6 +382,7 @@ def dec_to_float(coordinates):
 @login_required
 def galaxy_entry_form():
     form = AddGalaxyForm()
+    session=Session()
     if form.validate_on_submit ():
         if form.submit.data:
             try:
@@ -364,13 +393,81 @@ def galaxy_entry_form():
                 RA = ra_to_float(form.right_ascension.data)
             except:
                 RA = form.right_ascension.data 
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+            if galaxies.first() != None:
+                another_exists = True
+                return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=another_exists)
+            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been added. ')
         if form.new_line.data:
             return redirect(url_for('main.line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
+
+def update_redshift(session, galaxy_id):
+    line_redshift = session.query(
+            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all() 
+
+    sum_upper = sum_lower = 0
+    for l in line_redshift:
+        if l.observed_line_frequency_uncertainty_negative == None:
+            delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+        else:
+            delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+        J_UPPER = l.j_upper
+        if J_UPPER > 30 or J_UPPER < 1:
+            continue
+        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        sum_upper = sum_upper =+ (z/delta_z)
+        sum_lower = sum_lower =+ (1/delta_z)
+
+    redshift_weighted = sum_upper / sum_lower
+    session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift": redshift_weighted})
+    session.commit()
+    
+    return sum_upper
+
+def update_redshift_error(session, galaxy_id, sum_upper):
+    redshift_error_weighted = 0
+    line_redshift = session.query(
+            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all() 
+    for l in line_redshift:
+        if l.observed_line_frequency_uncertainty_negative == None:
+            delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+        else:
+            delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+        J_UPPER = l.j_upper
+        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        weight = (z/delta_z)/sum_upper
+        redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
+    session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift_error": redshift_error_weighted})
+    session.commit()
+
+def redshift_to_frequency(J_UPPER, z, positive_uncertainty, negative_uncertainty):
+    if negative_uncertainty == None:
+        negative_uncertainty = positive_uncertainty
+    delta_z = positive_uncertainty + negative_uncertainty
+    nu_obs = (EMITTED_FREQUENCY.get(J_UPPER))/(z+1)
+    delta_nu = delta_z * nu_obs / (z+1)
+    return nu_obs, delta_nu/2
+
+
+
 
 @bp.route("/line_entry_form", methods=['GET', 'POST'])
 @login_required
@@ -383,6 +480,14 @@ def line_entry_form():
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
             line = TempLine(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = form.observed_line_frequency.data, observed_line_frequency_uncertainty_positive = form.observed_line_frequency_uncertainty_positive.data, observed_line_frequency_uncertainty_negative = form.observed_line_frequency_uncertainty_negative.data, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            if form.freq_type.data == 'z':
+                frequency, positive_uncertainty = redshift_to_frequency(form.j_upper.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                negative_uncertainty = None
+            else:
+                frequency = form.observed_line_frequency.data
+                positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
+                negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
+            line = Line(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(line)
             db.session.commit()
             flash ('Line has been added. ')
@@ -424,9 +529,9 @@ def user(username):
 def submit():
     return render_template("submit.html")
 
-@bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
+@bp.route("/convert_to_CSV/<table>/<identifier>/<symmetrical>", methods=['GET', 'POST'])
 @login_required
-def convert_to_CSV(table, identifier):
+def convert_to_CSV(table, identifier, symmetrical):
     if table == "Galaxy":
         f = open('galaxy.csv', 'w')
         out = csv.writer(f)
@@ -477,7 +582,10 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        if symmetrical == "True":
+            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        else:
+            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()

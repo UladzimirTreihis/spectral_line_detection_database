@@ -52,7 +52,7 @@ class Line(db.Model):
     j_upper = db.Column(db.Integer, nullable = False)  
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
-    integrated_line_flux_uncertainty_negative = db.Column(db.Float(32), nullable = False)
+    integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
     peak_line_flux = db.Column(db.Float(32))
     peak_line_flux_uncertainty_positive = db.Column(db.Float(32))
     peak_line_flux_uncertainty_negative = db.Column(db.Float(32))

@@ -102,7 +102,7 @@ class AddLineForm(FlaskForm):
     j_upper = IntegerField('J Upper', validators = [DataRequired (), NumberRange(min = 1, max=30, message="The database accepts J Upper between %(min)s and %(max)s")])
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
     integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
-    integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     peak_line_flux = FloatField('Peak Line Flux', validators = [Optional (), NumberRange(min = 0)])
     peak_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     peak_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
