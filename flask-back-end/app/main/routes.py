@@ -10,10 +10,11 @@ from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
 from sqlalchemy.sql import text
-from config import EMITTED_FREQUENCY
+from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp
 from io import TextIOWrapper
 import math
 from app.main import bp
+import re
 
 #The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
 #@app.before_request
@@ -227,106 +228,109 @@ def entry_file():
             flash ("CSV File is empty. ")
         g_validated = True
         for row in data:
-            if row['name'] == "":
+            if row[COL_NAMES['name']] == "":
                 g_validated = False
                 flash ("Galaxy Name is Mandatory")
-            if row['coordinate_system'] != "ICRS" and row['coordinate_system'] != "J2000":
+            if row[COL_NAMES['coordinate_system']] != "ICRS" and row[COL_NAMES['coordinate_system']] != "J2000":
                 g_validated = False
                 flash ("Coordinate System can be ICRS or J2000 only.")
-            if row['lensing_flag'] != "Lensed" and row['coordinate_system'] != "Unlensed" and row['coordinate_system'] != "Either":
+            if row[COL_NAMES['lensing_flag']] != "l" and row[COL_NAMES['lensing_flag']] != "u" and row[COL_NAMES['lensing_flag']] != "L" and row[COL_NAMES['lensing_flag']] != "U":
                 g_validated = False
-                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\" under Lensing Flag.")
-            if row['classification'] == "":
+                flash ("Please enter either \"L\", \"U\" or \"l\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
+            if row[COL_NAMES['classification']] == "":
                 g_validated = False
                 flash ("Classification is Mandatory")
-            if row['right_ascension'] == "":
+            if row[COL_NAMES['right_ascension']] == "":
                 g_validated = False
                 flash ("Right Ascension is Mandatory")
-            if row['declination'] == "":
+            if re.search(ra_reg_exp, row[COL_NAMES['right_ascension']]) == None:
+                g_validated = False
+                flash ("Enter Right Ascension in a proper format")
+            if row[COL_NAMES['declination']] == "":
                 g_validated = False
                 flash ("Declination is Mandatory")
-            if row['redshift'] == "":
+            if re.search(dec_reg_exp, row[COL_NAMES['declination']]) == None:
                 g_validated = False
-                flash ("Redshift is Mandatory.")
-            if int(row['redshift']) <1 :
-                g_validated = False
-                flash ("Redshift cannot be negative.")
+                flash ("Enter Declination in a proper format")
             if g_validated == True:
-                galaxy = Galaxy(name = row['name'],
-                                right_ascension = row['right_ascension'],
-                                declination = row['declination'],
-                                coordinate_system = row['coordinate_system'],
-                                redshift = row['redshift'],
-                                lensing_flag = row ['lensing_flag'],
-                                classification = row ['classification'],
-                                notes = row ['notes'])
+                galaxy = Galaxy(name = row[COL_NAMES['name']],
+                                right_ascension = ra_to_float(row[COL_NAMES['right_ascension']]),
+                                declination = dec_to_float(row[COL_NAMES['declination']]),
+                                coordinate_system = row[COL_NAMES['coordinate_system']],
+                                lensing_flag = row [COL_NAMES['lensing_flag']],
+                                classification = row [COL_NAMES['classification']],
+                                notes = row [COL_NAMES['g_notes']])
                 db.session.add(galaxy)
                 new_id = db.session.query(func.max(Galaxy.id)).first()
                 id = new_id [0]
                 l_validated = True
-                if row['j_upper'] == "":
+                if row[COL_NAMES['j_upper']] == "":
                     l_validated = False
                     flash ("J Upper is Mandatory")
-                if row['integrated_line_flux'] == "":
+                if row[COL_NAMES['integrated_line_flux']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux is Mandatory")
-                if row['integrated_line_flux_uncertainty_positive'] == "":
+                if row[COL_NAMES['integrated_line_flux_uncertainty_positive']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux Positive Uncertainty is Mandatory")
-                if row['integrated_line_flux_uncertainty_negative'] == "":
+                if row[COL_NAMES['integrated_line_flux_uncertainty_negative']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux Negative Uncertainty is Mandatory")
-                if int (row['integrated_line_flux_uncertainty_positive']) < 0:
+                if float (row[COL_NAMES['integrated_line_flux_uncertainty_positive']]) < 0:
                     l_validated = False
-                    flash ("Integrated Line Flux Positive Uncertainty must be Positive")
-                if int (row['integrated_line_flux_uncertainty_negative']) > 0:
+                    flash ("Integrated Line Flux Positive Uncertainty must be greater than 0")
+                if float (row[COL_NAMES['integrated_line_flux_uncertainty_negative']]) < 0:
                     l_validated = False
-                    flash ("Integrated Line Flux Negative Uncertainty must be Negative")
-                if row ['peak_line_flux_uncertainty_positive'] != "":
-                    if int (row ['peak_line_flux_uncertainty_positive']) < 0:
+                    flash ("Integrated Line Flux Negative Uncertainty must be greater than 0")
+                if row [COL_NAMES['peak_line_flux_uncertainty_positive']] != "":
+                    if float (row [COL_NAMES['peak_line_flux_uncertainty_positive']]) < 0:
                         l_validated = False
-                        flash ("Peak Line Flux Positive Uncertainty must be Positive")
-                if row ['peak_line_flux_uncertainty_negative'] != "":
-                    if int (row ['peak_line_flux_uncertainty_negative']) > 0:
+                        flash ("Peak Line Flux Positive Uncertainty must be greater than 0")
+                if row [COL_NAMES['peak_line_flux_uncertainty_negative']] != "":
+                    if float (row [COL_NAMES['peak_line_flux_uncertainty_negative']]) < 0:
                         l_validated = False
-                        flash ("Peak Line Flux Negative Uncertainty must be Negative")
-                if row ['line_width_uncertainty_positive'] != "":
-                    if int (row ['line_width_uncertainty_positive']) < 0:
+                        flash ("Peak Line Flux Negative Uncertainty must be greater than 0")
+                if row [COL_NAMES['line_width_uncertainty_positive']] != "":
+                    if float (row [COL_NAMES['line_width_uncertainty_positive']]) < 0:
                         l_validated = False
-                        flash ("Line Width Positive Uncertainty must be Positive")
-                if row ['line_width_uncertainty_negative'] != "":
-                    if int (row ['line_width_uncertainty_negative']) > 0:
+                        flash ("Line Width Positive Uncertainty must be greater than 0")
+                if row [COL_NAMES['line_width_uncertainty_negative']] != "":
+                    if float (row [COL_NAMES['line_width_uncertainty_negative']]) < 0:
                         l_validated = False
-                        flash ("Line Width Negative Uncertainty must be Negative")
-                if row ['observed_line_frequency_uncertainty_positive'] != "":
-                    if int (row ['observed_line_frequency_uncertainty_positive']) < 0:
+                        flash ("Line Width Negative Uncertainty must be greater than 0")
+                if row[COL_NAMES['freq_type']] != "z" and row[COL_NAMES['freq_type']] != "f":
+                    l_validated = False
+                    flash ("Please enter either \"z\", \"f\" under {}.".format(COL_NAMES['freq_type']))
+                if row [COL_NAMES['observed_line_frequency_uncertainty_positive']] != "":
+                    if float (row [COL_NAMES['observed_line_frequency_uncertainty_positive']]) < 0:
                         l_validated = False
-                        flash ("Observed Line Frequency Positive Uncertainty must be Positive")
-                if row ['observed_line_frequency_uncertainty_negative'] != "":
-                    if int (row ['observed_line_frequency_uncertainty_negative']) > 0:
+                        flash ("Observed Line Frequency Positive Uncertainty must be greater than 0")
+                if row [COL_NAMES['observed_line_frequency_uncertainty_negative']] != "":
+                    if float (row [COL_NAMES['observed_line_frequency_uncertainty_negative']]) < 0:
                         l_validated = False
-                        flash ("Observed Line Frequency Negative Uncertainty must be Negative")
+                        flash ("Observed Line Frequency Negative Uncertainty must be greater than 0")
                 if l_validated == True:
                     line = Line (galaxy_id = id,
-                                j_upper= row ['j_upper'], 
-                                integrated_line_flux = row ['integrated_line_flux'], 
-                                integrated_line_flux_uncertainty_positive = row ['integrated_line_flux_uncertainty_positive'], 
-                                integrated_line_flux_uncertainty_negative = row ['integrated_line_flux_uncertainty_negative'], 
-                                peak_line_flux = row ['peak_line_flux'],
-                                peak_line_flux_uncertainty_positive = row ['peak_line_flux_uncertainty_positive'],
-                                peak_line_flux_uncertainty_negative= row ['peak_line_flux_uncertainty_negative'], 
-                                line_width= row ['line_width'],
-                                line_width_uncertainty_positive = row ['line_width_uncertainty_positive'],
-                                line_width_uncertainty_negative = row ['line_width_uncertainty_negative'],
-                                observed_line_frequency = row ['observed_line_frequency'],
-                                observed_line_frequency_uncertainty_positive = row ['observed_line_frequency_uncertainty_positive'],
-                                observed_line_frequency_uncertainty_negative = row ['observed_line_frequency_uncertainty_negative'],
-                                detection_type = row ['detection_type'],
-                                observed_beam_major = row ['observed_beam_major'], 
-                                observed_beam_minor = row ['observed_beam_minor'],
-                                observed_beam_angle = row ['observed_beam_angle'],
-                                reference = row ['reference'],
-                                notes = row ['notes']
+                                j_upper= row [COL_NAMES['j_upper']], 
+                                integrated_line_flux = row [COL_NAMES['integrated_line_flux']], 
+                                integrated_line_flux_uncertainty_positive = row [COL_NAMES['integrated_line_flux_uncertainty_positive']], 
+                                integrated_line_flux_uncertainty_negative = row [COL_NAMES['integrated_line_flux_uncertainty_negative']], 
+                                peak_line_flux = row [COL_NAMES['peak_line_flux']],
+                                peak_line_flux_uncertainty_positive = row [COL_NAMES['peak_line_flux_uncertainty_positive']],
+                                peak_line_flux_uncertainty_negative= row [COL_NAMES['peak_line_flux_uncertainty_negative']], 
+                                line_width= row [COL_NAMES['line_width']],
+                                line_width_uncertainty_positive = row [COL_NAMES['line_width_uncertainty_positive']],
+                                line_width_uncertainty_negative = row [COL_NAMES['line_width_uncertainty_negative']],
+                                observed_line_frequency = row [COL_NAMES['observed_line_frequency']],
+                                observed_line_frequency_uncertainty_positive = row [COL_NAMES['observed_line_frequency_uncertainty_positive']],
+                                observed_line_frequency_uncertainty_negative = row [COL_NAMES['observed_line_frequency_uncertainty_negative']],
+                                detection_type = row [COL_NAMES['detection_type']],
+                                observed_beam_major = row [COL_NAMES['observed_beam_major']], 
+                                observed_beam_minor = row [COL_NAMES['observed_beam_minor']],
+                                observed_beam_angle = row [COL_NAMES
+                                ['observed_beam_angle']],
+                                reference = row [COL_NAMES['reference']],
+                                notes = row [COL_NAMES['l_notes']]
                                 )
                     db.session.add(line)
                     db.session.commit()
