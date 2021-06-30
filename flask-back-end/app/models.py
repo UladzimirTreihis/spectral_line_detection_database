@@ -67,7 +67,7 @@ class Line(db.Model):
     observed_beam_minor = db.Column(db.Float(32))
     observed_beam_angle = db.Column(db.Float(32))
     reference = db.Column(db.String(128))
-    notes = db.Column(db.String(128))
+    notes = db.Column(db.String(128))  
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
 
