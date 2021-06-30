@@ -3,6 +3,7 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin import expose
 from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
+from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
 from app.models import User, Galaxy, Line, TempGalaxy, TempLine
 from app import admin, db, Session
 from config import EMITTED_FREQUENCY
@@ -83,6 +84,28 @@ class TempLineView(ModelView):
             l_temp = TempLine.query.filter_by(id=id).first()
             db.session.delete (l_temp)
             db.session.commit ()
+
+    @action('delete',
+           'Delete',
+            'Are you sure you want to delete selected records?')
+    def action_delete(self, ids):
+        session = Session ()
+        query = tools.get_query_for_ids(self.get_query(), self.model, ids)
+        if self.fast_mass_delete:
+            count = query.delete(synchronize_session=False)
+        else:
+            count = 0
+            for m in query.all():
+                if self.delete_model(m):
+                    count += 1
+        self.session.commit()
+        for id in ids:
+            g_id = session.query(TempLine.galaxy_id).filter(TempLine.id==id).first()
+            total = update_redshift(session, g_id)
+            update_redshift_error(session, g_id, total)
+            db.session.commit ()
+        flash('Record was successfully deleted.')
+        
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Galaxy, db.session))
