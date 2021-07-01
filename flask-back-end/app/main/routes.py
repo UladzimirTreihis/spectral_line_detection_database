@@ -260,15 +260,15 @@ def entry_file():
                 g_validated = False
                 flash ("Enter Declination in a proper format")
             if g_validated == True:
-                galaxy = Galaxy(name = row[COL_NAMES['name']],
-                                #right_ascension = row[COL_NAMES['right_ascension']],
-                                right_ascension = ra_to_float(row[COL_NAMES['right_ascension']]),
-                                #declination = row[COL_NAMES['declination']],
-                                declination = dec_to_float(row[COL_NAMES['declination']]),
-                                coordinate_system = row[COL_NAMES['coordinate_system']],
-                                lensing_flag = row [COL_NAMES['lensing_flag']],
-                                classification = row [COL_NAMES['classification']],
-                                notes = row [COL_NAMES['g_notes']])
+                galaxy = TempGalaxy(name = row['name'],
+                                    right_ascension = row['right_ascension'],
+                                    declination = row['declination'],
+                                    coordinate_system = row['coordinate_system'],
+                                    lensing_flag = row ['lensing_flag'],
+                                    classification = row ['classification'],
+                                    notes = row ['notes'],
+                                    user_submitted = current_user.username,
+                                    user_email = current_user.email)
                 db.session.add(galaxy)
                 new_id = db.session.query(func.max(Galaxy.id)).first()
                 id = new_id [0]
@@ -345,28 +345,29 @@ def entry_file():
                     except:
                         pass
                 if l_validated == True:
-                    line = Line (galaxy_id = id,
-                                j_upper = row [COL_NAMES['j_upper']], 
-                                integrated_line_flux = row [COL_NAMES['integrated_line_flux']], 
-                                integrated_line_flux_uncertainty_positive = row [COL_NAMES['integrated_line_flux_uncertainty_positive']], 
-                                integrated_line_flux_uncertainty_negative = to_none (row [COL_NAMES['integrated_line_flux_uncertainty_negative']]), 
-                                peak_line_flux = to_none (row [COL_NAMES['peak_line_flux']]),
-                                peak_line_flux_uncertainty_positive = to_none (row [COL_NAMES['peak_line_flux_uncertainty_positive']]),
-                                peak_line_flux_uncertainty_negative= to_none (row [COL_NAMES['peak_line_flux_uncertainty_negative']]), 
-                                line_width= to_none (row [COL_NAMES['line_width']]),
-                                line_width_uncertainty_positive = to_none (row [COL_NAMES['line_width_uncertainty_positive']]),
-                                line_width_uncertainty_negative = to_none (row [COL_NAMES['line_width_uncertainty_negative']]),
-                                observed_line_frequency = row [COL_NAMES['observed_line_frequency']],
-                                observed_line_frequency_uncertainty_positive = to_none (row [COL_NAMES['observed_line_frequency_uncertainty_positive']]),
-                                observed_line_frequency_uncertainty_negative = to_none (row [COL_NAMES['observed_line_frequency_uncertainty_negative']]),
-                                detection_type = row [COL_NAMES['detection_type']],
-                                observed_beam_major = to_none (row [COL_NAMES['observed_beam_major']]), 
-                                observed_beam_minor = to_none (row [COL_NAMES['observed_beam_minor']]),
-                                observed_beam_angle = to_none (row [COL_NAMES
-                                ['observed_beam_angle']]),
-                                reference = row [COL_NAMES['reference']],
-                                notes = row [COL_NAMES['l_notes']]
-                                )
+                    line = TempLine (galaxy_id = id,
+                                    j_upper= row ['j_upper'], 
+                                    integrated_line_flux = row ['integrated_line_flux'], 
+                                    integrated_line_flux_uncertainty_positive = row ['integrated_line_flux_uncertainty_positive'], 
+                                    integrated_line_flux_uncertainty_negative = row ['integrated_line_flux_uncertainty_negative'], 
+                                    peak_line_flux = row ['peak_line_flux'],
+                                    peak_line_flux_uncertainty_positive = row ['peak_line_flux_uncertainty_positive'],
+                                    peak_line_flux_uncertainty_negative= row ['peak_line_flux_uncertainty_negative'], 
+                                    line_width= row ['line_width'],
+                                    line_width_uncertainty_positive = row ['line_width_uncertainty_positive'],
+                                    line_width_uncertainty_negative = row ['line_width_uncertainty_negative'],
+                                    observed_line_frequency = row ['observed_line_frequency'],
+                                    observed_line_frequency_uncertainty_positive = row ['observed_line_frequency_uncertainty_positive'],
+                                    observed_line_frequency_uncertainty_negative = row ['observed_line_frequency_uncertainty_negative'],
+                                    detection_type = row ['detection_type'],
+                                    observed_beam_major = row ['observed_beam_major'], 
+                                    observed_beam_minor = row ['observed_beam_minor'],
+                                    observed_beam_angle = row ['observed_beam_angle'],
+                                    reference = row ['reference'],
+                                    notes = row ['notes'],
+                                    user_submitted = current_user.username,
+                                    user_email = current_user.email
+                                    )
                     db.session.add(line)
                     db.session.commit()
                     #session = Session ()
@@ -374,8 +375,6 @@ def entry_file():
                     #update_redshift_error(session, id, total)
                     flash ("File has been successfully uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
-      
-
 
 def ra_to_float(coordinates):
     if isinstance(coordinates, float) or isinstance(coordinates, int):
@@ -437,7 +436,7 @@ def galaxy_entry_form():
             if galaxies.first() != None:
                 another_exists = True
                 return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=another_exists)
-            galaxy = Galaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been added. ')
