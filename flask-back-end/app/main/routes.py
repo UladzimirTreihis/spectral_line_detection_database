@@ -260,7 +260,7 @@ def entry_file():
                 g_validated = False
                 flash ("Enter Declination in a proper format")
             if g_validated == True:
-                galaxy = Galaxy(name = row['name'],
+                galaxy = TempGalaxy(name = row['name'],
                                     right_ascension = ra_to_float(row['right_ascension']),
                                     declination = dec_to_float(row['declination']),
                                     coordinate_system = row['coordinate_system'],
@@ -345,7 +345,7 @@ def entry_file():
                     except:
                         pass
                 if l_validated == True:
-                    line = Line (galaxy_id = id,
+                    line = TempLine (galaxy_id = id,
                                     j_upper= row ['j_upper'], 
                                     integrated_line_flux =to_none( row ['integrated_line_flux']), 
                                     integrated_line_flux_uncertainty_positive =to_none( row ['integrated_line_flux_uncertainty_positive']), 
@@ -567,7 +567,7 @@ def user(username):
 def submit():
     return render_template("submit.html")
 
-@bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
+@bp.route("/convert_to_CSV/<table>/<identifier>/<symmetrical>", methods=['GET', 'POST'])
 @login_required
 def convert_to_CSV(table, identifier, symmetrical):
     if table == "Galaxy":
@@ -620,7 +620,7 @@ def convert_to_CSV(table, identifier, symmetrical):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        if symmetrical:
+        if symmetrical == "True":
             out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         else:
             out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
