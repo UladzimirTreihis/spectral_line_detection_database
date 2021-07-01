@@ -241,9 +241,9 @@ def entry_file():
             if row[COL_NAMES['coordinate_system']] != "ICRS" and row[COL_NAMES['coordinate_system']] != "J2000":
                 g_validated = False
                 flash ("Coordinate System can be ICRS or J2000 only.")
-            if row[COL_NAMES['lensing_flag']] != "l" and row[COL_NAMES['lensing_flag']] != "u" and row[COL_NAMES['lensing_flag']] != "L" and row[COL_NAMES['lensing_flag']] != "U":
+            if row[COL_NAMES['lensing_flag']] != "Lensed" and row[COL_NAMES['lensing_flag']] != "Unlensed" and row[COL_NAMES['lensing_flag']] != "Either":
                 g_validated = False
-                flash ("Please enter either \"L\", \"U\" or \"l\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
+                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\" under {}.".format(COL_NAMES['lensing_flag']))
             if row[COL_NAMES['classification']] == "":
                 g_validated = False
                 flash ("Classification is Mandatory")
