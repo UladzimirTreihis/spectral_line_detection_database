@@ -19,6 +19,7 @@ class Galaxy(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
+    is_similar = db.Column(db.String(128))
     lines = db.relationship('Line', backref='galaxy', lazy='dynamic')  
 
     def as_dict(self):
@@ -39,6 +40,7 @@ class TempGalaxy(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
+    is_similar = db.Column(db.String(128))
     lines = db.relationship('TempLine', backref='tempgalaxy', lazy='dynamic')  
 
     def as_dict(self):

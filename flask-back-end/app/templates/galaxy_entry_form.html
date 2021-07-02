@@ -5,7 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1> Galaxy Entry Form</h1>
+    
+            
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <h1> Galaxy Entry Form</h1>
     {% if another_exists %}
     <p>The galaxy you have entered seems to already exist. Do you mean one of these?</p>
     {% for element in galaxies %}
@@ -14,11 +18,11 @@
          
         <p1><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></p1>
     {% endfor %}
+    <br>
+    <p> Click Submit to Submit Anyway. </p>
+    <p>{{ form.submit_anyway() }}</p>    
+    <p>{{ form.do_not_submit() }}</p>
     {% endif %}
-            
-    
-    <form action="" method="post" novalidate>
-        {{ form.hidden_tag() }}
         <p>
             {{ form.name.label }}<br>
             {{ form.name(size=32) }}<br>

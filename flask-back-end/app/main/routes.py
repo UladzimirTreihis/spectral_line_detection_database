@@ -243,7 +243,7 @@ def entry_file():
                 flash ("Coordinate System can be ICRS or J2000 only.")
             if row[COL_NAMES['lensing_flag']] != "Lensed" and row[COL_NAMES['lensing_flag']] != "Unlensed" and row[COL_NAMES['lensing_flag']] != "Either":
                 g_validated = False
-                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\" under {}.".format(COL_NAMES['lensing_flag']))
+                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
             if row[COL_NAMES['classification']] == "":
                 g_validated = False
                 flash ("Classification is Mandatory")
@@ -405,7 +405,7 @@ def dec_to_float(coordinates):
     elif coordinates == '-inf':
         return float('-inf')
     elif coordinates == 'inf':
-        return float('inf')
+        return float('inf') 
     else:
         if coordinates[0] == '+':
             dec = coordinates.replace("+","")
@@ -413,14 +413,30 @@ def dec_to_float(coordinates):
             dec = coordinates
         return float(dec)
 
-
-
 @bp.route("/galaxy_entry_form", methods=['GET', 'POST'])
 @login_required
 def galaxy_entry_form():
     form = AddGalaxyForm()
     session=Session()
     if form.validate_on_submit ():
+        if form.submit_anyway.data:
+            try:
+                DEC = dec_to_float(form.declination.data)
+            except:
+                DEC = form.declination.data
+            try:
+                RA = ra_to_float(form.right_ascension.data)
+            except:
+                RA = form.right_ascension.data 
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()))
+            db.session.add(galaxy)
+            db.session.commit()
+            flash ('Galaxy has been added. ')
+        if form.do_not_submit.data:
+            return redirect (url_for ('main.main'))
         if form.submit.data:
             try:
                 DEC = dec_to_float(form.declination.data)
@@ -434,8 +450,7 @@ def galaxy_entry_form():
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             if galaxies.first() != None:
-                another_exists = True
-                return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=another_exists)
+                return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=True)
             galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
             db.session.add(galaxy)
             db.session.commit()
