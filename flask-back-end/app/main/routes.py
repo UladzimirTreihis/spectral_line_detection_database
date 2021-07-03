@@ -593,6 +593,33 @@ def line_entry_form():
             return redirect(url_for('main.main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
+
+@bp.route("/line_edit_form/<line>", methods=['GET', 'POST'])
+@login_required
+def line_edit_form(line):
+    form = AddLineForm(galaxy_name = line)
+    if form.galaxy_form.data:
+        return redirect(url_for('main.galaxy_entry_form'))
+    if form.validate_on_submit():
+        if form.submit.data:
+            session = Session()
+            galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
+            if form.freq_type.data == 'z':
+                frequency, positive_uncertainty = redshift_to_frequency(form.j_upper.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                negative_uncertainty = None
+            else:
+                frequency = form.observed_line_frequency.data
+                positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
+                negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
+            line = TempLine(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            db.session.add(line)
+            db.session.commit()
+            #total = update_redshift(session, galaxy_id)
+            #update_redshift_error(session, galaxy_id, total)
+            flash ('Line has been added. ')
+            return redirect(url_for('main.main'))
+    return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
+
 @bp.route('/galaxies')
 @login_required
 def galaxydic():

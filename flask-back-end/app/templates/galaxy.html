@@ -92,7 +92,7 @@
          </tbody>
       </table>
 <a href="{{ url_for ('main.galaxy_edit_form', galaxy = galaxy) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
-<a href="{{ url_for ('main.line_entry_form') }}" class="btn btn-info" role="button"> Update Line Information </a>
+<a href="{{ url_for ('main.line_edit_form', line = line[0]) }}" class="btn btn-info" role="button"> Update Line Information </a>
 <a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download as CSV</a>
 <a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button"> Back </a>
 
