@@ -459,6 +459,52 @@ def galaxy_entry_form():
             return redirect(url_for('main.line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
+@bp.route("/galaxy_edit_form/<galaxy>", methods=['GET', 'POST'])
+@login_required
+def galaxy_edit_form(galaxy):
+    form = AddGalaxyForm(name = galaxy)
+    session=Session()
+    if form.validate_on_submit ():
+        if form.submit_anyway.data:
+            try:
+                DEC = dec_to_float(form.declination.data)
+            except:
+                DEC = form.declination.data
+            try:
+                RA = ra_to_float(form.right_ascension.data)
+            except:
+                RA = form.right_ascension.data 
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()))
+            db.session.add(galaxy)
+            db.session.commit()
+            flash ('Galaxy has been added. ')
+        if form.do_not_submit.data:
+            return redirect (url_for ('main.main'))
+        if form.submit.data:
+            try:
+                DEC = dec_to_float(form.declination.data)
+            except:
+                DEC = form.declination.data
+            try:
+                RA = ra_to_float(form.right_ascension.data)
+            except:
+                RA = form.right_ascension.data 
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+            if galaxies.first() != None:
+                return render_template('galaxy_entry_form.html', title= 'Galaxy Edit Form', form=form, galaxies=galaxies, another_exists=True)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            db.session.add(galaxy)
+            db.session.commit()
+            flash ('Galaxy has been added. ')
+        if form.new_line.data:
+            return redirect(url_for('main.line_entry_form'))
+    return render_template('galaxy_entry_form.html', title= 'Galaxy Edit Form', form=form)
+
 def update_redshift(session, galaxy_id):
     line_redshift = session.query(
             Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
