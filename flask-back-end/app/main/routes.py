@@ -4,7 +4,7 @@ from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from flask_login import current_user, login_required
-from app.models import Galaxy, User, Line, TempGalaxy, TempLine
+from app.models import Galaxy, TempIds, User, Line, TempGalaxy, TempLine
 from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
 import csv
@@ -74,7 +74,7 @@ def to_none(entry):
     if entry == '':
         entry = None
     else:
-        entry = entry
+        entry = float(entry)
     return entry
 
 def to_m_inf(entry):
@@ -109,7 +109,7 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
         return galaxies
     else:
         subqry = session.query(func.max(Line.observed_beam_angle))
-        galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry)))
+        galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry))) & (subqry != None))
         return galaxies
     
 
@@ -241,7 +241,7 @@ def entry_file():
             if row[COL_NAMES['coordinate_system']] != "ICRS" and row[COL_NAMES['coordinate_system']] != "J2000":
                 g_validated = False
                 flash ("Coordinate System can be ICRS or J2000 only.")
-            if row[COL_NAMES['lensing_flag']] != "Lensed" and row[COL_NAMES['lensing_flag']] != "Unlensed" and row[COL_NAMES['lensing_flag']] != "Either":
+            if row[COL_NAMES['lensing_flag']] != "Lensed" and row[COL_NAMES['lensing_flag']] != "Unlensed" and row[COL_NAMES['lensing_flag']] != "l" and row[COL_NAMES['lensing_flag']] != "u":
                 g_validated = False
                 flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
             if row[COL_NAMES['classification']] == "":
@@ -260,18 +260,37 @@ def entry_file():
                 g_validated = False
                 flash ("Enter Declination in a proper format")
             if g_validated == True:
-                galaxy = TempGalaxy(name = row['name'],
-                                    right_ascension = ra_to_float(row['right_ascension']),
-                                    declination = dec_to_float(row['declination']),
-                                    coordinate_system = row['coordinate_system'],
-                                    lensing_flag = row ['lensing_flag'],
-                                    classification = row ['classification'],
-                                    notes = row ['notes'],
-                                    user_submitted = current_user.username,
-                                    user_email = current_user.email)
-                db.session.add(galaxy)
-                new_id = db.session.query(func.max(Galaxy.id)).first()
-                id = new_id [0]
+                ra = ra_to_float(row[COL_NAMES['right_ascension']])
+                dec = dec_to_float(row[COL_NAMES['declination']])
+                check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec))
+                check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec))
+                if (check_same_temp_galaxy.first() == None) & (check_same_galaxy.first() == None):
+                    galaxy = TempGalaxy(name = row['name'],
+                                        right_ascension = ra,
+                                        declination = dec,
+                                        coordinate_system = row[COL_NAMES['coordinate_system']],
+                                        lensing_flag = row [COL_NAMES['lensing_flag']],
+                                        classification = row[COL_NAMES ['classification']],
+                                        notes = row [COL_NAMES['g_notes']],
+                                        user_submitted = current_user.username,
+                                        user_email = current_user.email)
+                    db.session.add(galaxy)
+                    new_id = db.session.query(func.max(TempGalaxy.id)).first()
+                    id = new_id [0]
+                    temp_id = TempIds(tempgalaxy_id = id)
+                    db.session.add(temp_id)
+                    ids_id = db.session.query(func.max(TempIds.id))
+                    from_existed = None
+                elif (check_same_temp_galaxy.first() != None) & (check_same_galaxy.first() == None):
+                    new_id = check_same_temp_galaxy.first()
+                    id = new_id [0]
+                    ids_id = db.session.query(func.max(TempIds.id))
+                    from_existed = None
+                else:
+                    new_id = check_same_galaxy.first()
+                    id = new_id [0]
+                    ids_id = None
+                    from_existed = id
                 l_validated = True
                 if row[COL_NAMES['j_upper']] == "":
                     l_validated = False
@@ -345,8 +364,17 @@ def entry_file():
                     except:
                         pass
                 if l_validated == True:
+                    if row[COL_NAMES['freq_type']] == "z":
+                        frequency, positive_uncertainty = redshift_to_frequency(to_none(row ['j_upper']), to_none( row ['observed_line_frequency']), to_none( row ['line_width_uncertainty_positive']), to_none( row ['line_width_uncertainty_negative']))
+                        negative_uncertainty = None
+                    else:
+                        frequency = to_none( row ['observed_line_frequency'])
+                        positive_uncertainty = to_none( row ['line_width_uncertainty_positive'])
+                        negative_uncertainty = to_none( row ['line_width_uncertainty_negative'])
                     line = TempLine (galaxy_id = id,
-                                    j_upper= row ['j_upper'], 
+                                    tempids_id = ids_id,
+                                    from_existed_id = from_existed,
+                                    j_upper= to_none(row ['j_upper']), 
                                     integrated_line_flux =to_none( row ['integrated_line_flux']), 
                                     integrated_line_flux_uncertainty_positive =to_none( row ['integrated_line_flux_uncertainty_positive']), 
                                     integrated_line_flux_uncertainty_negative =to_none( row ['integrated_line_flux_uncertainty_negative']), 
@@ -356,9 +384,9 @@ def entry_file():
                                     line_width=to_none( row ['line_width']),
                                     line_width_uncertainty_positive =to_none( row ['line_width_uncertainty_positive']),
                                     line_width_uncertainty_negative =to_none( row ['line_width_uncertainty_negative']),
-                                    observed_line_frequency =to_none( row ['observed_line_frequency']),
-                                    observed_line_frequency_uncertainty_positive =to_none( row ['observed_line_frequency_uncertainty_positive']),
-                                    observed_line_frequency_uncertainty_negative =to_none( row ['observed_line_frequency_uncertainty_negative']),
+                                    observed_line_frequency =frequency,
+                                    observed_line_frequency_uncertainty_positive =positive_uncertainty,
+                                    observed_line_frequency_uncertainty_negative =negative_uncertainty,
                                     detection_type = row ['detection_type'],
                                     observed_beam_major =to_none( row ['observed_beam_major']), 
                                     observed_beam_minor =to_none( row ['observed_beam_minor']),
@@ -367,7 +395,7 @@ def entry_file():
                                     notes = row ['notes'],
                                     user_submitted = current_user.username,
                                     user_email = current_user.email
-                                    )
+                                    )                
                     db.session.add(line)
                     db.session.commit()
                     #session = Session ()
@@ -557,10 +585,14 @@ def update_redshift_error(session, galaxy_id, sum_upper):
     session.commit()
 
 def redshift_to_frequency(J_UPPER, z, positive_uncertainty, negative_uncertainty):
+    if z == None:
+        return None, None
+    nu_obs = (EMITTED_FREQUENCY.get(J_UPPER))/(z+1)
+    if positive_uncertainty == None:
+        return nu_obs, None
     if negative_uncertainty == None:
         negative_uncertainty = positive_uncertainty
     delta_z = positive_uncertainty + negative_uncertainty
-    nu_obs = (EMITTED_FREQUENCY.get(J_UPPER))/(z+1)
     delta_nu = delta_z * nu_obs / (z+1)
     return nu_obs, delta_nu/2
 

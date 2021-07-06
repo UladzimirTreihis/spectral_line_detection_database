@@ -8,6 +8,7 @@ class Galaxy(db.Model):
     __tablename__ = 'galaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
+    tempids_id = db.Column(db.Integer)  
     name = db.Column(db.String(128), nullable = False)   
     right_ascension = db.Column(db.Float(32), nullable = False) 
     declination = db.Column(db.Float(32), nullable = False) 
@@ -50,7 +51,7 @@ class Line(db.Model):
     __tablename__ = 'line'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id'), nullable = False) 
+    galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id')) 
     j_upper = db.Column(db.Integer, nullable = False)  
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
@@ -77,7 +78,9 @@ class TempLine(db.Model):
     __tablename__ = 'templine'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    galaxy_id = db.Column(db.Integer, db.ForeignKey('tempgalaxy.id'), nullable = False) 
+    galaxy_id = db.Column(db.Integer, db.ForeignKey('tempgalaxy.id')) 
+    tempids_id = db.Column(db.Integer)
+    from_existed_id = db.Column(db.Integer)
     j_upper = db.Column(db.Integer, nullable = False)  
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
@@ -99,6 +102,11 @@ class TempLine(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
+
+class TempIds(db.Model):
+    __tablename__ = 'tempids'
+    id = db.Column(db.Integer, primary_key=True)
+    tempgalaxy_id = db.Column(db.Integer, db.ForeignKey('tempgalaxy.id'))
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
