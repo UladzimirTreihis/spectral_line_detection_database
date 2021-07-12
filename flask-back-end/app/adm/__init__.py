@@ -4,9 +4,10 @@ from flask_admin import expose
 from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
-from app.models import TempIds, User, Galaxy, Line, TempGalaxy, TempLine
+from app.models import User, Galaxy, Line, TempGalaxy, TempLine
 from app import admin, db, Session
 from config import EMITTED_FREQUENCY
+from sqlalchemy import func
 
 bp = Blueprint('adm', __name__)
 
@@ -78,29 +79,34 @@ class TempGalaxyView(ModelView):
         session = Session ()
         for id in ids:
             galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==id).all()
-            ids_id = session.query(TempIds.id).filter(TempIds.tempgalaxy_id==id).first()
-            g = Galaxy (name = galaxy[0][0], right_ascension = galaxy[0][1], declination = galaxy[0][2], coordinate_system = galaxy[0][3], lensing_flag = galaxy [0][4], classification = galaxy[0][5], notes = galaxy [0][6], tempids_id = ids_id[0])
+            g = Galaxy (name = galaxy[0][0], right_ascension = galaxy[0][1], declination = galaxy[0][2], coordinate_system = galaxy[0][3], lensing_flag = galaxy [0][4], classification = galaxy[0][5], notes = galaxy [0][6])
             db.session.add (g)
             db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == id).update({TempLine.from_existed_id: existed})
             g_temp = TempGalaxy.query.filter_by(id=id).first()
             db.session.delete (g_temp)
             db.session.commit ()
             flash ("Galaxy has been Added")            
         
 class TempLineView(ModelView):
+    #details_template = "/admin/model/templine.html"
+    #list_template = "/admin/model/templine.html"
+    #@expose('/templine/')
+    #def templine(self):
+        #return self.render('/admin/model/templine.html')
+
     @action('approve', 'Approve')
     def action_approve(self, ids):
         session = Session ()
         for id in ids:
-            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.tempids_id, TempLine.from_existed_id).filter(TempLine.id==id).all()
+            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id).filter(TempLine.id==id).all()
             
-            if (line [0][21] != None):
-                g_id = line [0][21]
-            elif (line [0][20] != None):
-                id_query = session.query(Galaxy.id).filter(Galaxy.tempids_id == line [0][20]).first()
-                g_id = id_query [0]
+            if (line [0][20] == None):
+                raise Exception('You have not yet approved the galaxy to whoch the line belongs to')
             else:
-                g_id = line [0][0]
+                g_id = line [0][20]
             l = Line (galaxy_id = g_id, j_upper = line [0][1], integrated_line_flux = line [0][2], integrated_line_flux_uncertainty_positive = line [0][3], integrated_line_flux_uncertainty_negative = line [0][4], peak_line_flux = line [0][5], peak_line_flux_uncertainty_positive = line [0][6], peak_line_flux_uncertainty_negative = line [0][7], line_width = line [0][8], line_width_uncertainty_positive = line [0][9], line_width_uncertainty_negative = line [0][10], observed_line_frequency = line [0][11], observed_line_frequency_uncertainty_positive = line [0][12], observed_line_frequency_uncertainty_negative = line [0][13], detection_type = line [0][14], observed_beam_major = line [0][15], observed_beam_minor = line [0][16], observed_beam_angle = line [0][17], reference = line [0][18], notes = line [0][19])
             db.session.add (l)
             total = update_redshift(session, g_id)
@@ -130,12 +136,20 @@ class TempLineView(ModelView):
             update_redshift_error(session, g_id, total)
             db.session.commit ()
         flash('Record was successfully deleted.')
+
+class ActualLineView(ModelView):
+    details_template = "/admin/model/templine.html"
+    #@expose('/templine/')
+    #def templine(self):
+        #return self.render('admin/templine.html')
+
+
         
 
 admin.add_view(ModelView(User, db.session))
 admin.add_view(ModelView(Galaxy, db.session))
-admin.add_view(ModelView(Line, db.session))
-admin.add_view(ModelView(TempIds, db.session))
+#admin.add_view(ModelView(Line, db.session))
+admin.add_view(ActualLineView(Line, db.session))
 admin.add_view(TempGalaxyView (TempGalaxy, db.session, category = "New Entries"))
 admin.add_view(TempLineView(TempLine, db.session, category = "New Entries"))
 

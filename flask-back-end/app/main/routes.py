@@ -4,7 +4,7 @@ from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from flask_login import current_user, login_required
-from app.models import Galaxy, TempIds, User, Line, TempGalaxy, TempLine
+from app.models import Galaxy, User, Line, TempGalaxy, TempLine
 from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
 import csv
@@ -109,7 +109,15 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
         return galaxies
     else:
         subqry = session.query(func.max(Line.observed_beam_angle))
-        galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry))) & (subqry != None))
+        #galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry))) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < 5) )
+        #galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < 5) )
+        sub = subqry.first()
+        sub1 = sub[0]
+        if sub1  != None:
+            galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )   
+            #galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry))) ) 
+        else:
+            galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
         return galaxies
     
 
@@ -228,13 +236,16 @@ def entry_file():
     form = UploadFileForm()
     if request.method == 'POST':
         csvfile = request.files['file']
-        csv_file = TextIOWrapper(csvfile, encoding='utf-8')
+        csv_file = TextIOWrapper(csvfile, encoding='windows-1252')
         reader = csv.DictReader(csv_file)
         data = [row for row in reader]
         if data == []:
             flash ("CSV File is empty. ")
         g_validated = True
         for row in data:
+            if row == []:
+                flash ('that was an empty row')
+                continue
             if row[COL_NAMES['name']] == "":
                 g_validated = False
                 flash ("Galaxy Name is Mandatory")
@@ -277,19 +288,14 @@ def entry_file():
                     db.session.add(galaxy)
                     new_id = db.session.query(func.max(TempGalaxy.id)).first()
                     id = new_id [0]
-                    temp_id = TempIds(tempgalaxy_id = id)
-                    db.session.add(temp_id)
-                    ids_id = db.session.query(func.max(TempIds.id))
                     from_existed = None
                 elif (check_same_temp_galaxy.first() != None) & (check_same_galaxy.first() == None):
                     new_id = check_same_temp_galaxy.first()
                     id = new_id [0]
-                    ids_id = db.session.query(func.max(TempIds.id))
                     from_existed = None
                 else:
                     new_id = check_same_galaxy.first()
                     id = new_id [0]
-                    ids_id = None
                     from_existed = id
                 l_validated = True
                 if row[COL_NAMES['j_upper']] == "":
@@ -346,7 +352,7 @@ def entry_file():
                             flash ("Line Width Negative Uncertainty must be greater than 0")
                     except:
                         pass
-                if row[COL_NAMES['freq_type']] != "z" and row[COL_NAMES['freq_type']] != "f":
+                if row[COL_NAMES['freq_type']] != "z" and row[COL_NAMES['freq_type']] != "f" and row[COL_NAMES['freq_type']] != "":
                     l_validated = False
                     flash ("Please enter either \"z\", \"f\" under {}.".format(COL_NAMES['freq_type']))
                 if row [COL_NAMES['observed_line_frequency_uncertainty_positive']] != "":
@@ -372,7 +378,6 @@ def entry_file():
                         positive_uncertainty = to_none( row ['line_width_uncertainty_positive'])
                         negative_uncertainty = to_none( row ['line_width_uncertainty_negative'])
                     line = TempLine (galaxy_id = id,
-                                    tempids_id = ids_id,
                                     from_existed_id = from_existed,
                                     j_upper= to_none(row ['j_upper']), 
                                     integrated_line_flux =to_none( row ['integrated_line_flux']), 
@@ -398,9 +403,6 @@ def entry_file():
                                     )                
                     db.session.add(line)
                     db.session.commit()
-                    #session = Session ()
-                    #total = update_redshift(session, id)
-                    #update_redshift_error(session, id, total)
                     flash ("File has been successfully uploaded. ")
     return render_template ("/entry_file.html", title = "Upload File", form = form)
 
@@ -479,7 +481,7 @@ def galaxy_entry_form():
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             if galaxies.first() != None:
                 return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=True)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = None)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been added. ')
@@ -608,7 +610,17 @@ def line_entry_form():
     if form.validate_on_submit():
         if form.submit.data:
             session = Session()
-            galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
+            galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).first()
+            id = galaxy_id[0]
+            existed = id
+
+            if galaxy_id == None:
+                galaxy_id = session.query(TempGalaxy.id).filter(TempGalaxy.name==form.galaxy_name.data).first()
+                id = galaxy_id[0]
+                existed = None
+            if galaxy_id==None:
+                raise Exception ('Please enter the name exactly as proposed using Caps if necesarry')
+
             if form.freq_type.data == 'z':
                 frequency, positive_uncertainty = redshift_to_frequency(form.j_upper.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
                 negative_uncertainty = None
@@ -616,11 +628,9 @@ def line_entry_form():
                 frequency = form.observed_line_frequency.data
                 positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
-            line = TempLine(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+            line = TempLine(galaxy_id=id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed)
             db.session.add(line)
             db.session.commit()
-            #total = update_redshift(session, galaxy_id)
-            #update_redshift_error(session, galaxy_id, total)
             flash ('Line has been added. ')
             return redirect(url_for('main.main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
@@ -655,10 +665,14 @@ def line_edit_form(line):
 @bp.route('/galaxies')
 @login_required
 def galaxydic():
-    res = Galaxy.query.all()
-    list_galaxies = [r.as_dict() for r in res]
+    session = Session()
+    res1 = session.query(Galaxy)
+    res2 = session.query(TempGalaxy)
+    list_galaxies = [r.as_dict() for r in res1]
+    list_temp_galaxies = [r.as_dict() for r in res2]
+    list_galaxies.extend(list_temp_galaxies)
     return jsonify(list_galaxies)
-  
+
 @bp.route('/process', methods=['POST'])
 @login_required
 def process():
