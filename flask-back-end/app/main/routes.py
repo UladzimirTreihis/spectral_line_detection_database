@@ -696,7 +696,6 @@ def galaxy(name):
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
     gdict = galaxy.__dict__
-    flash(gdict)
     glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
     return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
 
