@@ -489,10 +489,13 @@ def galaxy_entry_form():
             return redirect(url_for('main.line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
-@bp.route("/galaxy_edit_form/<galaxy>", methods=['GET', 'POST'])
+@bp.route("/galaxy_edit_form/<glist>", methods=['GET', 'POST'])
 @login_required
-def galaxy_edit_form(galaxy):
-    form = AddGalaxyForm(name = galaxy)
+def galaxy_edit_form(glist):
+    glist = glist[1: (len(glist) - 2)]
+    glist = glist.replace("'","")
+    glist = glist.split(",")
+    form = AddGalaxyForm(name = glist[0], right_ascension = glist[1], declination = glist[2], coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
     session=Session()
     if form.validate_on_submit ():
         if form.submit_anyway.data:
@@ -687,7 +690,10 @@ def galaxy(name):
     session = Session ()
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
-    return render_template('galaxy.html', galaxy=galaxy, line = line)
+    gdict = galaxy.__dict__
+    flash(gdict)
+    glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
+    return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
 
 @bp.route('/user/<username>')
 @login_required
