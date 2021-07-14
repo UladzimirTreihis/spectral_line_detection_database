@@ -495,6 +495,11 @@ def galaxy_edit_form(glist):
     glist = glist[1: (len(glist) - 2)]
     glist = glist.replace("'","")
     glist = glist.split(",")
+    length = len (glist)
+    if length > 7:
+        for element in range (7, length):
+            glist[6] += ","
+            glist[6] += (glist[element])
     form = AddGalaxyForm(name = glist[0], right_ascension = glist[1], declination = glist[2], coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
     session=Session()
     if form.validate_on_submit ():
