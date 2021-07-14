@@ -500,7 +500,9 @@ def galaxy_edit_form(glist):
         for element in range (7, length):
             glist[6] += ","
             glist[6] += (glist[element])
-    form = AddGalaxyForm(name = glist[0], right_ascension = glist[1], declination = glist[2], coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
+    form = AddGalaxyForm(name = glist[0], right_ascension = glist[1], declination = glist[2], classification = glist[5], notes = glist[6])
+    form.coordinate_system.default = glist [3]
+    form.lensing_flag.default = glist[4]
     session=Session()
     if form.validate_on_submit ():
         if form.submit_anyway.data:
@@ -534,14 +536,14 @@ def galaxy_edit_form(glist):
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             if galaxies.first() != None:
-                return render_template('galaxy_entry_form.html', title= 'Galaxy Edit Form', form=form, galaxies=galaxies, another_exists=True)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email)
+                return render_template('galaxy_edit_form.html', title= 'Galaxy Edit Form', form=form, galaxies=galaxies, another_exists=True)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes")
             db.session.add(galaxy)
             db.session.commit()
-            flash ('Galaxy has been added. ')
+            flash ('Galaxy has been Edited. ')
         if form.new_line.data:
             return redirect(url_for('main.line_entry_form'))
-    return render_template('galaxy_entry_form.html', title= 'Galaxy Edit Form', form=form)
+    return render_template('galaxy_edit_form.html', title= 'Galaxy Edit Form', form=form)
 
 def update_redshift(session, galaxy_id):
     line_redshift = session.query(
