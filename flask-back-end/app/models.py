@@ -8,7 +8,9 @@ class Galaxy(db.Model):
     __tablename__ = 'galaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), nullable = False)   
+    name = db.Column(db.String(128), nullable = False) 
+    is_similar = db.Column(db.String(128))
+    is_edited = db.Column(db.String(128))  
     right_ascension = db.Column(db.Float(32), nullable = False) 
     declination = db.Column(db.Float(32), nullable = False) 
     coordinate_system = db.Column(db.String(128), nullable = False)
@@ -19,7 +21,6 @@ class Galaxy(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
-    is_similar = db.Column(db.String(128))
     lines = db.relationship('Line', backref='galaxy', lazy='dynamic')  
 
     def as_dict(self):
@@ -29,7 +30,9 @@ class TempGalaxy(db.Model):
     __tablename__ = 'tempgalaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(128), nullable = False)   
+    name = db.Column(db.String(128), nullable = False)
+    is_similar = db.Column(db.String(128))
+    is_edited = db.Column(db.String(128))    
     right_ascension = db.Column(db.Float(32), nullable = False) 
     declination = db.Column(db.Float(32), nullable = False) 
     coordinate_system = db.Column(db.String(128), nullable = False)
@@ -40,7 +43,6 @@ class TempGalaxy(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
-    is_similar = db.Column(db.String(128))
     lines = db.relationship('TempLine', backref='tempgalaxy', lazy='dynamic')  
 
     def as_dict(self):
