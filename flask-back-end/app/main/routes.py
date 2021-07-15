@@ -500,20 +500,18 @@ def galaxy_edit_form(glist):
         for element in range (7, length):
             glist[6] += ","
             glist[6] += (glist[element])
-    form = AddGalaxyForm(name = glist[0], right_ascension = glist[1], declination = glist[2], classification = glist[5], notes = glist[6])
-    form.coordinate_system.default = glist [3]
-    form.lensing_flag.default = glist[4]
+    form = AddGalaxyForm(name = glist[0], right_ascension = float(glist[1]), declination = float(glist[2]), coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
     session=Session()
     if form.validate_on_submit ():
         if form.submit_anyway.data:
             try:
                 DEC = dec_to_float(form.declination.data)
             except:
-                DEC = form.declination.data
+                DEC = float(form.declination.data)
             try:
                 RA = ra_to_float(form.right_ascension.data)
             except:
-                RA = form.right_ascension.data 
+                RA = float(form.right_ascension.data)
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
