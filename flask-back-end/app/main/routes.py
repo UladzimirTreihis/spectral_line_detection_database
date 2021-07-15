@@ -5,7 +5,7 @@ from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from flask_login import current_user, login_required
 from app.models import Galaxy, User, Line, TempGalaxy, TempLine
-from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
+from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
@@ -500,7 +500,7 @@ def galaxy_edit_form(glist):
         for element in range (7, length):
             glist[6] += ","
             glist[6] += (glist[element])
-    form = AddGalaxyForm(name = glist[0], right_ascension = float(glist[1]), declination = float(glist[2]), coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
+    form = EditGalaxyForm(name = glist[0], right_ascension = float(glist[1]), declination = float(glist[2]), coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
     session=Session()
     if form.validate_on_submit ():
         if form.submit_anyway.data:
@@ -696,7 +696,7 @@ def galaxy(name):
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
     gdict = galaxy.__dict__
-    glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
+    glist = [gdict['name'], float(gdict['right_ascension']), float(gdict['declination']), gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
     return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
 
 @bp.route('/user/<username>')
