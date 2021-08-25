@@ -8,6 +8,7 @@ from app.models import User, Galaxy, Line, TempGalaxy, TempLine
 from app import admin, db, Session
 from config import EMITTED_FREQUENCY
 from sqlalchemy import func
+from app.main.routes import galaxy, within_distance, ra_to_float, dec_to_float
 
 bp = Blueprint('adm', __name__)
 
@@ -74,6 +75,9 @@ def update_redshift_error(session, galaxy_id, sum_upper):
         sum_upper = -1
 
 class TempGalaxyView(ModelView):
+
+    #edit_template = 'admin/model/temp_galaxy_edit.html'
+    #list_template = 'admin/model/temp_galaxy_list.html'
     @action('approve', 'Approve')
     def action_approve(self, ids):
         session = Session ()
@@ -90,6 +94,34 @@ class TempGalaxyView(ModelView):
             db.session.commit ()
             flash ("Galaxy has been Added")            
         
+    @action('check for similar', 'Check For Similar')
+    def action_check_for_similar(self, ids):
+        session=Session()
+        for id in ids:
+            galaxy = session.query(TempGalaxy).filter(TempGalaxy.id == id)
+            RA_list = [g.get_ra() for g in galaxy]
+            RA = RA_list[0]
+            DEC_list = [g.get_dec() for g in galaxy]
+            DEC = DEC_list[0]
+            #RA = session.query(TempGalaxy.get_ra).filter(TempGalaxy.id==id).first()
+            #DEC = session.query(TempGalaxy.get_dec).filter(TempGalaxy.id==id).first()
+            #RA = session.query(TempGalaxy.right_ascension).filter(TempGalaxy.id==id).first()
+            #DEC = session.query(TempGalaxy.declination).filter(TempGalaxy.id==id).first()
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name).first()
+            if galaxies == None:
+                continue
+            similar_galaxy_id = str(galaxies)
+            similar_galaxy_id = int(similar_galaxy_id[9:similar_galaxy_id.find('>')])
+            similar_galaxy = session.query(Galaxy.name).filter(Galaxy.id == similar_galaxy_id).first()
+            similar_galaxy_name = str(similar_galaxy)
+            similar_galaxy_name = similar_galaxy_name [2:similar_galaxy_name.find(',')-1]
+
+            session.query(TempGalaxy).filter(TempGalaxy.id==id).update({"admin_notes": similar_galaxy_name})
+            session.commit()
+
+
 class TempLineView(ModelView):
     #details_template = "/admin/model/templine.html"
     #list_template = "/admin/model/templine.html"

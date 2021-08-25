@@ -12,7 +12,6 @@ import math
 from sqlalchemy import event
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_login import UserMixin
 
 db = SQLAlchemy()
 migrate = Migrate()

@@ -44,9 +44,20 @@ class TempGalaxy(db.Model):
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
     lines = db.relationship('TempLine', backref='tempgalaxy', lazy='dynamic')  
+    admin_notes = db.Column(db.String(128))
 
     def as_dict(self):
         return {'name': self.name}
+
+    def get_ra(self):
+        return self.right_ascension
+
+    def get_dec(self):
+        return self.declination
+
+    def __repr__(self):
+        return '{}'.format(self.name)
+    
 
 class Line(db.Model):
     __tablename__ = 'line'
@@ -102,6 +113,7 @@ class TempLine(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
+    admin_notes = db.Column(db.String(128))
 
 
 class User(UserMixin, db.Model):

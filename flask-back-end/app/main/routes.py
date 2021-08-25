@@ -16,21 +16,25 @@ import math
 from app.main import bp
 import re
 
-#The last-seen functionality (if necessary), otherwise it could still be useful of any before_request functionality
-#@app.before_request
-#def before_request():
-    #if current_user.is_authenticated:
-        #g.search_form = SearchForm()
-
-#default route
 @bp.route("/")
 @bp.route("/home")
 def home():
+
+    ''' Home page route '''
+
     return render_template("/home.html")
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
+
+    ''' 
+    Edit profile route
+    
+    On access: returns the form with prefilled user's data
+    On submit: Updates user's data and returns /main 
+    '''
+
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -50,8 +54,9 @@ def edit_profile():
 @bp.route('/test')
 @login_required
 def test():
-    #conn = engine.connect()    
-    #session = Session(bind=conn)
+
+    ''' Test route, used for development purposes only '''
+
     session = Session()
     galaxies = session.query(Galaxy).filter(text('cos(Galaxy.declination)<0.8')).all()
     return render_template("/test.html", galaxies=galaxies)
@@ -59,11 +64,23 @@ def test():
 @bp.route("/main", methods=['GET', 'POST'])
 @login_required
 def main():
+    
+    '''
+    Main route
+
+    On authenticated access: returns main menu and table with galaxy data
+    '''
+
     if current_user.is_authenticated:
         form = SearchForm()
     return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form)
 
 def to_empty(entry):
+    
+    '''
+    Converts None values to empty strings. If value != None, then value=value
+    '''
+    
     if entry == None:
         entry = ''
     else:
@@ -71,6 +88,11 @@ def to_empty(entry):
     return entry
 
 def to_none(entry):
+
+    '''
+    Converts empty strings to None. If value != '', then value=value
+    '''
+    
     if entry == '':
         entry = None
     else:
@@ -78,6 +100,12 @@ def to_none(entry):
     return entry
 
 def to_m_inf(entry):
+    
+    '''
+    Converts empty strings or None values to -inf. 
+    If value != '', or value != None, then value=value
+    '''
+    
     if entry == None:
         entry = float('-inf')
     elif entry == '':
@@ -87,6 +115,12 @@ def to_m_inf(entry):
     return entry
 
 def to_p_inf(entry):
+
+    '''
+    Converts empty strings or None values to inf. 
+    If value != '', or value != None, then value=value
+    '''
+
     if entry == None:
         entry = float('inf')
     elif entry == '':
@@ -96,6 +130,12 @@ def to_p_inf(entry):
     return entry
 
 def to_zero(entry):
+
+    '''
+    Converts None values to 0. 
+    If value != None, then value=value
+    '''
+
     if entry == None:
         entry = 0
     else:
@@ -104,18 +144,40 @@ def to_zero(entry):
 
 
 def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False):
+    
+    '''
+    Takes in a point's coordinates \form_ra and \form_dec and a \distance to check if any galaxy from \query is within the \distance.
+    Employs Great-circle distance: https://en.wikipedia.org/wiki/Great-circle_distance
+    If the \distance is not provided, it is assumed to be 3 * Line.observed_beam_minor.
+    If Line.observed_beam_minor is not available, the distance is assumed to be 5 arcsec to be in an extreme proximity. 
+
+    Returns:
+    galaxies -- a query object containing all galaxies that satisfy the distance formula. 
+
+    Parameters:
+    session -- the session in which the \query is evoked is passed.
+
+    query -- predefined query object is passed containing galaxies that are to be considered in terms of their proximity 
+    to some point/galaxy with given coordinates. It has to contain the Galaxy & Line table data if the distance is not passed and \based_on_beam_angle == True
+    
+    form_ra -- right ascension of a point/galaxy
+    form_dec -- declination of a point/galaxy
+    distance -- circular distance away from the point with coordinates (\form_ra, \form_dec). (default 0)
+    based_on_beam_angle -- Boolean value to check whether user wants to search for galaxies with extreme proximity based on their Line.observed_beam_minor.
+    (default False)
+
+
+    '''
+
     if based_on_beam_angle == False:
         galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < distance)
         return galaxies
     else:
         subqry = session.query(func.max(Line.observed_beam_angle))
-        #galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry))) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < 5) )
-        #galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < 5) )
         sub = subqry.first()
         sub1 = sub[0]
         if sub1  != None:
             galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )   
-            #galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (3 * func.radians(subqry))) ) 
         else:
             galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
         return galaxies
@@ -273,9 +335,13 @@ def entry_file():
             if g_validated == True:
                 ra = ra_to_float(row[COL_NAMES['right_ascension']])
                 dec = dec_to_float(row[COL_NAMES['declination']])
-                check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec))
-                check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec))
+                name = row[COL_NAMES['name']]
+                check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec) & (TempGalaxy.name == name))
+                check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec) & (Galaxy.name == name))
                 if (check_same_temp_galaxy.first() == None) & (check_same_galaxy.first() == None):
+                    #galaxies=session.query(Galaxy, Line).outerjoin(Line)
+                    #galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+                    #galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
                     galaxy = TempGalaxy(name = row['name'],
                                         right_ascension = ra,
                                         declination = dec,
@@ -414,13 +480,8 @@ def ra_to_float(coordinates):
         m = float(coordinates[3:5])
         s = float(coordinates[coordinates.find('m')+1:coordinates.find('s')])
         return h*15+m/4+s/240
-    elif coordinates == '-inf':
-        return float('-inf')
-    elif coordinates == 'inf':
-        return float('inf')
     else:
-        ra = coordinates
-        return float(ra) 
+        return float(coordinates) 
 def dec_to_float(coordinates):
     if isinstance(coordinates, float) or isinstance(coordinates, int):
         coordinates = str(coordinates)
@@ -432,10 +493,8 @@ def dec_to_float(coordinates):
             return (-1)*(d+m/60+s/3600)
         else:
             return d+m/60+s/3600
-    elif coordinates == '-inf':
-        return float('-inf')
-    elif coordinates == 'inf':
-        return float('inf') 
+    elif coordinates == '-inf' or coordinates == 'inf':
+        return float(coordinates)
     else:
         if coordinates[0] == '+':
             dec = coordinates.replace("+","")
