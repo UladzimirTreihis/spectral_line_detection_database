@@ -9,7 +9,8 @@ from app import admin, db, Session
 from config import EMITTED_FREQUENCY
 from sqlalchemy import func
 from app.main.routes import galaxy, within_distance, ra_to_float, dec_to_float
-from wtforms.validators import ValidationError
+from wtforms.validators import Regexp, ValidationError
+from config import dec_reg_exp, ra_reg_exp
 
 
 bp = Blueprint('adm', __name__)
@@ -78,11 +79,18 @@ def update_redshift_error(session, galaxy_id, sum_upper):
 
 class GalaxyView (ModelView):
     def check_coords(form, coordinate_system):
-        if coordinate_system != "ICRS" or coordinate_system!= "J2000":
+        if coordinate_system != "ICRS" and coordinate_system!= "J2000":
             raise ValidationError('Coordinate System must be either J2000 or ICRS')
 
+    def check_lensing_flag (form, lensing_flag):
+        if lensing_flag != "Lensed" and lensing_flag != "Unlensed" and lensing_flag != "Either":
+            raise ValidationError('Lensing Flag can only be Lensed, Unlensed or Either')
+
     form_args = dict(
-        coordinate_system=dict(validators=[check_coords])
+        coordinate_system=dict(validators=[check_coords]),
+        lensing_flag = dict(validators=[check_lensing_flag]),
+        right_ascension = dict(validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float")]),
+        declination = dict(validators = [Regexp(dec_reg_exp, message="Input in the format (+/-) 00h00m00s or as a float")]),
     )
 
 
