@@ -9,6 +9,8 @@ from app import admin, db, Session
 from config import EMITTED_FREQUENCY
 from sqlalchemy import func
 from app.main.routes import galaxy, within_distance, ra_to_float, dec_to_float
+from wtforms.validators import ValidationError
+
 
 bp = Blueprint('adm', __name__)
 
@@ -73,6 +75,16 @@ def update_redshift_error(session, galaxy_id, sum_upper):
         ).update({"redshift_error": redshift_error_weighted})
         session.commit()
         sum_upper = -1
+
+class GalaxyView (ModelView):
+    def check_coords(form, coordinate_system):
+        if coordinate_system != "ICRS" or coordinate_system!= "J2000":
+            raise ValidationError('Coordinate System must be either J2000 or ICRS')
+
+    form_args = dict(
+        coordinate_system=dict(validators=[check_coords])
+    )
+
 
 class TempGalaxyView(ModelView):
 
@@ -179,7 +191,7 @@ class ActualLineView(ModelView):
         
 
 admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(Galaxy, db.session))
+admin.add_view(GalaxyView (Galaxy, db.session))
 #admin.add_view(ModelView(Line, db.session))
 admin.add_view(ActualLineView(Line, db.session))
 admin.add_view(TempGalaxyView (TempGalaxy, db.session, category = "New Entries"))
