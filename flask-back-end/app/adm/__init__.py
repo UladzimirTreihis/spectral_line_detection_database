@@ -79,11 +79,11 @@ def update_redshift_error(session, galaxy_id, sum_upper):
 
 class GalaxyView (ModelView):
     def check_coords(form, coordinate_system):
-        if coordinate_system != "ICRS" and coordinate_system!= "J2000":
+        if form.coordinate_system.data != "ICRS" and form.coordinate_system.data != "J2000":
             raise ValidationError('Coordinate System must be either J2000 or ICRS')
 
     def check_lensing_flag (form, lensing_flag):
-        if lensing_flag != "Lensed" and lensing_flag != "Unlensed" and lensing_flag != "Either":
+        if form.lensing_flag.data != "Lensed" and form.lensing_flag.data != "Unlensed" and form.lensing_flag.data != "Either":
             raise ValidationError('Lensing Flag can only be Lensed, Unlensed or Either')
 
     form_args = dict(
