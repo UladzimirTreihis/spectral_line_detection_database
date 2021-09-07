@@ -4,7 +4,7 @@ from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from flask_login import current_user, login_required
-from app.models import Galaxy, User, Line, TempGalaxy, TempLine
+from app.models import Galaxy, User, Line, TempGalaxy, TempLine, EditGalaxy
 from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
 import csv
@@ -574,7 +574,7 @@ def galaxy_edit_form(glist):
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = "Yes")
+            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = "Yes")
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been Edited. ')
@@ -594,7 +594,7 @@ def galaxy_edit_form(glist):
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             if galaxies.first() != None:
                 return render_template('galaxy_edit_form.html', title= 'Galaxy Edit Form', form=form, galaxies=galaxies, another_exists=True)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes")
+            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes")
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been Edited. ')

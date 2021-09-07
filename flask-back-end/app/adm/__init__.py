@@ -4,7 +4,7 @@ from flask_admin import expose
 from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
-from app.models import User, Galaxy, Line, TempGalaxy, TempLine
+from app.models import User, Galaxy, Line, TempGalaxy, TempLine, EditGalaxy
 from app import admin, db, Session
 from config import EMITTED_FREQUENCY
 from sqlalchemy import func
@@ -141,6 +141,52 @@ class TempGalaxyView(ModelView):
             session.query(TempGalaxy).filter(TempGalaxy.id==id).update({"admin_notes": similar_galaxy_name})
             session.commit()
 
+class EditGalaxyView(ModelView):
+    
+    #edit_template = 'admin/model/temp_galaxy_edit.html'
+    #list_template = 'admin/model/temp_galaxy_list.html'
+    @action('approve', 'Approve')
+    def action_approve(self, ids):
+        session = Session ()
+        for id in ids:
+            galaxy = session.query(EditGalaxy.name, EditGalaxy.right_ascension, EditGalaxy.declination, EditGalaxy.coordinate_system, EditGalaxy.lensing_flag, EditGalaxy.classification, EditGalaxy.notes).filter(EditGalaxy.id==id).all()
+            g = Galaxy (name = galaxy[0][0], right_ascension = galaxy[0][1], declination = galaxy[0][2], coordinate_system = galaxy[0][3], lensing_flag = galaxy [0][4], classification = galaxy[0][5], notes = galaxy [0][6])
+            db.session.add (g)
+            db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == id).update({TempLine.from_existed_id: existed})
+            g_temp = EditGalaxy.query.filter_by(id=id).first()
+            db.session.delete (g_temp)
+            db.session.commit ()
+            flash ("Galaxy has been Added")            
+        
+    @action('check for similar', 'Check For Similar')
+    def action_check_for_similar(self, ids):
+        session=Session()
+        for id in ids:
+            galaxy = session.query(EditGalaxy).filter(EditGalaxy.id == id)
+            RA_list = [g.get_ra() for g in galaxy]
+            RA = RA_list[0]
+            DEC_list = [g.get_dec() for g in galaxy]
+            DEC = DEC_list[0]
+            #RA = session.query(TempGalaxy.get_ra).filter(TempGalaxy.id==id).first()
+            #DEC = session.query(TempGalaxy.get_dec).filter(TempGalaxy.id==id).first()
+            #RA = session.query(TempGalaxy.right_ascension).filter(TempGalaxy.id==id).first()
+            #DEC = session.query(TempGalaxy.declination).filter(TempGalaxy.id==id).first()
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name).first()
+            if galaxies == None:
+                continue
+            similar_galaxy_id = str(galaxies)
+            similar_galaxy_id = int(similar_galaxy_id[9:similar_galaxy_id.find('>')])
+            similar_galaxy = session.query(Galaxy.name).filter(Galaxy.id == similar_galaxy_id).first()
+            similar_galaxy_name = str(similar_galaxy)
+            similar_galaxy_name = similar_galaxy_name [2:similar_galaxy_name.find(',')-1]
+
+            session.query(EditGalaxy).filter(EditGalaxy.id==id).update({"admin_notes": similar_galaxy_name})
+            session.commit()
 
 class TempLineView(ModelView):
     #details_template = "/admin/model/templine.html"
@@ -204,4 +250,6 @@ admin.add_view(GalaxyView (Galaxy, db.session))
 admin.add_view(ActualLineView(Line, db.session))
 admin.add_view(TempGalaxyView (TempGalaxy, db.session, category = "New Entries"))
 admin.add_view(TempLineView(TempLine, db.session, category = "New Entries"))
+admin.add_view(EditGalaxyView (EditGalaxy, db.session, category = "New Edits"))
+
 
