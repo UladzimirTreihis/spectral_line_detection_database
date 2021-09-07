@@ -3,7 +3,6 @@ from flask.globals import session
 from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
-from flask_login import current_user, login_required
 from app.models import Galaxy, User, Line, TempGalaxy, TempLine
 from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
@@ -12,6 +11,7 @@ from sqlalchemy import func
 from sqlalchemy.sql import text
 from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp
 from io import TextIOWrapper
+from flask_user import current_user, login_required, roles_required
 import math
 from app.main import bp
 import re
@@ -43,7 +43,7 @@ def edit_profile():
         current_user.about_me = form.about_me.data
         db.session.commit()
         flash ("Your changes have been submitted")
-        return redirect(url_for('main'))
+        return redirect(url_for('main.main'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.university.data = current_user.university
@@ -52,6 +52,7 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
 @bp.route('/test')
+@roles_required('Admin') 
 @login_required
 def test():
 

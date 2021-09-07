@@ -1,10 +1,11 @@
 from flask import Blueprint, url_for, redirect, flash
 from flask_admin.contrib.sqla import ModelView
-from flask_admin import expose
+from flask_admin import expose, BaseView
 from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
-from app.models import User, Galaxy, Line, TempGalaxy, TempLine
+from flask_user import login_required, roles_required
+from app.models import User, Galaxy, Line, TempGalaxy, TempLine, Role
 from app import admin, db, Session
 from config import EMITTED_FREQUENCY
 from sqlalchemy import func
@@ -73,6 +74,7 @@ def update_redshift_error(session, galaxy_id, sum_upper):
         ).update({"redshift_error": redshift_error_weighted})
         session.commit()
         sum_upper = -1
+
 
 class TempGalaxyView(ModelView):
 
@@ -169,19 +171,21 @@ class TempLineView(ModelView):
             db.session.commit ()
         flash('Record was successfully deleted.')
 
-class ActualLineView(ModelView):
-    details_template = "/admin/model/templine.html"
-    #@expose('/templine/')
-    #def templine(self):
-        #return self.render('admin/templine.html')
+class PostsView(BaseView):
+    @expose('/')
+    def post_view(self):
+        line = "hi"
+        #self.line = line
+        return self.render("/admin/posts.html", line=line)
 
 
-        
+
 
 admin.add_view(ModelView(User, db.session))
+admin.add_view(ModelView(Role, db.session))
 admin.add_view(ModelView(Galaxy, db.session))
 #admin.add_view(ModelView(Line, db.session))
-admin.add_view(ActualLineView(Line, db.session))
+admin.add_view(PostsView(name='Posts', endpoint='posts'))
 admin.add_view(TempGalaxyView (TempGalaxy, db.session, category = "New Entries"))
 admin.add_view(TempLineView(TempLine, db.session, category = "New Entries"))
 

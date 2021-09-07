@@ -2,7 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import *
-from flask_login import LoginManager
+from flask_login import LoginManager, login_manager
+from flask_user import UserManager
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
@@ -12,12 +13,14 @@ import math
 from sqlalchemy import event
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from .models import db, User, Role, bcrypt, my_user_manager, my_login_manager
+from datetime import datetime
 
-db = SQLAlchemy()
+
 migrate = Migrate()
-login = LoginManager()
-login.login_view = 'auth.login'
-login.login_message = 'Please log in to access this page'
+
+my_login_manager.login_view = 'auth.login'
+my_login_manager.login_message = 'Please log in to access this page'
 engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
 admin = Admin (template_mode='bootstrap3')
 
@@ -46,15 +49,47 @@ def create_app(config_class = DevelopmentConfig):
     
     db.init_app(app)
     migrate.init_app(app, db, render_as_batch=True)
-    login.init_app(app)
+    my_login_manager.init_app(app)
 
     admin.init_app(app)
-    
-    
+
     engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
-    
+    bcrypt.init_app(app)
     Session = sessionmaker()
     Session.configure(bind=engine)
+
+
+    # Setup Flask-User and specify the User data-model
+    my_user_manager.init_app(app, db, User)
+
+    # Create all database tables
+    with app.app_context():
+        db.create_all()
+
+        # Create 'member@example.com' user with no roles
+        if not User.query.filter(User.email == 'member@example.com').first():
+            user = User(
+                email='member@example.com',
+                username='member',
+                email_confirmed_at=datetime.utcnow(),
+            )
+            user.set_password('Password1')
+            db.session.add(user)
+            db.session.commit()
+
+        # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
+        if not User.query.filter(User.email == 'admin@example.com').first():
+            user = User(
+                email='admin@example.com',
+                username='admin',
+                email_confirmed_at=datetime.utcnow(),
+            )
+            user.set_password('Password1')
+            user.roles.append(Role(name='Admin'))
+            #user.roles.append(Role(name='Agent'))
+            db.session.add(user)
+            db.session.commit()
+
 
     #BluePrints
     from app.errors import bp as errors_bp
