@@ -574,7 +574,22 @@ def galaxy_edit_form(glist):
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = "Yes")
+            changes = ""
+            if (glist[0] != form.name.data):
+                changes = changes + 'Initial Name: ' + glist [0] + ' New Name:' + form.name.data
+            if (str (glist[1]) != str(RA)):
+                changes = changes + 'Initial RA: ' + str (glist [1]) + ' New RA:' + str (RA)
+            if (str (glist[2]) != str (DEC)):
+                changes = changes + 'Initial DEC: ' + str (glist [2]) + ' New DEC:' + str (DEC)
+            if (glist[3] != form.coordinate_system.data):
+                changes = changes + 'Initial Coordinate System: ' + glist [3] + ' New Coordinate System:' + form.coordinate_system.data
+            if (glist[4] != form.lensing_flag.data):
+                changes = changes + 'Initial Lensing Flag: ' + glist [5] + ' New Lensing Flag:' + form.lensing_flag.data
+            if (glist[5] != form.classification.data):
+                changes = changes + 'Initial Classification: ' + glist [4] + ' New Classification:' + form.classification.data
+            if (glist[6] != form.notes.data):
+                changes = changes + 'Initial Notes: ' + glist [6] + 'New Notes:' + form.notes.data
+            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been Edited. ')
