@@ -32,7 +32,6 @@ class TempGalaxy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable = False)
     is_similar = db.Column(db.String(128))
-    is_edited = db.Column(db.String(128))    
     right_ascension = db.Column(db.Float(32), nullable = False) 
     declination = db.Column(db.Float(32), nullable = False) 
     coordinate_system = db.Column(db.String(128), nullable = False)
