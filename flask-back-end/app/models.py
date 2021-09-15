@@ -76,6 +76,7 @@ class EditGalaxy(db.Model):
     user_email = db.Column(db.String(128))
     lines = db.relationship('EditLine', backref='editgalaxy', lazy='dynamic')  
     admin_notes = db.Column(db.String(128))
+    original_id = db.Column(db.Integer)
 
     def as_dict(self):
         return {'name': self.name}

@@ -561,6 +561,7 @@ def galaxy_edit_form(glist):
             glist[6] += (glist[element])
     form = EditGalaxyForm(name = glist[0], right_ascension = float(glist[1]), declination = float(glist[2]), coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
     session=Session()
+    original = glist[0]
     if form.validate_on_submit ():
         if form.submit_anyway.data:
             try:
@@ -589,7 +590,7 @@ def galaxy_edit_form(glist):
                 changes = changes + 'Initial Classification: ' + glist [4] + ' New Classification:' + form.classification.data
             if (glist[6] != form.notes.data):
                 changes = changes + 'Initial Notes: ' + glist [6] + 'New Notes:' + form.notes.data
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes)
+            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original)
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been Edited. ')

@@ -149,8 +149,9 @@ class EditGalaxyView(ModelView):
     def action_approve(self, ids):
         session = Session ()
         for id in ids:
-            galaxy = session.query(EditGalaxy.name, EditGalaxy.right_ascension, EditGalaxy.declination, EditGalaxy.coordinate_system, EditGalaxy.lensing_flag, EditGalaxy.classification, EditGalaxy.notes).filter(EditGalaxy.id==id).all()
+            galaxy = session.query(EditGalaxy.name, EditGalaxy.right_ascension, EditGalaxy.declination, EditGalaxy.coordinate_system, EditGalaxy.lensing_flag, EditGalaxy.classification, EditGalaxy.notes, EditGalaxy.original_id).filter(EditGalaxy.id==id).all()
             g = Galaxy (name = galaxy[0][0], right_ascension = galaxy[0][1], declination = galaxy[0][2], coordinate_system = galaxy[0][3], lensing_flag = galaxy [0][4], classification = galaxy[0][5], notes = galaxy [0][6])
+            original_id = galaxy [0][7]
             db.session.add (g)
             db.session.commit ()
             from_existed = session.query(func.max(Galaxy.id)).first()
@@ -159,7 +160,10 @@ class EditGalaxyView(ModelView):
             g_temp = EditGalaxy.query.filter_by(id=id).first()
             db.session.delete (g_temp)
             db.session.commit ()
-            flash ("Galaxy has been Added")            
+            oldg  = Galaxy.query.filter_by(name = original_id).first()
+            db.session.delete(oldg)
+            db.session.commit ()
+            flash ("Galaxy has been Edited")            
         
     @action('check for similar', 'Check For Similar')
     def action_check_for_similar(self, ids):
