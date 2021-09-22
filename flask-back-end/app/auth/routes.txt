@@ -3,7 +3,6 @@ from flask.helpers import get_load_dotenv
 from sqlalchemy.orm import session
 from werkzeug.urls import url_parse
 from flask_login import login_user, logout_user
-from flask_user import current_user, login_required, roles_required
 from app import db, Session
 from app.auth import bp
 from app.auth.forms import LoginForm, RegistrationForm

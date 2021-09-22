@@ -1,17 +1,20 @@
-from flask import Blueprint, url_for, redirect, flash
+from flask import Blueprint, url_for, redirect, flash, request
+from flask.cli import with_appcontext
 from flask_admin.contrib.sqla import ModelView
-from flask_admin import expose, BaseView
+from flask_admin import Admin, expose, BaseView, AdminIndexView
 from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
-from flask_user import login_required, roles_required
-from app.models import User, Galaxy, Line, TempGalaxy, TempLine, Role
-from app import admin, db, Session
+from app.models import User, Galaxy, Line, TempGalaxy, TempLine, Role, Post
+from app import db, Session, admin, user_datastore
 from config import EMITTED_FREQUENCY
 from sqlalchemy import func
 from app.main.routes import galaxy, within_distance, ra_to_float, dec_to_float
+from flask_security import current_user
+
 
 bp = Blueprint('adm', __name__)
+
 
 def update_redshift(session, galaxy_id):
     line_redshift = session.query(
@@ -172,20 +175,56 @@ class TempLineView(ModelView):
         flash('Record was successfully deleted.')
 
 class PostsView(BaseView):
+
     @expose('/')
     def post_view(self):
-        line = "hi"
-        #self.line = line
-        return self.render("/admin/posts.html", line=line)
+        session = Session()
+        posts_query = session.query(Post).all()
+        return self.render("/admin/posts.html", posts_query=posts_query)
+    
+
+class AdminView(ModelView):
+    def is_accessible(self):
+        return current_user.has_role('admin')
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('security.login', next = request.url))
+    
+class UserView(AdminView):
+    @action('make admin',
+        'Make Admin',
+        'Are you sure you want to give this user admin privileges?')
+    def action_make_admin(self, ids):
+        for id in ids:
+            user = db.session.query(User).filter(User.id==id).first()
+            has_role = user_datastore.add_role_to_user(user=user, role='admin')
+            db.session.add(user)
+            db.session.commit()
+    @action('make member',
+        'Make Member',
+        'Are you sure you want to delete this user\'s privileges?')
+    def action_make_member(self, ids):
+        for id in ids:
+            user = db.session.query(User).filter(User.id==id).first()
+            has_role = user_datastore.remove_role_from_user(user=user, role='admin')
+            db.session.add(user)
+            db.session.commit()
 
 
 
 
-admin.add_view(ModelView(User, db.session))
-admin.add_view(ModelView(Role, db.session))
-admin.add_view(ModelView(Galaxy, db.session))
-#admin.add_view(ModelView(Line, db.session))
+
+
+
+admin.add_view(UserView(User, db.session))
+admin.add_view(AdminView(Role, db.session))
+admin.add_view(AdminView(Galaxy, db.session))
+admin.add_view(AdminView(Line, db.session))
 admin.add_view(PostsView(name='Posts', endpoint='posts'))
+admin.add_view(AdminView(Post, db.session))
 admin.add_view(TempGalaxyView (TempGalaxy, db.session, category = "New Entries"))
 admin.add_view(TempLineView(TempLine, db.session, category = "New Entries"))
+
+
+
 

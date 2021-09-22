@@ -1,5 +1,29 @@
 {% extends 'admin/master.html' %}
 {% block body %}
-<p>Here I'm going to display some data.</p>
-<p>{{line}}</p>
+
+<table>
+    <tr>
+        <th>Post ID</th>
+        <th>Type of entry</th>
+        <th>ID of entry</th>
+        <th>User's email</th>
+        <th>Date and time</th>
+    </tr>
+    {% for post in posts_query %}
+    <tr>
+        <td>{{post.id}}</td>
+        {% if post.tempgalaxy_id == None %}
+        <td>New Line</td>
+        <td>{{post.templine_id}}</td>
+        {% else %}
+        <td>New Line</td>
+        <td>{{post.templine_id}}</td>
+        {% endif %}
+        <td>{{post.user_email}}</td>
+        <td>{{post.time_submitted}}</td>
+    {%endfor%}
+    </tr>
+
+</table>
+
 {% endblock %}

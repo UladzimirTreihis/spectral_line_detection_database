@@ -1,9 +1,8 @@
-from flask import Flask
+from flask import Flask, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_security import SQLAlchemyUserDatastore, Security, current_user
 from config import *
-from flask_login import LoginManager, login_manager
-from flask_user import UserManager
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
 import os
@@ -11,18 +10,34 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import math
 from sqlalchemy import event
-from flask_admin import Admin
+from flask_admin import Admin, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
-from .models import db, User, Role, bcrypt, my_user_manager, my_login_manager
+from .models import db, User, Role
 from datetime import datetime
+from flask_security.forms import ConfirmRegisterForm, Required, StringField
+from flask_mail import Mail
+
 
 
 migrate = Migrate()
-
-my_login_manager.login_view = 'auth.login'
-my_login_manager.login_message = 'Please log in to access this page'
+mail = Mail()
 engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
 admin = Admin (template_mode='bootstrap3')
+
+#Flask-Security
+class ExtendedConfirmRegisterForm(ConfirmRegisterForm):
+    username = StringField('Username', [Required()])
+
+#Flask-Admin
+class RestrictedAdminIndexView(AdminIndexView):
+    def is_accessible(self):
+        return current_user.has_role('admin')
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('security.login', next = request.url))
+
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+security = Security()
 
 @event.listens_for(engine, 'connect')
 def create_math_functions_on_connect(dbapi_connection, connection_record):
@@ -49,46 +64,48 @@ def create_app(config_class = DevelopmentConfig):
     
     db.init_app(app)
     migrate.init_app(app, db, render_as_batch=True)
-    my_login_manager.init_app(app)
-
-    admin.init_app(app)
+    mail.init_app(app)
+    admin.init_app(app, index_view=RestrictedAdminIndexView(name='Index'), url='/')
 
     engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
-    bcrypt.init_app(app)
     Session = sessionmaker()
     Session.configure(bind=engine)
 
+    
 
-    # Setup Flask-User and specify the User data-model
-    my_user_manager.init_app(app, db, User)
+    #Flask-Security
+
+    security.init_app(app, user_datastore, confirm_register_form=ExtendedConfirmRegisterForm)
 
     # Create all database tables
     with app.app_context():
         db.create_all()
 
+        #Flask-Mail
+        #mail.send_message('New test message from Ulad',
+        #          sender="line.database.test@gmail.com",
+        #          recipients=['line.database.test@gmail.com'],
+        #          body="The app has been initiated")
+
         # Create 'member@example.com' user with no roles
         if not User.query.filter(User.email == 'member@example.com').first():
-            user = User(
-                email='member@example.com',
-                username='member',
-                email_confirmed_at=datetime.utcnow(),
-            )
-            user.set_password('Password1')
+            user = user_datastore.create_user(email='member@example.com', password = 'member', username='member', confirmed_at=datetime.now())
+            
             db.session.add(user)
             db.session.commit()
 
         # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
         if not User.query.filter(User.email == 'admin@example.com').first():
-            user = User(
-                email='admin@example.com',
-                username='admin',
-                email_confirmed_at=datetime.utcnow(),
-            )
-            user.set_password('Password1')
-            user.roles.append(Role(name='Admin'))
-            #user.roles.append(Role(name='Agent'))
+            admin_role = user_datastore.create_role(name='admin')
+            user = user_datastore.create_user(email='admin@example.com', password='admin', username='admin', confirmed_at=datetime.now())
+            user_datastore.add_role_to_user(user, admin_role)
+            db.session.add(admin_role)
             db.session.add(user)
             db.session.commit()
+
+            
+            #user.roles.append(Role(name='Admin'))
+            #user.roles.append(Role(name='Agent'))
 
 
     #BluePrints

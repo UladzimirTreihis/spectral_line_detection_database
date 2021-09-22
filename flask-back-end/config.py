@@ -12,20 +12,42 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
     
     # Flask-Mail SMTP server settings
+    #MAIL_SERVER = 'smtp.gmail.com'
+    #MAIL_PORT = 465
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 465
     MAIL_USE_SSL = True
     MAIL_USE_TLS = False
-    MAIL_USERNAME = 'email@example.com'
-    MAIL_PASSWORD = 'password'
-    MAIL_DEFAULT_SENDER = '"MyApp" <noreply@example.com>'
+    MAIL_USERNAME = 'line.database.test@gmail.com'
+    MAIL_PASSWORD = 'enrjbkfrbkzxboxk'
+    MAIL_DEFAULT_SENDER = MAIL_USERNAME
+    MAIL_MAX_EMAILS = None
+    MAIL_SUPPRESS_SEND = False
+    MAIL_ASCII_ATTACHEMENTS = False
 
     # Flask-User settings
-    USER_APP_NAME = "Flask-User Basic App"      # Shown in and email templates and page footers
-    USER_ENABLE_EMAIL = True        # Enable email authentication
-    USER_ENABLE_USERNAME = False    # Disable username authentication
-    USER_EMAIL_SENDER_NAME = USER_APP_NAME
-    USER_EMAIL_SENDER_EMAIL = "noreply@example.com"
+    #USER_APP_NAME = "Flask-User Basic App"      # Shown in and email templates and page footers
+    #USER_ENABLE_EMAIL = True        # Enable email authentication
+    #USER_ENABLE_USERNAME = False    # Disable username authentication
+    #USER_EMAIL_SENDER_NAME = USER_APP_NAME
+    #USER_EMAIL_SENDER_EMAIL = "noreply@example.com"
+
+    #FLASK-SECURITY
+    SECURITY_PASSWORD_SALT = 'dgdfsgdsfghf5hf6'
+    SECURITY_PASSWORD_HASH = 'sha512_crypt'
+    #SECURITY_LOGIN_USER_TEMPLATE = 'templates'
+    SECURITY_REGISTERABLE = True
+    SECURITY_SENDREGISTER_EMAIL = False
+    SECURITY_CONFIRMABLE = True
+    SECURITY_EMAIL_SENDER = 'email@example.com'
+    #SECURITY_REGISTER_URL = '/admin/create_account'
+#app.config['SECURITY_LOGIN_URL'] = '/admin/login'
+#app.config['SECURITY_POST_LOGIN_VIEW'] = '/admin'
+#SECURITY_LOGOUT_URL = '/logout'
+#SECURITY_POST_LOGOUT_VIEW = '/home'
+#app.config['SECURITY_RESET_URL'] = '/admin/reset'
+#app.config['SECURITY_CHANGE_URL'] = '/admin/change'
+#app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ['email', 'username']
 
     ADMINS = ['vtreygis@gmail.com']
     EMITTED_FREQUENCY = {

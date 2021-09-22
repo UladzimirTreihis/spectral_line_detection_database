@@ -3,7 +3,7 @@ from flask.globals import session
 from sqlalchemy.sql.expression import outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
-from app.models import Galaxy, User, Line, TempGalaxy, TempLine
+from app.models import Galaxy, User, Line, TempGalaxy, TempLine, Post
 from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalaxyForm, AddLineForm, AdvancedSearchForm, UploadFileForm
 from werkzeug.urls import url_parse
 import csv
@@ -11,10 +11,11 @@ from sqlalchemy import func
 from sqlalchemy.sql import text
 from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp
 from io import TextIOWrapper
-from flask_user import current_user, login_required, roles_required
+from flask_security import current_user, login_required, roles_required
 import math
 from app.main import bp
 import re
+from datetime import datetime
 
 @bp.route("/")
 @bp.route("/home")
@@ -23,6 +24,13 @@ def home():
     ''' Home page route '''
 
     return render_template("/home.html")
+
+@bp.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template('user.html', user=user)
+
 
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
@@ -351,7 +359,8 @@ def entry_file():
                                         classification = row[COL_NAMES ['classification']],
                                         notes = row [COL_NAMES['g_notes']],
                                         user_submitted = current_user.username,
-                                        user_email = current_user.email)
+                                        user_email = current_user.email,
+                                        time_submitted = datetime.utcnow)
                     db.session.add(galaxy)
                     new_id = db.session.query(func.max(TempGalaxy.id)).first()
                     id = new_id [0]
@@ -466,7 +475,8 @@ def entry_file():
                                     reference = row ['reference'],
                                     notes = row ['notes'],
                                     user_submitted = current_user.username,
-                                    user_email = current_user.email
+                                    user_email = current_user.email,
+                                    time_submitted = datetime.utcnow
                                     )                
                     db.session.add(line)
                     db.session.commit()
@@ -521,8 +531,13 @@ def galaxy_entry_form():
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()))
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), time_submitted = datetime.utcnow)
             db.session.add(galaxy)
+            db.session.commit()
+            tempgalaxy = session.query(TempGalaxy).filter_by(name=form.name.data).first()
+            tempgalaxy_id = int(tempgalaxy.repr())
+            post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow)
+            db.session.add(post)
             db.session.commit()
             flash ('Galaxy has been added. ')
         if form.do_not_submit.data:
@@ -541,8 +556,13 @@ def galaxy_entry_form():
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             if galaxies.first() != None:
                 return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=True)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = None)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = None, time_submitted = datetime.utcnow())
             db.session.add(galaxy)
+            db.session.commit()
+            tempgalaxy = TempGalaxy.query.filter_by(name=form.name.data).first()
+            tempgalaxy_id = int(tempgalaxy.__repr__())
+            post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+            db.session.add(post)
             db.session.commit()
             flash ('Galaxy has been added. ')
         if form.new_line.data:
@@ -679,7 +699,10 @@ def line_entry_form():
         if form.submit.data:
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).first()
-            id = galaxy_id[0]
+            try:
+                id = galaxy_id[0]
+            except:
+                id = None
             existed = id
 
             if galaxy_id == None:
@@ -698,6 +721,11 @@ def line_entry_form():
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
             line = TempLine(galaxy_id=id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed)
             db.session.add(line)
+            db.session.commit()
+            templine = session.query(func.max(TempLine.id)).first()
+            templine_id = int(templine[0])
+            post = Post(templine_id=templine_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+            db.session.add(post)
             db.session.commit()
             flash ('Line has been added. ')
             return redirect(url_for('main.main'))
@@ -758,12 +786,6 @@ def galaxy(name):
     gdict = galaxy.__dict__
     glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
     return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
-
-@bp.route('/user/<username>')
-@login_required
-def user(username):
-    user = User.query.filter_by(username=username).first_or_404()
-    return render_template('user.html', user=user)
 
 
 @bp.route("/submit")

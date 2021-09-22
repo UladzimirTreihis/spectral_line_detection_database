@@ -1,8 +1,21 @@
+from sqlalchemy.orm import backref
 from ._db import db
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import UserMixin
-from hashlib import md5
 from datetime import datetime
+
+class Post(db.Model):
+    __tablename__ = 'post'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    user_submitted = db.Column(db.String(128))
+    user_email = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+    tempgalaxy_id = db.Column(db.Integer, db.ForeignKey('tempgalaxy.id'))
+    templine_id = db.Column(db.Integer, db.ForeignKey('templine.id'))  
+    tempgalaxies = db.relationship('TempGalaxy', backref='post', foreign_keys=[tempgalaxy_id])
+    templines = db.relationship('TempLine', backref='post', foreign_keys=[templine_id])
+
+
+
 
 class Galaxy(db.Model):
     __tablename__ = 'galaxy'
@@ -42,9 +55,10 @@ class TempGalaxy(db.Model):
     classification = db.Column(db.String(128), nullable = False)   
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
-    user_email = db.Column(db.String(128))
-    lines = db.relationship('TempLine', backref='tempgalaxy', lazy='dynamic')  
+    user_email = db.Column(db.String(128)) 
     admin_notes = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+    lines = db.relationship('TempLine', backref='tempgalaxy', lazy='dynamic') 
 
     def as_dict(self):
         return {'name': self.name}
@@ -56,7 +70,7 @@ class TempGalaxy(db.Model):
         return self.declination
 
     def __repr__(self):
-        return '{}'.format(self.name)
+        return '{}'.format(self.id)
     
 
 class Line(db.Model):
@@ -114,5 +128,11 @@ class TempLine(db.Model):
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
     admin_notes = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return '{}'.format(self.id)
+
+
 
 
