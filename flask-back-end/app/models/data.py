@@ -14,9 +14,6 @@ class Post(db.Model):
     tempgalaxies = db.relationship('TempGalaxy', backref='post', foreign_keys=[tempgalaxy_id])
     templines = db.relationship('TempLine', backref='post', foreign_keys=[templine_id])
 
-
-
-
 class Galaxy(db.Model):
     __tablename__ = 'galaxy'
     __table_args__ = {'extend_existing': True}
@@ -168,6 +165,7 @@ class EditLine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     galaxy_id = db.Column(db.Integer, db.ForeignKey('editgalaxy.id')) 
     from_existed_id = db.Column(db.Integer)
+    is_edited = db.Column(db.String(128))  
     j_upper = db.Column(db.Integer, nullable = False)  
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
