@@ -748,10 +748,18 @@ def line_entry_form():
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
 
-@bp.route("/line_edit_form/<line>", methods=['GET', 'POST'])
+@bp.route("/line_edit_form/<llist>", methods=['GET', 'POST'])
 @login_required
-def line_edit_form(line):
-    form = EditLineForm(galaxy_name = line)
+def line_edit_form(llist):
+    llist = llist[1: len (llist) - 2]
+    llist = llist.replace("'", "")
+    llist = llist.split(",")
+    id = llist [0]
+    session = Session ()
+    name = session.query(Galaxy.name).filter(Galaxy.id==id).first() 
+    name = str(name)
+    name = name [2: (len (name) - 3)]
+    form = EditLineForm(galaxy_name = name, j_upper = llist[1], integrated_line_flux = llist[2], integrated_line_flux_uncertainty_positive = llist [3], peak_line_flux = llist[4], peak_line_flux_uncertainty_positive = llist [5], line_width = llist [6], line_width_uncertainty_positive = llist[7], observed_line_frequency = llist [8], observed_line_frequency_uncertainty_positive = llist [9], detection_type = llist[10], observed_beam_major = llist[11], observed_beam_minor = llist [12], observed_beam_angle = llist [13], reference = llist [14], notes = llist [15])
     if form.galaxy_form.data:
         return redirect(url_for('main.galaxy_entry_form'))
     if form.validate_on_submit():
@@ -772,7 +780,7 @@ def line_edit_form(line):
             #update_redshift_error(session, galaxy_id, total)
             flash ('Line has been edited. ')
             return redirect(url_for('main.main'))
-    return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
+    return render_template('line_edit_form.html', title= 'Line Edit Form', form=form)
 
 @bp.route('/galaxies')
 @login_required
@@ -801,17 +809,11 @@ def galaxy(name):
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
     gdict = galaxy.__dict__
     glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
-    '''
-    line = []
     llist = []
-    i = 0
     for l in line:
         ldict = l.__dict__
-        llist[i] = [ldict['galaxy_id'], ldict['j_upper'], ldict['integrated_line_flux'], ldict['integrated_line_flux_uncertainty_positive'], ldict['integrated_line_flux_uncertainty_negative'], ldict['peak_line_flux'], ldict['peak_line_flux_uncertainty_positive'], ldict['peak_line_flux_uncertainty_negative'], ldict['line_width'], ldict['line_width_uncertainty_positive'], ldict['line_width_uncertainty_negative'], ldict['observed_line_frequency'], ldict['observed_line_frequency_uncertainty_positive'], ldict['observed_line_frequency_uncertainty_negative'], ldict['detection_type'], ldict['observed_beam_major'], ldict['observed_beam_minor'], ldict['observed_beam_angle'], ldict['reference'], ldict['notes']]
-        i = i + 1
-    flash (llist[0])   
-    '''     
-    return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
+        llist = [ldict['galaxy_id'], ldict['j_upper'], ldict['integrated_line_flux'], ldict['integrated_line_flux_uncertainty_positive'], ldict['integrated_line_flux_uncertainty_negative'], ldict['peak_line_flux'], ldict['peak_line_flux_uncertainty_positive'], ldict['peak_line_flux_uncertainty_negative'], ldict['line_width'], ldict['line_width_uncertainty_positive'], ldict['line_width_uncertainty_negative'], ldict['observed_line_frequency'], ldict['observed_line_frequency_uncertainty_positive'], ldict['observed_line_frequency_uncertainty_negative'], ldict['detection_type'], ldict['observed_beam_major'], ldict['observed_beam_minor'], ldict['observed_beam_angle'], ldict['reference'], ldict['notes']]   
+    return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist, llist = llist)
 
 
 @bp.route("/submit")

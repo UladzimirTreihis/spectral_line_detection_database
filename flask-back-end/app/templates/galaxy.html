@@ -87,7 +87,7 @@
                   <td>{{ l.observed_beam_angle }}</td>
                   <td>{{ l.reference }}</td>
                   <td>{{ l.notes }}</td>
-                  <td> <a href="{{ url_for ('main.line_edit_form', line = line) }}" class="btn btn-info" role="button"> Update Line Information </a> </td>
+                  <td> <a href="{{ url_for ('main.line_edit_form', llist = llist) }}" class="btn btn-info" role="button"> Update Line Information </a> </td>
                </tr>
             {% endfor %}
          </tbody>
