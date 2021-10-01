@@ -748,18 +748,15 @@ def line_entry_form():
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
 
-@bp.route("/line_edit_form/<llist>", methods=['GET', 'POST'])
+@bp.route("/line_edit_form/<id>", methods=['GET', 'POST'])
 @login_required
-def line_edit_form(llist):
-    llist = llist[1: len (llist) - 2]
-    llist = llist.replace("'", "")
-    llist = llist.split(",")
-    id = llist [0]
+def line_edit_form(id):
     session = Session ()
+    line = session.query(Line).filter(Line.id == id).first()
     name = session.query(Galaxy.name).filter(Galaxy.id==id).first() 
     name = str(name)
     name = name [2: (len (name) - 3)]
-    form = EditLineForm(galaxy_name = name, j_upper = llist[1], integrated_line_flux = llist[2], integrated_line_flux_uncertainty_positive = llist [3], peak_line_flux = llist[4], peak_line_flux_uncertainty_positive = llist [5], line_width = llist [6], line_width_uncertainty_positive = llist[7], observed_line_frequency = llist [8], observed_line_frequency_uncertainty_positive = llist [9], detection_type = llist[10], observed_beam_major = llist[11], observed_beam_minor = llist [12], observed_beam_angle = llist [13], reference = llist [14], notes = llist [15])
+    form = EditLineForm(galaxy_name = name, j_upper = line.j_upper, integrated_line_flux = line.integrated_line_flux, integrated_line_flux_uncertainty_positive = line.integrated_line_flux_uncertainty_positive, peak_line_flux = line.peak_line_flux, peak_line_flux_uncertainty_positive = line.peak_line_flux_uncertainty_positive, line_width = line.line_width, line_width_uncertainty_positive = line.line_width_uncertainty_positive, observed_line_frequency = line.observed_line_frequency, observed_line_frequency_uncertainty_positive = line.observed_line_frequency_uncertainty_positive, detection_type = line.detection_type, observed_beam_major = line.observed_beam_major, observed_beam_minor = line.observed_beam_minor, observed_beam_angle = line.observed_beam_angle, reference = line.reference, notes = line.notes)
     if form.galaxy_form.data:
         return redirect(url_for('main.galaxy_entry_form'))
     if form.validate_on_submit():
@@ -809,11 +806,7 @@ def galaxy(name):
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
     gdict = galaxy.__dict__
     glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
-    llist = []
-    for l in line:
-        ldict = l.__dict__
-        llist = [ldict['galaxy_id'], ldict['j_upper'], ldict['integrated_line_flux'], ldict['integrated_line_flux_uncertainty_positive'], ldict['integrated_line_flux_uncertainty_negative'], ldict['peak_line_flux'], ldict['peak_line_flux_uncertainty_positive'], ldict['peak_line_flux_uncertainty_negative'], ldict['line_width'], ldict['line_width_uncertainty_positive'], ldict['line_width_uncertainty_negative'], ldict['observed_line_frequency'], ldict['observed_line_frequency_uncertainty_positive'], ldict['observed_line_frequency_uncertainty_negative'], ldict['detection_type'], ldict['observed_beam_major'], ldict['observed_beam_minor'], ldict['observed_beam_angle'], ldict['reference'], ldict['notes']]   
-    return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist, llist = llist)
+    return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
 
 
 @bp.route("/submit")
