@@ -29,8 +29,7 @@ def update_redshift(session, galaxy_id):
 
     sum_upper = sum_lower = 0
     for l in line_redshift:
-        #This if ignores all line without nu or nu_uncertainty in calculating galaxy's redshift. 
-        if l.observed_line_frequency or l.observed_line_frequency_uncertainty_positive == None:
+        if (l.observed_line_frequency_uncertainty_positive == None) or (l.observed_line_frequency == None):
             continue
         if l.observed_line_frequency_uncertainty_negative == None:
             delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
@@ -43,9 +42,10 @@ def update_redshift(session, galaxy_id):
         delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
         sum_upper = sum_upper =+ (z/delta_z)
         sum_lower = sum_lower =+ (1/delta_z)
+    #This case passes -1 to change redshift error, which will signal that no change needed
     if sum_lower == 0:
-        sum_upper = -1
-        return sum_upper
+        return -1
+
     redshift_weighted = sum_upper / sum_lower
     session.query(Galaxy).filter(
         Galaxy.id == galaxy_id
@@ -55,8 +55,8 @@ def update_redshift(session, galaxy_id):
     return sum_upper
 
 def update_redshift_error(session, galaxy_id, sum_upper):
-    #the while statement checks if the redshift was updated
-    while sum_upper != -1:
+    if sum_upper != -1:
+
         redshift_error_weighted = 0
         line_redshift = session.query(
                 Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
@@ -64,8 +64,7 @@ def update_redshift_error(session, galaxy_id, sum_upper):
                 Galaxy.id == galaxy_id
             ).all() 
         for l in line_redshift:
-            #This if ignores all line without nu or nu_uncertainty in calculating galaxy's redshift. 
-            if l.observed_line_frequency or l.observed_line_frequency_uncertainty_positive == None:
+            if (l.observed_line_frequency_uncertainty_positive == None) or (l.observed_line_frequency == None):
                 continue
             if l.observed_line_frequency_uncertainty_negative == None:
                 delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
@@ -76,11 +75,11 @@ def update_redshift_error(session, galaxy_id, sum_upper):
             delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
             weight = (z/delta_z)/sum_upper
             redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
-        session.query(Galaxy).filter(
-            Galaxy.id == galaxy_id
-        ).update({"redshift_error": redshift_error_weighted})
-        session.commit()
-        sum_upper = -1
+        if redshift_error_weighted != 0:
+            session.query(Galaxy).filter(
+                Galaxy.id == galaxy_id
+            ).update({"redshift_error": redshift_error_weighted})
+            session.commit()
 
 class GalaxyView (ModelView):
     def check_coords(form, coordinate_system):
@@ -208,14 +207,14 @@ class TempLineView(ModelView):
     def action_approve(self, ids):
         session = Session ()
         for id in ids:
-            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==id).all()
+            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==id).first()
             
-            if (line [0][20] == None):
-                # line [0][20] represents TempLine.from_existed_id
+            if (line [20] == None):
+                # line [20] represents TempLine.from_existed_id
                 raise Exception('You have not yet approved the galaxy to which the line belongs to')
             else:
-                g_id = line [0][20]
-            l = Line (galaxy_id = g_id, j_upper = line [0][1], integrated_line_flux = line [0][2], integrated_line_flux_uncertainty_positive = line [0][3], integrated_line_flux_uncertainty_negative = line [0][4], peak_line_flux = line [0][5], peak_line_flux_uncertainty_positive = line [0][6], peak_line_flux_uncertainty_negative = line [0][7], line_width = line [0][8], line_width_uncertainty_positive = line [0][9], line_width_uncertainty_negative = line [0][10], observed_line_frequency = line [0][11], observed_line_frequency_uncertainty_positive = line [0][12], observed_line_frequency_uncertainty_negative = line [0][13], detection_type = line [0][14], observed_beam_major = line [0][15], observed_beam_minor = line [0][16], observed_beam_angle = line [0][17], reference = line [0][18], notes = line [0][19], user_submitted = line [0][21], user_email = line[0][22])
+                g_id = line [20]
+            l = Line (galaxy_id = g_id, j_upper = line [1], integrated_line_flux = line [2], integrated_line_flux_uncertainty_positive = line [3], integrated_line_flux_uncertainty_negative = line [4], peak_line_flux = line [5], peak_line_flux_uncertainty_positive = line [6], peak_line_flux_uncertainty_negative = line [7], line_width = line [8], line_width_uncertainty_positive = line [9], line_width_uncertainty_negative = line [10], observed_line_frequency = line [11], observed_line_frequency_uncertainty_positive = line [12], observed_line_frequency_uncertainty_negative = line [13], detection_type = line [14], observed_beam_major = line [15], observed_beam_minor = line [16], observed_beam_angle = line [17], reference = line [18], notes = line [19], user_submitted = line [21], user_email = line[22])
             db.session.add (l)
             db.session.commit ()
             total = update_redshift(session, g_id)

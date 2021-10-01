@@ -67,11 +67,12 @@ def test():
     ''' Test route, used for development purposes only '''
 
     session = Session()
+    id = 19
     #subqry = session.query(TempGalaxy, TempLine).outerjoin(TempLine, TempGalaxy.lines).subquery()
-    total = update_redshift(session, 1)
-    update_redshift_error(session, 1, total)
-    posts = session.query(Post, TempGalaxy, TempLine).outerjoin(TempGalaxy, Post.tempgalaxies).outerjoin(TempLine, Post.templines).all()
-    return render_template("/test.html", posts=posts)
+    line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==id).first()
+    var = line[20]
+ 
+    return render_template("/test.html", var=var)
 
 @bp.route("/main", methods=['GET', 'POST']) 
 @login_required
@@ -680,6 +681,8 @@ def update_redshift(session, galaxy_id):
 
     sum_upper = sum_lower = 0
     for l in line_redshift:
+        if (l.observed_line_frequency_uncertainty_positive == None) or (l.observed_line_frequency == None):
+            continue
         if l.observed_line_frequency_uncertainty_negative == None:
             delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
         else:
@@ -691,6 +694,9 @@ def update_redshift(session, galaxy_id):
         delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
         sum_upper = sum_upper =+ (z/delta_z)
         sum_lower = sum_lower =+ (1/delta_z)
+    #This case passes -1 to change redshift error, which will signal that no change needed
+    if sum_lower == 0:
+        return -1
 
     redshift_weighted = sum_upper / sum_lower
     session.query(Galaxy).filter(
@@ -701,26 +707,31 @@ def update_redshift(session, galaxy_id):
     return sum_upper
 
 def update_redshift_error(session, galaxy_id, sum_upper):
-    redshift_error_weighted = 0
-    line_redshift = session.query(
-            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
-        ).outerjoin(Galaxy).filter(
-            Galaxy.id == galaxy_id
-        ).all() 
-    for l in line_redshift:
-        if l.observed_line_frequency_uncertainty_negative == None:
-            delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
-        else:
-            delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-        J_UPPER = l.j_upper
-        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
-        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
-        weight = (z/delta_z)/sum_upper
-        redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
-    session.query(Galaxy).filter(
-        Galaxy.id == galaxy_id
-    ).update({"redshift_error": redshift_error_weighted})
-    session.commit()
+    if sum_upper != -1:
+
+        redshift_error_weighted = 0
+        line_redshift = session.query(
+                Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+            ).outerjoin(Galaxy).filter(
+                Galaxy.id == galaxy_id
+            ).all() 
+        for l in line_redshift:
+            if (l.observed_line_frequency_uncertainty_positive == None) or (l.observed_line_frequency == None):
+                continue
+            if l.observed_line_frequency_uncertainty_negative == None:
+                delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+            else:
+                delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+            J_UPPER = l.j_upper
+            z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+            delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+            weight = (z/delta_z)/sum_upper
+            redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
+        if redshift_error_weighted != 0:
+            session.query(Galaxy).filter(
+                Galaxy.id == galaxy_id
+            ).update({"redshift_error": redshift_error_weighted})
+            session.commit()
 
 def redshift_to_frequency(J_UPPER, z, positive_uncertainty, negative_uncertainty):
     if z == None:

@@ -9,38 +9,8 @@
 <hr>
 <h1> Test </h1>
 
-<table>
-   <tr>
-      <th>
-         Post Id
-      </th>
-      <th>
-         Galaxy Id
-      </th>
-      <th>
-         Line Id
-      </th> 
-   </tr>
-{% for post in posts %}
-   {% set p = post[0] %}
-   {% set g = post[1] %}
-   {% set l = post[2] %}
-   
-   <tr>
-      <td>
-         {{p.id}}
-      </td>
-      <td>
-         {{g.id}}
-      </td>
-      <td>
-         {{l.id}}
-      </td>
-   </tr>
-{%endfor%}
-</table>
-<p>
-    Test
-</p>
+
+<p>{{ var }}</p>
+
 
 {% endblock %}
