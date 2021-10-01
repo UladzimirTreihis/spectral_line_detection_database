@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Line Edit Form
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <h1>Line Edit Form</h1>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+    <form class="form-inline" action="" method="post" novalidate>
+        <br>
+        <label class="container">My uncertainties for values are not symmetrical 
+            <input type="checkbox" id="myCheck" onclick="showUncertainties()">
+            <span class="checkmark"></span>
+        </label>
+        <br>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.galaxy_name.label }}<br>
+            {{ form.galaxy_name(size=32) }}<br>
+            {% for error in form.galaxy_name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p> If the Galaxy you're looking for does not exist, go to the Add a New Galaxy Page. </p>
+        <p>{{ form.galaxy_form() }}</p>
+        <p>
+            {{ form.j_upper.label }}<br>
+            {{ form.j_upper(size=32) }}<br>
+            {% for error in form.j_upper.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.integrated_line_flux.label }}<br>
+            {{ form.integrated_line_flux(size=32) }}<br>
+            {% for error in form.integrated_line_flux.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.integrated_line_flux_uncertainty_positive.label }}<br>
+            {{ form.integrated_line_flux_uncertainty_positive(size=32) }}<br>
+            {% for error in form.integrated_line_flux_uncertainty_positive.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p id="uncertainty" style="display:none">
+            {{ form.integrated_line_flux_uncertainty_negative.label }}<br>
+            {{ form.integrated_line_flux_uncertainty_negative(size=32) }}<br>
+            {% for error in form.integrated_line_flux_uncertainty_negative.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.peak_line_flux.label }}<br>
+            {{ form.peak_line_flux(size=32) }}<br>
+            {% for error in form.peak_line_flux.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.peak_line_flux_uncertainty_positive.label }}<br>
+            {{ form.peak_line_flux_uncertainty_positive(size=32) }}<br>
+            {% for error in form.peak_line_flux_uncertainty_positive.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p id="uncertainty" style="display:none">
+            {{ form.peak_line_flux_uncertainty_negative.label }}<br>
+            {{ form.peak_line_flux_uncertainty_negative(size=32) }}<br>
+            {% for error in form.peak_line_flux_uncertainty_negative.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.line_width.label }}<br>
+            {{ form.line_width(size=32) }}<br>
+            {% for error in form.line_width.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.line_width_uncertainty_positive.label }}<br>
+            {{ form.line_width_uncertainty_positive(size=32) }}<br>
+            {% for error in form.line_width_uncertainty_positive.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p id="uncertainty" style="display:none">
+            {{ form.line_width_uncertainty_negative.label }}<br>
+            {{ form.line_width_uncertainty_negative(size=32) }}<br>
+            {% for error in form.line_width_uncertainty_negative.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.freq_type.label }}<br>
+            {{ form.freq_type(size=2) }}<br>
+            {% for error in form.freq_type.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.observed_line_frequency.label }}<br>
+            {{ form.observed_line_frequency(size=32) }}<br>
+            {% for error in form.observed_line_frequency.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.observed_line_frequency_uncertainty_positive.label }}<br>
+            {{ form.observed_line_frequency_uncertainty_positive(size=32) }}<br>
+            {% for error in form.observed_line_frequency_uncertainty_positive.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p id="uncertainty" style="display:none">
+            {{ form.observed_line_frequency_uncertainty_negative.label }}<br>
+            {{ form.observed_line_frequency_uncertainty_negative(size=32) }}<br>
+            {% for error in form.observed_line_frequency_uncertainty_negative.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.detection_type.label }}<br>
+            {{ form.detection_type(size=3) }}<br>
+            {% for error in form.detection_type.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.observed_beam_major.label }}<br>
+            {{ form.observed_beam_major(size=32) }}<br>
+            {% for error in form.observed_beam_major.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.observed_beam_minor.label }}<br>
+            {{ form.observed_beam_minor(size=32) }}<br>
+            {% for error in form.observed_beam_minor.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.observed_beam_angle.label }}<br>
+            {{ form.observed_beam_angle(size=32) }}<br>
+            {% for error in form.observed_beam_angle.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.reference.label }}<br>
+            {{ form.reference(size=32) }}<br>
+            {% for error in form.reference.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes(size=32) }}<br>
+            {% for error in form.notes.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <script>
+
+        $(document).ready(function(){
+        var galaxy_name = [];
+        function loadGalaxies(){
+        $.getJSON('/galaxies', function(data, status, xhr)
+        {
+        for (var i = 0; i < data.length; i++ ) {
+            galaxy_name.push(data[i].name);
+        }
+        });
+        };
+        loadGalaxies();
+        
+        $('#galaxy_name').autocomplete({
+        source: galaxy_name, 
+        }); 
+
+        $.ajax({
+        data: {galaxy_name:$('#galaxy_name').val()},
+        type: 'POST',
+        url : '/process'
+        })
+        .done(function(data){ 
+        })
+        e.preventDefault();
+        
+        }); 
+    </script>
+    <style>
+
+</style>
+{% endblock %}
