@@ -9,37 +9,36 @@
 <hr>
 <h1> Test </h1>
 
-<table class = "table" id = "Galaxy">
-    <thead>
-       <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Right Ascension</th>
-          <th>Declination</th>
-          <th>Coordinate System</th>
-          <th>Redshift</th>
-          <th>Lensing Flag</th>
-          <th>Classification</th>
-          <th>Notes</th>
-       </tr>
-    </thead>
-     
-    <tbody>
-       {% for g in galaxies %}
-          <tr>
-             <td>{{ g.id }}</td>
-             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-             <td>{{ g.right_ascension }}</td>
-             <td>{{ g.declination }}</td>
-             <td>{{ g.coordinate_system }}</td>
-             <td>{{ g.redshift }}</td>
-             <td>{{ g.lensing_flag }}</td>
-             <td>{{ g.classification }}</td>
-             <td>{{ g.notes }}</td>
-          </tr>
-       {% endfor %}
-    </tbody>
- </table>
+<table>
+   <tr>
+      <th>
+         Post Id
+      </th>
+      <th>
+         Galaxy Id
+      </th>
+      <th>
+         Line Id
+      </th> 
+   </tr>
+{% for post in posts %}
+   {% set p = post[0] %}
+   {% set g = post[1] %}
+   {% set l = post[2] %}
+   
+   <tr>
+      <td>
+         {{p.id}}
+      </td>
+      <td>
+         {{g.id}}
+      </td>
+      <td>
+         {{l.id}}
+      </td>
+   </tr>
+{%endfor%}
+</table>
 <p>
     Test
 </p>

@@ -5,6 +5,8 @@ from flask_admin import Admin, expose, BaseView, AdminIndexView
 from flask_admin.model.template import EndpointLinkRowAction
 from flask_admin.actions import action
 from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
+from flask_login.utils import login_required
+from sqlalchemy.orm import session
 from app.models import User, Galaxy, Line, TempGalaxy, TempLine, Role, Post, EditGalaxy
 from app import db, Session, admin, user_datastore
 from config import EMITTED_FREQUENCY
@@ -206,14 +208,16 @@ class TempLineView(ModelView):
     def action_approve(self, ids):
         session = Session ()
         for id in ids:
-            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id).filter(TempLine.id==id).all()
+            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==id).all()
             
             if (line [0][20] == None):
-                raise Exception('You have not yet approved the galaxy to whoch the line belongs to')
+                # line [0][20] represents TempLine.from_existed_id
+                raise Exception('You have not yet approved the galaxy to which the line belongs to')
             else:
                 g_id = line [0][20]
-            l = Line (galaxy_id = g_id, j_upper = line [0][1], integrated_line_flux = line [0][2], integrated_line_flux_uncertainty_positive = line [0][3], integrated_line_flux_uncertainty_negative = line [0][4], peak_line_flux = line [0][5], peak_line_flux_uncertainty_positive = line [0][6], peak_line_flux_uncertainty_negative = line [0][7], line_width = line [0][8], line_width_uncertainty_positive = line [0][9], line_width_uncertainty_negative = line [0][10], observed_line_frequency = line [0][11], observed_line_frequency_uncertainty_positive = line [0][12], observed_line_frequency_uncertainty_negative = line [0][13], detection_type = line [0][14], observed_beam_major = line [0][15], observed_beam_minor = line [0][16], observed_beam_angle = line [0][17], reference = line [0][18], notes = line [0][19])
+            l = Line (galaxy_id = g_id, j_upper = line [0][1], integrated_line_flux = line [0][2], integrated_line_flux_uncertainty_positive = line [0][3], integrated_line_flux_uncertainty_negative = line [0][4], peak_line_flux = line [0][5], peak_line_flux_uncertainty_positive = line [0][6], peak_line_flux_uncertainty_negative = line [0][7], line_width = line [0][8], line_width_uncertainty_positive = line [0][9], line_width_uncertainty_negative = line [0][10], observed_line_frequency = line [0][11], observed_line_frequency_uncertainty_positive = line [0][12], observed_line_frequency_uncertainty_negative = line [0][13], detection_type = line [0][14], observed_beam_major = line [0][15], observed_beam_minor = line [0][16], observed_beam_angle = line [0][17], reference = line [0][18], notes = line [0][19], user_submitted = line [0][21], user_email = line[0][22])
             db.session.add (l)
+            db.session.commit ()
             total = update_redshift(session, g_id)
             update_redshift_error(session, g_id, total)
             db.session.commit ()
@@ -247,9 +251,25 @@ class PostsView(BaseView):
     @expose('/')
     def post_view(self):
         session = Session()
-        posts_query = session.query(Post).all()
+        posts_query = session.query(Post, TempGalaxy, TempLine).outerjoin(TempGalaxy, Post.tempgalaxies).outerjoin(TempLine, Post.templines).all()
         return self.render("/admin/posts.html", posts_query=posts_query)
-    
+
+@bp.route('/post_delete/<id>') 
+@login_required  
+def post_delete(id):
+    session = Session()
+    post = Post.query.filter_by(id=id).first()
+    templine_id = session.query(Post.templine_id).filter_by(id=id)
+    tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id)
+    if templine_id != None:
+        templine = TempLine.query.filter_by(id=templine_id).first()
+        db.session.delete (templine)
+    else:
+        tempgalaxy = TempGalaxy.query.filter_by(id=tempgalaxy_id).first()
+        db.session.delete (tempgalaxy)
+    db.session.delete (post)
+    db.session.commit ()    
+    return redirect("/posts")
 
 class AdminView(ModelView):
     def is_accessible(self):

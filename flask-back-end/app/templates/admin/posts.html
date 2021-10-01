@@ -1,29 +1,107 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 
-<table>
-    <tr>
-        <th>Post ID</th>
-        <th>Type of entry</th>
-        <th>ID of entry</th>
-        <th>User's email</th>
-        <th>Date and time</th>
-    </tr>
-    {% for post in posts_query %}
-    <tr>
-        <td>{{post.id}}</td>
-        {% if post.tempgalaxy_id == None %}
-        <td>New Line</td>
-        <td>{{post.templine_id}}</td>
-        {% else %}
-        <td>New Line</td>
-        <td>{{post.templine_id}}</td>
-        {% endif %}
-        <td>{{post.user_email}}</td>
-        <td>{{post.time_submitted}}</td>
-    {%endfor%}
-    </tr>
+<nav class="navbar navbar-dafault" role="navigation"></nav>
+<ul class="nav nav-tabs action-nav">
+    <li class="active">
+        <a href="javascript:void(0)">List #</a>
+    </li>
+    <li class="dropdown">
+        <a class="btn dropdown-toggle" data-toggle="dropdown"
+        href="javascript:void(0)">
+            With selected
+            <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="javascript:void(0)" onclick="return modelActions.execute('delete');">
+                Delete
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
 
-</table>
+<p><a href="{{ url_for('adm.post_delete', id = 40) }}">Yes</a></p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered table-hover model-list">
+        <thead>
+            <tr>
+                <th class="ist-checkbox-column">
+                    <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="Select all records">
+                </th>
+                <th class="col-md-1">nbsp;></th>
+                <th>Post ID</th>
+                <th>Type of entry</th>
+                <th>ID of entry</th>
+                <th>About</th>
+                <th>User's email</th>
+                <th>Date and time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for post in posts_query %}
+                {% set p = post[0] %}
+                {% set g = post[1] %}
+                {% set l = post[2] %}
+            <tr>
+                <td>
+                    <input type="checkbox" name="rowid" class="action-checkbox" 
+                    value={{post.id}} title="Select record">
+                </td>
+                <td class="list-buttons-column">
+                    <form class="icon" method="POST" action="/post_delete/{{post.id}}">
+                        <input id="id" name="id" required type="hidden" value={{post.id}}>
+                        <input id="url" name="url" type="hidden" value="/post/">
+                        <button onclick="return faHelpers.safeConfirm('Are you sure you want to delete this record?');" 
+                        title="Delete record">
+                            <span class="fa fa-trash glyphicon glyphicon-trash">
+                                <a href="{{ url_for('adm.post_delete', id = post.id) }}"></a>
+                            </span>
+                        </button>
+                    </form>
+                </td>
+                <td>{{p.id}}</td>
+                {% if p.templine_id != None %}
+                <td>New Line</td>
+                <td>{{p.templine_id}}</td>
+                <td>
+                    <ul>
+                        <li>
+                            {{g.name}}
+                        </li>
+                        <li>
+                            {{l.j_upper}}
+                        </li>
+                        <li>
+                            {{l.observed_line_frequency}}
+                        </li>
+                    </ul>
+                </td>
+                {% else %}
+                <td>New Galaxy</td>
+                <td>{{p.tempgalaxy_id}}</td>
+                <td>
+                    <ul>
+                        <li>
+                            {{g.name}}
+                        </li>
+                        <li>
+                            {{g.right_ascension}}
+                        </li>
+                        <li>
+                            {{g.declination}}
+                        </li>
+                    </ul>
+                </td>
+                {% endif %}
+                <td>{{p.user_email}}</td>
+                <td>{{p.time_submitted}}</td>
+            </tr>
+            {%endfor%}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

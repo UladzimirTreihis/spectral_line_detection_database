@@ -8,11 +8,13 @@
       {% block script %}{% endblock %}
       <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
       <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      {% block style %}{% endblock %}
     </head>
     
     <body>
         <nav class="navbar navbar-dark bg-dark">
             <div class="navbar-nav mr-auto text-right">
+              <div class="container">
                 <ul class="list-inline text-right" >
                   <li class="list-inline-item">
                   <a class= "navbar-brand btn btn-info " role="button" href="{{ url_for ('main.main') }} "> View Database  </a>
@@ -57,6 +59,7 @@
                   </li>
                   {% endif %}
                 </ul>
+              </div>
             </div> 
         </nav>
         <h1>{{content}}</h1>

@@ -6,10 +6,18 @@
 
 {% block content %}
     
-            
+    
+
+
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <h1> Galaxy Entry Form</h1>
+    
+    {% if same_temp_exists %}
+    <p>Galaxy you have entered seems to be proposed already and awaits approval. 
+        You can still add line detections to it by usings the galaxy's name and coordinates. </p>
+    {% endif %}
+
     {% if another_exists %}
     <p>The galaxy you have entered seems to already exist. Do you mean one of these?</p>
     {% for element in galaxies %}

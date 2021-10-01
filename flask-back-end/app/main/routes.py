@@ -60,17 +60,20 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
 @bp.route('/test')
-@roles_required('Admin') 
+@roles_required('admin') 
 @login_required
 def test():
 
     ''' Test route, used for development purposes only '''
 
     session = Session()
-    galaxies = session.query(Galaxy).filter(text('cos(Galaxy.declination)<0.8')).all()
-    return render_template("/test.html", galaxies=galaxies)
+    #subqry = session.query(TempGalaxy, TempLine).outerjoin(TempLine, TempGalaxy.lines).subquery()
+    total = update_redshift(session, 1)
+    update_redshift_error(session, 1, total)
+    posts = session.query(Post, TempGalaxy, TempLine).outerjoin(TempGalaxy, Post.tempgalaxies).outerjoin(TempLine, Post.templines).all()
+    return render_template("/test.html", posts=posts)
 
-@bp.route("/main", methods=['GET', 'POST'])
+@bp.route("/main", methods=['GET', 'POST']) 
 @login_required
 def main():
     
@@ -82,7 +85,10 @@ def main():
 
     if current_user.is_authenticated:
         form = SearchForm()
-    return render_template("/main.html", galaxy = Galaxy.query.all(), line = Line.query.all(), form=form)
+    session = Session()
+    galaxies = session.query(Galaxy).all()
+    lines = session.query(Line.galaxy_id, Line.j_upper).distinct().all()
+    return render_template("/main.html", galaxies=galaxies, lines=lines, form=form)
 
 def to_empty(entry):
     
@@ -313,7 +319,9 @@ def entry_file():
         if data == []:
             flash ("CSV File is empty. ")
         g_validated = True
+        row_count = 0
         for row in data:
+            row_count += 1
             if row == []:
                 flash ('that was an empty row')
                 continue
@@ -360,11 +368,15 @@ def entry_file():
                                         notes = row [COL_NAMES['g_notes']],
                                         user_submitted = current_user.username,
                                         user_email = current_user.email,
-                                        time_submitted = datetime.utcnow)
+                                        time_submitted = datetime.utcnow())
                     db.session.add(galaxy)
                     new_id = db.session.query(func.max(TempGalaxy.id)).first()
                     id = new_id [0]
                     from_existed = None
+                    tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
+                    tempgalaxy_id = int(tempgalaxy[0])
+                    post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+                    db.session.add(post)
                 elif (check_same_temp_galaxy.first() != None) & (check_same_galaxy.first() == None):
                     new_id = check_same_temp_galaxy.first()
                     id = new_id [0]
@@ -476,11 +488,21 @@ def entry_file():
                                     notes = row ['notes'],
                                     user_submitted = current_user.username,
                                     user_email = current_user.email,
-                                    time_submitted = datetime.utcnow
+                                    time_submitted = datetime.utcnow()
                                     )                
                     db.session.add(line)
-                    db.session.commit()
-                    flash ("File has been successfully uploaded. ")
+                    try:
+                        db.session.commit()
+                        templine = db.session.query(func.max(TempLine.id)).first()
+                        templine_id = int(templine[0])
+                        post = Post(templine_id=templine_id, tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+                        db.session.add(post)
+                        db.session.commit()
+                        flash ("Entry number {} has been successfully uploaded.".format(row_count))
+                    except:
+                        db.session.rollback()
+                        raise
+                    
     return render_template ("/entry_file.html", title = "Upload File", form = form)
 
 def ra_to_float(coordinates):
@@ -534,9 +556,9 @@ def galaxy_entry_form():
             galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), time_submitted = datetime.utcnow)
             db.session.add(galaxy)
             db.session.commit()
-            tempgalaxy = session.query(TempGalaxy).filter_by(name=form.name.data).first()
-            tempgalaxy_id = int(tempgalaxy.repr())
-            post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow)
+            tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
+            tempgalaxy_id = int(tempgalaxy[0])
+            post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
             db.session.add(post)
             db.session.commit()
             flash ('Galaxy has been added. ')
@@ -554,13 +576,23 @@ def galaxy_entry_form():
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            if galaxies.first() != None:
-                return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, another_exists=True)
+            check_same_temp_galaxy = session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == RA) & (TempGalaxy.declination == DEC) & (TempGalaxy.name == form.name.data))
+
+            if (galaxies.first() != None) or (check_same_temp_galaxy.first() != None):
+                if galaxies.first() != None:
+                    another_exists = True
+                else:
+                    another_exists = False
+                if check_same_temp_galaxy.first() != None:
+                    same_temp_exists = True
+                else:
+                    same_temp_exists = False
+                return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, same_temp_exists=same_temp_exists, another_exists=another_exists)
             galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = None, time_submitted = datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()
-            tempgalaxy = TempGalaxy.query.filter_by(name=form.name.data).first()
-            tempgalaxy_id = int(tempgalaxy.__repr__())
+            tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
+            tempgalaxy_id = int(tempgalaxy[0])
             post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
             db.session.add(post)
             db.session.commit()
@@ -720,10 +752,12 @@ def line_entry_form():
             except:
                 id = None
             existed = id
+            tempgalaxy_id = None
 
             if galaxy_id == None:
                 galaxy_id = session.query(TempGalaxy.id).filter(TempGalaxy.name==form.galaxy_name.data).first()
                 id = galaxy_id[0]
+                tempgalaxy_id = id
                 existed = None
             if galaxy_id==None:
                 raise Exception ('Please enter the name exactly as proposed using Caps if necesarry')
@@ -740,7 +774,7 @@ def line_entry_form():
             db.session.commit()
             templine = session.query(func.max(TempLine.id)).first()
             templine_id = int(templine[0])
-            post = Post(templine_id=templine_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+            post = Post(templine_id=templine_id, tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
             db.session.add(post)
             db.session.commit()
             flash ('Line has been added. ')
@@ -793,7 +827,7 @@ def process():
         return jsonify({'galaxy_name':galaxy_name})
     return jsonify({'error': 'missing data..'})
 
-@bp.route('/galaxy/<name>')
+@bp.route('/galaxy/<name>', methods=['GET', 'POST'])
 @login_required
 def galaxy(name):
     session = Session ()
