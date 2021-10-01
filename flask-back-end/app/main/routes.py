@@ -787,7 +787,7 @@ def line_entry_form():
 def line_edit_form(id):
     session = Session ()
     line = session.query(Line).filter(Line.id == id).first()
-    name = session.query(Galaxy.name).filter(Galaxy.id==id).first() 
+    name = session.query(Galaxy.name).filter(Galaxy.id==line.galaxy_id).first() 
     name = str(name)
     name = name [2: (len (name) - 3)]
     form = EditLineForm(galaxy_name = name, j_upper = line.j_upper, integrated_line_flux = line.integrated_line_flux, integrated_line_flux_uncertainty_positive = line.integrated_line_flux_uncertainty_positive, peak_line_flux = line.peak_line_flux, peak_line_flux_uncertainty_positive = line.peak_line_flux_uncertainty_positive, line_width = line.line_width, line_width_uncertainty_positive = line.line_width_uncertainty_positive, observed_line_frequency = line.observed_line_frequency, observed_line_frequency_uncertainty_positive = line.observed_line_frequency_uncertainty_positive, detection_type = line.detection_type, observed_beam_major = line.observed_beam_major, observed_beam_minor = line.observed_beam_minor, observed_beam_angle = line.observed_beam_angle, reference = line.reference, notes = line.notes)
