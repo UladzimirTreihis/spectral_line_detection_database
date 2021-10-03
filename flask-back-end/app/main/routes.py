@@ -632,9 +632,9 @@ def galaxy_edit_form(glist):
             changes = ""
             if (glist[0] != form.name.data):
                 changes = changes + 'Initial Name: ' + glist [0] + ' New Name:' + form.name.data
-            if (str (glist[1]) != str(RA)):
+            if (float (glist[1]) != float(RA)):
                 changes = changes + 'Initial RA: ' + str (glist [1]) + ' New RA:' + str (RA)
-            if (str (glist[2]) != str (DEC)):
+            if (float (glist[2]) != float (DEC)):
                 changes = changes + 'Initial DEC: ' + str (glist [2]) + ' New DEC:' + str (DEC)
             if (glist[3] != form.coordinate_system.data):
                 changes = changes + 'Initial Coordinate System: ' + glist [3] + ' New Coordinate System:' + form.coordinate_system.data
