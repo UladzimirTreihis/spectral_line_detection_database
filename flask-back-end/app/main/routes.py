@@ -599,7 +599,7 @@ def galaxy_edit_form(id):
     form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
     original = galaxy.name
     if form.validate_on_submit ():
-        if form.submit_anyway.data:
+        if form.submit.data:
             try:
                 DEC = dec_to_float(form.declination.data)
             except:
@@ -627,26 +627,6 @@ def galaxy_edit_form(id):
             if (galaxy.notes != form.notes.data):
                 changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes:' + form.notes.data
             galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original)
-            db.session.add(galaxy)
-            db.session.commit()
-            flash ('Galaxy has been Edited. ')
-        if form.do_not_submit.data:
-            return redirect (url_for ('main.main'))
-        if form.submit.data:
-            try:
-                DEC = dec_to_float(form.declination.data)
-            except:
-                DEC = form.declination.data
-            try:
-                RA = ra_to_float(form.right_ascension.data)
-            except:
-                RA = form.right_ascension.data 
-            galaxies=session.query(Galaxy, Line).outerjoin(Line)
-            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
-            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            if galaxies.first() != None:
-                return render_template('galaxy_edit_form.html', title= 'Galaxy Edit Form', form=form, galaxies=galaxies, another_exists=True)
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes")
             db.session.add(galaxy)
             db.session.commit()
             flash ('Galaxy has been Edited. ')
