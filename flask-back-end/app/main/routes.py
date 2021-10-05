@@ -20,9 +20,7 @@ from datetime import datetime
 @bp.route("/")
 @bp.route("/home")
 def home():
-
     ''' Home page route '''
-
     return render_template("/home.html")
 
 @bp.route('/user/<username>')
@@ -35,14 +33,12 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-
     ''' 
     Edit profile route
     
     On access: returns the form with prefilled user's data
     On submit: Updates user's data and returns /main 
     '''
-
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -63,9 +59,7 @@ def edit_profile():
 @roles_required('admin') 
 @login_required
 def test():
-
     ''' Test route, used for development purposes only '''
-
     session = Session()
     id = 19
     #subqry = session.query(TempGalaxy, TempLine).outerjoin(TempLine, TempGalaxy.lines).subquery()
@@ -181,8 +175,6 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
     distance -- circular distance away from the point with coordinates (\form_ra, \form_dec). (default 0)
     based_on_beam_angle -- Boolean value to check whether user wants to search for galaxies with extreme proximity based on their Line.observed_beam_minor.
     (default False)
-
-
     '''
 
     if based_on_beam_angle == False:
@@ -198,8 +190,6 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
             galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
         return galaxies
     
-
-
 #Is expected to redirect here to display the results. 
 @bp.route("/query_results", methods=['GET', 'POST'])
 @login_required
@@ -253,7 +243,6 @@ def query_results():
             form_advanced.reference.data = ''
         
         #query displaying galaxies based on the data from form_advanced
-
 
         if form_advanced.galaxySearch.data:
             
@@ -602,20 +591,13 @@ def galaxy_entry_form():
             return redirect(url_for('main.line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
-@bp.route("/galaxy_edit_form/<glist>", methods=['GET', 'POST'])
+@bp.route("/galaxy_edit_form/<id>", methods=['GET', 'POST'])
 @login_required
-def galaxy_edit_form(glist):
-    glist = glist[1: (len(glist) - 2)]
-    glist = glist.replace("'","")
-    glist = glist.split(",")
-    length = len (glist)
-    if length > 7:
-        for element in range (7, length):
-            glist[6] += ","
-            glist[6] += (glist[element])
-    form = EditGalaxyForm(name = glist[0], right_ascension = float(glist[1]), declination = float(glist[2]), coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
+def galaxy_edit_form(id):
     session=Session()
-    original = glist[0]
+    galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
+    form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
+    original = galaxy.name
     if form.validate_on_submit ():
         if form.submit_anyway.data:
             try:
@@ -630,20 +612,20 @@ def galaxy_edit_form(glist):
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             changes = ""
-            if (glist[0] != form.name.data):
-                changes = changes + 'Initial Name: ' + glist [0] + ' New Name:' + form.name.data
-            if (float (glist[1]) != float(RA)):
-                changes = changes + 'Initial RA: ' + str (glist [1]) + ' New RA:' + str (RA)
-            if (float (glist[2]) != float (DEC)):
-                changes = changes + 'Initial DEC: ' + str (glist [2]) + ' New DEC:' + str (DEC)
-            if (glist[3] != form.coordinate_system.data):
-                changes = changes + 'Initial Coordinate System: ' + glist [3] + ' New Coordinate System:' + form.coordinate_system.data
-            if (glist[4] != form.lensing_flag.data):
-                changes = changes + 'Initial Lensing Flag: ' + glist [5] + ' New Lensing Flag:' + form.lensing_flag.data
-            if (glist[5] != form.classification.data):
-                changes = changes + 'Initial Classification: ' + glist [4] + ' New Classification:' + form.classification.data
-            if (glist[6] != form.notes.data):
-                changes = changes + 'Initial Notes: ' + glist [6] + 'New Notes:' + form.notes.data
+            if (galaxy.name != form.name.data):
+                changes = changes + 'Initial Name: ' + galaxy.name + ' New Name:' + form.name.data
+            if (galaxy.right_ascension != float(RA)):
+                changes = changes + 'Initial RA: ' + str(galaxy.right_ascension) + ' New RA:' + str (RA)
+            if (galaxy.declination != float (DEC)):
+                changes = changes + 'Initial DEC: ' + str(galaxy.declination) + ' New DEC:' + str (DEC)
+            if (galaxy.coordinate_system != form.coordinate_system.data):
+                changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System:' + form.coordinate_system.data
+            if (galaxy.lensing_flag != form.lensing_flag.data):
+                changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag:' + form.lensing_flag.data
+            if (galaxy.classification != form.classification.data):
+                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification:' + form.classification.data
+            if (galaxy.notes != form.notes.data):
+                changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes:' + form.notes.data
             galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original)
             db.session.add(galaxy)
             db.session.commit()
@@ -744,9 +726,6 @@ def redshift_to_frequency(J_UPPER, z, positive_uncertainty, negative_uncertainty
     delta_z = positive_uncertainty + negative_uncertainty
     delta_nu = delta_z * nu_obs / (z+1)
     return nu_obs, delta_nu/2
-
-
-
 
 @bp.route("/line_entry_form", methods=['GET', 'POST'])
 @login_required
@@ -967,6 +946,4 @@ def convert_to_CSV(table, identifier, symmetrical):
         cd = 'attachment; filename=sample.csv'
         response.headers['Content-Disposition'] = cd 
         response.mimetype='text/csv'
-        return response
-
-    
+        return response   
