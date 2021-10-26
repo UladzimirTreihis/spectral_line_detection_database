@@ -596,7 +596,10 @@ def galaxy_entry_form():
 def galaxy_edit_form(id):
     session=Session()
     galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
-    form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
+    declination = galaxy.declination
+    if declination > 0:
+        declination = '{:+}'.format(declination) 
+    form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
     original = galaxy.name
     if form.validate_on_submit ():
         if form.submit.data:
