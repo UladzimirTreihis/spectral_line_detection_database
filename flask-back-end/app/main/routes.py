@@ -360,7 +360,7 @@ def entry_file():
                     #galaxies=session.query(Galaxy, Line).outerjoin(Line)
                     #galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
                     #galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-                    galaxy = TempGalaxy(name = row['name'],
+                    galaxy = TempGalaxy(name = row[COL_NAMES['name']],
                                         right_ascension = ra,
                                         declination = dec,
                                         coordinate_system = row[COL_NAMES['coordinate_system']],
@@ -489,14 +489,15 @@ def entry_file():
                                     notes = row ['notes'],
                                     user_submitted = current_user.username,
                                     user_email = current_user.email,
-                                    time_submitted = datetime.utcnow()
+                                    time_submitted = datetime.utcnow(),
+                                    galaxy_name = row[COL_NAMES['name']]
                                     )                
                     db.session.add(line)
                     try:
                         db.session.commit()
                         templine = db.session.query(func.max(TempLine.id)).first()
                         templine_id = int(templine[0])
-                        post = Post(templine_id=templine_id, tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+                        post = Post(templine_id=templine_id, user_email = current_user.email, time_submitted = datetime.utcnow())
                         db.session.add(post)
                         db.session.commit()
                         flash ("Entry number {} has been successfully uploaded.".format(row_count))
@@ -554,7 +555,7 @@ def galaxy_entry_form():
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), time_submitted = datetime.utcnow)
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), time_submitted = datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()
             tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
@@ -602,22 +603,15 @@ def galaxy_entry_form():
             return redirect(url_for('main.line_entry_form'))
     return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form)
 
-@bp.route("/galaxy_edit_form/<glist>", methods=['GET', 'POST'])
+@bp.route("/galaxy_edit_form/<id>", methods=['GET', 'POST'])
 @login_required
-def galaxy_edit_form(glist):
-    glist = glist[1: (len(glist) - 2)]
-    glist = glist.replace("'","")
-    glist = glist.split(",")
-    length = len (glist)
-    if length > 7:
-        for element in range (7, length):
-            glist[6] += ","
-            glist[6] += (glist[element])
-    form = EditGalaxyForm(name = glist[0], right_ascension = float(glist[1]), declination = float(glist[2]), coordinate_system = glist[3], lensing_flag = glist[4], classification = glist[5], notes = glist[6])
+def galaxy_edit_form(id):
     session=Session()
-    original = glist[0]
+    galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
+    form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
+    original_id = galaxy.id
     if form.validate_on_submit ():
-        if form.submit_anyway.data:
+        if form.submit.data:
             try:
                 DEC = dec_to_float(form.declination.data)
             except:
@@ -630,43 +624,31 @@ def galaxy_edit_form(glist):
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             changes = ""
-            if (glist[0] != form.name.data):
-                changes = changes + 'Initial Name: ' + glist [0] + ' New Name:' + form.name.data
-            if (str (glist[1]) != str(RA)):
-                changes = changes + 'Initial RA: ' + str (glist [1]) + ' New RA:' + str (RA)
-            if (str (glist[2]) != str (DEC)):
-                changes = changes + 'Initial DEC: ' + str (glist [2]) + ' New DEC:' + str (DEC)
-            if (glist[3] != form.coordinate_system.data):
-                changes = changes + 'Initial Coordinate System: ' + glist [3] + ' New Coordinate System:' + form.coordinate_system.data
-            if (glist[4] != form.lensing_flag.data):
-                changes = changes + 'Initial Lensing Flag: ' + glist [5] + ' New Lensing Flag:' + form.lensing_flag.data
-            if (glist[5] != form.classification.data):
-                changes = changes + 'Initial Classification: ' + glist [4] + ' New Classification:' + form.classification.data
-            if (glist[6] != form.notes.data):
-                changes = changes + 'Initial Notes: ' + glist [6] + 'New Notes:' + form.notes.data
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original)
+            if (galaxy.name != form.name.data):
+                changes = changes + 'Initial Name: ' + galaxy.name + ' New Name:' + form.name.data
+            if (galaxy.right_ascension != float(RA)):
+                changes = changes + 'Initial RA: ' + str(galaxy.right_ascension) + ' New RA:' + str (RA)
+            if (galaxy.declination != float (DEC)):
+                changes = changes + 'Initial DEC: ' + str(galaxy.declination) + ' New DEC:' + str (DEC)
+            if (galaxy.coordinate_system != form.coordinate_system.data):
+                changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System:' + form.coordinate_system.data
+            if (galaxy.lensing_flag != form.lensing_flag.data):
+                changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag:' + form.lensing_flag.data
+            if (galaxy.classification != form.classification.data):
+                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification:' + form.classification.data
+            if (galaxy.notes != form.notes.data):
+                changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes:' + form.notes.data
+            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
             db.session.commit()
-            flash ('Galaxy has been Edited. ')
-        if form.do_not_submit.data:
-            return redirect (url_for ('main.main'))
-        if form.submit.data:
-            try:
-                DEC = dec_to_float(form.declination.data)
-            except:
-                DEC = form.declination.data
-            try:
-                RA = ra_to_float(form.right_ascension.data)
-            except:
-                RA = form.right_ascension.data 
-            galaxies=session.query(Galaxy, Line).outerjoin(Line)
-            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
-            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            if galaxies.first() != None:
-                return render_template('galaxy_edit_form.html', title= 'Galaxy Edit Form', form=form, galaxies=galaxies, another_exists=True)
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes")
-            db.session.add(galaxy)
+
+            #adding corresponding post
+            editgalaxy = session.query(func.max(EditGalaxy.id)).first()
+            editgalaxy_id = int(editgalaxy[0])
+            post = Post(editgalaxy_id=editgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+            db.session.add(post)
             db.session.commit()
+
             flash ('Galaxy has been Edited. ')
         if form.new_line.data:
             return redirect(url_for('main.line_entry_form'))
@@ -760,14 +742,17 @@ def line_entry_form():
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).first()
             try:
                 id = galaxy_id[0]
+                name = session.query(Galaxy.name).filter(Galaxy.id==id).scalar()
             except:
                 id = None
             existed = id
             tempgalaxy_id = None
+            
 
             if galaxy_id == None:
                 galaxy_id = session.query(TempGalaxy.id).filter(TempGalaxy.name==form.galaxy_name.data).first()
                 id = galaxy_id[0]
+                name = session.query(TempGalaxy.name).filter(TempGalaxy.id==id).scalar()
                 tempgalaxy_id = id
                 existed = None
             if galaxy_id==None:
@@ -780,7 +765,7 @@ def line_entry_form():
                 frequency = form.observed_line_frequency.data
                 positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
-            line = TempLine(galaxy_id=id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed)
+            line = TempLine(galaxy_id=id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed, galaxy_name = name)
             db.session.add(line)
             db.session.commit()
             templine = session.query(func.max(TempLine.id)).first()
@@ -805,7 +790,7 @@ def line_edit_form(id):
     if form.validate_on_submit():
         if form.submit.data:
             session = Session()
-            galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
+            galaxy_id = line.galaxy_id
             if form.freq_type.data == 'z':
                 frequency, positive_uncertainty = redshift_to_frequency(form.j_upper.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
                 negative_uncertainty = None
@@ -813,8 +798,15 @@ def line_edit_form(id):
                 frequency = form.observed_line_frequency.data
                 positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
-            line = EditLine(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes", from_existed_id = galaxy_id)
-            db.session.add(line)
+            editline = EditLine(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = "Yes", original_line_id = line.id, galaxy_name=name)
+            db.session.add(editline)
+            db.session.commit()
+
+            #add a post
+            editline = session.query(func.max(EditLine.id)).first()
+            editline_id = int(editline[0])
+            post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+            db.session.add(post)
             db.session.commit()
             #total = update_redshift(session, galaxy_id)
             #update_redshift_error(session, galaxy_id, total)

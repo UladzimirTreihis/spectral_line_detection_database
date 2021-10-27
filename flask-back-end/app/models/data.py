@@ -11,8 +11,14 @@ class Post(db.Model):
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     tempgalaxy_id = db.Column(db.Integer, db.ForeignKey('tempgalaxy.id'))
     templine_id = db.Column(db.Integer, db.ForeignKey('templine.id'))  
+    editgalaxy_id = db.Column(db.Integer, db.ForeignKey('editgalaxy.id'))
+    galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id'))
+    editline_id = db.Column(db.Integer, db.ForeignKey('editline.id'))  
     tempgalaxies = db.relationship('TempGalaxy', backref='post', foreign_keys=[tempgalaxy_id])
     templines = db.relationship('TempLine', backref='post', foreign_keys=[templine_id])
+    editgalaxies = db.relationship('EditGalaxy', backref='post', foreign_keys=[editgalaxy_id])
+    galaxies = db.relationship('Galaxy', backref='post', foreign_keys=[galaxy_id])
+    editlines = db.relationship('EditLine', backref='post', foreign_keys=[editline_id])
 
 class Galaxy(db.Model):
     __tablename__ = 'galaxy'
@@ -54,7 +60,7 @@ class TempGalaxy(db.Model):
     user_email = db.Column(db.String(128)) 
     admin_notes = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
-    lines = db.relationship('TempLine', backref='tempgalaxy', lazy='dynamic') 
+
 
     def as_dict(self):
         return {'name': self.name}
@@ -85,9 +91,9 @@ class EditGalaxy(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
-    lines = db.relationship('EditLine', backref='editgalaxy', lazy='dynamic')  
     admin_notes = db.Column(db.String(128))
-    original_id = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+    original_id = db.Column(db.Integer)
 
     def as_dict(self):
         return {'name': self.name}
@@ -133,7 +139,7 @@ class TempLine(db.Model):
     __tablename__ = 'templine'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    galaxy_id = db.Column(db.Integer, db.ForeignKey('tempgalaxy.id')) 
+    galaxy_id = db.Column(db.Integer) 
     from_existed_id = db.Column(db.Integer)
     j_upper = db.Column(db.Integer, nullable = False)  
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
@@ -158,13 +164,14 @@ class TempLine(db.Model):
     user_email = db.Column(db.String(128))
     admin_notes = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+    galaxy_name = db.Column(db.String(128))
 
 class EditLine(db.Model):
     __tablename__ = 'editline'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
-    galaxy_id = db.Column(db.Integer, db.ForeignKey('editgalaxy.id')) 
-    from_existed_id = db.Column(db.Integer)
+    galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id')) 
+    original_line_id = db.Column(db.Integer)
     is_edited = db.Column(db.String(128))  
     j_upper = db.Column(db.Integer, nullable = False)  
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
@@ -188,6 +195,9 @@ class EditLine(db.Model):
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
     admin_notes = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
+    galaxy_name = db.Column(db.String(128))
+
 
 
 

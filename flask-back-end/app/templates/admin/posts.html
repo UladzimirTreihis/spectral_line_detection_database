@@ -22,14 +22,33 @@
     </li>
 </ul>
 
-<p><a href="{{ url_for('adm.post_delete', id = 40) }}">Yes</a></p>
+
+<script type="text/javascript">
+    // Select all check boxes : Setting the checked property to true in checkAll() function
+      function checkAll(){
+        var items = document.getElementsByName('rowid');
+          for (var i = 0; i < items.length; i++) {
+              if (items[i].type == 'checkbox')
+                  items[i].checked = true;
+          }
+      }
+  // Clear all check boxes : Setting the checked property to false in uncheckAll() function
+      function uncheckAll(){
+        var items = document.getElementsByName('rowid');
+          for (var i = 0; i < items.length; i++) {
+              if (items[i].type == 'checkbox')
+                  items[i].checked = false;
+          }
+      }
+</script>
+
 
 <div class="table-responsive">
     <table class="table table-striped table-bordered table-hover model-list">
         <thead>
             <tr>
-                <th class="ist-checkbox-column">
-                    <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="Select all records">
+                <th class="list-checkbox-column">
+                    <input type="checkbox" name="rowtoggle" class="action-rowtoggle" title="Select all records" onclick="checkAll">
                 </th>
                 <th class="col-md-1">nbsp;></th>
                 <th>Post ID</th>
@@ -43,59 +62,112 @@
         <tbody>
             {% for post in posts_query %}
                 {% set p = post[0] %}
-                {% set g = post[1] %}
-                {% set l = post[2] %}
+                {% set tg = post[1] %}
+                {% set tl = post[2] %}
+                {% set eg = post[3] %}
+                {% set el = post[4] %}
             <tr>
                 <td>
                     <input type="checkbox" name="rowid" class="action-checkbox" 
-                    value={{post.id}} title="Select record">
+                    value="{{p.id}}" title="Select record">
                 </td>
                 <td class="list-buttons-column">
-                    <form class="icon" method="POST" action="/post_delete/{{post.id}}">
-                        <input id="id" name="id" required type="hidden" value={{post.id}}>
+                    <form class="icon" method="GET" action="/post_delete/{{p.id}}">
+                        <input id="id" name="id" required type="hidden" value={{p.id}}>
                         <input id="url" name="url" type="hidden" value="/post/">
                         <button onclick="return faHelpers.safeConfirm('Are you sure you want to delete this record?');" 
                         title="Delete record">
                             <span class="fa fa-trash glyphicon glyphicon-trash">
-                                <a href="{{ url_for('adm.post_delete', id = post.id) }}"></a>
+                                <a href="{{ url_for('adm.post_delete', id=p.id) }}"></a>
                             </span>
                         </button>
-                    </form>
+                    </form> 	
+                    <form class="icon" method="GET" action="/post_approve/{{p.id}}">
+                        <input id="id" name="id" required type="hidden" value={{p.id}}>
+                        <input id="url" name="url" type="hidden" value="/post/">
+                        <button onclick="return faHelpers.safeConfirm('Are you sure you want to approve this record?');" 
+                        title="Approve record">
+                            <span class="fa fa-trash glyphicon glyphicon-ok">
+                                <a href="{{ url_for('adm.post_approve', id=p.id) }}"></a>
+                            </span>
+                        </button>
+                    </form> 
                 </td>
                 <td>{{p.id}}</td>
                 {% if p.templine_id != None %}
                 <td>New Line</td>
-                <td>{{p.templine_id}}</td>
+                <td>{{tl.id}}</td>
                 <td>
                     <ul>
                         <li>
-                            {{g.name}}
+                            {{tl.galaxy_name}}
                         </li>
                         <li>
-                            {{l.j_upper}}
+                            {{tl.j_upper}}
                         </li>
                         <li>
-                            {{l.observed_line_frequency}}
+                            {{tl.observed_line_frequency}}
                         </li>
                     </ul>
                 </td>
-                {% else %}
+                {% elif p.tempgalaxy_id != None %}
                 <td>New Galaxy</td>
-                <td>{{p.tempgalaxy_id}}</td>
+                <td>{{tg.id}}</td>
                 <td>
                     <ul>
                         <li>
-                            {{g.name}}
+                            {{tg.name}}
                         </li>
                         <li>
-                            {{g.right_ascension}}
+                            {{tg.right_ascension}}
                         </li>
                         <li>
-                            {{g.declination}}
+                            {{tg.declination}}
                         </li>
                     </ul>
                 </td>
+                {% elif p.editgalaxy_id != None %}
+                <td>Edit Galaxy</td>
+                <td>{{eg.id}}</td>
+                <td>
+                    <ul>
+                        <li>
+                            {{eg.name}}
+                        </li>
+                        <li>
+                            {{eg.right_ascension}}
+                        </li>
+                        <li>
+                            {{eg.declination}}
+                        </li>
+                        <li>
+                            {{eg.is_edited}}
+                        </li>
+                    </ul>
+                </td>
+
+                {% else %}
+                <td>Edit Line</td>
+                <td>{{el.id}}</td>
+                <td>
+                    <ul>
+                        <li>
+                            {{el.galaxy_name}}
+                        </li>
+                        <li>
+                            {{el.j_upper}}
+                        </li>
+                        <li>
+                            {{el.observed_line_frequency}}
+                        </li>
+                        <li>
+                            {{el.is_edited}}
+                        </li>
+                    </ul>
+                </td>
+
                 {% endif %}
+                
                 <td>{{p.user_email}}</td>
                 <td>{{p.time_submitted}}</td>
             </tr>

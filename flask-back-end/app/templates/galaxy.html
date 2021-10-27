@@ -42,7 +42,6 @@
          <thead>
             <tr>
                <th>J Upper</th>
-               <th>Line ID Type</th>
                <th>Integrated Line Flux</th>
                <th>Integrated Line Flux Positive Uncertainty</th>
                <th>Integrated Line Flux Negative Uncertainty</th>
@@ -68,7 +67,6 @@
             {% for l in line %}
                <tr>
                   <td>{{ l.j_upper }}</td>
-                  <td>{{ l.line_id_type }}</td>
                   <td>{{ l.integrated_line_flux }}</td>
                   <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
                   <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
@@ -92,7 +90,7 @@
             {% endfor %}
          </tbody>
       </table>
-<a href="{{ url_for ('main.galaxy_edit_form', glist = glist) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
+<a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
 <a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download as CSV</a>
 <a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button"> Back </a>
 
