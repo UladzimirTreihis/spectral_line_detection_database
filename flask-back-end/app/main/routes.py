@@ -313,32 +313,32 @@ def entry_file():
         for row in data:
             row_count += 1
             if row == []:
-                flash ('that was an empty row')
+                flash ("row " + row_count + 'was an empty row')
                 continue
             if row[COL_NAMES['name']] == "":
                 g_validated = False
-                flash ("Galaxy Name is Mandatory")
+                flash ("Row " + row_count + ": Galaxy Name is Mandatory")
             if row[COL_NAMES['coordinate_system']] != "ICRS" and row[COL_NAMES['coordinate_system']] != "J2000":
                 g_validated = False
-                flash ("Coordinate System can be ICRS or J2000 only.")
+                flash ("Row " + row_count + ": Coordinate System can be ICRS or J2000 only.")
             if row[COL_NAMES['lensing_flag']] != "Lensed" and row[COL_NAMES['lensing_flag']] != "Unlensed" and row[COL_NAMES['lensing_flag']] != "l" and row[COL_NAMES['lensing_flag']] != "u":
                 g_validated = False
-                flash ("Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
+                flash ("Row " + row_count + ": Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
             if row[COL_NAMES['classification']] == "":
                 g_validated = False
-                flash ("Classification is Mandatory")
+                flash ("Row " + row_count + ": Classification is Mandatory")
             if row[COL_NAMES['right_ascension']] == "":
                 g_validated = False
-                flash ("Right Ascension is Mandatory")
+                flash ("Row " + row_count + ": Right Ascension is Mandatory")
             if re.search(ra_reg_exp, row[COL_NAMES['right_ascension']]) == None:
                 g_validated = False
-                flash ("Enter Right Ascension in a proper format")
+                flash ("Row " + row_count + ": Enter Right Ascension in a proper format")
             if row[COL_NAMES['declination']] == "":
                 g_validated = False
-                flash ("Declination is Mandatory")
+                flash ("Row " + row_count + ": Declination is Mandatory")
             if re.search(dec_reg_exp, row[COL_NAMES['declination']]) == None:
                 g_validated = False
-                flash ("Enter Declination in a proper format")
+                flash ("Row " + row_count + ": Enter Declination in a proper format")
             if g_validated == True:
                 ra = ra_to_float(row[COL_NAMES['right_ascension']])
                 dec = dec_to_float(row[COL_NAMES['declination']])
