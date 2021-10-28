@@ -197,6 +197,7 @@ class EditLine(db.Model):
     admin_notes = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
+    from_existed_id = db.Column(db.Integer)
 
 
 

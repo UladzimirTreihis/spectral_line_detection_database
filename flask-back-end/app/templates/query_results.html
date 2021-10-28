@@ -16,6 +16,7 @@
 
 <form action= {{url_for('main.query_results')}} method='POST' id='galaxyForm'>
    {{form_advanced.hidden_tag() }}
+   <div class = "entry">
       <p>
             {{ form_advanced.name.label }}<br>
             {{ form_advanced.name(size=32) }}<br>
@@ -119,6 +120,8 @@
 
       </p>
       <br>
+      </div>
+      <div class = "entry">
       <p>Here you can additionality sort galaxies that have at least one line that falls under the specified Line parameters</p>
       <div style="display: flex;">
          <p>
@@ -246,12 +249,24 @@
          <span style="color: red;">[{{ error }}]</span>
          {% endfor %}
       </p>
+      </div>
+      <div class = "buttons">
       <button type="button"> 
          {{ form_advanced.galaxySearch() }}
       </button>
       <button type="button"> 
          {{ form_advanced.lineSearch() }}
       </button>
+      </div>
+      <style>
+      .entry {
+            width: 50%;
+            float: left;
+      }
+      .buttons {
+         text-align: center;
+      }
+      </style>
 </form>
    
 
