@@ -39,6 +39,8 @@ class SearchForm(FlaskForm):
 
 
 class AdvancedSearchForm(FlaskForm):
+    
+
     name = StringField('Galaxy Name', validators = [Optional ()])
     right_ascension_min = StringField('Right Ascension from:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
     right_ascension_max = StringField('Right Ascension to:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
@@ -58,8 +60,9 @@ class AdvancedSearchForm(FlaskForm):
         choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validate_choice=False)
     #line data
 
-    j_upper_min = IntegerField('J Upper from:', validators = [Optional (), NumberRange(min = 0)])
-    j_upper_max = IntegerField('J Upper to:', validators = [Optional (), NumberRange(min = 0)])
+    emitted_frequency_min = FloatField('Emitted Frequency from:', validators = [Optional (), NumberRange(min = 0)])
+    emitted_frequency_max = FloatField('Emitted Frequency to:', validators = [Optional (), NumberRange(min = 0)])
+    species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other'), ('Either', 'Either')], validate_choice=False)
     integrated_line_flux_min = FloatField('Integrated Line Flux from:', validators = [Optional(), NumberRange(min = 0)])
     integrated_line_flux_max = FloatField('Integrated Line Flux to:', validators = [Optional(), NumberRange(min = 0)])
     peak_line_flux_min = FloatField('Peak Line Flux from:', validators = [Optional (), NumberRange(min = 0)])
@@ -114,7 +117,10 @@ class DynamicSearchForm(FlaskForm):
 class AddLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
-    j_upper = IntegerField('J Upper', validators = [DataRequired (), NumberRange(min = 1, max=30, message="The database accepts J Upper between %(min)s and %(max)s")])
+   
+    emitted_frequency = FloatField('Emitted Frequency', validators = [DataRequired (), NumberRange(min = 0)])
+    species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other')], validators = [DataRequired ()])
+
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
     integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
     integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
@@ -139,7 +145,10 @@ class AddLineForm(FlaskForm):
 class EditLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
-    j_upper = IntegerField('J Upper', validators = [DataRequired (), NumberRange(min = 1, max=30, message="The database accepts J Upper between %(min)s and %(max)s")])
+        
+    emitted_frequency = FloatField('Emitted Frequency', validators = [DataRequired (), NumberRange(min = 0)])
+    species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other')], validators = [DataRequired ()])
+    
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
     integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
     integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])

@@ -41,7 +41,8 @@
     <table class = "table" id = "Line">
          <thead>
             <tr>
-               <th>J Upper</th>
+               <th>Emitted Frequency</th>
+               <th>Species</th>
                <th>Integrated Line Flux</th>
                <th>Integrated Line Flux Positive Uncertainty</th>
                <th>Integrated Line Flux Negative Uncertainty</th>
@@ -66,7 +67,8 @@
          <tbody>
             {% for l in line %}
                <tr>
-                  <td>{{ l.j_upper }}</td>
+                  <td>{{ l.emitted_frequency }}</td>
+                  <td>{{ l.species }}</td>
                   <td>{{ l.integrated_line_flux }}</td>
                   <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
                   <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>

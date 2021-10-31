@@ -23,7 +23,7 @@ bp = Blueprint('adm', __name__)
 
 def update_redshift(session, galaxy_id):
     line_redshift = session.query(
-            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+            Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
         ).outerjoin(Galaxy).filter(
             Galaxy.id == galaxy_id
         ).all() 
@@ -36,10 +36,8 @@ def update_redshift(session, galaxy_id):
             delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
         else:
             delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-        J_UPPER = l.j_upper
-        if J_UPPER > 30 or J_UPPER < 1:
-            continue
-        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+
+        z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
         delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
         sum_upper = sum_upper =+ (z/delta_z)
         sum_lower = sum_lower =+ (1/delta_z)
@@ -60,7 +58,7 @@ def update_redshift_error(session, galaxy_id, sum_upper):
 
         redshift_error_weighted = 0
         line_redshift = session.query(
-                Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+                Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
             ).outerjoin(Galaxy).filter(
                 Galaxy.id == galaxy_id
             ).all() 
@@ -71,8 +69,8 @@ def update_redshift_error(session, galaxy_id, sum_upper):
                 delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
             else:
                 delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-            J_UPPER = l.j_upper
-            z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+
+            z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
             delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
             weight = (z/delta_z)/sum_upper
             redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
@@ -255,14 +253,14 @@ class TempLineView(ModelView):
     def action_approve(self, ids):
         session = Session ()
         for id in ids:
-            line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==id).first()
+            line = session.query(TempLine.galaxy_id, TempLine.emitted_frequency, TempLine.species, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==id).first()
             
-            if (line [20] == None):
-                # line [20] represents TempLine.from_existed_id
+            if (line [21] == None):
+                # line [21] represents TempLine.from_existed_id
                 raise Exception('You have not yet approved the galaxy to which the line belongs to')
             else:
-                g_id = line [20]
-            l = Line (galaxy_id = g_id, j_upper = line [1], integrated_line_flux = line [2], integrated_line_flux_uncertainty_positive = line [3], integrated_line_flux_uncertainty_negative = line [4], peak_line_flux = line [5], peak_line_flux_uncertainty_positive = line [6], peak_line_flux_uncertainty_negative = line [7], line_width = line [8], line_width_uncertainty_positive = line [9], line_width_uncertainty_negative = line [10], observed_line_frequency = line [11], observed_line_frequency_uncertainty_positive = line [12], observed_line_frequency_uncertainty_negative = line [13], detection_type = line [14], observed_beam_major = line [15], observed_beam_minor = line [16], observed_beam_angle = line [17], reference = line [18], notes = line [19], user_submitted = line [21], user_email = line[22])
+                g_id = line [21]
+            l = Line (galaxy_id = g_id, emitted_frequency = line [1], species = line [2], integrated_line_flux = line [3], integrated_line_flux_uncertainty_positive = line [4], integrated_line_flux_uncertainty_negative = line [5], peak_line_flux = line [6], peak_line_flux_uncertainty_positive = line [7], peak_line_flux_uncertainty_negative = line [8], line_width = line [9], line_width_uncertainty_positive = line [10], line_width_uncertainty_negative = line [11], observed_line_frequency = line [12], observed_line_frequency_uncertainty_positive = line [13], observed_line_frequency_uncertainty_negative = line [14], detection_type = line [15], observed_beam_major = line [16], observed_beam_minor = line [17], observed_beam_angle = line [18], reference = line [19], notes = line [20], user_submitted = line [22], user_email = line[23])
             db.session.add (l)
             db.session.commit ()
             total = update_redshift(session, g_id)
@@ -308,14 +306,14 @@ class EditLineView(ModelView):
     def action_approve(self, ids):
         session = Session ()
         for id in ids:
-            line = session.query(EditLine.galaxy_id, EditLine.original_line_id, EditLine.j_upper, EditLine.integrated_line_flux, EditLine.integrated_line_flux_uncertainty_positive, EditLine.integrated_line_flux_uncertainty_negative, EditLine.peak_line_flux, EditLine.peak_line_flux_uncertainty_positive, EditLine.peak_line_flux_uncertainty_negative, EditLine.line_width, EditLine.line_width_uncertainty_positive, EditLine.line_width_uncertainty_negative, EditLine.observed_line_frequency, EditLine.observed_line_frequency_uncertainty_positive, EditLine.observed_line_frequency_uncertainty_negative, EditLine.detection_type, EditLine.observed_beam_major, EditLine.observed_beam_minor, EditLine.observed_beam_angle, EditLine.reference, EditLine.notes).filter(EditLine.id==id).first()
+            line = session.query(EditLine.galaxy_id, EditLine.original_line_id, EditLine.emitted_frequency, EditLine.integrated_line_flux, EditLine.integrated_line_flux_uncertainty_positive, EditLine.integrated_line_flux_uncertainty_negative, EditLine.peak_line_flux, EditLine.peak_line_flux_uncertainty_positive, EditLine.peak_line_flux_uncertainty_negative, EditLine.line_width, EditLine.line_width_uncertainty_positive, EditLine.line_width_uncertainty_negative, EditLine.observed_line_frequency, EditLine.observed_line_frequency_uncertainty_positive, EditLine.observed_line_frequency_uncertainty_negative, EditLine.detection_type, EditLine.observed_beam_major, EditLine.observed_beam_minor, EditLine.observed_beam_angle, EditLine.reference, EditLine.notes, EditLine.species).filter(EditLine.id==id).first()
 
             original_line_id = line[1]
             galaxy_id = line[0]
 
             session.query(Line).filter(
                 Line.id == original_line_id
-            ).update({"j_upper": line[2], "integrated_line_flux": line[3], "integrated_line_flux_uncertainty_positive": line[4], "integrated_line_flux_uncertainty_negative": line[5], "peak_line_flux": line[6], "peak_line_flux_uncertainty_positive": line[7], "peak_line_flux_uncertainty_negative": line[8], "line_width": line[9], "line_width_uncertainty_positive": line[10], "line_width_uncertainty_negative": line[11], "observed_line_frequency": line[12], "observed_line_frequency_uncertainty_positive": line[13], "observed_line_frequency_uncertainty_negative": line[14], "detection_type": line[15], "observed_beam_major": line[16], "observed_beam_minor": line[17], "observed_beam_angle": line[18], "reference": line[19], "notes": line[20]})
+            ).update({"emitted_frequency": line[2], "integrated_line_flux": line[3], "integrated_line_flux_uncertainty_positive": line[4], "integrated_line_flux_uncertainty_negative": line[5], "peak_line_flux": line[6], "peak_line_flux_uncertainty_positive": line[7], "peak_line_flux_uncertainty_negative": line[8], "line_width": line[9], "line_width_uncertainty_positive": line[10], "line_width_uncertainty_negative": line[11], "observed_line_frequency": line[12], "observed_line_frequency_uncertainty_positive": line[13], "observed_line_frequency_uncertainty_negative": line[14], "detection_type": line[15], "observed_beam_major": line[16], "observed_beam_minor": line[17], "observed_beam_angle": line[18], "reference": line[19], "notes": line[20], "species": line[21]})
 
 
             total = update_redshift(session, galaxy_id)
@@ -416,14 +414,14 @@ def post_approve(id):
         
         templine = TempLine.query.filter_by(id=templine_id).first()
 
-        line = session.query(TempLine.galaxy_id, TempLine.j_upper, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted).filter(TempLine.id==templine_id).first()
+        line = session.query(TempLine.galaxy_id, TempLine.emitted_frequency, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted, TempLine.species).filter(TempLine.id==templine_id).first()
             
         if (line [20] == None):
             # line [20] represents TempLine.from_existed_id
             raise Exception('You have not yet approved the galaxy to which the line belongs to')
         else:
             g_id = line [20]
-        l = Line (galaxy_id = g_id, j_upper = line [1], integrated_line_flux = line [2], integrated_line_flux_uncertainty_positive = line [3], integrated_line_flux_uncertainty_negative = line [4], peak_line_flux = line [5], peak_line_flux_uncertainty_positive = line [6], peak_line_flux_uncertainty_negative = line [7], line_width = line [8], line_width_uncertainty_positive = line [9], line_width_uncertainty_negative = line [10], observed_line_frequency = line [11], observed_line_frequency_uncertainty_positive = line [12], observed_line_frequency_uncertainty_negative = line [13], detection_type = line [14], observed_beam_major = line [15], observed_beam_minor = line [16], observed_beam_angle = line [17], reference = line [18], notes = line [19], user_submitted = line [21], user_email = line[22])
+        l = Line (galaxy_id = g_id, emitted_frequency = line [1], integrated_line_flux = line [2], integrated_line_flux_uncertainty_positive = line [3], integrated_line_flux_uncertainty_negative = line [4], peak_line_flux = line [5], peak_line_flux_uncertainty_positive = line [6], peak_line_flux_uncertainty_negative = line [7], line_width = line [8], line_width_uncertainty_positive = line [9], line_width_uncertainty_negative = line [10], observed_line_frequency = line [11], observed_line_frequency_uncertainty_positive = line [12], observed_line_frequency_uncertainty_negative = line [13], detection_type = line [14], observed_beam_major = line [15], observed_beam_minor = line [16], observed_beam_angle = line [17], reference = line [18], notes = line [19], user_submitted = line [21], user_email = line[22], species = line[25])
         db.session.add (l)
         db.session.commit ()
         total = update_redshift(session, g_id)
@@ -465,14 +463,14 @@ def post_approve(id):
     else:
 
         editline = EditLine.query.filter_by(id=editline_id).first()
-        line = session.query(EditLine.galaxy_id, EditLine.original_line_id, EditLine.j_upper, EditLine.integrated_line_flux, EditLine.integrated_line_flux_uncertainty_positive, EditLine.integrated_line_flux_uncertainty_negative, EditLine.peak_line_flux, EditLine.peak_line_flux_uncertainty_positive, EditLine.peak_line_flux_uncertainty_negative, EditLine.line_width, EditLine.line_width_uncertainty_positive, EditLine.line_width_uncertainty_negative, EditLine.observed_line_frequency, EditLine.observed_line_frequency_uncertainty_positive, EditLine.observed_line_frequency_uncertainty_negative, EditLine.detection_type, EditLine.observed_beam_major, EditLine.observed_beam_minor, EditLine.observed_beam_angle, EditLine.reference, EditLine.notes).filter(EditLine.id==editline_id).first()
+        line = session.query(EditLine.galaxy_id, EditLine.original_line_id, EditLine.emitted_frequency, EditLine.integrated_line_flux, EditLine.integrated_line_flux_uncertainty_positive, EditLine.integrated_line_flux_uncertainty_negative, EditLine.peak_line_flux, EditLine.peak_line_flux_uncertainty_positive, EditLine.peak_line_flux_uncertainty_negative, EditLine.line_width, EditLine.line_width_uncertainty_positive, EditLine.line_width_uncertainty_negative, EditLine.observed_line_frequency, EditLine.observed_line_frequency_uncertainty_positive, EditLine.observed_line_frequency_uncertainty_negative, EditLine.detection_type, EditLine.observed_beam_major, EditLine.observed_beam_minor, EditLine.observed_beam_angle, EditLine.reference, EditLine.notes, EditLine.species).filter(EditLine.id==editline_id).first()
 
         original_line_id = line[1]
         galaxy_id = line[0]
 
         session.query(Line).filter(
             Line.id == original_line_id
-        ).update({"j_upper": line[2], "integrated_line_flux": line[3], "integrated_line_flux_uncertainty_positive": line[4], "integrated_line_flux_uncertainty_negative": line[5], "peak_line_flux": line[6], "peak_line_flux_uncertainty_positive": line[7], "peak_line_flux_uncertainty_negative": line[8], "line_width": line[9], "line_width_uncertainty_positive": line[10], "line_width_uncertainty_negative": line[11], "observed_line_frequency": line[12], "observed_line_frequency_uncertainty_positive": line[13], "observed_line_frequency_uncertainty_negative": line[14], "detection_type": line[15], "observed_beam_major": line[16], "observed_beam_minor": line[17], "observed_beam_angle": line[18], "reference": line[19], "notes": line[20]})
+        ).update({"emitted_frequency": line[2], "integrated_line_flux": line[3], "integrated_line_flux_uncertainty_positive": line[4], "integrated_line_flux_uncertainty_negative": line[5], "peak_line_flux": line[6], "peak_line_flux_uncertainty_positive": line[7], "peak_line_flux_uncertainty_negative": line[8], "line_width": line[9], "line_width_uncertainty_positive": line[10], "line_width_uncertainty_negative": line[11], "observed_line_frequency": line[12], "observed_line_frequency_uncertainty_positive": line[13], "observed_line_frequency_uncertainty_negative": line[14], "detection_type": line[15], "observed_beam_major": line[16], "observed_beam_minor": line[17], "observed_beam_angle": line[18], "reference": line[19], "notes": line[20], "species": line[21]})
 
 
         total = update_redshift(session, galaxy_id)

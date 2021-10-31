@@ -82,7 +82,7 @@ class Config(object):
     29:3325.00528270,
     30:3438.36461100}
 
-    CO = {
+CO = {
     115.27120180:"1", 
     230.53800000:"2", 
     345.79598990:"3", 
@@ -197,6 +197,8 @@ COL_NAMES = {
     'lensing_flag':'lensing_flag',
     'classification':'classification',
     'g_notes':'notes',
+    'emitted_frequency':'emitted_frequency',
+    'species':'species',
     'j_upper':'j_upper',
     'integrated_line_flux':'integrated_line_flux',
     'integrated_line_flux_uncertainty_positive':'integrated_line_flux_uncertainty_positive',

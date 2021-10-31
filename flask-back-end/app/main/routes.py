@@ -1,6 +1,6 @@
 from operator import ne
 from flask.globals import session
-from sqlalchemy.sql.expression import outerjoin, true
+from sqlalchemy.sql.expression import false, outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from app.models import Galaxy, User, Line, TempGalaxy, TempLine, Post, EditGalaxy, EditLine
@@ -9,7 +9,7 @@ from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
 from sqlalchemy.sql import text
-from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp
+from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp, CO
 from io import TextIOWrapper
 from flask_security import current_user, login_required, roles_required
 import math
@@ -68,6 +68,7 @@ def test():
  
     return render_template("/test.html", var=var)
 
+#NEED TO FIX J_UPPER HERE
 @bp.route("/main", methods=['GET', 'POST']) 
 @login_required
 def main():
@@ -82,7 +83,7 @@ def main():
         form = SearchForm()
     session = Session()
     galaxies = session.query(Galaxy).all()
-    lines = session.query(Line.galaxy_id, Line.j_upper).distinct().all()
+    lines = session.query(Line.galaxy_id, Line.emitted_frequency).distinct().all()
     return render_template("/main.html", galaxies=galaxies, lines=lines, form=form)
 
 def to_empty(entry):
@@ -209,10 +210,14 @@ def query_results():
             form_advanced.redshift_max.data = float('inf')
         if form_advanced.lensing_flag.data == None or form_advanced.lensing_flag.data == 'Either':
             form_advanced.lensing_flag.data = ''
-        if form_advanced.j_upper_min.data == None:
-            form_advanced.j_upper_min.data = float('-inf')
-        if form_advanced.j_upper_max.data == None:
-            form_advanced.j_upper_max.data = float('inf')
+        if form_advanced.emitted_frequency_min.data == None:
+            form_advanced.emitted_frequency_min.data = float('-inf')
+        if form_advanced.emitted_frequency_max.data == None:
+            form_advanced.emitted_frequency_max.data = float('inf')
+        
+        if form_advanced.species.data == None or form_advanced.species.data == 'Either':
+            form_advanced.species.data = ''   
+
         if form_advanced.integrated_line_flux_min.data == None:
             form_advanced.integrated_line_flux_min.data = float('-inf')
         if form_advanced.integrated_line_flux_max.data == None:
@@ -259,7 +264,7 @@ def query_results():
             galaxies=galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)), ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (Galaxy.declination.between(dec_to_float(to_m_inf(form_advanced.declination_min.data)), dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None) ) & (Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (Galaxy.lensing_flag == None)))
 
             #Filters in respect to line parameters or if galaxy has no lines
-            galaxies = galaxies.filter((Line.id == None) | ((Line.j_upper.between(form_advanced.j_upper_min.data, form_advanced.j_upper_max.data) | (Line.j_upper == None )) & (Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (Line.integrated_line_flux == None)) & (Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data) | (Line.peak_line_flux == None)) & (Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data) | (Line.line_width == None )) & (Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data) | (Line.observed_line_frequency == None )) & (Line.detection_type.contains(form_advanced.detection_type.data) | (Line.detection_type == None)) & (Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data) | (Line.observed_beam_major == None )) & (Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data) | (Line.observed_beam_minor == None )) & (Line.reference.contains(form_advanced.reference.data) | (Line.reference == None)) ))
+            galaxies = galaxies.filter((Line.id == None) | ((Line.emitted_frequency.between(form_advanced.emitted_frequency_min.data, form_advanced.emitted_frequency_max.data) | (Line.emitted_frequency == None )) & ((Line.species.contains(form_advanced.species.data)) | (Line.species == None)) & (Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (Line.integrated_line_flux == None)) & (Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data) | (Line.peak_line_flux == None)) & (Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data) | (Line.line_width == None )) & (Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data) | (Line.observed_line_frequency == None )) & (Line.detection_type.contains(form_advanced.detection_type.data) | (Line.detection_type == None)) & (Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data) | (Line.observed_beam_major == None )) & (Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data) | (Line.observed_beam_minor == None )) & (Line.reference.contains(form_advanced.reference.data) | (Line.reference == None)) ))
 
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
@@ -279,7 +284,7 @@ def query_results():
 
             galaxies=galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)), ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (Galaxy.declination.between(dec_to_float(to_m_inf(form_advanced.declination_min.data)), dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None) ) & (Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (Galaxy.lensing_flag == None)))
 
-            galaxies=galaxies.filter((Line.j_upper.between(form_advanced.j_upper_min.data, form_advanced.j_upper_max.data) | (Line.j_upper == None )) & (Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (Line.integrated_line_flux == None)) & (Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data) | (Line.peak_line_flux == None)) & (Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data) | (Line.line_width == None )) & (Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data) | (Line.observed_line_frequency == None )) & (Line.detection_type.contains(form_advanced.detection_type.data) | (Line.detection_type == None)) & (Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data) | (Line.observed_beam_major == None )) & (Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data) | (Line.observed_beam_minor == None )) & (Line.reference.contains(form_advanced.reference.data) | (Line.reference == None)) )
+            galaxies=galaxies.filter((Line.emitted_frequency.between(form_advanced.emitted_frequency_min.data, form_advanced.emitted_frequency_max.data) | (Line.emitted_frequency == None )) & ((Line.species.contains(form_advanced.species.data)) | (Line.species == None)) & (Line.integrated_line_flux.between(form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (Line.integrated_line_flux == None)) & (Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data, form_advanced.peak_line_flux_max.data) | (Line.peak_line_flux == None)) & (Line.line_width.between(form_advanced.line_width_min.data, form_advanced.line_width_max.data) | (Line.line_width == None )) & (Line.observed_line_frequency.between(form_advanced.observed_line_frequency_min.data, form_advanced.observed_line_frequency_max.data) | (Line.observed_line_frequency == None )) & (Line.detection_type.contains(form_advanced.detection_type.data) | (Line.detection_type == None)) & (Line.observed_beam_major.between(form_advanced.observed_beam_major_min.data, form_advanced.observed_beam_major_max.data) | (Line.observed_beam_major == None )) & (Line.observed_beam_minor.between(form_advanced.observed_beam_minor_min.data, form_advanced.observed_beam_minor_max.data) | (Line.observed_beam_minor == None )) & (Line.reference.contains(form_advanced.reference.data) | (Line.reference == None)) )
             
             galaxies=galaxies.order_by(Galaxy.name).all()
 
@@ -296,6 +301,44 @@ def query_results():
         galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
     
     return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
+
+def test_frequency (input_frequency, species_type):
+    message = ''
+    if species_type == "CO":
+        if input_frequency in CO:
+            dict_frequency = input_frequency 
+        else: 
+            delta = input_frequency
+            for key, value in CO.items():
+                if abs(key-input_frequency) < delta:
+                    delta = abs(key-input_frequency)
+                    nearest_frequency = key
+            
+            input_frequency_str = str(input_frequency)
+            decimals = input_frequency_str[input_frequency_str.find('.')+1:]
+            precision = len(decimals)
+            range_1 = input_frequency - (0.1) ** precision 
+            range_2 = input_frequency + (0.1) ** precision 
+            range_values = []
+            messages_list = []
+
+            for key, value in CO.items():
+                if key > (range_1) and (key < range_2):
+                    message_1 = "This frequency ({}), also represented as this quontum number ({})".format(key, value)
+                    messages_list.append(message_1)
+                    range_values.append((key, value))
+            
+            if len(range_values) > 1:
+                message = "We could not parse your submission of emitted frequency. Did you mean {}".format(messages_list)
+            else:
+                dict_frequency = nearest_frequency
+    else:
+        message = "Please select among available species"
+        dict_frequency = False
+        
+    return dict_frequency, message
+    
+
 
 @bp.route("/entry_file", methods=['GET', 'POST'])
 @login_required
@@ -376,9 +419,21 @@ def entry_file():
                     id = new_id [0]
                     from_existed = id
                 l_validated = True
-                if row[COL_NAMES['j_upper']] == "":
+                if row[COL_NAMES['emitted_frequency']] == "":
                     l_validated = False
-                    flash ("J Upper is Mandatory")
+                    flash ("Emitted Frequency is Mandatory")
+
+                try:
+                    dict_frequency, message = test_frequency(to_none(row[COL_NAMES['emitted_frequency']]), row[COL_NAMES['species']].strip())
+                    if dict_frequency == False:
+                        flash(message)
+                        l_validated = False
+                except:
+                    continue
+
+                if row[COL_NAMES['species']] == "":
+                    l_validated = False
+                    flash ("Please Specify the Species")
                 if row[COL_NAMES['integrated_line_flux']] == "":
                     l_validated = False
                     flash ("Integrated Line Flux is Mandatory")
@@ -449,7 +504,7 @@ def entry_file():
                         pass
                 if l_validated == True:
                     if row[COL_NAMES['freq_type']] == "z":
-                        frequency, positive_uncertainty = redshift_to_frequency(to_none(row ['j_upper']), to_none( row ['observed_line_frequency']), to_none( row ['line_width_uncertainty_positive']), to_none( row ['line_width_uncertainty_negative']))
+                        frequency, positive_uncertainty = redshift_to_frequency(to_none(row [COL_NAMES['emitted_frequency']]), to_none( row ['observed_line_frequency']), to_none( row ['line_width_uncertainty_positive']), to_none( row ['line_width_uncertainty_negative']))
                         negative_uncertainty = None
                     else:
                         frequency = to_none( row ['observed_line_frequency'])
@@ -457,7 +512,8 @@ def entry_file():
                         negative_uncertainty = to_none( row ['line_width_uncertainty_negative'])
                     line = TempLine (galaxy_id = id,
                                     from_existed_id = from_existed,
-                                    j_upper= to_none(row ['j_upper']), 
+                                    emitted_frequency = dict_frequency, 
+                                    species = row ['species'].strip(), 
                                     integrated_line_flux =to_none( row ['integrated_line_flux']), 
                                     integrated_line_flux_uncertainty_positive =to_none( row ['integrated_line_flux_uncertainty_positive']), 
                                     integrated_line_flux_uncertainty_negative =to_none( row ['integrated_line_flux_uncertainty_negative']), 
@@ -601,7 +657,7 @@ def galaxy_edit_form(id):
     if declination > 0:
         declination = '{:+}'.format(declination) 
     form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
-    original = galaxy.name
+    original_id = galaxy.id
     if form.validate_on_submit ():
         if form.submit.data:
             try:
@@ -617,19 +673,19 @@ def galaxy_edit_form(id):
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
             changes = ""
             if (galaxy.name != form.name.data):
-                changes = changes + 'Initial Name: ' + galaxy.name + ' New Name:' + form.name.data
+                changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
             if (galaxy.right_ascension != float(RA)):
-                changes = changes + 'Initial RA: ' + str(galaxy.right_ascension) + ' New RA:' + str (RA)
+                changes = changes + 'Initial RA: ' + str(galaxy.right_ascension) + ' New RA: ' + str (RA)
             if (galaxy.declination != float (DEC)):
-                changes = changes + 'Initial DEC: ' + str(galaxy.declination) + ' New DEC:' + str (DEC)
+                changes = changes + 'Initial DEC: ' + str(galaxy.declination) + ' New DEC: ' + str (DEC)
             if (galaxy.coordinate_system != form.coordinate_system.data):
-                changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System:' + form.coordinate_system.data
+                changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System: ' + form.coordinate_system.data
             if (galaxy.lensing_flag != form.lensing_flag.data):
-                changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag:' + form.lensing_flag.data
+                changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag: ' + form.lensing_flag.data
             if (galaxy.classification != form.classification.data):
-                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification:' + form.classification.data
+                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + form.classification.data
             if (galaxy.notes != form.notes.data):
-                changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes:' + form.notes.data
+                changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
             galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
             db.session.commit()
@@ -648,7 +704,7 @@ def galaxy_edit_form(id):
 
 def update_redshift(session, galaxy_id):
     line_redshift = session.query(
-            Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+            Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
         ).outerjoin(Galaxy).filter(
             Galaxy.id == galaxy_id
         ).all() 
@@ -661,10 +717,8 @@ def update_redshift(session, galaxy_id):
             delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
         else:
             delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-        J_UPPER = l.j_upper
-        if J_UPPER > 30 or J_UPPER < 1:
-            continue
-        z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+
+        z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
         delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
         sum_upper = sum_upper =+ (z/delta_z)
         sum_lower = sum_lower =+ (1/delta_z)
@@ -685,7 +739,7 @@ def update_redshift_error(session, galaxy_id, sum_upper):
 
         redshift_error_weighted = 0
         line_redshift = session.query(
-                Line.j_upper, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
+                Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative, Line.observed_line_frequency_uncertainty_positive
             ).outerjoin(Galaxy).filter(
                 Galaxy.id == galaxy_id
             ).all() 
@@ -696,8 +750,8 @@ def update_redshift_error(session, galaxy_id, sum_upper):
                 delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
             else:
                 delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-            J_UPPER = l.j_upper
-            z = (EMITTED_FREQUENCY.get(J_UPPER) - l.observed_line_frequency) / l.observed_line_frequency
+
+            z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
             delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
             weight = (z/delta_z)/sum_upper
             redshift_error_weighted = redshift_error_weighted =+ (weight*delta_z)
@@ -707,10 +761,10 @@ def update_redshift_error(session, galaxy_id, sum_upper):
             ).update({"redshift_error": redshift_error_weighted})
             session.commit()
 
-def redshift_to_frequency(J_UPPER, z, positive_uncertainty, negative_uncertainty):
+def redshift_to_frequency(emitted_frequency, z, positive_uncertainty, negative_uncertainty):
     if z == None:
         return None, None
-    nu_obs = (EMITTED_FREQUENCY.get(J_UPPER))/(z+1)
+    nu_obs = emitted_frequency/(z+1)
     if positive_uncertainty == None:
         return nu_obs, None
     if negative_uncertainty == None:
@@ -748,13 +802,13 @@ def line_entry_form():
                 raise Exception ('Please enter the name exactly as proposed using Caps if necesarry')
 
             if form.freq_type.data == 'z':
-                frequency, positive_uncertainty = redshift_to_frequency(form.j_upper.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
                 negative_uncertainty = None
             else:
                 frequency = form.observed_line_frequency.data
                 positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
-            line = TempLine(galaxy_id=id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed, galaxy_name = name)
+            line = TempLine(galaxy_id=id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed, galaxy_name = name)
             db.session.add(line)
             db.session.commit()
             templine = session.query(func.max(TempLine.id)).first()
@@ -773,7 +827,7 @@ def line_edit_form(id):
     session = Session ()
     line = session.query(Line).filter(Line.id == id).first()
     name = session.query(Galaxy.name).filter(Galaxy.id==line.galaxy_id).scalar()
-    form = EditLineForm(galaxy_name = name, j_upper = line.j_upper, integrated_line_flux = line.integrated_line_flux, integrated_line_flux_uncertainty_positive = line.integrated_line_flux_uncertainty_positive, peak_line_flux = line.peak_line_flux, peak_line_flux_uncertainty_positive = line.peak_line_flux_uncertainty_positive, line_width = line.line_width, line_width_uncertainty_positive = line.line_width_uncertainty_positive, observed_line_frequency = line.observed_line_frequency, observed_line_frequency_uncertainty_positive = line.observed_line_frequency_uncertainty_positive, detection_type = line.detection_type, observed_beam_major = line.observed_beam_major, observed_beam_minor = line.observed_beam_minor, observed_beam_angle = line.observed_beam_angle, reference = line.reference, notes = line.notes)
+    form = EditLineForm(galaxy_name = name, emitted_frequency = line.emitted_frequency, species = line.species, integrated_line_flux = line.integrated_line_flux, integrated_line_flux_uncertainty_positive = line.integrated_line_flux_uncertainty_positive, peak_line_flux = line.peak_line_flux, peak_line_flux_uncertainty_positive = line.peak_line_flux_uncertainty_positive, line_width = line.line_width, line_width_uncertainty_positive = line.line_width_uncertainty_positive, observed_line_frequency = line.observed_line_frequency, observed_line_frequency_uncertainty_positive = line.observed_line_frequency_uncertainty_positive, detection_type = line.detection_type, observed_beam_major = line.observed_beam_major, observed_beam_minor = line.observed_beam_minor, observed_beam_angle = line.observed_beam_angle, reference = line.reference, notes = line.notes)
     if form.galaxy_form.data:
         return redirect(url_for('main.galaxy_entry_form'))
     if form.validate_on_submit():
@@ -781,7 +835,7 @@ def line_edit_form(id):
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
             if form.freq_type.data == 'z':
-                frequency, positive_uncertainty = redshift_to_frequency(form.j_upper.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
                 negative_uncertainty = None
             else:
                 frequency = form.observed_line_frequency.data
@@ -789,10 +843,10 @@ def line_edit_form(id):
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
 
             changes = ""
-            if line.galaxy_id != galaxy_id:
-                changes = changes + "Initial Galaxy ID: " + line.galaxy_id + " New Galaxy ID: " + galaxy_id
-            if int(line.j_upper) != int (form.j_upper.data):
-                changes = changes + "Initial J Upper: " + str (line.j_upper) + " New J Upper: " + str (form.j_upper.data)
+            if int(line.emitted_frequency) != int (form.emitted_frequency.data):
+                changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + str (form.emitted_frequency.data)
+            if int(line.species) != form.species.data:
+                changes = changes + "Initial Species: " + str (line.species) + " New Species: " + str (form.species.data)
             if float(line.integrated_line_flux) !=  float (form.integrated_line_flux.data):
                 changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
             if form.integrated_line_flux_uncertainty_positive.data:
@@ -834,7 +888,7 @@ def line_edit_form(id):
             if form.notes.data:
                 if line.notes != form.notes.data:
                     changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
-            line = EditLine(galaxy_id=galaxy_id, j_upper=form.j_upper.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, from_existed_id = galaxy_id)
+            line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes)
             db.session.add(line)
             db.session.commit()
 
@@ -920,11 +974,11 @@ def convert_to_CSV(table, identifier, symmetrical):
         f = open('galaxy_lines.csv', 'w')
         out = csv.writer(f)
         galaxy_lines = session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier, Line.galaxy_id == identifier)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         for item in galaxy_lines:
             l = item [1]
             g = item [0]
-            out.writerow([g.name, g.right_ascension, g.declination, g.coordinate_system, g.redshift, g.lensing_flag, g.classification, g.notes, l.j_upper, l.integrated_line_flux, l.integrated_line_flux_uncertainty_positive, l.integrated_line_flux_uncertainty_negative, l.peak_line_flux, l.peak_line_flux_uncertainty_positive, l.peak_line_flux_uncertainty_negative, l.line_width, l.line_width_uncertainty_positive, l.line_width_uncertainty_negative, l.observed_line_frequency, l.observed_line_frequency_uncertainty_positive, l.observed_line_frequency_uncertainty_negative, l.detection_type, l.observed_beam_major, l.observed_beam_minor, l.observed_beam_angle, l.reference, l.notes])
+            out.writerow([g.name, g.right_ascension, g.declination, g.coordinate_system, g.redshift, g.lensing_flag, g.classification, g.notes, l.emitted_frequency, l.species, l.integrated_line_flux, l.integrated_line_flux_uncertainty_positive, l.integrated_line_flux_uncertainty_negative, l.peak_line_flux, l.peak_line_flux_uncertainty_positive, l.peak_line_flux_uncertainty_negative, l.line_width, l.line_width_uncertainty_positive, l.line_width_uncertainty_negative, l.observed_line_frequency, l.observed_line_frequency_uncertainty_positive, l.observed_line_frequency_uncertainty_negative, l.detection_type, l.observed_beam_major, l.observed_beam_minor, l.observed_beam_angle, l.reference, l.notes])
         f.close()
         with open('./galaxy_lines.csv', 'r') as file:
             galaxy_lines_csv = file.read()
@@ -938,12 +992,12 @@ def convert_to_CSV(table, identifier, symmetrical):
         f = open('galaxies_lines.csv', 'w')
         out = csv.writer(f)
         data = session.query(Galaxy, Line).outerjoin(Line)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         for item in data:
             l = item [1]
             g = item [0]
             if l is not None:
-                out.writerow([g.name, g.right_ascension, g.declination, g.coordinate_system, g.redshift, g.lensing_flag, g.classification, g.notes, l.j_upper, l.integrated_line_flux, l.integrated_line_flux_uncertainty_positive, l.integrated_line_flux_uncertainty_negative, l.peak_line_flux, l.peak_line_flux_uncertainty_positive, l.peak_line_flux_uncertainty_negative, l.line_width, l.line_width_uncertainty_positive, l.line_width_uncertainty_negative, l.observed_line_frequency, l.observed_line_frequency_uncertainty_positive, l.observed_line_frequency_uncertainty_negative, l.detection_type, l.observed_beam_major, l.observed_beam_minor, l.observed_beam_angle, l.reference, l.notes])
+                out.writerow([g.name, g.right_ascension, g.declination, g.coordinate_system, g.redshift, g.lensing_flag, g.classification, g.notes, l.emitted_frequency, l.species, l.integrated_line_flux, l.integrated_line_flux_uncertainty_positive, l.integrated_line_flux_uncertainty_negative, l.peak_line_flux, l.peak_line_flux_uncertainty_positive, l.peak_line_flux_uncertainty_negative, l.line_width, l.line_width_uncertainty_positive, l.line_width_uncertainty_negative, l.observed_line_frequency, l.observed_line_frequency_uncertainty_positive, l.observed_line_frequency_uncertainty_negative, l.detection_type, l.observed_beam_major, l.observed_beam_minor, l.observed_beam_angle, l.reference, l.notes])
             else:
                 out.writerow([g.name, g.right_ascension, g.declination, g.coordinate_system, g.redshift, g.lensing_flag, g.classification, g.notes])
         f.close()
@@ -959,9 +1013,9 @@ def convert_to_CSV(table, identifier, symmetrical):
         f = open('sample.csv', 'w')
         out = csv.writer(f)
         if symmetrical == "True":
-            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species','integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         else:
-            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'j_upper', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()

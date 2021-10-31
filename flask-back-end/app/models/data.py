@@ -113,7 +113,8 @@ class Line(db.Model):
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
     galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id')) 
-    j_upper = db.Column(db.Integer, nullable = False)  
+    emitted_frequency = db.Column(db.Float(32), nullable = False)
+    species = db.Column(db.String(32))
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
@@ -141,7 +142,8 @@ class TempLine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     galaxy_id = db.Column(db.Integer) 
     from_existed_id = db.Column(db.Integer)
-    j_upper = db.Column(db.Integer, nullable = False)  
+    emitted_frequency = db.Column(db.Float(32), nullable = False)
+    species = db.Column(db.String(32))
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
@@ -173,7 +175,8 @@ class EditLine(db.Model):
     galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id')) 
     original_line_id = db.Column(db.Integer)
     is_edited = db.Column(db.String(128))  
-    j_upper = db.Column(db.Integer, nullable = False)  
+    emitted_frequency = db.Column(db.Float(32), nullable = False)
+    species = db.Column(db.String(32))
     integrated_line_flux = db.Column(db.Float(32), nullable = False)
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
@@ -197,7 +200,6 @@ class EditLine(db.Model):
     admin_notes = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
-    from_existed_id = db.Column(db.Integer)
 
 
 
