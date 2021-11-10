@@ -54,14 +54,16 @@
                <th>Name</th>
                <th>Right Ascension</th>
                <th>Declination</th>
-               <th>Emitted Frequences Submitted</th>
+               <th>Lines per Species</th>
                <th>Redshift</th>
                <th>Classification</th>
             </tr>
          </thead>
          
          <tbody>
-            {% for g in galaxies %}
+
+            {% for g, galaxy_count in galaxies|zip(count_list) %}
+
                <tr>
                   <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
                   <td>{{ g.right_ascension }}</td>
@@ -69,16 +71,15 @@
                   {% set id = g.id %}
                   <td>
                      <ul id="menu">
-                     {% for l in lines %}
-                        {% if l[0] == id %}
-                        <li>{{ l[1] }}</li>
-                        {% endif %}
+                     {% for species in list_of_lines_per_species[galaxy_count] %}
+                        <li>{{species}}</li>
                      {% endfor %}
                      </ul>
                   </td>
                   <td>{{ g.redshift }}</td>
                   <td>{{ g.classification }}</td>
                </tr>
+               
             {% endfor %}
          </tbody>
       </table>

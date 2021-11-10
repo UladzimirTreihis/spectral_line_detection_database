@@ -363,6 +363,42 @@ class PostsView(BaseView):
         #return self.render("/test_dump.html", posts_query=posts_query)
         return self.render("/admin/posts.html", posts_query=posts_query)
 
+    #@action('delete',
+     ##      'Are you sure you want to delete selected records?')
+    #def action_delete(self, ids)
+
+
+@bp.route('/posts_delete/<ids>') 
+@login_required  
+def posts_delete(ids):
+
+    '''
+    Deletes the submission (unapproved) from the entire db.
+    Used by admin/posts.
+    
+    '''
+    entries = request.form.getlist('rowid')
+    session = Session()
+    post = Post.query.filter_by(id=id).first()
+    templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
+    tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+    editgalaxy_id  = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
+    editline_id  = session.query(Post.editline_id).filter_by(id=id).scalar()
+    if templine_id != None:
+        templine = TempLine.query.filter_by(id=templine_id).first()
+        db.session.delete (templine)
+    elif tempgalaxy_id != None:
+        tempgalaxy = TempGalaxy.query.filter_by(id=tempgalaxy_id).first()
+        db.session.delete (tempgalaxy)
+    elif editgalaxy_id != None:
+        editgalaxy = EditGalaxy.query.filter_by(id=editgalaxy_id).first()
+        db.session.delete(editgalaxy)
+    else:
+        editline = EditLine.query.filter_by(id=editline_id).first()
+        db.session.delete(editline)
+    db.session.delete (post)
+    db.session.commit ()    
+    return redirect("/posts")
 
 @bp.route('/post_delete/<id>') 
 @login_required  

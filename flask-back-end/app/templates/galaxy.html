@@ -5,95 +5,97 @@
 {% endblock %}
 
 {% block content %}
+<div class="container">
 
-<h2> Galaxy Details </h2>
-<table class = "table" id = "Galaxy">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Right Ascension</th>
-        <th>Declination</th>
-        <th>Coordinate System</th>
-        <th>Redshift</th>
-        <th>Lensing Flag</th>
-        <th>Classification</th>
-        <th>Notes</th>
-    </tr>
-    </thead>
-    
-    <tbody>
+    <h2> Galaxy Details </h2>
+    <table class = "table" id = "Galaxy">
+        <thead>
         <tr>
-            <td>{{ galaxy.id }}</td>
-            <td>{{ galaxy.name }}</td>
-            <td>{{ galaxy.right_ascension }}</td>
-            <td>{{ galaxy.declination }}</td>
-            <td>{{ galaxy.coordinate_system }}</td>
-            <td>{{ galaxy.redshift }}</td>
-            <td>{{ galaxy.lensing_flag }}</td>
-            <td>{{ galaxy.classification }}</td>
-            <td>{{ galaxy.notes }}</td>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Right Ascension</th>
+            <th>Declination</th>
+            <th>Coordinate System</th>
+            <th>Redshift</th>
+            <th>Lensing Flag</th>
+            <th>Classification</th>
+            <th>Notes</th>
         </tr>
-    </tbody>
-</table>
-
-<h2> Lines in this Galaxy </h2>
-    <table class = "table" id = "Line">
-         <thead>
+        </thead>
+        
+        <tbody>
             <tr>
-               <th>Emitted Frequency</th>
-               <th>Species</th>
-               <th>Integrated Line Flux</th>
-               <th>Integrated Line Flux Positive Uncertainty</th>
-               <th>Integrated Line Flux Negative Uncertainty</th>
-               <th>Peak Line Flux</th>
-               <th>Peak Line Flux Positive Uncertainty</th>
-               <th>Peak Line Flux Negative Uncertainty</th>
-               <th>Line Width</th>
-               <th>Line Width Positive Uncertainty</th>
-               <th>Line Width Negative Uncertainty</th>
-               <th>Observed Line Frequency</th>
-               <th>Observed Line Frequency Positive Uncertainty</th>
-               <th>Observed Line Frequency Negative Uncertainty</th>
-               <th>Detection Type</th>
-               <th>Observed Beam Major</th>
-               <th>Observed Beam Minor</th>
-               <th>Observed Beam Angle</th>
-               <th>Reference</th>
-               <th>Notes</th>
+                <td>{{ galaxy.id }}</td>
+                <td>{{ galaxy.name }}</td>
+                <td>{{ galaxy.right_ascension }}</td>
+                <td>{{ galaxy.declination }}</td>
+                <td>{{ galaxy.coordinate_system }}</td>
+                <td>{{ galaxy.redshift }}</td>
+                <td>{{ galaxy.lensing_flag }}</td>
+                <td>{{ galaxy.classification }}</td>
+                <td>{{ galaxy.notes }}</td>
             </tr>
-         </thead>
-         
-         <tbody>
-            {% for l in line %}
-               <tr>
-                  <td>{{ l.emitted_frequency }}</td>
-                  <td>{{ l.species }}</td>
-                  <td>{{ l.integrated_line_flux }}</td>
-                  <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-                  <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
-                  <td>{{ l.peak_line_flux }}</td>
-                  <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-                  <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
-                  <td>{{ l.line_width }}</td>
-                  <td>{{ l.line_width_uncertainty_positive }}</td>
-                  <td>{{ l.line_width_uncertainty_negative }}</td>
-                  <td>{{ l.observed_line_frequency }}</td>
-                  <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
-                  <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
-                  <td>{{ l.detection_type }}</td>
-                  <td>{{ l.observed_beam_major }}</td>
-                  <td>{{ l.observed_beam_minor }}</td>
-                  <td>{{ l.observed_beam_angle }}</td>
-                  <td>{{ l.reference }}</td>
-                  <td>{{ l.notes }}</td>
-                  <td> <a href="{{ url_for ('main.line_edit_form', id = l.id) }}" class="btn btn-info" role="button" > Update Line Information </a> </td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
-<a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
-<a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download as CSV</a>
-<a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button"> Back </a>
+        </tbody>
+    </table>
 
+    <h2> Lines in this Galaxy </h2>
+        <table class = "table" id = "Line">
+            <thead>
+                <tr>
+                <th>Emitted Frequency</th>
+                <th>Species</th>
+                <th>Integrated Line Flux</th>
+                <th>Integrated Line Flux Positive Uncertainty</th>
+                <th>Integrated Line Flux Negative Uncertainty</th>
+                <th>Peak Line Flux</th>
+                <th>Peak Line Flux Positive Uncertainty</th>
+                <th>Peak Line Flux Negative Uncertainty</th>
+                <th>Line Width</th>
+                <th>Line Width Positive Uncertainty</th>
+                <th>Line Width Negative Uncertainty</th>
+                <th>Observed Line Frequency</th>
+                <th>Observed Line Frequency Positive Uncertainty</th>
+                <th>Observed Line Frequency Negative Uncertainty</th>
+                <th>Detection Type</th>
+                <th>Observed Beam Major</th>
+                <th>Observed Beam Minor</th>
+                <th>Observed Beam Angle</th>
+                <th>Reference</th>
+                <th>Notes</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for l in line %}
+                <tr>
+                    <td>{{ l.emitted_frequency }}</td>
+                    <td>{{ l.species }}</td>
+                    <td>{{ l.integrated_line_flux }}</td>
+                    <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
+                    <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
+                    <td>{{ l.peak_line_flux }}</td>
+                    <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
+                    <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
+                    <td>{{ l.line_width }}</td>
+                    <td>{{ l.line_width_uncertainty_positive }}</td>
+                    <td>{{ l.line_width_uncertainty_negative }}</td>
+                    <td>{{ l.observed_line_frequency }}</td>
+                    <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
+                    <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
+                    <td>{{ l.detection_type }}</td>
+                    <td>{{ l.observed_beam_major }}</td>
+                    <td>{{ l.observed_beam_minor }}</td>
+                    <td>{{ l.observed_beam_angle }}</td>
+                    <td>{{ l.reference }}</td>
+                    <td>{{ l.notes }}</td>
+                    <td> <a href="{{ url_for ('main.line_edit_form', id = l.id) }}" class="btn btn-info" role="button" > Update Line Information </a> </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    <a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
+    <a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download as CSV</a>
+    <a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button"> Back </a>
+
+</div>
 {% endblock %}

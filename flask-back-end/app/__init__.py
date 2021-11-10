@@ -66,6 +66,7 @@ def create_app(config_class = DevelopmentConfig):
     migrate.init_app(app, db, render_as_batch=True)
     mail.init_app(app)
     admin.init_app(app, index_view=RestrictedAdminIndexView(name='Index'), url='/')
+    app.jinja_env.filters['zip'] = zip
 
     engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
     Session = sessionmaker()
