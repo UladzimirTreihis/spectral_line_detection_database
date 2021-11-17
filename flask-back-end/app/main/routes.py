@@ -9,7 +9,7 @@ from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
 from sqlalchemy.sql import text
-from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp, CO
+from config import EMITTED_FREQUENCY, COL_NAMES, ra_reg_exp, dec_reg_exp, CO, C17O, C18O, CarbonMonoxide
 from io import TextIOWrapper
 from flask_security import current_user, login_required, roles_required
 import math
@@ -41,7 +41,7 @@ def edit_profile():
     '''
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
-        current_user.username = form.username.fixeddata
+        current_user.username = form.username.data
         current_user.university = form.university.data
         current_user.website = form.website.data
         current_user.about_me = form.about_me.data
@@ -94,9 +94,10 @@ def main():
         list_of_lines_per_species.append([])
         id = galaxies[i].id
         species = session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
-        for s in species:
-            lines_count = session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
-            list_of_lines_per_species[i].append((s, lines_count)) 
+        if species != None:
+            for s in species:
+                lines_count = session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
+                list_of_lines_per_species[i].append((s, lines_count)) 
 
 
     lines = session.query(Line.galaxy_id, Line.species).distinct().all()
@@ -169,6 +170,13 @@ def to_zero(entry):
     else:
         entry = entry
     return entry
+
+def check_decimal(entry):
+    if re.findall(r'[0-9]\.[0-9]', entry) == []:
+        return False
+    else:
+        return True
+
 
 
 def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False):
@@ -319,42 +327,110 @@ def query_results():
     
     return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
 
-def test_frequency (input_frequency, species_type):
-    message = ''
-    if species_type == "CO":
-        if input_frequency in CO:
-            dict_frequency = input_frequency 
-        else: 
-            delta = input_frequency
-            for key, value in CO.items():
-                if abs(key-input_frequency) < delta:
-                    delta = abs(key-input_frequency)
-                    nearest_frequency = key
-            
-            input_frequency_str = str(input_frequency)
-            decimals = input_frequency_str[input_frequency_str.find('.')+1:]
-            precision = len(decimals)
-            range_1 = input_frequency - (0.1) ** precision 
-            range_2 = input_frequency + (0.1) ** precision 
-            range_values = []
-            messages_list = []
 
-            for key, value in CO.items():
-                if key > (range_1) and (key < range_2):
-                    message_1 = "This frequency ({}), also represented as this quontum number ({})".format(key, value)
-                    messages_list.append(message_1)
-                    range_values.append((key, value))
-            
-            if len(range_values) > 1:
-                message = "We could not parse your submission of emitted frequency. Did you mean {}".format(messages_list)
-            else:
-                dict_frequency = nearest_frequency
-    else:
-        message = "Please select among available species"
-        dict_frequency = False
-        
-    return dict_frequency, message
+
+def test_frequency (input_frequency_str, species_type):
+    if species_type in CarbonMonoxide:
+        dict_frequency, message = test_frequency_for_family(CarbonMonoxide, species_type, input_frequency_str)
+        return dict_frequency, message
+
+
+def test_frequency_for_family(family, species_type, input_frequency_str):
     
+    message = ''
+    input_frequency = float(input_frequency_str)
+
+    #Iterates over family members not specified by the user
+    for species_name, species_dict in family.items():
+    
+        if species_name != species_type:
+
+
+            if input_frequency in species_dict:
+                message = message + "We found the same exact frequency for ({}) species. Did you mean ({}) instead of ({})? ".format(species_name, species_name, species_type) 
+            else: 
+                delta = input_frequency
+                for key, value in species_dict.items():
+                    if abs(key-input_frequency) < delta:
+                        delta = abs(key-input_frequency)
+                        nearest_frequency = key
+                
+                if check_decimal(input_frequency_str):
+                    decimals = input_frequency_str[input_frequency_str.find('.')+1:]
+                    precision = len(decimals)
+                    range_1 = input_frequency - (0.1) ** precision 
+                    range_2 = input_frequency + (0.1) ** precision 
+                else:
+                    precision = len(input_frequency_str)
+                    for c in input_frequency_str:
+                        if c != '0':
+                            precision -= 1
+                        else:
+                            pass
+                    range_1 = input_frequency - (10) ** precision 
+                    range_2 = input_frequency + (10) ** precision
+
+                #check if there are any values of similar species in the range
+                for key, value in species_dict.items():
+                    if key > (range_1) and (key < range_2):
+                        message_1 = "This frequency ({}), also represented as this quontum number ({}) for this species ({}). ".format(key, value, species_name)
+                        message = message + message_1
+
+        else:
+            pass
+
+    #Finds the specified by user species 
+    #and returns the frequency from dictionary if no previous errors returned.
+    for species_name, species_dict in family.items():
+
+        if species_name == species_type:
+
+            if input_frequency in species_dict:
+                dict_frequency = input_frequency
+            else: 
+                delta = input_frequency
+                for key, value in species_dict.items():
+                    if abs(key-input_frequency) < delta:
+                        delta = abs(key-input_frequency)
+                        nearest_frequency = key
+                
+                if check_decimal(input_frequency_str):
+                    decimals = input_frequency_str[input_frequency_str.find('.')+1:]
+                    precision = len(decimals)
+                    range_1 = input_frequency - (0.1) ** precision 
+                    range_2 = input_frequency + (0.1) ** precision 
+                else:
+                    precision = len(input_frequency_str)
+                    for c in input_frequency_str:
+                        if c != '0':
+                            precision -= 1
+                        else:
+                            pass
+                    range_1 = input_frequency - (10) ** precision 
+                    range_2 = input_frequency + (10) ** precision
+
+                #check if there are more than one value in the range
+                count_values_in_range = 0
+                for key, value in species_dict.items():
+                    if key > (range_1) and (key < range_2):
+                        count_values_in_range += 1
+                        if (count_values_in_range > 1) or (message != ''):
+                            message_1 = "This frequency ({}), also represented as this quontum number ({}) for this species ({}). ".format(key, value, species_name)
+                            message = message + message_1
+
+                dict_frequency = nearest_frequency
+            
+        else:
+            pass
+
+    
+    if message == '':
+        return dict_frequency, message
+
+    else:
+        message = " Multiple possible lines identified within the submitted frequency precision. Please double check the species name and/or add additional digits of precision to the frequency, then resubmit. Here is the full error you may want to consider: \n" + message
+
+        return False, message  
 
 
 @bp.route("/entry_file", methods=['GET', 'POST'])
@@ -370,7 +446,7 @@ def entry_file():
             flash ("CSV File is empty. ")
         else:
             validated = True
-            row_count = 1
+            row_count = 0
             for row in data:
                 row_count += 1
                 is_empty = True
@@ -379,129 +455,194 @@ def entry_file():
                         is_empty = False
                 if not is_empty:
                     if row == []:
-                        flash ("row " + str(row_count) + 'was an empty row')
-                    if row[COL_NAMES['name']] == "":
+                        flash ("Entry " + str(row_count) + ' was an empty row')
+
+                    row_name = row[COL_NAMES['name']].strip()
+                    row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
+                    row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
+                    row_classification = row[COL_NAMES['classification']].strip()
+                    row_right_ascension = row[COL_NAMES['right_ascension']].strip()
+                    row_declination = row[COL_NAMES['declination']].strip()
+                    row_g_notes = row[COL_NAMES['g_notes']].strip()
+
+                    row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
+                    row_species = row[COL_NAMES['species']].strip()
+                    row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
+                    row_integrated_line_flux_uncertainty_positive = row[COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
+                    row_integrated_line_flux_uncertainty_negative = row[COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
+                    row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
+                    row_peak_line_flux_uncertainty_positive = row[COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
+                    row_peak_line_flux_uncertainty_negative = row[COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
+                    row_line_width = row[COL_NAMES['line_width']].strip()
+                    row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
+                    row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
+                    row_freq_type = row[COL_NAMES['freq_type']].strip()
+                    row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
+                    row_observed_line_frequency_uncertainty_positive = row[COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
+                    row_observed_line_frequency_uncertainty_negative = row[COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
+                    row_detection_type = row[COL_NAMES['detection_type']].strip()
+                    row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
+                    row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
+                    row_observed_beam_angle = row[COL_NAMES['observed_beam_angle']].strip()
+                    row_reference = row[COL_NAMES['reference']].strip()
+                    row_notes = row[COL_NAMES['l_notes']].strip()
+
+
+                    if row_name == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Galaxy Name is Mandatory")
-                    if row[COL_NAMES['coordinate_system']] != "ICRS" and row[COL_NAMES['coordinate_system']] != "J2000":
+                        flash ("Entry " + str(row_count) + ": Galaxy Name is Mandatory")
+                    if row_coordinate_system != "ICRS" and row_coordinate_system != "J2000":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
-                    if row[COL_NAMES['lensing_flag']] != "Lensed" and row[COL_NAMES['lensing_flag']] != "Unlensed" and row[COL_NAMES['lensing_flag']] != "l" and row[COL_NAMES['lensing_flag']] != "u":
+                        flash ("Entry " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
+                    if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "l" and row_lensing_flag != "u":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(COL_NAMES['lensing_flag']))
-                    if row[COL_NAMES['classification']] == "":
+                        flash ("Entry " + str(row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(row_lensing_flag))
+                    if row_classification == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Classification is Mandatory")
-                    if row[COL_NAMES['right_ascension']] == "":
+                        flash ("Entry " + str(row_count) + ": Classification is Mandatory")
+                    if row_right_ascension == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Right Ascension is Mandatory")
-                    if re.search(ra_reg_exp, row[COL_NAMES['right_ascension']]) == None:
+                        flash ("Entry " + str(row_count) + ": Right Ascension is Mandatory")
+                    if re.search(ra_reg_exp, row_right_ascension) == None:
                         validated = False
-                        flash ("Row " + str(row_count) + ": Enter Right Ascension in a proper format")
-                    if row[COL_NAMES['declination']] == "":
+                        flash ("Entry " + str(row_count) + ": Enter Right Ascension in a proper format")
+                    if row_declination == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Declination is Mandatory")
-                    if re.search(dec_reg_exp, row[COL_NAMES['declination']]) == None:
+                        flash ("Entry " + str(row_count) + ": Declination is Mandatory")
+                    if re.search(dec_reg_exp, row_declination) == None:
                         validated = False
-                        flash ("Row " + str(row_count) + ": Enter Declination in a proper format")
-                    if row[COL_NAMES['emitted_frequency']] == "":
+                        flash ("Entry " + str(row_count) + ": Enter Declination in a proper format")
+                    if row_emitted_frequency == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": J Upper is Mandatory")
+                        flash ("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
                     try:
-                        dict_frequency, message = test_frequency(to_none(row[COL_NAMES['emitted_frequency']]), row[COL_NAMES['species']].strip())
+                        dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
                         if dict_frequency == False:
-                            flash(message)
+                            flash("Entry " + str(row_count) + message)
                             validated = False
                     except:
-                        continue
-                    if row[COL_NAMES['species']] == "":
+                        pass
+                    if row_species == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Please specify species")
-                    if row[COL_NAMES['integrated_line_flux']] == "":
+                        flash ("Entry " + str(row_count) + ": Please specify species")
+                    if row_integrated_line_flux == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Integrated Line Flux is Mandatory")
-                    if row[COL_NAMES['integrated_line_flux_uncertainty_positive']] == "":
+                        flash ("Entry " + str(row_count) + ": Integrated Line Flux is Mandatory")
+                    if row_integrated_line_flux_uncertainty_positive == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
-                    if row[COL_NAMES['integrated_line_flux_uncertainty_negative']] == "":
+                        flash ("Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
+                    if row_integrated_line_flux_uncertainty_negative == "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Integrated Line Flux Negative Uncertainty is Mandatory")
-                    if row [COL_NAMES['integrated_line_flux_uncertainty_positive']] != "":
+                        flash ("Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty is Mandatory")
+                    if row_integrated_line_flux_uncertainty_positive != "":
                         try:
-                            if float (row[COL_NAMES['integrated_line_flux_uncertainty_positive']]) < 0:
+                            if float (row_integrated_line_flux_uncertainty_positive) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
                         except:
                             pass
-                    if row [COL_NAMES['integrated_line_flux_uncertainty_negative']] != "":
+                    if row_integrated_line_flux_uncertainty_negative != "":
                         try:
-                            if float (row[COL_NAMES['integrated_line_flux_uncertainty_negative']]) < 0:
+                            if float (row_integrated_line_flux_uncertainty_negative) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
                         except:
                             pass
-                    if row [COL_NAMES['peak_line_flux_uncertainty_positive']] != "":
+                    if row_peak_line_flux_uncertainty_positive != "":
                         try:
-                            if float (row [COL_NAMES['peak_line_flux_uncertainty_positive']]) < 0:
+                            if float (row_peak_line_flux_uncertainty_positive) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Peak Line Flux Positive Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Peak Line Flux Positive Uncertainty must be greater than 0")
                         except:
                             pass                
-                    if row [COL_NAMES['peak_line_flux_uncertainty_negative']] != "":
+                    if row_peak_line_flux_uncertainty_negative != "":
                         try:
-                            if float (row [COL_NAMES['peak_line_flux_uncertainty_negative']]) < 0:
+                            if float (row_peak_line_flux_uncertainty_negative) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Peak Line Flux Negative Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Peak Line Flux Negative Uncertainty must be greater than 0")
                         except:
                             pass
-                    if row [COL_NAMES['line_width_uncertainty_positive']] != "":
+                    if row_line_width_uncertainty_positive != "":
                         try:
-                            if float (row [COL_NAMES['line_width_uncertainty_positive']]) < 0:
+                            if float (row_line_width_uncertainty_positive) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Line Width Positive Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Line Width Positive Uncertainty must be greater than 0")
                         except:
                             pass
-                    if row [COL_NAMES['line_width_uncertainty_negative']] != "":
+                    if row_line_width_uncertainty_negative != "":
                         try:
-                            if float (row [COL_NAMES['line_width_uncertainty_negative']]) < 0:
+                            if float (row_line_width_uncertainty_negative) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Line Width Negative Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Line Width Negative Uncertainty must be greater than 0")
                         except:
                             pass
-                    if row[COL_NAMES['freq_type']] != "z" and row[COL_NAMES['freq_type']] != "f" and row[COL_NAMES['freq_type']] != "":
+                    if row_freq_type != "z" and row_freq_type != "f" and row_freq_type != "":
                         validated = False
-                        flash ("Row " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(COL_NAMES['freq_type']))
-                    if row [COL_NAMES['observed_line_frequency_uncertainty_positive']] != "":
+                        flash ("Entry " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(row_freq_type))
+                    if row_observed_line_frequency_uncertainty_positive != "":
                         try:
-                            if float (row [COL_NAMES['observed_line_frequency_uncertainty_positive']]) < 0:
+                            if float (row_observed_line_frequency_uncertainty_positive) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
                         except:
                             pass
-                    if row [COL_NAMES['observed_line_frequency_uncertainty_negative']] != "":
+                    if row_observed_line_frequency_uncertainty_negative != "":
                         try:
-                            if float (row [COL_NAMES['observed_line_frequency_uncertainty_negative']]) < 0:
+                            if float (row_observed_line_frequency_uncertainty_negative) < 0:
                                 validated = False
-                                flash ("Row " + str(row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
                         except:
                             pass
 
         if validated:
             flash ("All entered values have been validated")
             for row in data:
-                ra = ra_to_float(row[COL_NAMES['right_ascension']])
-                dec = dec_to_float(row[COL_NAMES['declination']])
-                name = row[COL_NAMES['name']]
-                check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec) & (TempGalaxy.name == name))
-                check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec) & (Galaxy.name == name))
+
+
+                row_name = row[COL_NAMES['name']].strip()
+                row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
+                row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
+                row_classification = row[COL_NAMES['classification']].strip()
+                row_right_ascension = row[COL_NAMES['right_ascension']].strip()
+                row_declination = row[COL_NAMES['declination']].strip()
+                row_g_notes = row[COL_NAMES['g_notes']].strip()
+
+                row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
+                row_species = row[COL_NAMES['species']].strip()
+                row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
+                row_integrated_line_flux_uncertainty_positive = row[COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
+                row_integrated_line_flux_uncertainty_negative = row[COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
+                row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
+                row_peak_line_flux_uncertainty_positive = row[COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
+                row_peak_line_flux_uncertainty_negative = row[COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
+                row_line_width = row[COL_NAMES['line_width']].strip()
+                row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
+                row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
+                row_freq_type = row[COL_NAMES['freq_type']].strip()
+                row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
+                row_observed_line_frequency_uncertainty_positive = row[COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
+                row_observed_line_frequency_uncertainty_negative = row[COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
+                row_detection_type = row[COL_NAMES['detection_type']].strip()
+                row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
+                row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
+                row_observed_beam_angle = row[COL_NAMES['observed_beam_angle']].strip()
+                row_reference = row[COL_NAMES['reference']].strip()
+                row_notes = row[COL_NAMES['l_notes']].strip()
+
+
+                ra = ra_to_float(row_right_ascension)
+                dec = dec_to_float(row_declination)
+                check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec) & (TempGalaxy.name == row_name))
+                check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec) & (Galaxy.name == row_name))
                 if (check_same_temp_galaxy.first() == None) & (check_same_galaxy.first() == None):
-                    galaxy = TempGalaxy(name = row[COL_NAMES['name']],
+
+                    galaxy = TempGalaxy(name = row_name,
                                         right_ascension = ra,
                                         declination = dec,
-                                        coordinate_system = row[COL_NAMES['coordinate_system']],
-                                        lensing_flag = row [COL_NAMES['lensing_flag']],
-                                        classification = row[COL_NAMES ['classification']],
-                                        notes = row [COL_NAMES['g_notes']],
+                                        coordinate_system = row_coordinate_system,
+                                        lensing_flag = row_lensing_flag,
+                                        classification = row_classification,
+                                        notes = row_g_notes,
                                         user_submitted = current_user.username,
                                         user_email = current_user.email,
                                         time_submitted = datetime.utcnow())
@@ -513,6 +654,7 @@ def entry_file():
                     tempgalaxy_id = int(tempgalaxy[0])
                     post = Post(tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
                     db.session.add(post)
+                    db.session.commit()
                 elif (check_same_temp_galaxy.first() != None) & (check_same_galaxy.first() == None):
                     new_id = check_same_temp_galaxy.first()
                     id = new_id [0]
@@ -522,49 +664,57 @@ def entry_file():
                     id = new_id [0]
                     from_existed = id
 
-                dict_frequency, message = test_frequency(to_none(row[COL_NAMES['emitted_frequency']]), row[COL_NAMES['species']].strip())
+                dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+
+
+
+                if row_freq_type == "z":
+                    frequency, positive_uncertainty = redshift_to_frequency(to_none(row_emitted_frequency), to_none( row_observed_line_frequency), to_none( row_line_width_uncertainty_positive), to_none( row_line_width_uncertainty_negative))
+                    negative_uncertainty = None
+                else:
+                    frequency = to_none( row_observed_line_frequency)
+                    positive_uncertainty = to_none( row_line_width_uncertainty_positive)
+                    negative_uncertainty = to_none( row_line_width_uncertainty_negative)
 
                 #checking if the same line already exists in db.
-                check_same_temp_line = db.session.query(TempLine.id).filter((TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == row[COL_NAMES['observed_line_frequency']].strip()) & (TempLine.galaxy_name == name) & (TempLine.species == row[COL_NAMES['species']].strip())).first()
-                check_same_line = db.session.query(Line.id).filter((Line.emitted_frequency == dict_frequency) & (Line.observed_line_frequency == row[COL_NAMES['observed_line_frequency']].strip()) & (Line.species == row[COL_NAMES['species']].strip())).first()
+                check_same_temp_line = db.session.query(TempLine.id).filter((TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (TempLine.galaxy_name == row_name) & (TempLine.species == row_species) & (TempLine.integrated_line_flux == to_none(row_integrated_line_flux)) & (TempLine.integrated_line_flux_uncertainty_positive == to_none(row_integrated_line_flux_uncertainty_positive))).first()
 
-                if (check_same_temp_line != None) & (check_same_line != None):
+                galaxy_id = db.session.query(Galaxy.id).filter_by(name=row_name).scalar()
 
-                    if row[COL_NAMES['freq_type']] == "z":
-                        frequency, positive_uncertainty = redshift_to_frequency(to_none(row [COL_NAMES['emitted_frequency']]), to_none( row ['observed_line_frequency']), to_none( row ['line_width_uncertainty_positive']), to_none( row ['line_width_uncertainty_negative']))
-                        negative_uncertainty = None
-                    else:
-                        frequency = to_none( row ['observed_line_frequency'])
-                        positive_uncertainty = to_none( row ['line_width_uncertainty_positive'])
-                        negative_uncertainty = to_none( row ['line_width_uncertainty_negative'])
+                check_same_line = db.session.query(Line.id).filter((Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (Line.observed_line_frequency == frequency) & (Line.integrated_line_flux == to_none(row_integrated_line_flux)) & (Line.integrated_line_flux_uncertainty_positive == to_none(row_integrated_line_flux_uncertainty_positive)) & (Line.species == row_species)).first()
+
+                #uploading if did not exist.
+                if (check_same_temp_line == None) & (check_same_line == None):
+
                     line = TempLine (galaxy_id = id,
                                     from_existed_id = from_existed,
                                     emitted_frequency = dict_frequency, 
-                                    species = row ['species'].strip(),  
-                                    integrated_line_flux =to_none( row ['integrated_line_flux']), 
-                                    integrated_line_flux_uncertainty_positive =to_none( row ['integrated_line_flux_uncertainty_positive']), 
-                                    integrated_line_flux_uncertainty_negative =to_none( row ['integrated_line_flux_uncertainty_negative']), 
-                                    peak_line_flux =to_none( row ['peak_line_flux']),
-                                    peak_line_flux_uncertainty_positive =to_none( row ['peak_line_flux_uncertainty_positive']),
-                                    peak_line_flux_uncertainty_negative=to_none( row ['peak_line_flux_uncertainty_negative']), 
-                                    line_width=to_none( row ['line_width']),
-                                    line_width_uncertainty_positive =to_none( row ['line_width_uncertainty_positive']),
-                                    line_width_uncertainty_negative =to_none( row ['line_width_uncertainty_negative']),
+                                    species = row_species,  
+                                    integrated_line_flux =to_none( row_integrated_line_flux), 
+                                    integrated_line_flux_uncertainty_positive =to_none( row_integrated_line_flux_uncertainty_positive), 
+                                    integrated_line_flux_uncertainty_negative =to_none( row_integrated_line_flux_uncertainty_negative), 
+                                    peak_line_flux =to_none(row_peak_line_flux),
+                                    peak_line_flux_uncertainty_positive =to_none( row_peak_line_flux_uncertainty_positive),
+                                    peak_line_flux_uncertainty_negative=to_none( row_peak_line_flux_uncertainty_negative), 
+                                    line_width=to_none( row_line_width),
+                                    line_width_uncertainty_positive =to_none( row_line_width_uncertainty_positive),
+                                    line_width_uncertainty_negative =to_none( row_line_width_uncertainty_negative),
                                     observed_line_frequency =frequency,
                                     observed_line_frequency_uncertainty_positive =positive_uncertainty,
                                     observed_line_frequency_uncertainty_negative =negative_uncertainty,
-                                    detection_type = row ['detection_type'],
-                                    observed_beam_major =to_none( row ['observed_beam_major']), 
-                                    observed_beam_minor =to_none( row ['observed_beam_minor']),
-                                    observed_beam_angle =to_none( row ['observed_beam_angle']),
-                                    reference = row ['reference'],
-                                    notes = row ['notes'],
+                                    detection_type = row_detection_type,
+                                    observed_beam_major =to_none( row_observed_beam_major), 
+                                    observed_beam_minor =to_none( row_observed_beam_minor),
+                                    observed_beam_angle =to_none( row_observed_beam_angle),
+                                    reference = row_reference,
+                                    notes = row_notes,
                                     user_submitted = current_user.username,
                                     user_email = current_user.email,
                                     time_submitted = datetime.utcnow(),
-                                    galaxy_name = row[COL_NAMES['name']]
+                                    galaxy_name = row_name
                                     )                
                     db.session.add(line)
+
                     try:
                         db.session.commit()
                         templine = db.session.query(func.max(TempLine.id)).first()
@@ -572,14 +722,14 @@ def entry_file():
                         post = Post(templine_id=templine_id, user_email = current_user.email, time_submitted = datetime.utcnow())
                         db.session.add(post)
                         db.session.commit()
-                        # flash ("Entry number {} has been successfully uploaded.".format(row_count))
+                        #flash ("Entry number {} has been successfully uploaded.".format(row_count))
                     except:
                         db.session.rollback()
                         raise
 
                 else:
                     #We don not add a line that already exists in db.
-                    continue
+                    pass
 
             flash('Entries have been successfully uploaded')
         else:
