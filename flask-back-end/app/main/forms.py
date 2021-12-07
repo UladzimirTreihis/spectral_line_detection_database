@@ -14,18 +14,18 @@ class EditProfileForm(FlaskForm):
     about_me = TextAreaField('About me', validators=[Length(min=0, max=140)])
     submit = SubmitField('Submit')
 
-    #Yet to understand the method
+    # Yet to understand the method
     def __init__(self, original_username, *args, **kwargs):
         super(EditProfileForm, self).__init__(*args, **kwargs)
         self.original_username = original_username
-    #if the username has changed to something but original_us  ername, then query if new username is not in the database, if it is, raise ValidationError
+    # If the username has changed to something but original_username, then query if new username is not in the database, if it is, raise ValidationError
     def validate_username(self, username):
         if username.data != self.original_username:
             user = User.query.filter_by(username=self.username.data).first()
             if user is not None:
                 raise ValidationError('Please use a different username')
 
-#The simple search form to desplay options also. Will need to redevelop to be either advanced or just simple search.
+# The simple search form to desplay options also. Will need to redevelop to be either advanced or just simple search.
 class SearchForm(FlaskForm):
     search = StringField('')
     submit = SubmitField('Search', validators=[DataRequired()])
@@ -58,7 +58,8 @@ class AdvancedSearchForm(FlaskForm):
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
     lensing_flag = SelectField(u'Lensing Flag',
         choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validate_choice=False)
-    #line data
+    
+    # Line data
 
     emitted_frequency_min = FloatField('Emitted Frequency from:', validators = [Optional (), NumberRange(min = 0)])
     emitted_frequency_max = FloatField('Emitted Frequency to:', validators = [Optional (), NumberRange(min = 0)])
@@ -118,7 +119,7 @@ class AddLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
    
-    emitted_frequency = FloatField('Emitted Frequency', validators = [DataRequired (), NumberRange(min = 0)])
+    emitted_frequency = StringField('Emitted Frequency', validators = [DataRequired ()])
     species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other')], validators = [DataRequired ()])
 
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
@@ -171,5 +172,5 @@ class EditLineForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class UploadFileForm(FlaskForm):
-    file = FileField('')
+    file = FileField('Choose file for Upload')
     submit = SubmitField('Submit')

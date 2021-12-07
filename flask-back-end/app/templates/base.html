@@ -28,10 +28,10 @@
                   </li>
                   {% else %}
                   <li class="list-inline-item">
-                  <a href="{{  url_for_security('logout') }}" class="btn btn-info " role="button">Logout</a>
+                  <a href="{{ url_for('main.user', username=current_user.username) }}" class = "btn btn-info " role = "button"> My Profile</a> 
                   </li>
                   <li class="list-inline-item">
-                  <a href="{{ url_for('main.user', username=current_user.username) }}" class = "btn btn-info " role = "button"> My Profile</a> 
+                  <a href="{{  url_for_security('logout') }}" class="btn btn-info " role="button">Logout</a>
                   </li>
                   {% endif %}
                   {% if current_user.has_role('admin') %}
@@ -39,26 +39,21 @@
                   <a href="{{ url_for('admin.index', username=current_user.username) }}" class = "btn btn-info " role = "button"> Go to Admin </a> 
                   </li>
                   {% endif %}
-
-                  {% if g.search_form %}
                   <li class="list-inline-item">
-                    <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.query_results') }}">
-                      <ul class="list-inline text-right" >
-                        <li class="list-inline-item">
-                          <div class="form-group">
-                            {{ g.search_form.search(size=20, class='form-control',placeholder=g.search_form.search.label.text) }}
-                          </div>
-                        </li>
-                        <li class="list-inline-item">
-                          <button type="submit" value="Search">
-                            {{ g.search_form.submit() }}
-                          </button>
-                        </li>
-                      </ul>
-                    </form> 
-                  </li>
-                  {% endif %}
+                    <a href="{{  url_for('main.home') }}">About Us</a>
+                  </li>  
+                  <li class="list-inline-item">
+                    <a href="{{  url_for('main.home') }}">Contact Us</a>
+                  </li>  
+
+               
                 </ul>
+
+                
+                 
+
+                
+
               </div>
             </div> 
         </nav>
@@ -79,5 +74,8 @@
             </ul>
             {% endif %}
             {% endwith %}
+           
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+            <script src="{{ url_for('static', filename='jquery.js') }}"></script>
     </body>
 </html>

@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, redirect, flash, request
+from flask import Blueprint, url_for, redirect, flash, request, jsonify, render_template
 from flask.cli import with_appcontext
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin, expose, BaseView, AdminIndexView
@@ -8,6 +8,7 @@ from flask_admin.contrib.sqla import form, filters as sqla_filters, tools
 from flask_login.utils import login_required
 from sqlalchemy.orm import session, aliased
 from sqlalchemy.sql import alias
+from sqlalchemy.sql.selectable import TableSample
 from app.models import User, Galaxy, Line, TempGalaxy, TempLine, Role, Post, EditGalaxy, EditLine
 from app import db, Session, admin, user_datastore
 from config import EMITTED_FREQUENCY
@@ -16,7 +17,7 @@ from flask_security import current_user
 from app.main.routes import galaxy, within_distance, ra_to_float, dec_to_float
 from wtforms.validators import Regexp, ValidationError
 from config import dec_reg_exp, ra_reg_exp
-
+import json
 
 bp = Blueprint('adm', __name__)
 
@@ -79,6 +80,47 @@ def update_redshift_error(session, galaxy_id, sum_upper):
                 Galaxy.id == galaxy_id
             ).update({"redshift_error": redshift_error_weighted})
             session.commit()
+
+def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False, temporary = False):
+    
+    '''
+    Takes in a point's coordinates \form_ra and \form_dec and a \distance to check if any galaxy from \query is within the \distance.
+    Employs Great-circle distance: https://en.wikipedia.org/wiki/Great-circle_distance
+    If the \distance is not provided, it is assumed to be 3 * Line.observed_beam_minor.
+    If Line.observed_beam_minor is not available, the distance is assumed to be 5 arcsec to be in an extreme proximity. 
+
+    Returns:
+    galaxies -- a query object containing all galaxies that satisfy the distance formula (type::Query). 
+
+    Parameters:
+    session -- the session in which the \query is evoked is passed (type::Session).
+
+    query -- predefined query object is passed containing galaxies that are to be considered in terms of their proximity 
+    to some point/galaxy with given coordinates. It has to contain the Galaxy & Line table data if the distance is not passed and \based_on_beam_angle == True
+    
+    form_ra -- right ascension of a point/galaxy
+    form_dec -- declination of a point/galaxy
+    distance -- circular distance away from the point with coordinates (\form_ra, \form_dec). (default 0)
+    based_on_beam_angle -- Boolean value to check whether user wants to search for galaxies with extreme proximity based on their Line.observed_beam_minor.
+    (default False)
+    temporary -- (type::Boolean), indicator if the check should be performed among not yet approved galaxies (TempGalaxy).
+    '''
+
+    if based_on_beam_angle == False:
+        galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < distance)
+        return galaxies
+    else:
+        if temporary == True:
+            galaxies = query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(TempGalaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(TempGalaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - TempGalaxy.declination)))   ) < func.radians(5/3600)) )
+        else:
+            subqry = session.query(func.max(Line.observed_beam_angle))
+            sub = subqry.first()
+            sub1 = sub[0]
+            if sub1  != None:
+                galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )   
+            else:
+                galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
+        return galaxies
 
 class GalaxyView (ModelView):
     def check_coords(form, coordinate_system):
@@ -355,50 +397,370 @@ class EditLineView(ModelView):
 
 class PostsView(BaseView):
 
-    @expose('/')
+    @expose('/', methods=['GET', 'POST'])
     def post_view(self):
+        if request.method == "POST":
+            session = Session()
+            data = request.form
+            dictionary = data.to_dict(flat=True)
+            for key in dictionary.keys():
+                dict_of_ids = json.loads(key)
+            for key, list_of_ids in dict_of_ids.items():
+                if key == 'delete':
+                    for id in list_of_ids:
+                        id = int(id)
+                        post = Post.query.filter_by(id=id).first()
+                        templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
+                        tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+                        editgalaxy_id  = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
+                        editline_id  = session.query(Post.editline_id).filter_by(id=id).scalar()
+                        if templine_id != None:
+                            templine = TempLine.query.filter_by(id=templine_id).first()
+                            db.session.delete (templine)
+                        elif tempgalaxy_id != None:
+                            tempgalaxy = TempGalaxy.query.filter_by(id=tempgalaxy_id).first()
+                            db.session.delete (tempgalaxy)
+                        elif editgalaxy_id != None:
+                            editgalaxy = EditGalaxy.query.filter_by(id=editgalaxy_id).first()
+                            db.session.delete(editgalaxy)
+                        else:
+                            editline = EditLine.query.filter_by(id=editline_id).first()
+                            db.session.delete(editline)
+                        db.session.delete (post)
+                        db.session.commit ()
+                elif key == 'approve':
+                    for id in list_of_ids:
+                        id = int(id)
+                        post = Post.query.filter_by(id=id).first()
+                        templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
+                        tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+                        editgalaxy_id  = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
+                        editline_id  = session.query(Post.editline_id).filter_by(id=id).scalar()
+
+                        if templine_id != None:
+                            
+                            templine = TempLine.query.filter_by(id=templine_id).first()
+
+                            line = session.query(TempLine.galaxy_id, TempLine.emitted_frequency, TempLine.integrated_line_flux, TempLine.integrated_line_flux_uncertainty_positive, TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux, TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative, TempLine.line_width, TempLine.line_width_uncertainty_positive, TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency, TempLine.observed_line_frequency_uncertainty_positive, TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type, TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle, TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted, TempLine.user_email, TempLine.admin_notes, TempLine.time_submitted, TempLine.species).filter(TempLine.id==templine_id).first()
+                                
+                            if (line [20] == None):
+                                # line [20] represents TempLine.from_existed_id
+                                raise Exception('You have not yet approved the galaxy to which the line belongs to')
+                            else:
+                                g_id = line [20]
+                            l = Line (galaxy_id = g_id, emitted_frequency = line [1], integrated_line_flux = line [2], integrated_line_flux_uncertainty_positive = line [3], integrated_line_flux_uncertainty_negative = line [4], peak_line_flux = line [5], peak_line_flux_uncertainty_positive = line [6], peak_line_flux_uncertainty_negative = line [7], line_width = line [8], line_width_uncertainty_positive = line [9], line_width_uncertainty_negative = line [10], observed_line_frequency = line [11], observed_line_frequency_uncertainty_positive = line [12], observed_line_frequency_uncertainty_negative = line [13], detection_type = line [14], observed_beam_major = line [15], observed_beam_minor = line [16], observed_beam_angle = line [17], reference = line [18], notes = line [19], user_submitted = line [21], user_email = line[22], species = line[25])
+                            db.session.add (l)
+                            db.session.commit ()
+                            total = update_redshift(session, g_id)
+                            update_redshift_error(session, g_id, total)
+                            db.session.delete (templine)
+                            db.session.commit ()
+
+
+
+                        elif tempgalaxy_id != None:
+
+                            tempgalaxy = TempGalaxy.query.filter_by(id=tempgalaxy_id).first()
+
+                            galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==tempgalaxy_id).first()
+
+                            g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+                            db.session.add (g)
+                            db.session.commit ()
+                            from_existed = session.query(func.max(Galaxy.id)).first()
+                            existed = from_existed[0]
+                            db.session.query(TempLine).filter(TempLine.galaxy_id == tempgalaxy_id).update({TempLine.from_existed_id: existed})
+                            db.session.delete (tempgalaxy)
+                            db.session.commit()
+
+                        elif editgalaxy_id != None:
+
+                            editgalaxy = EditGalaxy.query.filter_by(id=editgalaxy_id).first()
+
+                            galaxy = session.query(EditGalaxy.name, EditGalaxy.right_ascension, EditGalaxy.declination, EditGalaxy.coordinate_system, EditGalaxy.lensing_flag, EditGalaxy.classification, EditGalaxy.notes, EditGalaxy.original_id).filter(EditGalaxy.id==editgalaxy_id).first()
+                            original_id = galaxy [7]
+
+                            session.query(Galaxy).filter(
+                                Galaxy.id == original_id
+                            ).update({"name": galaxy[0], "right_ascension": galaxy[1], "declination": galaxy[2], "coordinate_system": galaxy[3], "lensing_flag": galaxy[4], "classification": galaxy[5], "notes": galaxy[6]})
+                            db.session.delete(editgalaxy)
+                            session.commit()
+
+
+                        else:
+
+                            editline = EditLine.query.filter_by(id=editline_id).first()
+                            line = session.query(EditLine.galaxy_id, EditLine.original_line_id, EditLine.emitted_frequency, EditLine.integrated_line_flux, EditLine.integrated_line_flux_uncertainty_positive, EditLine.integrated_line_flux_uncertainty_negative, EditLine.peak_line_flux, EditLine.peak_line_flux_uncertainty_positive, EditLine.peak_line_flux_uncertainty_negative, EditLine.line_width, EditLine.line_width_uncertainty_positive, EditLine.line_width_uncertainty_negative, EditLine.observed_line_frequency, EditLine.observed_line_frequency_uncertainty_positive, EditLine.observed_line_frequency_uncertainty_negative, EditLine.detection_type, EditLine.observed_beam_major, EditLine.observed_beam_minor, EditLine.observed_beam_angle, EditLine.reference, EditLine.notes, EditLine.species).filter(EditLine.id==editline_id).first()
+
+                            original_line_id = line[1]
+                            galaxy_id = line[0]
+
+                            session.query(Line).filter(
+                                Line.id == original_line_id
+                            ).update({"emitted_frequency": line[2], "integrated_line_flux": line[3], "integrated_line_flux_uncertainty_positive": line[4], "integrated_line_flux_uncertainty_negative": line[5], "peak_line_flux": line[6], "peak_line_flux_uncertainty_positive": line[7], "peak_line_flux_uncertainty_negative": line[8], "line_width": line[9], "line_width_uncertainty_positive": line[10], "line_width_uncertainty_negative": line[11], "observed_line_frequency": line[12], "observed_line_frequency_uncertainty_positive": line[13], "observed_line_frequency_uncertainty_negative": line[14], "detection_type": line[15], "observed_beam_major": line[16], "observed_beam_minor": line[17], "observed_beam_angle": line[18], "reference": line[19], "notes": line[20], "species": line[21]})
+
+
+                            total = update_redshift(session, galaxy_id)
+                            update_redshift_error(session, galaxy_id, total)
+                            db.session.commit ()
+                            #delete the edit
+                            db.session.delete(editline)
+
+                        db.session.delete (post)
+                        db.session.commit ()  
+                elif key == "check":
+                    count_of_similar_galaxies = 0
+                    dict_of_dict_of_similar = {}
+                    for id in list_of_ids:
+                        id = int(id)
+                        post = Post.query.filter_by(id=id).first()
+                        tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+                        if tempgalaxy_id == None:
+                            continue
+                        tempgalaxy = session.query(TempGalaxy).filter_by(id=tempgalaxy_id).first()
+                        right_ascension = tempgalaxy.right_ascension
+                        declination = tempgalaxy.declination
+                    
+                        galaxies=session.query(Galaxy, Line).outerjoin(Line)
+                        
+                        galaxies = within_distance(session, galaxies, right_ascension, declination, based_on_beam_angle=True)
+                        galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+                        dict_of_similar = {'similar_id': '', 'similar_name': '', 'similar_ra': '', 'similar_dec': '', 'investigated_id': '', 'investigated_name': '', 'investigated_ra': '', 'investigated_dec': ''}
+                        similar_galaxy = galaxies.first()
+                        if similar_galaxy != None:
+                            count_of_similar_galaxies += 1
+                            similar_id = str(similar_galaxy[0].id)
+                            similar_name = str(similar_galaxy[0].name)
+                            similar_ra = str(similar_galaxy[0].right_ascension)
+                            similar_dec = str(similar_galaxy[0].declination)
+                            investigated_id = str(tempgalaxy.id)
+                            investigated_name = str(tempgalaxy.name)
+                            investigated_ra = str(tempgalaxy.right_ascension)
+                            investigated_dec = str(tempgalaxy.declination)
+                            list_of_values = [similar_id, similar_name, similar_ra, similar_dec, investigated_id, investigated_name, investigated_ra, investigated_dec]
+                            dict_of_similar = dict(zip(dict_of_similar, list_of_values))
+                            dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
+                    return render_template('home.html', title= 'Test Home')
+
+                    
+
+
+
+
+
+
+
+
+
+
         session = Session()
- 
+        count_of_similar_galaxies = 0
+        dict_of_dict_of_similar = {}
+        list_of_tempgalaxy_ids = []
+        posts_of_galaxies = session.query(Post).filter(Post.tempgalaxy_id != None).all()
+        for query in posts_of_galaxies:
+            list_of_tempgalaxy_ids.append(query.tempgalaxy_id)
+        for id in list_of_tempgalaxy_ids:
+            id = int(id)
+            tempgalaxy = session.query(TempGalaxy).filter_by(id=id).first()
+            right_ascension = tempgalaxy.right_ascension
+            declination = tempgalaxy.declination
+
+
+        
+            galaxies=session.query(Galaxy, Line).outerjoin(Line)
+            
+            galaxies = within_distance(session, galaxies, right_ascension, declination, based_on_beam_angle=True)
+            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+
+            tempgalaxies=session.query(TempGalaxy)
+            tempgalaxies=within_distance(session, tempgalaxies, right_ascension, declination, based_on_beam_angle=True, temporary=True)
+
+            similar_galaxy = galaxies.first()
+            similar_tempgalaxy = tempgalaxies.first()
+
+            if similar_galaxy != None:
+                dict_of_similar = {'similar_id': '', 'similar_name': '', 'similar_ra': '', 'similar_dec': '', 'similar_lines_approved': '', 'similar_lines_waiting_approval': '', 'investigated_id': '', 'investigated_name': '', 'investigated_ra': '', 'investigated_dec': '', 'investigated_lines_approved': '', 'investigated_lines_waiting_approval': '', 'relationship': ''}
+
+                count_of_similar_galaxies += 1
+                similar_id = str(similar_galaxy[0].id)
+                similar_name = str(similar_galaxy[0].name)
+                similar_ra = str(similar_galaxy[0].right_ascension)
+                similar_dec = str(similar_galaxy[0].declination)
+                investigated_id = str(tempgalaxy.id)
+                investigated_name = str(tempgalaxy.name)
+                investigated_ra = str(tempgalaxy.right_ascension)
+                investigated_dec = str(tempgalaxy.declination)
+                # Lines count
+                similar_lines_waiting_approval_count = 0
+                similar_lines_approved_count = 0
+                investigated_lines_waiting_approval_count = 0
+                investigated_lines_approved_count = 0
+
+                investigated_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(TempLine.galaxy_id==id).scalar()
+                similar_lines_approved_count = session.query(func.count(Line.id)).filter(Line.galaxy_id==int(similar_id)).scalar()
+                similar_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(TempLine.from_existed_id==int(similar_id)).scalar()
+                
+                list_of_values = [similar_id, similar_name, similar_ra, similar_dec, similar_lines_approved_count, similar_lines_waiting_approval_count,  investigated_id, investigated_name, investigated_ra, investigated_dec, investigated_lines_approved_count, investigated_lines_waiting_approval_count, 'approved_temp']
+                dict_of_similar = dict(zip(dict_of_similar, list_of_values))
+                dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
+            
+            if (similar_tempgalaxy != None) & (similar_tempgalaxy.id != tempgalaxy.id):
+                dict_of_similar = {'similar_id': '', 'similar_name': '', 'similar_ra': '', 'similar_dec': '', 'similar_lines_approved': '', 'similar_lines_waiting_approval': '', 'investigated_id': '', 'investigated_name': '', 'investigated_ra': '', 'investigated_dec': '', 'investigated_lines_approved': '', 'investigated_lines_waiting_approval': '', 'relationship': ''}
+
+                count_of_similar_galaxies += 1
+                similar_id = str(similar_tempgalaxy.id)
+                similar_name = str(similar_tempgalaxy.name)
+                similar_ra = str(similar_tempgalaxy.right_ascension)
+                similar_dec = str(similar_tempgalaxy.declination)
+                investigated_id = str(tempgalaxy.id)
+                investigated_name = str(tempgalaxy.name)
+                investigated_ra = str(tempgalaxy.right_ascension)
+                investigated_dec = str(tempgalaxy.declination)
+                # Lines count
+                similar_lines_waiting_approval_count = 0
+                similar_lines_approved_count = 0
+                investigated_lines_waiting_approval_count = 0
+                investigated_lines_approved_count = 0
+
+                investigated_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(TempLine.galaxy_id==id).scalar()
+                similar_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(TempLine.galaxy_id==int(similar_id)).scalar()
+                
+                list_of_values = [similar_id, similar_name, similar_ra, similar_dec, similar_lines_approved_count, similar_lines_waiting_approval_count,  investigated_id, investigated_name, investigated_ra, investigated_dec, investigated_lines_approved_count, investigated_lines_waiting_approval_count, 'temp_temp']
+                dict_of_similar = dict(zip(dict_of_similar, list_of_values))
+                dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
+
+        
+
         posts_query = session.query(Post, TempGalaxy, TempLine, EditGalaxy, EditLine).select_from(Post).outerjoin(TempGalaxy, TempGalaxy.id == Post.tempgalaxy_id).outerjoin(TempLine, TempLine.id == Post.templine_id).outerjoin(EditGalaxy, EditGalaxy.id == Post.editgalaxy_id).outerjoin(EditLine, EditLine.id == Post.editline_id).all()
         #return self.render("/test_dump.html", posts_query=posts_query)
-        return self.render("/admin/posts.html", posts_query=posts_query)
+        return self.render("/admin/posts.html", posts_query=posts_query, dict_of_dict_of_similar=dict_of_dict_of_similar, count_of_similar_galaxies=count_of_similar_galaxies)
+
+
+@bp.route('/resolve/<main_id>/<other_id>/<type>/<relationship>', methods=["GET", "POST"])
+@login_required
+def resolve(main_id, other_id, type, relationship):
+    main_id = int(main_id)
+    other_id = int(other_id)
+    session = Session()
+
+    if relationship == 'approved_temp':
+        if type == "similar_to_investigated":
+
+            # Approve the galaxy first
+            tempgalaxy = TempGalaxy.query.filter_by(id=main_id).first()
+            post = Post.query.filter_by(tempgalaxy_id=main_id).first()
+
+            galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==main_id).first()
+            g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+            db.session.add (g)
+            db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+            db.session.commit()
+            db.session.delete (tempgalaxy)
+            db.session.commit()
+            db.session.delete(post)
+            db.session.commit()
+            
+            # Reassign temporary lines to the newly approved galaxy. 
+            lines = session.query(Line).filter(Line.galaxy_id==other_id).all()
+            for line in lines:
+                line.galaxy_id = existed
+
+            # Delete old approved galaxy
+            old_galaxy = session.query(Galaxy).filter_by(id=other_id).first()
+            db.session.delete(old_galaxy)
+            db.session.commit()
+
+        elif type == "investigated_to_similar":
+
+            db.session.query(TempLine).filter(TempLine.galaxy_id == other_id).update({TempLine.from_existed_id: main_id})
+            db.session.commit()
+            tempgalaxy = TempGalaxy.query.filter_by(id=other_id).first()
+            db.session.delete(tempgalaxy)
+            db.session.commit()
+    
+    elif relationship == 'temp_temp':
+
+        main = TempGalaxy.query.filter_by(id=main_id).first()
+        post_of_main = Post.query.filter_by(tempgalaxy_id=main_id).first()
+        other = TempGalaxy.query.filter_by(id=other_id).first()
+        post_of_other = Post.query.filter_by(tempgalaxy_id=other_id).first()
+
+        # Approve main
+        galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==main_id).first()
+        g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+        db.session.add (g)
+        db.session.commit ()
+        from_existed = session.query(func.max(Galaxy.id)).first()
+        existed = from_existed[0]
+        db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+        db.session.commit()
+        db.session.delete (main)
+        db.session.commit()
+        db.session.delete(post_of_main)
+        db.session.commit()
+
+        # Reassign temporary lines to the newly approved galaxy. 
+        lines = session.query(TempLine).filter(TempLine.galaxy_id==other_id).all()
+        for line in lines:
+            line.from_existed_id = existed
+
+        # Delete other tempgalaxy
+        db.session.delete(other)
+        db.session.commit()
+        db.session.delete(post_of_other)
+        db.session.commit()
+
+        
+
+    return redirect("/posts")
 
     #@action('delete',
      ##      'Are you sure you want to delete selected records?')
     #def action_delete(self, ids)
 
 
-@bp.route('/posts_delete/<ids>') 
+@bp.route('/posts_delete', methods=["GET", "POST"]) 
 @login_required  
-def posts_delete(ids):
+def posts_delete():
 
     '''
     Deletes the submission (unapproved) from the entire db.
     Used by admin/posts.
     
     '''
-    entries = request.form.getlist('rowid')
-    session = Session()
-    post = Post.query.filter_by(id=id).first()
-    templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
-    tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
-    editgalaxy_id  = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
-    editline_id  = session.query(Post.editline_id).filter_by(id=id).scalar()
-    if templine_id != None:
-        templine = TempLine.query.filter_by(id=templine_id).first()
-        db.session.delete (templine)
-    elif tempgalaxy_id != None:
-        tempgalaxy = TempGalaxy.query.filter_by(id=tempgalaxy_id).first()
-        db.session.delete (tempgalaxy)
-    elif editgalaxy_id != None:
-        editgalaxy = EditGalaxy.query.filter_by(id=editgalaxy_id).first()
-        db.session.delete(editgalaxy)
-    else:
-        editline = EditLine.query.filter_by(id=editline_id).first()
-        db.session.delete(editline)
-    db.session.delete (post)
-    db.session.commit ()    
-    return redirect("/posts")
+    try:
+        data = request.get_json()
+
+        return jsonify(status="success", data=data)
+    except:
+        ids_list = ['35', '36']
+        session = Session()
+        for id in ids_list:
+            id = int(id)
+            post = Post.query.filter_by(id=id).first()
+            templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
+            tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+            editgalaxy_id  = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
+            editline_id  = session.query(Post.editline_id).filter_by(id=id).scalar()
+            if templine_id != None:
+                templine = TempLine.query.filter_by(id=templine_id).first()
+                db.session.delete (templine)
+            elif tempgalaxy_id != None:
+                tempgalaxy = TempGalaxy.query.filter_by(id=tempgalaxy_id).first()
+                db.session.delete (tempgalaxy)
+            elif editgalaxy_id != None:
+                editgalaxy = EditGalaxy.query.filter_by(id=editgalaxy_id).first()
+                db.session.delete(editgalaxy)
+            else:
+                editline = EditLine.query.filter_by(id=editline_id).first()
+                db.session.delete(editline)
+            db.session.delete (post)
+            db.session.commit ()   
+        return redirect("/posts")
 
 @bp.route('/post_delete/<id>') 
 @login_required  
