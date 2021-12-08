@@ -4,12 +4,19 @@
     Advanced Search
 {% endblock %}
 
+{% block script %}
+
+{% endblock %}
+
 {% block content %}
 
 <hr>
 <h1> Advanced Search </h1>
-<form action= {{url_for('query_results')}} method='POST' id='galaxyForm'>
+<br>
+
+<form action= {{url_for('main.query_results')}} method='POST' id='galaxyForm'>
    {{form_advanced.hidden_tag() }}
+   <div class = "entry">
       <p>
             {{ form_advanced.name.label }}<br>
             {{ form_advanced.name(size=32) }}<br>
@@ -49,6 +56,44 @@
             {% endfor %}
          </p>
       </div>
+      <p>Alternatively, you can search within a radius</p>
+      <div style="display: flex;">
+         <p>
+            {{ form_advanced.right_ascension_point.label }}<br>
+            {{ form_advanced.right_ascension_point(size=20) }}<br>
+            {% for error in form_advanced.right_ascension_point.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.declination_point.label }}<br>
+            {{ form_advanced.declination_point(size=20) }}<br>
+            {% for error in form_advanced.declination_point.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.radius_d.label }}<br>
+            {{ form_advanced.radius_d(size=3) }}<br>
+            {% for error in form_advanced.radius_d.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.radius_m.label }}<br>
+            {{ form_advanced.radius_m(size=3) }}<br>
+            {% for error in form_advanced.radius_m.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.radius_s.label }}<br>
+            {{ form_advanced.radius_s(size=4) }}<br>
+            {% for error in form_advanced.radius_s.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+      </div>
       <div style="display: flex;">
          <p>
             {{ form_advanced.redshift_min.label }}<br>
@@ -75,30 +120,32 @@
 
       </p>
       <br>
+      </div>
+      <div class = "entry">
       <p>Here you can additionality sort galaxies that have at least one line that falls under the specified Line parameters</p>
       <div style="display: flex;">
          <p>
-            {{ form_advanced.j_upper_min.label }}<br>
-            {{ form_advanced.j_upper_min(size=20) }}<br>
-            {% for error in form_advanced.j_upper_min.errors %}
+            {{ form_advanced.emitted_frequency_min.label }}<br>
+            {{ form_advanced.emitted_frequency_min(size=20) }}<br>
+            {% for error in form_advanced.emitted_frequency_min.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
          <p>
-            {{ form_advanced.j_upper_max.label }}<br>
-            {{ form_advanced.j_upper_max(size=20) }}<br>
-            {% for error in form_advanced.j_upper_max.errors %}
+            {{ form_advanced.emitted_frequency_max.label }}<br>
+            {{ form_advanced.emitted_frequency_max(size=20) }}<br>
+            {% for error in form_advanced.emitted_frequency_max.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.species.label }}<br>
+            {{ form_advanced.species(size=3) }}<br>
+            {% for error in form_advanced.species.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
       </div>
-      <p>
-         {{ form_advanced.line_id_type.label }}<br>
-         {{ form_advanced.line_id_type(size=32) }}<br>
-         {% for error in form_advanced.line_id_type.errors %}
-         <span style="color: red;">[{{ error }}]</span>
-         {% endfor %}
-      </p>
       <div style="display: flex;">
          <p>
             {{ form_advanced.integrated_line_flux_min.label }}<br>
@@ -209,12 +256,24 @@
          <span style="color: red;">[{{ error }}]</span>
          {% endfor %}
       </p>
+      </div>
+      <div class = "buttons">
       <button type="button"> 
          {{ form_advanced.galaxySearch() }}
       </button>
       <button type="button"> 
          {{ form_advanced.lineSearch() }}
       </button>
+      </div>
+      <style>
+      .entry {
+            width: 50%;
+            float: left;
+      }
+      .buttons {
+         text-align: center;
+      }
+      </style>
 </form>
    
 
@@ -242,7 +301,7 @@
          {% set g = element[0] %}
          <tr>
             <td>{{ g.id }}</td>
-            <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+            <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ g.right_ascension }}</td>
             <td>{{ g.declination }}</td>
             <td>{{ g.coordinate_system }}</td>
@@ -263,7 +322,6 @@
       <tr>
          <th>Galaxy Name</th>
          <th>J Upper</th>
-         <th>Line ID Type</th>
          <th>Integrated Line Flux</th>
          <th>Integrated Line Flux Positive Uncertainty</th>
          <th>Integrated Line Flux Negative Uncertainty</th>
@@ -290,21 +348,44 @@
          {% set l = element[1] %}  
          {% set g = element[0] %}
          <tr>
-            <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+            <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ l.j_upper }}</td>
-            <td>{{ l.line_id_type }}</td>
             <td>{{ l.integrated_line_flux }}</td>
             <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-            <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
+            <td>
+               {% if l.integrated_line_flux_uncertainty_negative == None %}
+                  {{ l.integrated_line_flux_uncertainty_positive }}
+               {% else %}
+                  {{ l.integrated_line_flux_uncertainty_negative }}
+               {% endif %}
+            </td>
             <td>{{ l.peak_line_flux }}</td>
             <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-            <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
+            <td>
+               {% if l.peak_line_flux_uncertainty_negative == None %}
+                  {{ l.peak_line_flux_uncertainty_positive }}
+               {% else %}
+                  {{ l.peak_line_flux_uncertainty_negative }}
+               {% endif %}
+            </td>
             <td>{{ l.line_width }}</td>
             <td>{{ l.line_width_uncertainty_positive }}</td>
-            <td>{{ l.line_width_uncertainty_negative }}</td>
+            <td>
+               {% if l.line_width_uncertainty_negative == None %}
+                  {{ l.line_width_uncertainty_positive }}
+               {% else %}
+                  {{ l.line_width_uncertainty_negative }}
+               {% endif %}
+            </td>
             <td>{{ l.observed_line_frequency }}</td>
             <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
-            <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
+            <td>
+               {% if l.observed_line_frequency_uncertainty_negative == None %}
+                  {{ l.observed_line_frequency_uncertainty_positive }}
+               {% else %}
+                  {{ l.observed_line_frequency_uncertainty_negative }}
+               {% endif %}
+            </td>                
             <td>{{ l.detection_type }}</td>
             <td>{{ l.observed_beam_major }}</td>
             <td>{{ l.observed_beam_minor }}</td>
@@ -316,5 +397,4 @@
    </tbody>
 </table> 
 {% endif %}
-
 {% endblock %}

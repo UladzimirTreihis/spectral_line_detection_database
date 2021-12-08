@@ -1,11 +1,9 @@
-from app import app, db
-from app.models import User, Galaxy, Line
+from app import create_app
+from app.models import db, User, Galaxy, Line, Role
 
-if __name__ == "__main__":
-    app.run(debug = True, use_reloader = True) 
+
+app=create_app()
 
 @app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'User': User, 'Galaxy': Galaxy, 'Line': Line}
-
-from app import routes
+    return {'db': db, 'User': User, 'Galaxy': Galaxy, 'Line': Line, 'Role': Role}

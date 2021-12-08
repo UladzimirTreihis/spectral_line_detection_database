@@ -1,0 +1,32 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Test
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+
+
+
+<input type="checkbox" id="select-all" name="rowid" title="Select all records" onchange="checkAll(this)">
+
+<input type="checkbox" name="rowid"
+value="1" title="Select record">
+
+<input type="checkbox" name="rowid"
+value="2" title="Select record">
+
+<input type="checkbox" name="rowid"
+value="3" title="Select record">
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
+
+
+
+{% endblock %}

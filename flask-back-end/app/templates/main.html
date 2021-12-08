@@ -3,23 +3,31 @@
 {% block title %}
     Main 
 {% endblock %}
+{% block style %}
+<style>
+   ul#menu li {
+     display:inline;
+   }
+</style>
+{% endblock %}
 
 {% block content %}
-
+<div class="container">
 <hr>
 <h1> Main Page </h1>
 <p> This is the content for the main page. </p>
 <br>
 
-<a href="{{ url_for('galaxy_entry_form') }}" class="btn btn-info" role="button">Enter Galaxy Information Through a Form</a>
-<a href="{{ url_for('line_entry_form') }}" class="btn btn-info" role="button">Enter Line Information Through a Form</a>
-<a href="{{ url_for('entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
-<a href="{{ url_for('query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
+<a href="{{ url_for('main.galaxy_entry_form') }}" class="btn btn-info" role="button">Create a New Galaxy</a>
+<a href="{{ url_for('main.line_entry_form') }}" class="btn btn-info" role="button">Add a Line to an Existing Galaxy</a>
+<a href="{{ url_for('main.entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
+<a href="{{ url_for('main.query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
+
 <br>
 <br>
 {% if form %}
 <li class="list-inline-item">
-   <form class="navbar-form navbar-left" method="get" action="{{ url_for('query_results') }}">
+   <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.query_results') }}">
      <ul class="list-inline text-right" >
          <li class="list-inline-item">
             <div class="form-group">
@@ -43,97 +51,45 @@
 <table class = "table" id = "Galaxy">
          <thead>
             <tr>
-               <th>ID</th>
                <th>Name</th>
                <th>Right Ascension</th>
                <th>Declination</th>
-               <th>Coordinate System</th>
+               <th>Lines per Species</th>
                <th>Redshift</th>
-               <th>Lensing Flag</th>
                <th>Classification</th>
-               <th>Notes</th>
             </tr>
          </thead>
          
          <tbody>
-            {% for g in galaxy %}
+
+            {% for g, galaxy_count in galaxies|zip(count_list) %}
+
                <tr>
-                  <td>{{ g.id }}</td>
-                  <td><a href="{{ url_for('galaxy', name=g.name) }}">{{ g.name }}</a></td>
+                  <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
                   <td>{{ g.right_ascension }}</td>
                   <td>{{ g.declination }}</td>
-                  <td>{{ g.coordinate_system }}</td>
+                  {% set id = g.id %}
+                  <td>
+                     <ul id="menu">
+                     {% for species in list_of_lines_per_species[galaxy_count] %}
+                        <li>{{species}}</li>
+                     {% endfor %}
+                     </ul>
+                  </td>
                   <td>{{ g.redshift }}</td>
-                  <td>{{ g.lensing_flag }}</td>
                   <td>{{ g.classification }}</td>
-                  <td>{{ g.notes }}</td>
                </tr>
+               
             {% endfor %}
          </tbody>
       </table>
 
-<a href="{{ url_for ('convert_to_CSV', table = "Galaxy") }}" class="btn btn-info" role="button">Download as CSV</a>
+<a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy", identifier = "None", symmetrical = "False") }}" class="btn btn-info" role="button">Download All Galaxies as CSV</a>
+<a href="{{ url_for ('main.convert_to_CSV', table = "Everything", identifier = "None", symmetrical = "False") }}" class="btn btn-info" role="button">Download All Galaxies and Lines as CSV</a>
 
 <br> 
 <br>
 
-<h2> Line </h2>
-    <table class = "table" id = "Line">
-         <thead>
-            <tr>
-               <th>Galaxy ID</th>
-               <th>J Upper</th>
-               <th>Line ID Type</th>
-               <th>Integrated Line Flux</th>
-               <th>Integrated Line Flux Positive Uncertainty</th>
-               <th>Integrated Line Flux Negative Uncertainty</th>
-               <th>Peak Line Flux</th>
-               <th>Peak Line Flux Positive Uncertainty</th>
-               <th>Peak Line Flux Negative Uncertainty</th>
-               <th>Line Width</th>
-               <th>Line Width Positive Uncertainty</th>
-               <th>Line Width Negative Uncertainty</th>
-               <th>Observed Line Frequency</th>
-               <th>Observed Line Frequency Positive Uncertainty</th>
-               <th>Observed Line Frequency Negative Uncertainty</th>
-               <th>Detection Type</th>
-               <th>Observed Beam Major</th>
-               <th>Observed Beam Minor</th>
-               <th>Observed Beam Angle</th>
-               <th>Reference</th>
-               <th>Notes</th>
-            </tr>
-         </thead>
-         
-         <tbody>
-            {% for l in line %}
-               <tr>
-                  <td>{{ l.galaxy_id }}</td>
-                  <td>{{ l.j_upper }}</td>
-                  <td>{{ l.line_id_type }}</td>
-                  <td>{{ l.integrated_line_flux }}</td>
-                  <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-                  <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
-                  <td>{{ l.peak_line_flux }}</td>
-                  <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-                  <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
-                  <td>{{ l.line_width }}</td>
-                  <td>{{ l.line_width_uncertainty_positive }}</td>
-                  <td>{{ l.line_width_uncertainty_negative }}</td>
-                  <td>{{ l.observed_line_frequency }}</td>
-                  <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
-                  <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
-                  <td>{{ l.detection_type }}</td>
-                  <td>{{ l.observed_beam_major }}</td>
-                  <td>{{ l.observed_beam_minor }}</td>
-                  <td>{{ l.observed_beam_angle }}</td>
-                  <td>{{ l.reference }}</td>
-                  <td>{{ l.notes }}</td>
-               </tr>
-            {% endfor %}
-         </tbody>
-      </table>
 
-<a href="{{ url_for ('convert_to_CSV', table = "Line") }}" class="btn btn-info" role="button">Download as CSV</a>
-
+</div>
 {% endblock %}
