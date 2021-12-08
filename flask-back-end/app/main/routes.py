@@ -1,6 +1,3 @@
-from operator import ne
-from flask.globals import session
-from sqlalchemy.sql.expression import false, outerjoin, true
 from app import db, Session, engine
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from app.models import Galaxy, User, Line, TempGalaxy, TempLine, Post, EditGalaxy, EditLine
@@ -8,7 +5,6 @@ from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalax
 from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
-from sqlalchemy.sql import text
 from config import *
 from io import TextIOWrapper
 from flask_security import current_user, login_required, roles_required
