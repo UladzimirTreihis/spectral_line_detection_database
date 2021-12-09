@@ -681,38 +681,85 @@ def resolve(main_id, other_id, type, relationship):
             tempgalaxy = TempGalaxy.query.filter_by(id=other_id).first()
             db.session.delete(tempgalaxy)
             db.session.commit()
+
+        elif type == "different":
+            # Approve temporary first
+            galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==other_id).first()
+            g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+            db.session.add (g)
+            db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+            db.session.commit()
+            # Remember similarity
+            galaxy_2_id = existed
+            galaxy_1_id = main_id
+            db.session.query(Galaxy).filter(Galaxy.id == galaxy_1_id).update({Line.is_similar: galaxy_2_id})
+            db.session.commit()
+            db.session.query(Galaxy).filter(Galaxy.id == galaxy_2_id).update({Line.is_similar: galaxy_1_id})
+            db.session.commit()
     
     elif relationship == 'temp_temp':
+        if type == "different":
+            # Approve both galaxies
+            # 1
+            galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==other_id).first()
+            g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+            db.session.add (g)
+            db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+            db.session.commit()
+            galaxy_1_id = existed
+            # 2
+            galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==main_id).first()
+            g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+            db.session.add (g)
+            db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+            db.session.commit()
+            galaxy_2_id = existed
 
-        main = TempGalaxy.query.filter_by(id=main_id).first()
-        post_of_main = Post.query.filter_by(tempgalaxy_id=main_id).first()
-        other = TempGalaxy.query.filter_by(id=other_id).first()
-        post_of_other = Post.query.filter_by(tempgalaxy_id=other_id).first()
+            # Remember similarity
+            db.session.query(Galaxy).filter(Galaxy.id == galaxy_1_id).update({Line.is_similar: galaxy_2_id})
+            db.session.commit()
+            db.session.query(Galaxy).filter(Galaxy.id == galaxy_2_id).update({Line.is_similar: galaxy_1_id})
+            db.session.commit()
 
-        # Approve main
-        galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==main_id).first()
-        g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
-        db.session.add (g)
-        db.session.commit ()
-        from_existed = session.query(func.max(Galaxy.id)).first()
-        existed = from_existed[0]
-        db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
-        db.session.commit()
-        db.session.delete (main)
-        db.session.commit()
-        db.session.delete(post_of_main)
-        db.session.commit()
+        else:
+            main = TempGalaxy.query.filter_by(id=main_id).first()
+            post_of_main = Post.query.filter_by(tempgalaxy_id=main_id).first()
+            other = TempGalaxy.query.filter_by(id=other_id).first()
+            post_of_other = Post.query.filter_by(tempgalaxy_id=other_id).first()
 
-        # Reassign temporary lines to the newly approved galaxy. 
-        lines = session.query(TempLine).filter(TempLine.galaxy_id==other_id).all()
-        for line in lines:
-            line.from_existed_id = existed
+            # Approve main
+            galaxy = session.query(TempGalaxy.name, TempGalaxy.right_ascension, TempGalaxy.declination, TempGalaxy.coordinate_system, TempGalaxy.lensing_flag, TempGalaxy.classification, TempGalaxy.notes).filter(TempGalaxy.id==main_id).first()
+            g = Galaxy (name = galaxy[0], right_ascension = galaxy[1], declination = galaxy[2], coordinate_system = galaxy[3], lensing_flag = galaxy [4], classification = galaxy[5], notes = galaxy [6])
+            db.session.add (g)
+            db.session.commit ()
+            from_existed = session.query(func.max(Galaxy.id)).first()
+            existed = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+            db.session.commit()
+            db.session.delete (main)
+            db.session.commit()
+            db.session.delete(post_of_main)
+            db.session.commit()
 
-        # Delete other tempgalaxy
-        db.session.delete(other)
-        db.session.commit()
-        db.session.delete(post_of_other)
-        db.session.commit()
+            # Reassign temporary lines to the newly approved galaxy. 
+            lines = session.query(TempLine).filter(TempLine.galaxy_id==other_id).all()
+            for line in lines:
+                line.from_existed_id = existed
+
+            # Delete other tempgalaxy
+            db.session.delete(other)
+            db.session.commit()
+            db.session.delete(post_of_other)
+            db.session.commit()
 
         
 

@@ -1,0 +1,99 @@
+2021-12-10 03:08:09,168 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 03:08:09,172 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 03:08:09,173 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 03:08:09,173 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 03:08:09,174 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 03:08:09,174 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 03:08:09,175 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 03:08:09,177 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 03:09:44,428 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/adm/__init__.py', reloading
+2021-12-10 03:09:45,472 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 03:09:45,475 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 03:09:45,475 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 03:09:45,475 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 03:09:45,476 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 03:09:45,476 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 03:09:45,476 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 03:09:45,477 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 03:10:51,899 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2021-12-10 03:10:52,874 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 03:10:52,878 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 03:10:52,879 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 03:10:52,879 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 03:10:52,879 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 03:10:52,880 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 03:10:52,880 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 03:10:52,881 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 03:11:01,306 INFO werkzeug Thread-3 : 127.0.0.1 - - [10/Dec/2021 03:11:01] "GET /main HTTP/1.1" 200 -
+2021-12-10 03:11:01,374 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Dec/2021 03:11:01] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2021-12-10 03:11:01,479 INFO werkzeug Thread-5 : 127.0.0.1 - - [10/Dec/2021 03:11:01] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2021-12-10 03:11:03,023 INFO werkzeug Thread-6 : 127.0.0.1 - - [10/Dec/2021 03:11:03] "[35m[1mGET /contribute HTTP/1.1[0m" 500 -
+2021-12-10 03:11:03,073 INFO werkzeug Thread-7 : 127.0.0.1 - - [10/Dec/2021 03:11:03] "GET /contribute?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2021-12-10 03:11:03,074 INFO werkzeug Thread-8 : 127.0.0.1 - - [10/Dec/2021 03:11:03] "GET /contribute?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2021-12-10 03:11:03,087 INFO werkzeug Thread-9 : 127.0.0.1 - - [10/Dec/2021 03:11:03] "GET /contribute?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2021-12-10 03:11:03,112 INFO werkzeug Thread-10 : 127.0.0.1 - - [10/Dec/2021 03:11:03] "GET /contribute?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2021-12-10 03:13:28,564 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/__init__.py', reloading
+2021-12-10 03:13:29,529 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 03:13:29,533 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 03:13:29,534 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 03:13:29,534 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 03:13:29,535 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 03:13:29,535 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 03:13:29,536 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 03:13:29,538 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 03:13:54,480 INFO werkzeug Thread-3 : 127.0.0.1 - - [10/Dec/2021 03:13:54] "GET /query_results HTTP/1.1" 200 -
+2021-12-10 03:13:54,547 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Dec/2021 03:13:54] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2021-12-10 03:13:54,597 INFO werkzeug Thread-5 : 127.0.0.1 - - [10/Dec/2021 03:13:54] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2021-12-10 03:13:56,259 INFO werkzeug Thread-6 : 127.0.0.1 - - [10/Dec/2021 03:13:56] "GET /main HTTP/1.1" 200 -
+2021-12-10 03:13:56,323 INFO werkzeug Thread-7 : 127.0.0.1 - - [10/Dec/2021 03:13:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2021-12-10 03:13:56,383 INFO werkzeug Thread-8 : 127.0.0.1 - - [10/Dec/2021 03:13:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2021-12-10 03:13:59,019 INFO werkzeug Thread-9 : 127.0.0.1 - - [10/Dec/2021 03:13:59] "[35m[1mGET /contribute HTTP/1.1[0m" 500 -
+2021-12-10 03:13:59,068 INFO werkzeug Thread-11 : 127.0.0.1 - - [10/Dec/2021 03:13:59] "GET /contribute?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2021-12-10 03:13:59,069 INFO werkzeug Thread-10 : 127.0.0.1 - - [10/Dec/2021 03:13:59] "GET /contribute?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2021-12-10 03:13:59,086 INFO werkzeug Thread-12 : 127.0.0.1 - - [10/Dec/2021 03:13:59] "GET /contribute?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2021-12-10 03:13:59,106 INFO werkzeug Thread-13 : 127.0.0.1 - - [10/Dec/2021 03:13:59] "GET /contribute?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2021-12-10 05:41:42,916 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2021-12-10 05:41:44,029 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 05:41:44,033 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 05:41:44,035 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 05:41:44,035 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 05:41:44,035 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 05:41:44,035 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 05:41:44,036 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 05:41:44,037 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 05:42:17,133 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2021-12-10 05:42:17,825 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 05:42:17,827 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 05:42:17,828 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 05:42:17,828 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 05:42:17,828 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 05:42:17,828 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 05:42:17,829 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 05:42:17,830 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 05:46:55,467 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/config.py', reloading
+2021-12-10 05:46:56,427 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 05:46:56,430 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 05:46:56,431 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 05:46:56,431 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 05:46:56,432 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 05:46:56,432 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 05:46:56,432 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 05:46:56,433 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 05:53:58,591 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/config.py', reloading
+2021-12-10 05:53:59,545 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 05:53:59,548 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 05:53:59,549 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 05:53:59,549 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 05:53:59,549 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 05:53:59,549 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 05:53:59,550 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 05:53:59,551 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2021-12-10 05:55:30,300 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/config.py', reloading
+2021-12-10 05:55:31,393 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2021-12-10 05:55:31,397 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2021-12-10 05:55:31,398 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2021-12-10 05:55:31,398 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2021-12-10 05:55:31,399 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2021-12-10 05:55:31,399 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2021-12-10 05:55:31,400 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2021-12-10 05:55:31,403 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>

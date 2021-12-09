@@ -48,6 +48,9 @@ def create_math_functions_on_connect(dbapi_connection, connection_record):
 Session = sessionmaker()
 Session.configure(bind=engine)
 
+logging.basicConfig(filename='record.log', level=logging.DEBUG, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+
+
 #create the instance of flask app
 def create_app(config_class = DevelopmentConfig):
     app = Flask(__name__)
@@ -130,20 +133,26 @@ def create_app(config_class = DevelopmentConfig):
             secure = None
             if app.config['MAIL_USE_TLS']:
                 secure()
-            mail_handler = SMTPHandler(mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']), fromaddr='no-reply@' + app.config['MAIL_SERVER'], toaddrs=app.config['ADMINS'], subject='Datavase Failure', credentials=auth, secure=secure) 
+            mail_handler = SMTPHandler(mailhost=(app.config['MAIL_SERVER'], app.config['MAIL_PORT']), fromaddr='no-reply@' + app.config['MAIL_SERVER'], toaddrs=app.config['ADMINS'], subject='Database Failure', credentials=auth, secure=secure) 
             mail_handler.setLevel(logging.ERROR)
             app.logger.addHandler(mail_handler)
         #Logs files function properly
-        if not os.path.exists('logs'):
-            os.mkdir('logs')
-        file_handler = RotatingFileHandler('logs/database.log', maxBytes=10240, backupCount=10)
-        formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
-        file_handler.setFormatter(formatter)
-        file_handler.setLevel(logging.INFO)
-        app.logger.addHandler(file_handler)
 
-        app.logger.setLevel(logging.INFO)
-        app.logger.info('App startup')
+        if app.config['LOG_TO_STDOUT']:
+            stream_handler = logging.StreamHandler()
+            stream_handler.setLevel(logging.INFO)
+            app.logger.addHandler(stream_handler)
+        else:
+            if not os.path.exists('logs'):
+                os.mkdir('logs')
+            file_handler = RotatingFileHandler('logs/database.log', maxBytes=10240, backupCount=10)
+            formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]')
+            file_handler.setFormatter(formatter)
+            file_handler.setLevel(logging.INFO)
+            app.logger.addHandler(file_handler)
+
+            app.logger.setLevel(logging.INFO)
+            app.logger.info('App startup')
     
     return app
 

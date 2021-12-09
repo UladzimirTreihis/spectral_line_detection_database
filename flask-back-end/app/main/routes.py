@@ -1,4 +1,4 @@
-from app import db, Session, engine
+from app import db, Session, engine 
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from app.models import Galaxy, User, Line, TempGalaxy, TempLine, Post, EditGalaxy, EditLine
 from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalaxyForm, AddLineForm, EditLineForm, AdvancedSearchForm, UploadFileForm
@@ -63,7 +63,6 @@ def test():
 
 
 @bp.route("/main", methods=['GET', 'POST']) 
-@login_required
 def main():
     
     '''
@@ -72,8 +71,7 @@ def main():
     On authenticated access: returns main menu and table with galaxy data
     '''
 
-    if current_user.is_authenticated:
-        form = SearchForm()
+    form = SearchForm()
     session = Session()
     galaxies = session.query(Galaxy).all()
     galaxies_count = session.query(Galaxy.id).count()
@@ -96,6 +94,20 @@ def main():
     lines = session.query(Line.galaxy_id, Line.species).distinct().all()
 
     return render_template("/main.html", galaxies=galaxies, lines=lines, list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
+
+@bp.route('/contribute', methods=['GET'])
+def contribute():
+
+    bp.logger.info("/contribute accessed")
+
+    '''
+    Route with instructions on how to contribute to the database
+
+    On authenticated access: returns an instruction page with follow-up buttons to select the method of contribution. 
+    '''
+
+    return render_template("contribute.html")
+
 
 def to_empty(entry):
     
@@ -211,7 +223,6 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
     
 #Is expected to redirect here to display the results. 
 @bp.route("/query_results", methods=['GET', 'POST'])
-@login_required
 def query_results():
     '''
     Search data route
@@ -1406,7 +1417,6 @@ def process():
     return jsonify({'error': 'missing data..'})
 
 @bp.route('/galaxy/<name>', methods=['GET', 'POST'])
-@login_required
 def galaxy(name):
 
     '''
