@@ -849,8 +849,7 @@ def entry_file():
                 similar_galaxy = galaxies.first()
                 similar_tempgalaxy = tempgalaxies.first()
 
-                check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec) & (TempGalaxy.name == row_name))
-                check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec) & (Galaxy.name == row_name))
+                
                 # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
                 if (similar_tempgalaxy == None) & (similar_galaxy == None):
 
