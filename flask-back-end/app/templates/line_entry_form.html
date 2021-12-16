@@ -32,6 +32,20 @@
         <p> If the Galaxy you're looking for does not exist, go to the Add a New Galaxy Page. </p>
         <p>{{ form.galaxy_form() }}</p>
         <p>
+            {{ form.right_ascension.label }}<br>
+            {{ form.right_ascension(size=32) }}<br>
+            {% for error in form.right_ascension.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.declination.label }}<br>
+            {{ form.declination(size=32) }}<br>
+            {% for error in form.declination.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
             {{ form.emitted_frequency.label }}<br>
             {{ form.emitted_frequency(size=32) }}<br>
             {% for error in form.emitted_frequency.errors %}

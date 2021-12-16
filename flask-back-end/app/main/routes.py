@@ -1,3 +1,4 @@
+from sqlalchemy.orm import session
 from app import db, Session, engine 
 from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
 from app.models import Galaxy, User, Line, TempGalaxy, TempLine, Post, EditGalaxy, EditLine
@@ -184,7 +185,7 @@ def check_decimal(entry):
 
 
 
-def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False):
+def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False, temporary = False):
     
     '''
     Takes in a point's coordinates \form_ra and \form_dec and a \distance to check if any galaxy from \query is within the \distance.
@@ -206,22 +207,26 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
     distance -- circular distance away from the point with coordinates (\form_ra, \form_dec). (default 0)
     based_on_beam_angle -- Boolean value to check whether user wants to search for galaxies with extreme proximity based on their Line.observed_beam_minor.
     (default False)
+    temporary -- (type::Boolean), indicator if the check should be performed among not yet approved galaxies (TempGalaxy).
     '''
 
     if based_on_beam_angle == False:
         galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < distance)
         return galaxies
     else:
-        subqry = session.query(func.max(Line.observed_beam_angle))
-        sub = subqry.first()
-        sub1 = sub[0]
-        if sub1  != None:
-            galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )   
+        if temporary == True:
+            galaxies = query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(TempGalaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(TempGalaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - TempGalaxy.declination)))   ) < func.radians(5/3600)) )
         else:
-            galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
+            subqry = session.query(func.max(Line.observed_beam_angle))
+            sub = subqry.first()
+            sub1 = sub[0]
+            if sub1  != None:
+                galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )   
+            else:
+                galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
         return galaxies
     
-#Is expected to redirect here to display the results. 
+# Add line search given Line coordinates?
 @bp.route("/query_results", methods=['GET', 'POST'])
 def query_results():
     '''
@@ -592,6 +597,34 @@ def test_frequency_for_family(family, species_type, input_frequency_str):
 
         return False, message  
 
+def update_right_ascension(galaxy_id):
+    session = Session()
+    lines = session.query(Line.right_ascension).filter(Line.galaxy_id==galaxy_id).all()
+    total = 0
+    count = 0
+    for line in lines:
+        total += line
+        count += 1
+    if count != 0:
+        right_ascension = total / count
+        return right_ascension
+    else: 
+        return False
+    
+def update_declination(galaxy_id):
+    session = Session()
+    lines = session.query(Line.declination).filter(Line.galaxy_id==galaxy_id).all()
+    total = 0
+    count = 0
+    for line in lines:
+        total += line
+        count += 1
+    if count != 0:
+        declination = total / count
+        return declination
+    else: 
+        return False
+
 
 @bp.route("/entry_file", methods=['GET', 'POST'])
 @login_required
@@ -805,10 +838,21 @@ def entry_file():
                 dec = dec_to_float(row_declination)
 
                 # Check whether this galaxy entry has been previously uploaded and/or approved
+                session = Session()
+                galaxies=session.query(Galaxy, Line).outerjoin(Line).filter(Galaxy.name == row_name)
+                galaxies = within_distance(session, galaxies, ra, dec, based_on_beam_angle=True)
+                galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+
+                tempgalaxies=session.query(TempGalaxy).filter(TempGalaxy.name == row_name)
+                tempgalaxies=within_distance(session, tempgalaxies, ra, dec, based_on_beam_angle=True, temporary=True)
+
+                similar_galaxy = galaxies.first()
+                similar_tempgalaxy = tempgalaxies.first()
+
                 check_same_temp_galaxy = db.session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == ra) & (TempGalaxy.declination == dec) & (TempGalaxy.name == row_name))
                 check_same_galaxy = db.session.query(Galaxy.id).filter((Galaxy.right_ascension == ra) & (Galaxy.declination == dec) & (Galaxy.name == row_name))
                 # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
-                if (check_same_temp_galaxy.first() == None) & (check_same_galaxy.first() == None):
+                if (similar_tempgalaxy == None) & (similar_galaxy == None):
 
                     galaxy = TempGalaxy(name = row_name,
                                         right_ascension = ra,
@@ -830,14 +874,12 @@ def entry_file():
                     db.session.add(post)
                     db.session.commit()
                 # If this galaxy has been previously uploaded but not yet approved / deleted, then remember id to assign the corresponding line submission. 
-                elif (check_same_temp_galaxy.first() != None) & (check_same_galaxy.first() == None):
-                    new_id = check_same_temp_galaxy.first()
-                    id = new_id [0]
+                elif (similar_tempgalaxy != None) & (similar_galaxy == None):
+                    id = similar_tempgalaxy.id
                     from_existed = None
                 # If this galaxy has been previously approved and is stored in db, then remember id to assign the correspondin line submissions. 
                 else:
-                    new_id = check_same_galaxy.first()
-                    id = new_id [0]
+                    id = similar_galaxy[0].id
                     from_existed = id
 
                 dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
@@ -887,7 +929,9 @@ def entry_file():
                                     user_submitted = current_user.username,
                                     user_email = current_user.email,
                                     time_submitted = datetime.utcnow(),
-                                    galaxy_name = row_name
+                                    galaxy_name = row_name,
+                                    right_ascension = ra,
+                                    declination = dec
                                     )                
                     db.session.add(line)
 
@@ -969,6 +1013,12 @@ def dec_to_float(coordinates):
             dec = coordinates
         return float(dec)
 
+def ra_to_string(ra_float):
+    pass
+
+def dec_to_string(dec_float):
+    pass
+
 @bp.route("/galaxy_entry_form", methods=['GET', 'POST'])
 @login_required
 def galaxy_entry_form():
@@ -996,17 +1046,25 @@ def galaxy_entry_form():
                 RA = ra_to_float(form.right_ascension.data)
             except:
                 RA = form.right_ascension.data 
+
+
+            # Check whether this galaxy entry has been previously uploaded and/or approved
             galaxies=session.query(Galaxy, Line).outerjoin(Line)
             galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            check_same_temp_galaxy = session.query(TempGalaxy.id).filter((TempGalaxy.right_ascension == RA) & (TempGalaxy.declination == DEC) & (TempGalaxy.name == form.name.data))
 
-            if (galaxies.first() != None) or (check_same_temp_galaxy.first() != None):
-                if galaxies.first() != None:
+            tempgalaxies=session.query(TempGalaxy)
+            tempgalaxies=within_distance(session, tempgalaxies, RA, DEC, based_on_beam_angle=True, temporary=True)
+
+            similar_galaxy = galaxies.first()
+            similar_tempgalaxy = tempgalaxies.first()
+
+            if (similar_galaxy != None) or (similar_tempgalaxy != None):
+                if similar_galaxy != None:
                     another_exists = True
                 else:
                     another_exists = False
-                if check_same_temp_galaxy.first() != None:
+                if similar_tempgalaxy != None:
                     same_temp_exists = True
                 else:
                     same_temp_exists = False
@@ -1031,10 +1089,8 @@ def galaxy_entry_form():
                 RA = ra_to_float(form.right_ascension.data)
             except:
                 RA = form.right_ascension.data 
-            galaxies=session.query(Galaxy, Line).outerjoin(Line)
-            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
-            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), time_submitted = datetime.utcnow())
+
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, time_submitted = datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()
             tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
@@ -1080,9 +1136,7 @@ def galaxy_edit_form(id):
                 RA = ra_to_float(form.right_ascension.data)
             except:
                 RA = float(form.right_ascension.data)
-            galaxies=session.query(Galaxy, Line).outerjoin(Line)
-            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
-            galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
+
             changes = ""
             if (galaxy.name != form.name.data):
                 changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
@@ -1098,7 +1152,7 @@ def galaxy_edit_form(id):
                 changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + form.classification.data
             if (galaxy.notes != form.notes.data):
                 changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = str(galaxies.all()), is_edited = changes, original_id = original_id)
+            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
             db.session.commit()
 
@@ -1288,7 +1342,33 @@ def line_entry_form():
 
             # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
             if (check_same_line == None) & (check_same_temp_line == None):
-                line = TempLine(galaxy_id=id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, from_existed_id = existed, galaxy_name = name)
+                line = TempLine(galaxy_id=id, 
+                                emitted_frequency=form.emitted_frequency.data, 
+                                species=form.species.data, 
+                                integrated_line_flux = form.integrated_line_flux.data, 
+                                integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data,
+                                integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, 
+                                peak_line_flux = form.peak_line_flux.data, 
+                                peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, 
+                                peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, 
+                                line_width=form.line_width.data, 
+                                line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
+                                line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
+                                observed_line_frequency = frequency, 
+                                observed_line_frequency_uncertainty_positive = positive_uncertainty, 
+                                observed_line_frequency_uncertainty_negative = negative_uncertainty, 
+                                detection_type = form.detection_type.data, 
+                                observed_beam_major = form.observed_beam_major.data, 
+                                observed_beam_minor = form.observed_beam_minor.data, 
+                                observed_beam_angle = form.observed_beam_angle.data, 
+                                reference = form.reference.data, 
+                                notes = form.notes.data, 
+                                user_submitted = current_user.username, 
+                                user_email = current_user.email, 
+                                from_existed_id = existed, 
+                                galaxy_name = name,
+                                right_ascension = form.right_ascension.data,
+                                declination = form.declination.data)
                 db.session.add(line)
                 db.session.commit()
                 templine = session.query(func.max(TempLine.id)).first()

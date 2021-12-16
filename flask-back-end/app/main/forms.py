@@ -100,8 +100,6 @@ class AddGalaxyForm(FlaskForm):
 
 class EditGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
-    right_ascension = StringField('Right Ascension', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), DataRequired ()])
-    declination = StringField('Declination', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), DataRequired ()])
     submit_anyway = SubmitField('Submit Anyway')
     do_not_submit = SubmitField('No, go back to Home. ')
     coordinate_system = StringField('Coordinate System - J2000 or ICRS only', validators = [DataRequired ()])
@@ -120,6 +118,9 @@ class AddLineForm(FlaskForm):
    
     emitted_frequency = StringField('Emitted Frequency', validators = [DataRequired ()])
     species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other')], validators = [DataRequired ()])
+
+    right_ascension = StringField('Right Ascension', validators = [DataRequired ()])
+    declination = StringField('Declination', validators = [DataRequired ()])
 
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
     integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
