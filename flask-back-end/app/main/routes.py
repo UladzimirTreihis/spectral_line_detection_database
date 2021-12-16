@@ -99,8 +99,6 @@ def main():
 @bp.route('/contribute', methods=['GET'])
 def contribute():
 
-    bp.logger.info("/contribute accessed")
-
     '''
     Route with instructions on how to contribute to the database
 
