@@ -45,7 +45,7 @@
                     <a href="{{ url_for('adm.resolve', main_id=value['similar_id'], other_id=value['investigated_id'], type='investigated_to_similar', relationship=value['relationship']) }}">Keep galaxy 2 main</a>
                 </button>
                 <button>
-                    These are different galaxies
+                    <a href="{{ url_for('adm.resolve', main_id=value['similar_id'], other_id=value['investigated_id'], type='different', relationship=value['relationship']) }}">These are different galaxies</a>
                 </button>
             </td>
         </tr>

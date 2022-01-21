@@ -37,7 +37,13 @@ class Galaxy(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     lines = db.relationship('Line', backref='galaxy', lazy='dynamic')  
+    approved_user_email = db.Column(db.String(128))
+    approved_username = db.Column(db.String(128))
+    approved_time = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 
     def as_dict(self):
         return {'name': self.name}
@@ -81,8 +87,8 @@ class EditGalaxy(db.Model):
     name = db.Column(db.String(128), nullable = False)
     is_similar = db.Column(db.String(128))
     is_edited = db.Column(db.String(128))    
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
     coordinate_system = db.Column(db.String(128), nullable = False)
     redshift = db.Column(db.Float(32))
     redshift_error = db.Column(db.Float(32))
@@ -135,6 +141,14 @@ class Line(db.Model):
     notes = db.Column(db.String(128))  
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime)
+    approved_user_email = db.Column(db.String(128))
+    approved_username = db.Column(db.String(128))
+    approved_time = db.Column(db.DateTime, default=datetime.utcnow)
+    right_ascension = db.Column(db.Float(32), nullable = False) 
+    declination = db.Column(db.Float(32), nullable = False) 
+
+
 
 class TempLine(db.Model):
     __tablename__ = 'templine'
@@ -164,9 +178,11 @@ class TempLine(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
-    admin_notes = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
+    right_ascension = db.Column(db.Float(32), nullable = False) 
+    declination = db.Column(db.Float(32), nullable = False) 
+
 
 class EditLine(db.Model):
     __tablename__ = 'editline'
@@ -197,9 +213,11 @@ class EditLine(db.Model):
     notes = db.Column(db.String(128))
     user_submitted = db.Column(db.String(128))
     user_email = db.Column(db.String(128))
-    admin_notes = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
+    right_ascension = db.Column(db.Float(32), nullable = False) 
+    declination = db.Column(db.Float(32), nullable = False) 
+
 
 
 
