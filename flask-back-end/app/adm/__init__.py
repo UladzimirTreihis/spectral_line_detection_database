@@ -460,7 +460,7 @@ class PostsView(BaseView):
                                 # line [20] represents TempLine.from_existed_id
                                 raise Exception('You have not yet approved the galaxy to which the line belongs to')
                             else:
-                                g_id = templine.galaxy_id
+                                g_id = templine.from_existed_id
                             l = Line(galaxy_id = g_id, 
                                     emitted_frequency = templine.emitted_frequency, 
                                     integrated_line_flux = templine.integrated_line_flux, 
@@ -750,10 +750,9 @@ def resolve(main_id, other_id, type, relationship):
             db.session.add (g)
             db.session.commit ()
             from_existed = session.query(func.max(Galaxy.id)).first()
-            existed = from_existed[0]
-            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
+            galaxy_1_id = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == other_id).update({TempLine.from_existed_id: galaxy_1_id})
             db.session.commit()
-            galaxy_1_id = existed
             db.session.delete(galaxy)
             db.session.commit()
             db.session.delete(post)
@@ -765,13 +764,12 @@ def resolve(main_id, other_id, type, relationship):
             db.session.add (g)
             db.session.commit ()
             from_existed = session.query(func.max(Galaxy.id)).first()
-            existed = from_existed[0]
-            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: existed})
-            db.session.commit()
-            galaxy_2_id = existed
-            db.session.delete(galaxy)
+            galaxy_2_id = from_existed[0]
+            db.session.query(TempLine).filter(TempLine.galaxy_id == main_id).update({TempLine.from_existed_id: galaxy_2_id})
             db.session.commit()
             db.session.delete(galaxy)
+            db.session.commit()
+            db.session.delete(post)
             db.session.commit()
 
             # Remember similarity

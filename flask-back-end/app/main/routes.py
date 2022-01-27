@@ -695,9 +695,14 @@ def entry_file():
                     if row_coordinate_system != "ICRS" and row_coordinate_system != "J2000":
                         validated = False
                         flash ("Entry " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
-                    if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "l" and row_lensing_flag != "u":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"Either\", \"u\" under {}.".format(row_lensing_flag))
+                    if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "":
+                        if row_lensing_flag != "L" and row_lensing_flag != "U" and row_lensing_flag != "l" and row_lensing_flag != "u":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"L\", \"U\" under {}.".format(row_lensing_flag))
+                        else:
+                            if row_lensing_flag == "U" or row_lensing_flag == "u":
+                                row_lensing_flag = "Unlensed"
+                            else: row_lensing_flag = "Lensed"
                     if row_classification == "":
                         validated = False
                         flash ("Entry " + str(row_count) + ": Classification is Mandatory")
