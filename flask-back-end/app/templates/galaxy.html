@@ -5,15 +5,16 @@
 {% endblock %}
 
 {% block content %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
     <h2> Galaxy Details </h2>
     <table class = "table" id = "Galaxy">
         <thead>
         <tr>
-            <th>ID</th>
             <th>Name</th>
-            <th>Right Ascension</th>
-            <th>Declination</th>
+            <th>Average R.A.</th>
+            <th>Average Dec.</th>
             <th>Coordinate System</th>
             <th>Redshift</th>
             <th>Lensing Flag</th>
@@ -24,7 +25,6 @@
         
         <tbody>
             <tr>
-                <td>{{ galaxy.id }}</td>
                 <td>{{ galaxy.name }}</td>
                 <td>{{ galaxy.right_ascension }}</td>
                 <td>{{ galaxy.declination }}</td>
@@ -38,37 +38,37 @@
     </table>
 
     <h2> Lines in this Galaxy </h2>
-        <table class = "table" id = "Line">
+        <table class = "table" id = "Line" style="width: 100%">
             <thead>
                 <tr>
-                <th>Emitted Frequency</th>
-                <th>Species</th>
-                <th>Integrated Line Flux</th>
-                <th>Integrated Line Flux Positive Uncertainty</th>
-                <th>Integrated Line Flux Negative Uncertainty</th>
-                <th>Peak Line Flux</th>
-                <th>Peak Line Flux Positive Uncertainty</th>
-                <th>Peak Line Flux Negative Uncertainty</th>
-                <th>Line Width</th>
-                <th>Line Width Positive Uncertainty</th>
-                <th>Line Width Negative Uncertainty</th>
-                <th>Observed Line Frequency</th>
-                <th>Observed Line Frequency Positive Uncertainty</th>
-                <th>Observed Line Frequency Negative Uncertainty</th>
-                <th>Detection Type</th>
-                <th>Observed Beam Major</th>
-                <th>Observed Beam Minor</th>
-                <th>Observed Beam Angle</th>
-                <th>Reference</th>
-                <th>Notes</th>
+                    <th>\( Species \)</th>
+                    <th>\( f_{rest} \) \( (GHz) \)</th>
+                    <th>\( S \Delta V \) \((Jy \ km \ s^{-1}) \)</th>
+                    <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+                    <th>Integrated Line Flux Negative Uncertainty</th>
+                    <th>Peak Line Flux</th>
+                    <th>Peak Line Flux Positive Uncertainty</th>
+                    <th>Peak Line Flux Negative Uncertainty</th>
+                    <th>Line Width</th>
+                    <th>Line Width Positive Uncertainty</th>
+                    <th>Line Width Negative Uncertainty</th>
+                    <th>Observed Line Frequency</th>
+                    <th>Observed Line Frequency Positive Uncertainty</th>
+                    <th>Observed Line Frequency Negative Uncertainty</th>
+                    <th>Detection Type</th>
+                    <th>Observed Beam Major</th>
+                    <th>Observed Beam Minor</th>
+                    <th>Observed Beam Angle</th>
+                    <th>Reference</th>
+                    <th>Notes</th>
                 </tr>
             </thead>
             
             <tbody>
                 {% for l in line %}
                 <tr>
-                    <td>{{ l.emitted_frequency }}</td>
                     <td>{{ l.species }}</td>
+                    <td>{{ l.emitted_frequency }}</td>
                     <td>{{ l.integrated_line_flux }}</td>
                     <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
                     <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>

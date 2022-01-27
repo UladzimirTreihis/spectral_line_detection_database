@@ -92,7 +92,7 @@ class AddGalaxyForm(FlaskForm):
     submit_anyway = SubmitField('Submit Anyway')
     do_not_submit = SubmitField('No, go back to Home. ')
     coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS')], validators = [DataRequired ()])
-    lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validators = [DataRequired ()])
+    lensing_flag = SelectField(u'Is it gravitationally lensed?', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')], validators = [DataRequired ()])
     classification = StringField('Classification', validators = [DataRequired ()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
