@@ -4862,3 +4862,233 @@ IndexError: tuple index out of range
 2022-01-28 17:55:18,423 INFO werkzeug Thread-387 : 127.0.0.1 - - [28/Jan/2022 17:55:18] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
 2022-01-28 17:58:38,948 INFO werkzeug Thread-388 : 127.0.0.1 - - [28/Jan/2022 17:58:38] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
 2022-01-28 17:58:38,999 INFO werkzeug Thread-389 : 127.0.0.1 - - [28/Jan/2022 17:58:38] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:30:49,117 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-28 21:30:49,121 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-28 21:30:49,122 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-28 21:30:49,122 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-28 21:30:49,123 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-28 21:30:49,123 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-28 21:30:49,124 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-28 21:30:49,126 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 21:30:49,254 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-28 21:30:49,255 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-28 21:30:50,003 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-28 21:30:50,007 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-28 21:30:50,008 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-28 21:30:50,008 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-28 21:30:50,009 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-28 21:30:50,009 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-28 21:30:50,010 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-28 21:30:50,012 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 21:30:57,856 INFO werkzeug Thread-3 : 127.0.0.1 - - [28/Jan/2022 21:30:57] "[35m[1mGET /galaxy_edit_form/1 HTTP/1.1[0m" 500 -
+2022-01-28 21:30:57,923 INFO werkzeug Thread-4 : 127.0.0.1 - - [28/Jan/2022 21:30:57] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2022-01-28 21:30:57,923 INFO werkzeug Thread-5 : 127.0.0.1 - - [28/Jan/2022 21:30:57] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2022-01-28 21:30:57,954 INFO werkzeug Thread-6 : 127.0.0.1 - - [28/Jan/2022 21:30:57] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-28 21:30:58,141 INFO werkzeug Thread-7 : 127.0.0.1 - - [28/Jan/2022 21:30:58] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-28 21:31:10,816 INFO werkzeug Thread-8 : 127.0.0.1 - - [28/Jan/2022 21:31:10] "[35m[1mGET /galaxy_edit_form/1 HTTP/1.1[0m" 500 -
+2022-01-28 21:31:10,887 INFO werkzeug Thread-9 : 127.0.0.1 - - [28/Jan/2022 21:31:10] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2022-01-28 21:31:10,888 INFO werkzeug Thread-10 : 127.0.0.1 - - [28/Jan/2022 21:31:10] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2022-01-28 21:31:10,906 INFO werkzeug Thread-11 : 127.0.0.1 - - [28/Jan/2022 21:31:10] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-28 21:31:10,936 INFO werkzeug Thread-12 : 127.0.0.1 - - [28/Jan/2022 21:31:10] "GET /galaxy_edit_form/1?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-28 21:35:01,844 INFO werkzeug Thread-13 : 127.0.0.1 - - [28/Jan/2022 21:35:01] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:35:01,910 INFO werkzeug Thread-14 : 127.0.0.1 - - [28/Jan/2022 21:35:01] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:36:13,860 INFO werkzeug Thread-15 : 127.0.0.1 - - [28/Jan/2022 21:36:13] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:36:13,937 INFO werkzeug Thread-16 : 127.0.0.1 - - [28/Jan/2022 21:36:13] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:41:49,380 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-28 21:41:49,384 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-28 21:41:49,386 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-28 21:41:49,386 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-28 21:41:49,387 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-28 21:41:49,388 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-28 21:41:49,389 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-28 21:41:49,391 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 21:41:49,531 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-28 21:41:49,533 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-28 21:41:50,249 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-28 21:41:50,252 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-28 21:41:50,253 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-28 21:41:50,253 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-28 21:41:50,254 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-28 21:41:50,254 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-28 21:41:50,255 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-28 21:41:50,257 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 21:41:55,501 INFO werkzeug Thread-3 : 127.0.0.1 - - [28/Jan/2022 21:41:55] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:41:55,573 INFO werkzeug Thread-4 : 127.0.0.1 - - [28/Jan/2022 21:41:55] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:42:23,346 INFO werkzeug Thread-5 : 127.0.0.1 - - [28/Jan/2022 21:42:23] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:42:23,421 INFO werkzeug Thread-6 : 127.0.0.1 - - [28/Jan/2022 21:42:23] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:42:48,989 INFO werkzeug Thread-7 : 127.0.0.1 - - [28/Jan/2022 21:42:48] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:42:49,059 INFO werkzeug Thread-8 : 127.0.0.1 - - [28/Jan/2022 21:42:49] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:45:48,026 INFO werkzeug Thread-9 : 127.0.0.1 - - [28/Jan/2022 21:45:48] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:45:48,093 INFO werkzeug Thread-10 : 127.0.0.1 - - [28/Jan/2022 21:45:48] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:46:14,261 INFO werkzeug Thread-11 : 127.0.0.1 - - [28/Jan/2022 21:46:14] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:46:14,329 INFO werkzeug Thread-12 : 127.0.0.1 - - [28/Jan/2022 21:46:14] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:52:35,399 INFO werkzeug Thread-13 : 127.0.0.1 - - [28/Jan/2022 21:52:35] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:52:35,471 INFO werkzeug Thread-14 : 127.0.0.1 - - [28/Jan/2022 21:52:35] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:53:05,540 INFO werkzeug Thread-15 : 127.0.0.1 - - [28/Jan/2022 21:53:05] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:53:05,614 INFO werkzeug Thread-16 : 127.0.0.1 - - [28/Jan/2022 21:53:05] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:55:03,187 INFO werkzeug Thread-17 : 127.0.0.1 - - [28/Jan/2022 21:55:03] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:55:03,255 INFO werkzeug Thread-18 : 127.0.0.1 - - [28/Jan/2022 21:55:03] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 21:56:06,841 INFO werkzeug Thread-19 : 127.0.0.1 - - [28/Jan/2022 21:56:06] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 21:56:06,906 INFO werkzeug Thread-20 : 127.0.0.1 - - [28/Jan/2022 21:56:06] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 22:00:15,587 INFO werkzeug Thread-21 : 127.0.0.1 - - [28/Jan/2022 22:00:15] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 22:00:15,657 INFO werkzeug Thread-22 : 127.0.0.1 - - [28/Jan/2022 22:00:15] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 22:55:25,791 INFO werkzeug Thread-23 : 127.0.0.1 - - [28/Jan/2022 22:55:25] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 22:55:25,858 INFO werkzeug Thread-24 : 127.0.0.1 - - [28/Jan/2022 22:55:25] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 22:55:56,783 INFO werkzeug Thread-25 : 127.0.0.1 - - [28/Jan/2022 22:55:56] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 22:55:56,853 INFO werkzeug Thread-26 : 127.0.0.1 - - [28/Jan/2022 22:55:56] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 22:56:37,182 INFO werkzeug Thread-27 : 127.0.0.1 - - [28/Jan/2022 22:56:37] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 22:56:37,250 INFO werkzeug Thread-28 : 127.0.0.1 - - [28/Jan/2022 22:56:37] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 22:58:00,731 INFO werkzeug Thread-29 : 127.0.0.1 - - [28/Jan/2022 22:58:00] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 22:58:00,804 INFO werkzeug Thread-30 : 127.0.0.1 - - [28/Jan/2022 22:58:00] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 22:59:27,991 INFO werkzeug Thread-31 : 127.0.0.1 - - [28/Jan/2022 22:59:27] "GET /main HTTP/1.1" 200 -
+2022-01-28 22:59:28,063 INFO werkzeug Thread-32 : 127.0.0.1 - - [28/Jan/2022 22:59:28] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:03:15,707 INFO werkzeug Thread-33 : 127.0.0.1 - - [28/Jan/2022 23:03:15] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:03:15,771 INFO werkzeug Thread-34 : 127.0.0.1 - - [28/Jan/2022 23:03:15] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:03:40,092 INFO werkzeug Thread-35 : 127.0.0.1 - - [28/Jan/2022 23:03:40] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:03:40,171 INFO werkzeug Thread-36 : 127.0.0.1 - - [28/Jan/2022 23:03:40] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:04:10,111 INFO werkzeug Thread-37 : 127.0.0.1 - - [28/Jan/2022 23:04:10] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:04:10,185 INFO werkzeug Thread-38 : 127.0.0.1 - - [28/Jan/2022 23:04:10] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:05:16,438 INFO werkzeug Thread-39 : 127.0.0.1 - - [28/Jan/2022 23:05:16] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:05:16,510 INFO werkzeug Thread-40 : 127.0.0.1 - - [28/Jan/2022 23:05:16] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:05:24,819 INFO werkzeug Thread-41 : 127.0.0.1 - - [28/Jan/2022 23:05:24] "GET /user/admin HTTP/1.1" 200 -
+2022-01-28 23:05:26,566 INFO werkzeug Thread-42 : 127.0.0.1 - - [28/Jan/2022 23:05:26] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:05:26,624 INFO werkzeug Thread-43 : 127.0.0.1 - - [28/Jan/2022 23:05:26] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:06:13,149 INFO werkzeug Thread-44 : 127.0.0.1 - - [28/Jan/2022 23:06:13] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:06:13,229 INFO werkzeug Thread-45 : 127.0.0.1 - - [28/Jan/2022 23:06:13] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:07:52,327 INFO werkzeug Thread-46 : 127.0.0.1 - - [28/Jan/2022 23:07:52] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:07:52,395 INFO werkzeug Thread-47 : 127.0.0.1 - - [28/Jan/2022 23:07:52] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:08:13,181 INFO werkzeug Thread-48 : 127.0.0.1 - - [28/Jan/2022 23:08:13] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:08:13,245 INFO werkzeug Thread-49 : 127.0.0.1 - - [28/Jan/2022 23:08:13] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:09:35,394 INFO werkzeug Thread-50 : 127.0.0.1 - - [28/Jan/2022 23:09:35] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:09:35,467 INFO werkzeug Thread-51 : 127.0.0.1 - - [28/Jan/2022 23:09:35] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:09:59,092 INFO werkzeug Thread-52 : 127.0.0.1 - - [28/Jan/2022 23:09:59] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:09:59,168 INFO werkzeug Thread-53 : 127.0.0.1 - - [28/Jan/2022 23:09:59] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:14:47,431 INFO werkzeug Thread-54 : 127.0.0.1 - - [28/Jan/2022 23:14:47] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:14:47,499 INFO werkzeug Thread-55 : 127.0.0.1 - - [28/Jan/2022 23:14:47] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:15:25,522 INFO werkzeug Thread-56 : 127.0.0.1 - - [28/Jan/2022 23:15:25] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:15:25,595 INFO werkzeug Thread-57 : 127.0.0.1 - - [28/Jan/2022 23:15:25] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:16:44,930 INFO werkzeug Thread-58 : 127.0.0.1 - - [28/Jan/2022 23:16:44] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:16:44,997 INFO werkzeug Thread-59 : 127.0.0.1 - - [28/Jan/2022 23:16:44] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:17:31,297 INFO werkzeug Thread-60 : 127.0.0.1 - - [28/Jan/2022 23:17:31] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:17:31,360 INFO werkzeug Thread-61 : 127.0.0.1 - - [28/Jan/2022 23:17:31] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:18:43,222 INFO werkzeug Thread-62 : 127.0.0.1 - - [28/Jan/2022 23:18:43] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:18:43,289 INFO werkzeug Thread-63 : 127.0.0.1 - - [28/Jan/2022 23:18:43] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:20:18,864 INFO werkzeug Thread-64 : 127.0.0.1 - - [28/Jan/2022 23:20:18] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:20:18,935 INFO werkzeug Thread-65 : 127.0.0.1 - - [28/Jan/2022 23:20:18] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:22:55,552 INFO werkzeug Thread-66 : 127.0.0.1 - - [28/Jan/2022 23:22:55] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:22:55,618 INFO werkzeug Thread-67 : 127.0.0.1 - - [28/Jan/2022 23:22:55] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:32:05,306 INFO werkzeug Thread-68 : 127.0.0.1 - - [28/Jan/2022 23:32:05] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:32:05,370 INFO werkzeug Thread-69 : 127.0.0.1 - - [28/Jan/2022 23:32:05] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:32:08,653 INFO werkzeug Thread-70 : 127.0.0.1 - - [28/Jan/2022 23:32:08] "GET /query_results HTTP/1.1" 200 -
+2022-01-28 23:32:16,661 INFO werkzeug Thread-71 : 127.0.0.1 - - [28/Jan/2022 23:32:16] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:32:16,731 INFO werkzeug Thread-72 : 127.0.0.1 - - [28/Jan/2022 23:32:16] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:32:19,837 INFO werkzeug Thread-73 : 127.0.0.1 - - [28/Jan/2022 23:32:19] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:32:19,901 INFO werkzeug Thread-74 : 127.0.0.1 - - [28/Jan/2022 23:32:19] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:33:22,895 INFO werkzeug Thread-75 : 127.0.0.1 - - [28/Jan/2022 23:33:22] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:33:22,960 INFO werkzeug Thread-76 : 127.0.0.1 - - [28/Jan/2022 23:33:22] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:35:59,652 INFO werkzeug Thread-77 : 127.0.0.1 - - [28/Jan/2022 23:35:59] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:35:59,724 INFO werkzeug Thread-78 : 127.0.0.1 - - [28/Jan/2022 23:35:59] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:37:16,008 INFO werkzeug Thread-79 : 127.0.0.1 - - [28/Jan/2022 23:37:16] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:37:16,068 INFO werkzeug Thread-80 : 127.0.0.1 - - [28/Jan/2022 23:37:16] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:38:46,442 INFO werkzeug Thread-81 : 127.0.0.1 - - [28/Jan/2022 23:38:46] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:38:46,510 INFO werkzeug Thread-82 : 127.0.0.1 - - [28/Jan/2022 23:38:46] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:39:04,372 INFO werkzeug Thread-83 : 127.0.0.1 - - [28/Jan/2022 23:39:04] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:39:04,440 INFO werkzeug Thread-84 : 127.0.0.1 - - [28/Jan/2022 23:39:04] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:39:07,718 INFO werkzeug Thread-85 : 127.0.0.1 - - [28/Jan/2022 23:39:07] "GET /query_results HTTP/1.1" 200 -
+2022-01-28 23:39:10,118 INFO werkzeug Thread-86 : 127.0.0.1 - - [28/Jan/2022 23:39:10] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:39:10,181 INFO werkzeug Thread-87 : 127.0.0.1 - - [28/Jan/2022 23:39:10] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:39:13,586 INFO werkzeug Thread-88 : 127.0.0.1 - - [28/Jan/2022 23:39:13] "GET /user/admin HTTP/1.1" 200 -
+2022-01-28 23:39:15,257 INFO werkzeug Thread-89 : 127.0.0.1 - - [28/Jan/2022 23:39:15] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:39:15,318 INFO werkzeug Thread-90 : 127.0.0.1 - - [28/Jan/2022 23:39:15] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:39:17,038 INFO werkzeug Thread-91 : 127.0.0.1 - - [28/Jan/2022 23:39:17] "GET /query_results HTTP/1.1" 200 -
+2022-01-28 23:39:18,179 INFO werkzeug Thread-92 : 127.0.0.1 - - [28/Jan/2022 23:39:18] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:39:18,244 INFO werkzeug Thread-93 : 127.0.0.1 - - [28/Jan/2022 23:39:18] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:39:18,916 INFO werkzeug Thread-94 : 127.0.0.1 - - [28/Jan/2022 23:39:18] "GET /contribute HTTP/1.1" 200 -
+2022-01-28 23:39:20,150 INFO werkzeug Thread-95 : 127.0.0.1 - - [28/Jan/2022 23:39:20] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:39:20,208 INFO werkzeug Thread-96 : 127.0.0.1 - - [28/Jan/2022 23:39:20] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:39:29,474 INFO werkzeug Thread-97 : 127.0.0.1 - - [28/Jan/2022 23:39:29] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:39:29,552 INFO werkzeug Thread-98 : 127.0.0.1 - - [28/Jan/2022 23:39:29] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:42:40,055 INFO werkzeug Thread-99 : 127.0.0.1 - - [28/Jan/2022 23:42:40] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:42:40,122 INFO werkzeug Thread-100 : 127.0.0.1 - - [28/Jan/2022 23:42:40] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:42:41,416 INFO werkzeug Thread-101 : 127.0.0.1 - - [28/Jan/2022 23:42:41] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:42:41,490 INFO werkzeug Thread-102 : 127.0.0.1 - - [28/Jan/2022 23:42:41] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:48:09,050 INFO werkzeug Thread-103 : 127.0.0.1 - - [28/Jan/2022 23:48:09] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:48:09,120 INFO werkzeug Thread-104 : 127.0.0.1 - - [28/Jan/2022 23:48:09] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:48:33,487 INFO werkzeug Thread-105 : 127.0.0.1 - - [28/Jan/2022 23:48:33] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:48:33,554 INFO werkzeug Thread-106 : 127.0.0.1 - - [28/Jan/2022 23:48:33] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:48:35,570 INFO werkzeug Thread-107 : 127.0.0.1 - - [28/Jan/2022 23:48:35] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:48:35,638 INFO werkzeug Thread-108 : 127.0.0.1 - - [28/Jan/2022 23:48:35] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:53:57,116 INFO werkzeug Thread-109 : 127.0.0.1 - - [28/Jan/2022 23:53:57] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:53:57,177 INFO werkzeug Thread-110 : 127.0.0.1 - - [28/Jan/2022 23:53:57] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:54:06,263 INFO werkzeug Thread-111 : 127.0.0.1 - - [28/Jan/2022 23:54:06] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:54:06,326 INFO werkzeug Thread-112 : 127.0.0.1 - - [28/Jan/2022 23:54:06] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:54:07,798 INFO werkzeug Thread-113 : 127.0.0.1 - - [28/Jan/2022 23:54:07] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:54:07,867 INFO werkzeug Thread-114 : 127.0.0.1 - - [28/Jan/2022 23:54:07] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:55:14,250 INFO werkzeug Thread-115 : 127.0.0.1 - - [28/Jan/2022 23:55:14] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:55:14,320 INFO werkzeug Thread-116 : 127.0.0.1 - - [28/Jan/2022 23:55:14] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:55:28,759 INFO werkzeug Thread-117 : 127.0.0.1 - - [28/Jan/2022 23:55:28] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:55:28,830 INFO werkzeug Thread-118 : 127.0.0.1 - - [28/Jan/2022 23:55:28] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:55:31,530 INFO werkzeug Thread-119 : 127.0.0.1 - - [28/Jan/2022 23:55:31] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:55:31,597 INFO werkzeug Thread-120 : 127.0.0.1 - - [28/Jan/2022 23:55:31] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:55:40,301 INFO werkzeug Thread-121 : 127.0.0.1 - - [28/Jan/2022 23:55:40] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:55:40,374 INFO werkzeug Thread-122 : 127.0.0.1 - - [28/Jan/2022 23:55:40] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:55:41,516 INFO werkzeug Thread-123 : 127.0.0.1 - - [28/Jan/2022 23:55:41] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:55:41,589 INFO werkzeug Thread-124 : 127.0.0.1 - - [28/Jan/2022 23:55:41] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:56:18,765 INFO werkzeug Thread-125 : 127.0.0.1 - - [28/Jan/2022 23:56:18] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:56:18,841 INFO werkzeug Thread-126 : 127.0.0.1 - - [28/Jan/2022 23:56:18] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:56:23,250 INFO werkzeug Thread-127 : 127.0.0.1 - - [28/Jan/2022 23:56:23] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:56:23,321 INFO werkzeug Thread-128 : 127.0.0.1 - - [28/Jan/2022 23:56:23] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:56:26,207 INFO werkzeug Thread-129 : 127.0.0.1 - - [28/Jan/2022 23:56:26] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:56:26,278 INFO werkzeug Thread-130 : 127.0.0.1 - - [28/Jan/2022 23:56:26] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:57:07,242 INFO werkzeug Thread-131 : 127.0.0.1 - - [28/Jan/2022 23:57:07] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:57:07,307 INFO werkzeug Thread-132 : 127.0.0.1 - - [28/Jan/2022 23:57:07] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:57:39,959 INFO werkzeug Thread-133 : 127.0.0.1 - - [28/Jan/2022 23:57:39] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:57:40,026 INFO werkzeug Thread-134 : 127.0.0.1 - - [28/Jan/2022 23:57:40] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:58:30,531 INFO werkzeug Thread-135 : 127.0.0.1 - - [28/Jan/2022 23:58:30] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-28 23:58:30,590 INFO werkzeug Thread-136 : 127.0.0.1 - - [28/Jan/2022 23:58:30] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:58:41,532 INFO werkzeug Thread-137 : 127.0.0.1 - - [28/Jan/2022 23:58:41] "GET /main HTTP/1.1" 200 -
+2022-01-28 23:58:41,608 INFO werkzeug Thread-138 : 127.0.0.1 - - [28/Jan/2022 23:58:41] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:58:43,160 INFO werkzeug Thread-139 : 127.0.0.1 - - [28/Jan/2022 23:58:43] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:58:43,231 INFO werkzeug Thread-140 : 127.0.0.1 - - [28/Jan/2022 23:58:43] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-28 23:59:56,640 INFO werkzeug Thread-141 : 127.0.0.1 - - [28/Jan/2022 23:59:56] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-28 23:59:56,711 INFO werkzeug Thread-142 : 127.0.0.1 - - [28/Jan/2022 23:59:56] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:08,918 INFO werkzeug Thread-143 : 127.0.0.1 - - [29/Jan/2022 00:11:08] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-29 00:11:08,988 INFO werkzeug Thread-144 : 127.0.0.1 - - [29/Jan/2022 00:11:08] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:16,329 INFO werkzeug Thread-145 : 127.0.0.1 - - [29/Jan/2022 00:11:16] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:11:16,397 INFO werkzeug Thread-146 : 127.0.0.1 - - [29/Jan/2022 00:11:16] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:17,902 INFO werkzeug Thread-147 : 127.0.0.1 - - [29/Jan/2022 00:11:17] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:11:17,974 INFO werkzeug Thread-148 : 127.0.0.1 - - [29/Jan/2022 00:11:17] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:25,014 INFO werkzeug Thread-149 : 127.0.0.1 - - [29/Jan/2022 00:11:25] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:11:25,086 INFO werkzeug Thread-150 : 127.0.0.1 - - [29/Jan/2022 00:11:25] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:26,459 INFO werkzeug Thread-151 : 127.0.0.1 - - [29/Jan/2022 00:11:26] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-29 00:11:26,532 INFO werkzeug Thread-152 : 127.0.0.1 - - [29/Jan/2022 00:11:26] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:37,362 INFO werkzeug Thread-153 : 127.0.0.1 - - [29/Jan/2022 00:11:37] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:11:37,426 INFO werkzeug Thread-154 : 127.0.0.1 - - [29/Jan/2022 00:11:37] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:40,905 INFO werkzeug Thread-155 : 127.0.0.1 - - [29/Jan/2022 00:11:40] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:11:40,976 INFO werkzeug Thread-156 : 127.0.0.1 - - [29/Jan/2022 00:11:40] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:11:45,561 INFO werkzeug Thread-157 : 127.0.0.1 - - [29/Jan/2022 00:11:45] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:11:45,628 INFO werkzeug Thread-158 : 127.0.0.1 - - [29/Jan/2022 00:11:45] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:12:16,345 INFO werkzeug Thread-159 : 127.0.0.1 - - [29/Jan/2022 00:12:16] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-29 00:12:16,422 INFO werkzeug Thread-160 : 127.0.0.1 - - [29/Jan/2022 00:12:16] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:13:10,959 INFO werkzeug Thread-161 : 127.0.0.1 - - [29/Jan/2022 00:13:10] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-29 00:13:11,026 INFO werkzeug Thread-162 : 127.0.0.1 - - [29/Jan/2022 00:13:11] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:13:42,266 INFO werkzeug Thread-163 : 127.0.0.1 - - [29/Jan/2022 00:13:42] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:13:42,326 INFO werkzeug Thread-164 : 127.0.0.1 - - [29/Jan/2022 00:13:42] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:13:50,515 INFO werkzeug Thread-165 : 127.0.0.1 - - [29/Jan/2022 00:13:50] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:13:50,588 INFO werkzeug Thread-166 : 127.0.0.1 - - [29/Jan/2022 00:13:50] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:13:52,042 INFO werkzeug Thread-167 : 127.0.0.1 - - [29/Jan/2022 00:13:52] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-29 00:13:52,105 INFO werkzeug Thread-168 : 127.0.0.1 - - [29/Jan/2022 00:13:52] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:13:58,263 INFO werkzeug Thread-169 : 127.0.0.1 - - [29/Jan/2022 00:13:58] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:13:58,341 INFO werkzeug Thread-170 : 127.0.0.1 - - [29/Jan/2022 00:13:58] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:13:59,506 INFO werkzeug Thread-171 : 127.0.0.1 - - [29/Jan/2022 00:13:59] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:13:59,559 INFO werkzeug Thread-172 : 127.0.0.1 - - [29/Jan/2022 00:13:59] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:14:47,233 INFO werkzeug Thread-173 : 127.0.0.1 - - [29/Jan/2022 00:14:47] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:14:47,290 INFO werkzeug Thread-174 : 127.0.0.1 - - [29/Jan/2022 00:14:47] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:16:16,203 INFO werkzeug Thread-175 : 127.0.0.1 - - [29/Jan/2022 00:16:16] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:16:16,275 INFO werkzeug Thread-176 : 127.0.0.1 - - [29/Jan/2022 00:16:16] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:16:49,298 INFO werkzeug Thread-177 : 127.0.0.1 - - [29/Jan/2022 00:16:49] "GET /galaxy/SMMJ14011%2B0252 HTTP/1.1" 200 -
+2022-01-29 00:16:49,362 INFO werkzeug Thread-178 : 127.0.0.1 - - [29/Jan/2022 00:16:49] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:17:04,677 INFO werkzeug Thread-179 : 127.0.0.1 - - [29/Jan/2022 00:17:04] "GET /main HTTP/1.1" 200 -
+2022-01-29 00:17:04,752 INFO werkzeug Thread-180 : 127.0.0.1 - - [29/Jan/2022 00:17:04] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-29 00:17:06,186 INFO werkzeug Thread-181 : 127.0.0.1 - - [29/Jan/2022 00:17:06] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-01-29 00:17:06,248 INFO werkzeug Thread-182 : 127.0.0.1 - - [29/Jan/2022 00:17:06] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
