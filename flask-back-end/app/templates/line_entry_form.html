@@ -4,15 +4,13 @@
     Line Entry Form
 {% endblock %}
 {% block script %}
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
 
 {% endblock %}
 
 {% block content %}
     <h1>Line Entry Form</h1>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     
     <form class="form-inline" action="" method="post" novalidate>
         <br>
@@ -213,36 +211,8 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
-    <script>
 
-        $(document).ready(function(){
-        var galaxy_name = [];
-        function loadGalaxies(){
-        $.getJSON('/galaxies', function(data, status, xhr)
-        {
-        for (var i = 0; i < data.length; i++ ) {
-            galaxy_name.push(data[i].name);
-        }
-        });
-        };
-        loadGalaxies();
-        
-        $('#galaxy_name').autocomplete({
-        source: galaxy_name, 
-        }); 
+    <script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
 
-        $.ajax({
-        data: {galaxy_name:$('#galaxy_name').val()},
-        type: 'POST',
-        url : '/process'
-        })
-        .done(function(data){ 
-        })
-        e.preventDefault();
-        
-        }); 
-    </script>
-    <style>
-
-</style>
+ 
 {% endblock %}
