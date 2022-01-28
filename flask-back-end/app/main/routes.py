@@ -1,14 +1,48 @@
 from sqlalchemy.orm import session
-from app import db, Session, engine 
-from flask import render_template, flash, redirect, url_for, request, g, make_response, jsonify, json
-from app.models import Galaxy, User, Line, TempGalaxy, TempLine, Post, EditGalaxy, EditLine
-from app.main.forms import EditProfileForm, SearchForm, AddGalaxyForm, EditGalaxyForm, AddLineForm, EditLineForm, AdvancedSearchForm, UploadFileForm
+from app import (
+    db,
+    engine,
+    Session
+)
+from flask import (
+    flash,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for
+)
+from app.models import (
+    EditGalaxy,
+    EditLine,
+    Galaxy,
+    Line,
+    Post,
+    TempGalaxy,
+    TempLine,
+    User
+)
+from app.main.forms import (
+    AddGalaxyForm,
+    AddLineForm,
+    AdvancedSearchForm,
+    EditGalaxyForm,
+    EditLineForm,
+    EditProfileForm,
+    SearchForm,
+    UploadFileForm
+)
 from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
 from config import *
 from io import TextIOWrapper
-from flask_security import current_user, login_required, roles_required
+from flask_security import (
+    current_user,
+    login_required,
+    roles_required
+)
 import math
 from app.main import bp
 import re
@@ -30,11 +64,11 @@ def user(username):
 @bp.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
-    ''' 
+    '''
     Edit profile route
     
     On access: Returns the form with prefilled user's data
-    On submit: Updates user's data and returns /main 
+    On submit: Updates user's data and returns /main
     '''
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
@@ -53,7 +87,7 @@ def edit_profile():
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
 @bp.route('/test', methods=['GET', 'POST'])
-@roles_required('admin') 
+@roles_required('admin')
 @login_required
 def test():
     ''' Test route, used for development purposes only '''
@@ -63,9 +97,8 @@ def test():
     #return render_template("/test.html")
 
 
-@bp.route("/main", methods=['GET', 'POST']) 
+@bp.route("/main", methods=['GET', 'POST'])
 def main():
-    
     '''
     Main route
 
@@ -186,9 +219,9 @@ def check_decimal(entry):
 def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False, temporary = False):
     
     '''
-    Takes in a point's coordinates \form_ra and \form_dec and a \distance to check if any galaxy from \query is within the \distance.
+    Takes in a point's coordinates 'form_ra' and 'form_dec' and a 'distance' to check if any galaxy from 'query' is within the 'distance'.
     Employs Great-circle distance: https://en.wikipedia.org/wiki/Great-circle_distance
-    If the \distance is not provided, it is assumed to be 3 * Line.observed_beam_minor.
+    If the 'distance' is not provided, it is assumed to be 3 * Line.observed_beam_minor.
     If Line.observed_beam_minor is not available, the distance is assumed to be 5 arcsec to be in an extreme proximity. 
 
     Returns:
@@ -202,7 +235,7 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
     
     form_ra -- right ascension of a point/galaxy
     form_dec -- declination of a point/galaxy
-    distance -- circular distance away from the point with coordinates (\form_ra, \form_dec). (default 0)
+    distance -- circular distance away from the point with coordinates (form_ra, form_dec). (default 0)
     based_on_beam_angle -- Boolean value to check whether user wants to search for galaxies with extreme proximity based on their Line.observed_beam_minor.
     (default False)
     temporary -- (type::Boolean), indicator if the check should be performed among not yet approved galaxies (TempGalaxy).
@@ -1016,7 +1049,28 @@ def dec_to_float(coordinates):
         return float(dec)
 
 def ra_to_string(ra_float):
-    pass
+    '''
+    Analogue to JS function in coordinates.js
+    '''
+    ra_string = ""
+    h = round(ra_float//15)
+    m = round((ra_float - h*15) // 0.25)
+    s = round(((ra_float - h*15) - m*0.25) * 240, 3) 
+    if h < 10:
+        h = "0"+str(h)+"h"
+    else:
+        h = str(h)+"h"
+    if m < 10:
+        m = "0"+str(m)+"m"
+    else:
+        m = str(m)+"m"
+    if s < 10:
+        s = "0"+str(s)+"s"
+    else:
+        s = str(s)+"s"
+    ra_string = h+m+s
+    return ra_string
+    
 
 def dec_to_string(dec_float):
     pass
@@ -1370,12 +1424,17 @@ def line_entry_form():
                                 from_existed_id = existed, 
                                 galaxy_name = name,
                                 right_ascension = form.right_ascension.data,
-                                declination = form.declination.data)
+                                declination = form.declination.data
+                                )
                 db.session.add(line)
                 db.session.commit()
                 templine = session.query(func.max(TempLine.id)).first()
                 templine_id = int(templine[0])
-                post = Post(templine_id=templine_id, tempgalaxy_id=tempgalaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+                post = Post(templine_id=templine_id, 
+                            tempgalaxy_id=tempgalaxy_id, 
+                            user_email = current_user.email, 
+                            time_submitted = datetime.utcnow()
+                            )
                 db.session.add(post)
                 db.session.commit()
             else:
@@ -1509,9 +1568,8 @@ def galaxy(name):
     session = Session ()
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
     line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
-    gdict = galaxy.__dict__
-    glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
-    return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
+
+    return render_template('galaxy.html', galaxy=galaxy, line = line)
 
 
 @bp.route("/submit")
@@ -1529,9 +1587,19 @@ def convert_to_CSV(table, identifier, symmetrical):
     '''
 
     if table == "Galaxy":
+        
+        # Galaxy takes averaged coordinates
         f = open('galaxy.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'redshift', 'lensing_flag', 'classification', 'notes'])
+        out.writerow(['name', 
+                      'right_ascension', 
+                      'declination', 
+                      'coordinate_system', 
+                      'redshift', 
+                      'lensing_flag', 
+                      'classification', 
+                      'notes']
+                    )
         for item in Galaxy.query.all():
             out.writerow([item.name, item.right_ascension, item.declination, item.coordinate_system, item.redshift, item.lensing_flag, item.classification, item.notes])
         f.close()
@@ -1542,7 +1610,10 @@ def convert_to_CSV(table, identifier, symmetrical):
         response.headers['Content-Disposition'] = cd 
         response.mimetype='text/csv'
         return response
+
     elif table == "Line":
+
+        # Line takes individual coordinates
         f = open('line.csv', 'w')
         out = csv.writer(f)
         out.writerow(['integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
@@ -1556,7 +1627,10 @@ def convert_to_CSV(table, identifier, symmetrical):
         response.headers['Content-Disposition'] = cd 
         response.mimetype='text/csv'
         return response
+
     elif table == "Galaxy Lines":
+
+        # Galaxy with lines takes lines individual coordinates
         session = Session ()
         f = open('galaxy_lines.csv', 'w')
         out = csv.writer(f)
@@ -1574,7 +1648,10 @@ def convert_to_CSV(table, identifier, symmetrical):
         response.headers['Content-Disposition'] = cd 
         response.mimetype='text/csv'
         return response
+
     elif table == "Everything":
+
+        # Lines take individual coordinates
         session = Session ()
         f = open('galaxies_lines.csv', 'w')
         out = csv.writer(f)

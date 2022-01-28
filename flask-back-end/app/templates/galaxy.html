@@ -3,15 +3,21 @@
 {% block title %}
     Galaxy {{ galaxy.name }} 
 {% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+{% endblock %}
 
 {% block content %}
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
 
     <h2> Galaxy Details </h2>
+
     <table class = "table" id = "Galaxy">
         <thead>
         <tr>
+            <th></th>
             <th>Name</th>
             <th>Average R.A.</th>
             <th>Average Dec.</th>
@@ -25,9 +31,10 @@
         
         <tbody>
             <tr>
+                <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"> Update</a></td>
                 <td>{{ galaxy.name }}</td>
-                <td>{{ galaxy.right_ascension }}</td>
-                <td>{{ galaxy.declination }}</td>
+                <td name="raCoordinates" id="181.346375"></td>
+                <td name="decCoordinates" id="-7.709094444444444">{{ galaxy.declination }}</td>
                 <td>{{ galaxy.coordinate_system }}</td>
                 <td>{{ galaxy.redshift }}</td>
                 <td>{{ galaxy.lensing_flag }}</td>
@@ -36,8 +43,17 @@
             </tr>
         </tbody>
     </table>
+    <a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
 
+    <br>
+    <br>
     <h2> Lines in this Galaxy </h2>
+    <p>
+        To see individual lines' individual positions, please download. 
+    </p>
+    <a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download line entries for this galaxy</a>
+
+   
         <table class = "table" id = "Line" style="width: 100%">
             <thead>
                 <tr>
@@ -45,22 +61,22 @@
                     <th>\( f_{rest} \) \( (GHz) \)</th>
                     <th>\( S \Delta V \) \((Jy \ km \ s^{-1}) \)</th>
                     <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-                    <th>Integrated Line Flux Negative Uncertainty</th>
-                    <th>Peak Line Flux</th>
-                    <th>Peak Line Flux Positive Uncertainty</th>
-                    <th>Peak Line Flux Negative Uncertainty</th>
-                    <th>Line Width</th>
-                    <th>Line Width Positive Uncertainty</th>
-                    <th>Line Width Negative Uncertainty</th>
-                    <th>Observed Line Frequency</th>
-                    <th>Observed Line Frequency Positive Uncertainty</th>
-                    <th>Observed Line Frequency Negative Uncertainty</th>
-                    <th>Detection Type</th>
-                    <th>Observed Beam Major</th>
-                    <th>Observed Beam Minor</th>
-                    <th>Observed Beam Angle</th>
-                    <th>Reference</th>
-                    <th>Notes</th>
+                    <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+                    <th>\( S_{max} \) \( (mJy) \)</th>
+                    <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
+                    <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+                    <th>\( FwHM \) \( (kms^{-1}) \)</th>
+                    <th>\( +\sigma_{FwHM} \) \( (kms^{-1}) \)</th>
+                    <th>\( -\sigma_{FwHM} \) \( (kms^{-1}) \)</th>
+                    <th>\( f_{obs} \) \( (GHz) \)</th>
+                    <th>\( +\sigma_{f_{obs}} \) \( (GHz) \)</th>
+                    <th>\( -\sigma_{f_{obs}} \) \( (GHz) \)</th>
+                    <th>\( Telescope \) \( Type \)</th>
+                    <th>\( Beam \ Maj. \) \(FwHM ('') \)</th>
+                    <th>\( Beam \ Min. \) \(FwHM ('') \)</th>
+                    <th>\( Beam \ P.A. \) \( (*) \)</th>
+                    <th>\( Reference \)</th>
+                    <th>\( Notes \)</th>
                 </tr>
             </thead>
             
@@ -92,9 +108,6 @@
                 {% endfor %}
             </tbody>
         </table>
-    <a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
-    <a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download as CSV</a>
-    <a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button"> Back </a>
-
-
+        
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
 {% endblock %}

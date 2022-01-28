@@ -4003,3 +4003,449 @@ IndexError: tuple index out of range
 2022-01-27 13:25:09,195 INFO werkzeug Thread-16 : 127.0.0.1 - - [27/Jan/2022 13:25:09] "GET /galaxy/BR1202-0725N HTTP/1.1" 200 -
 2022-01-27 13:25:09,260 INFO werkzeug Thread-17 : 127.0.0.1 - - [27/Jan/2022 13:25:09] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
 2022-01-27 13:25:09,317 INFO werkzeug Thread-18 : 127.0.0.1 - - [27/Jan/2022 13:25:09] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:24,608 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 13:49:24,610 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 13:49:24,611 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 13:49:24,611 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 13:49:24,611 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 13:49:24,611 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 13:49:24,612 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 13:49:24,613 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 13:49:24,699 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-27 13:49:24,699 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 13:49:25,230 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 13:49:25,234 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 13:49:25,234 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 13:49:25,235 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 13:49:25,235 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 13:49:25,235 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 13:49:25,235 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 13:49:25,237 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 13:49:30,744 INFO werkzeug Thread-3 : 127.0.0.1 - - [27/Jan/2022 13:49:30] "GET /main HTTP/1.1" 200 -
+2022-01-27 13:49:30,795 INFO werkzeug Thread-4 : 127.0.0.1 - - [27/Jan/2022 13:49:30] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:30,865 INFO werkzeug Thread-5 : 127.0.0.1 - - [27/Jan/2022 13:49:30] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:32,967 INFO werkzeug Thread-6 : 127.0.0.1 - - [27/Jan/2022 13:49:32] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 13:49:33,013 INFO werkzeug Thread-7 : 127.0.0.1 - - [27/Jan/2022 13:49:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:33,106 INFO werkzeug Thread-8 : 127.0.0.1 - - [27/Jan/2022 13:49:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:49,222 INFO werkzeug Thread-9 : 127.0.0.1 - - [27/Jan/2022 13:49:49] "[32mGET /logout HTTP/1.1[0m" 302 -
+2022-01-27 13:49:49,232 INFO werkzeug Thread-10 : 127.0.0.1 - - [27/Jan/2022 13:49:49] "GET / HTTP/1.1" 200 -
+2022-01-27 13:49:49,371 INFO werkzeug Thread-11 : 127.0.0.1 - - [27/Jan/2022 13:49:49] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:49,421 INFO werkzeug Thread-12 : 127.0.0.1 - - [27/Jan/2022 13:49:49] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:50,723 INFO werkzeug Thread-13 : 127.0.0.1 - - [27/Jan/2022 13:49:50] "GET /register HTTP/1.1" 200 -
+2022-01-27 13:49:50,775 INFO werkzeug Thread-14 : 127.0.0.1 - - [27/Jan/2022 13:49:50] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:49:50,904 INFO werkzeug Thread-15 : 127.0.0.1 - - [27/Jan/2022 13:49:50] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:50:07,554 INFO werkzeug Thread-16 : 127.0.0.1 - - [27/Jan/2022 13:50:07] "[32mPOST /register HTTP/1.1[0m" 302 -
+2022-01-27 13:50:07,561 INFO werkzeug Thread-17 : 127.0.0.1 - - [27/Jan/2022 13:50:07] "GET / HTTP/1.1" 200 -
+2022-01-27 13:50:07,598 INFO werkzeug Thread-18 : 127.0.0.1 - - [27/Jan/2022 13:50:07] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:50:07,658 INFO werkzeug Thread-19 : 127.0.0.1 - - [27/Jan/2022 13:50:07] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:51:59,447 INFO werkzeug Thread-20 : 127.0.0.1 - - [27/Jan/2022 13:51:59] "GET /login HTTP/1.1" 200 -
+2022-01-27 13:51:59,489 INFO werkzeug Thread-21 : 127.0.0.1 - - [27/Jan/2022 13:51:59] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:51:59,640 INFO werkzeug Thread-22 : 127.0.0.1 - - [27/Jan/2022 13:51:59] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:04,271 INFO werkzeug Thread-23 : 127.0.0.1 - - [27/Jan/2022 13:52:04] "POST /login HTTP/1.1" 200 -
+2022-01-27 13:52:04,308 INFO werkzeug Thread-24 : 127.0.0.1 - - [27/Jan/2022 13:52:04] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:04,344 INFO werkzeug Thread-25 : 127.0.0.1 - - [27/Jan/2022 13:52:04] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:14,970 INFO werkzeug Thread-26 : 127.0.0.1 - - [27/Jan/2022 13:52:14] "POST /login HTTP/1.1" 200 -
+2022-01-27 13:52:15,017 INFO werkzeug Thread-27 : 127.0.0.1 - - [27/Jan/2022 13:52:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:15,072 INFO werkzeug Thread-28 : 127.0.0.1 - - [27/Jan/2022 13:52:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:25,357 INFO werkzeug Thread-29 : 127.0.0.1 - - [27/Jan/2022 13:52:25] "[32mPOST /login HTTP/1.1[0m" 302 -
+2022-01-27 13:52:25,369 INFO werkzeug Thread-30 : 127.0.0.1 - - [27/Jan/2022 13:52:25] "GET / HTTP/1.1" 200 -
+2022-01-27 13:52:25,416 INFO werkzeug Thread-31 : 127.0.0.1 - - [27/Jan/2022 13:52:25] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:25,467 INFO werkzeug Thread-32 : 127.0.0.1 - - [27/Jan/2022 13:52:25] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:28,311 INFO werkzeug Thread-33 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-01-27 13:52:28,377 INFO werkzeug Thread-36 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-01-27 13:52:28,387 INFO werkzeug Thread-34 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-01-27 13:52:28,388 INFO werkzeug Thread-38 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-01-27 13:52:28,390 INFO werkzeug Thread-37 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-01-27 13:52:28,390 INFO werkzeug Thread-35 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-01-27 13:52:28,390 INFO werkzeug Thread-39 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-01-27 13:52:28,406 INFO werkzeug Thread-40 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1" 200 -
+2022-01-27 13:52:28,409 INFO werkzeug Thread-41 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1" 200 -
+2022-01-27 13:52:28,410 INFO werkzeug Thread-42 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1" 200 -
+2022-01-27 13:52:28,461 INFO werkzeug Thread-43 : 127.0.0.1 - - [27/Jan/2022 13:52:28] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-01-27 13:52:30,320 INFO werkzeug Thread-44 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /user/ HTTP/1.1" 200 -
+2022-01-27 13:52:30,392 INFO werkzeug Thread-47 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1" 200 -
+2022-01-27 13:52:30,395 INFO werkzeug Thread-49 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1" 200 -
+2022-01-27 13:52:30,395 INFO werkzeug Thread-50 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1" 200 -
+2022-01-27 13:52:30,395 INFO werkzeug Thread-46 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1" 200 -
+2022-01-27 13:52:30,395 INFO werkzeug Thread-45 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1" 200 -
+2022-01-27 13:52:30,396 INFO werkzeug Thread-48 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1" 200 -
+2022-01-27 13:52:30,421 INFO werkzeug Thread-55 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,423 INFO werkzeug Thread-52 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,423 INFO werkzeug Thread-54 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,426 INFO werkzeug Thread-51 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,426 INFO werkzeug Thread-53 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,431 INFO werkzeug Thread-56 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,438 INFO werkzeug Thread-57 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,447 INFO werkzeug Thread-60 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "GET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1" 200 -
+2022-01-27 13:52:30,447 INFO werkzeug Thread-59 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,448 INFO werkzeug Thread-58 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:30,457 INFO werkzeug Thread-61 : 127.0.0.1 - - [27/Jan/2022 13:52:30] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-01-27 13:52:45,793 INFO werkzeug Thread-62 : 127.0.0.1 - - [27/Jan/2022 13:52:45] "GET / HTTP/1.1" 200 -
+2022-01-27 13:52:45,838 INFO werkzeug Thread-63 : 127.0.0.1 - - [27/Jan/2022 13:52:45] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:45,887 INFO werkzeug Thread-64 : 127.0.0.1 - - [27/Jan/2022 13:52:45] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:47,687 INFO werkzeug Thread-65 : 127.0.0.1 - - [27/Jan/2022 13:52:47] "GET /main HTTP/1.1" 200 -
+2022-01-27 13:52:47,730 INFO werkzeug Thread-66 : 127.0.0.1 - - [27/Jan/2022 13:52:47] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:47,775 INFO werkzeug Thread-67 : 127.0.0.1 - - [27/Jan/2022 13:52:47] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:48,887 INFO werkzeug Thread-68 : 127.0.0.1 - - [27/Jan/2022 13:52:48] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 13:52:48,934 INFO werkzeug Thread-69 : 127.0.0.1 - - [27/Jan/2022 13:52:48] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 13:52:49,021 INFO werkzeug Thread-70 : 127.0.0.1 - - [27/Jan/2022 13:52:49] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:06:16,688 INFO werkzeug Thread-71 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-01-27 14:06:16,754 INFO werkzeug Thread-73 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,756 INFO werkzeug Thread-76 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,757 INFO werkzeug Thread-77 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,757 INFO werkzeug Thread-74 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,759 INFO werkzeug Thread-72 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,760 INFO werkzeug Thread-75 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,775 INFO werkzeug Thread-79 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,776 INFO werkzeug Thread-78 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,777 INFO werkzeug Thread-80 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:16,803 INFO werkzeug Thread-81 : 127.0.0.1 - - [27/Jan/2022 14:06:16] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,364 INFO werkzeug Thread-82 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "GET /user/ HTTP/1.1" 200 -
+2022-01-27 14:06:18,424 INFO werkzeug Thread-83 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,425 INFO werkzeug Thread-85 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,427 INFO werkzeug Thread-84 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,440 INFO werkzeug Thread-86 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,443 INFO werkzeug Thread-88 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,444 INFO werkzeug Thread-87 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,458 INFO werkzeug Thread-89 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,458 INFO werkzeug Thread-90 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,460 INFO werkzeug Thread-91 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,464 INFO werkzeug Thread-93 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,467 INFO werkzeug Thread-92 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,472 INFO werkzeug Thread-94 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,481 INFO werkzeug Thread-96 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,482 INFO werkzeug Thread-95 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,484 INFO werkzeug Thread-97 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-01-27 14:06:18,484 INFO werkzeug Thread-98 : 127.0.0.1 - - [27/Jan/2022 14:06:18] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-01-27 14:20:18,124 INFO werkzeug Thread-99 : 127.0.0.1 - - [27/Jan/2022 14:20:18] "GET / HTTP/1.1" 200 -
+2022-01-27 14:20:18,162 INFO werkzeug Thread-100 : 127.0.0.1 - - [27/Jan/2022 14:20:18] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:18,407 INFO werkzeug Thread-101 : 127.0.0.1 - - [27/Jan/2022 14:20:18] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:19,576 INFO werkzeug Thread-102 : 127.0.0.1 - - [27/Jan/2022 14:20:19] "GET /main HTTP/1.1" 200 -
+2022-01-27 14:20:19,612 INFO werkzeug Thread-103 : 127.0.0.1 - - [27/Jan/2022 14:20:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:19,804 INFO werkzeug Thread-104 : 127.0.0.1 - - [27/Jan/2022 14:20:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:21,034 INFO werkzeug Thread-105 : 127.0.0.1 - - [27/Jan/2022 14:20:21] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:20:21,079 INFO werkzeug Thread-106 : 127.0.0.1 - - [27/Jan/2022 14:20:21] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:21,428 INFO werkzeug Thread-107 : 127.0.0.1 - - [27/Jan/2022 14:20:21] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:52,355 INFO werkzeug Thread-108 : 127.0.0.1 - - [27/Jan/2022 14:20:52] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:20:52,399 INFO werkzeug Thread-109 : 127.0.0.1 - - [27/Jan/2022 14:20:52] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:20:52,488 INFO werkzeug Thread-110 : 127.0.0.1 - - [27/Jan/2022 14:20:52] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:22:30,056 INFO werkzeug Thread-111 : 127.0.0.1 - - [27/Jan/2022 14:22:30] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:22:30,098 INFO werkzeug Thread-112 : 127.0.0.1 - - [27/Jan/2022 14:22:30] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:22:30,198 INFO werkzeug Thread-113 : 127.0.0.1 - - [27/Jan/2022 14:22:30] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:36:17,378 INFO werkzeug Thread-114 : 127.0.0.1 - - [27/Jan/2022 14:36:17] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:36:17,421 INFO werkzeug Thread-115 : 127.0.0.1 - - [27/Jan/2022 14:36:17] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:36:17,488 INFO werkzeug Thread-116 : 127.0.0.1 - - [27/Jan/2022 14:36:17] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:37:16,245 INFO werkzeug Thread-117 : 127.0.0.1 - - [27/Jan/2022 14:37:16] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:37:16,296 INFO werkzeug Thread-118 : 127.0.0.1 - - [27/Jan/2022 14:37:16] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:37:16,398 INFO werkzeug Thread-119 : 127.0.0.1 - - [27/Jan/2022 14:37:16] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:37:29,002 INFO werkzeug Thread-120 : 127.0.0.1 - - [27/Jan/2022 14:37:29] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:37:29,048 INFO werkzeug Thread-121 : 127.0.0.1 - - [27/Jan/2022 14:37:29] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:37:29,148 INFO werkzeug Thread-122 : 127.0.0.1 - - [27/Jan/2022 14:37:29] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:40:40,756 INFO werkzeug Thread-123 : 127.0.0.1 - - [27/Jan/2022 14:40:40] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:40:40,800 INFO werkzeug Thread-124 : 127.0.0.1 - - [27/Jan/2022 14:40:40] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:40:40,868 INFO werkzeug Thread-125 : 127.0.0.1 - - [27/Jan/2022 14:40:40] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:40:56,460 INFO werkzeug Thread-126 : 127.0.0.1 - - [27/Jan/2022 14:40:56] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:40:56,507 INFO werkzeug Thread-127 : 127.0.0.1 - - [27/Jan/2022 14:40:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:40:56,601 INFO werkzeug Thread-128 : 127.0.0.1 - - [27/Jan/2022 14:40:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:43:32,564 INFO werkzeug Thread-129 : 127.0.0.1 - - [27/Jan/2022 14:43:32] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 14:43:32,609 INFO werkzeug Thread-130 : 127.0.0.1 - - [27/Jan/2022 14:43:32] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:43:32,701 INFO werkzeug Thread-131 : 127.0.0.1 - - [27/Jan/2022 14:43:32] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:50:50,502 INFO werkzeug Thread-132 : 127.0.0.1 - - [27/Jan/2022 14:50:50] "GET /main HTTP/1.1" 200 -
+2022-01-27 14:50:50,544 INFO werkzeug Thread-133 : 127.0.0.1 - - [27/Jan/2022 14:50:50] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:50:50,604 INFO werkzeug Thread-134 : 127.0.0.1 - - [27/Jan/2022 14:50:50] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:50:56,233 INFO werkzeug Thread-135 : 127.0.0.1 - - [27/Jan/2022 14:50:56] "GET /query_results?search=clo HTTP/1.1" 200 -
+2022-01-27 14:50:56,284 INFO werkzeug Thread-136 : 127.0.0.1 - - [27/Jan/2022 14:50:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:50:56,321 INFO werkzeug Thread-137 : 127.0.0.1 - - [27/Jan/2022 14:50:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:50:59,280 INFO werkzeug Thread-138 : 127.0.0.1 - - [27/Jan/2022 14:50:59] "GET /main HTTP/1.1" 200 -
+2022-01-27 14:50:59,322 INFO werkzeug Thread-139 : 127.0.0.1 - - [27/Jan/2022 14:50:59] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:50:59,370 INFO werkzeug Thread-140 : 127.0.0.1 - - [27/Jan/2022 14:50:59] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:06,605 INFO werkzeug Thread-141 : 127.0.0.1 - - [27/Jan/2022 14:51:06] "GET /query_results?search=Clover&submit=Search HTTP/1.1" 200 -
+2022-01-27 14:51:06,651 INFO werkzeug Thread-142 : 127.0.0.1 - - [27/Jan/2022 14:51:06] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:06,702 INFO werkzeug Thread-143 : 127.0.0.1 - - [27/Jan/2022 14:51:06] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:11,057 INFO werkzeug Thread-144 : 127.0.0.1 - - [27/Jan/2022 14:51:11] "GET /main HTTP/1.1" 200 -
+2022-01-27 14:51:11,100 INFO werkzeug Thread-145 : 127.0.0.1 - - [27/Jan/2022 14:51:11] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:11,141 INFO werkzeug Thread-146 : 127.0.0.1 - - [27/Jan/2022 14:51:11] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:15,876 INFO werkzeug Thread-147 : 127.0.0.1 - - [27/Jan/2022 14:51:15] "GET /main HTTP/1.1" 200 -
+2022-01-27 14:51:15,915 INFO werkzeug Thread-148 : 127.0.0.1 - - [27/Jan/2022 14:51:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:15,967 INFO werkzeug Thread-149 : 127.0.0.1 - - [27/Jan/2022 14:51:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:19,357 INFO werkzeug Thread-150 : 127.0.0.1 - - [27/Jan/2022 14:51:19] "GET /contribute HTTP/1.1" 200 -
+2022-01-27 14:51:19,400 INFO werkzeug Thread-151 : 127.0.0.1 - - [27/Jan/2022 14:51:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:19,434 INFO werkzeug Thread-152 : 127.0.0.1 - - [27/Jan/2022 14:51:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:23,573 INFO werkzeug Thread-153 : 127.0.0.1 - - [27/Jan/2022 14:51:23] "GET /main HTTP/1.1" 200 -
+2022-01-27 14:51:23,612 INFO werkzeug Thread-154 : 127.0.0.1 - - [27/Jan/2022 14:51:23] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 14:51:23,650 INFO werkzeug Thread-155 : 127.0.0.1 - - [27/Jan/2022 14:51:23] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 15:12:45,986 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 15:12:46,126 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 15:12:46,699 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 15:12:46,701 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 15:12:46,701 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 15:12:46,701 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 15:12:46,702 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 15:12:46,702 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 15:12:46,702 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 15:12:46,704 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 15:41:36,854 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 15:41:36,984 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 15:41:37,517 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 15:41:37,520 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 15:41:37,520 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 15:41:37,520 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 15:41:37,521 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 15:41:37,521 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 15:41:37,522 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 15:41:37,523 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 15:43:28,387 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 15:43:28,508 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 15:43:29,048 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 15:43:29,050 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 15:43:29,051 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 15:43:29,051 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 15:43:29,052 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 15:43:29,052 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 15:43:29,052 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 15:43:29,053 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 15:43:41,455 INFO werkzeug Thread-3 : 127.0.0.1 - - [27/Jan/2022 15:43:41] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 15:43:41,504 INFO werkzeug Thread-4 : 127.0.0.1 - - [27/Jan/2022 15:43:41] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 15:43:41,633 INFO werkzeug Thread-5 : 127.0.0.1 - - [27/Jan/2022 15:43:41] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 15:44:58,615 INFO werkzeug Thread-6 : 127.0.0.1 - - [27/Jan/2022 15:44:58] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 15:44:58,666 INFO werkzeug Thread-7 : 127.0.0.1 - - [27/Jan/2022 15:44:58] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 15:44:58,749 INFO werkzeug Thread-8 : 127.0.0.1 - - [27/Jan/2022 15:44:58] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:09,101 INFO werkzeug Thread-9 : 127.0.0.1 - - [27/Jan/2022 19:01:09] "GET /main HTTP/1.1" 200 -
+2022-01-27 19:01:09,161 INFO werkzeug Thread-10 : 127.0.0.1 - - [27/Jan/2022 19:01:09] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:09,258 INFO werkzeug Thread-11 : 127.0.0.1 - - [27/Jan/2022 19:01:09] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:11,228 INFO werkzeug Thread-12 : 127.0.0.1 - - [27/Jan/2022 19:01:11] "GET /contribute HTTP/1.1" 200 -
+2022-01-27 19:01:11,289 INFO werkzeug Thread-13 : 127.0.0.1 - - [27/Jan/2022 19:01:11] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:11,346 INFO werkzeug Thread-14 : 127.0.0.1 - - [27/Jan/2022 19:01:11] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:14,596 INFO werkzeug Thread-15 : 127.0.0.1 - - [27/Jan/2022 19:01:14] "GET /line_entry_form HTTP/1.1" 200 -
+2022-01-27 19:01:14,654 INFO werkzeug Thread-16 : 127.0.0.1 - - [27/Jan/2022 19:01:14] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:14,657 INFO werkzeug Thread-17 : 127.0.0.1 - - [27/Jan/2022 19:01:14] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-01-27 19:01:15,378 INFO werkzeug Thread-18 : 127.0.0.1 - - [27/Jan/2022 19:01:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:01:15,405 INFO werkzeug Thread-19 : 127.0.0.1 - - [27/Jan/2022 19:01:15] "GET /galaxies HTTP/1.1" 200 -
+2022-01-27 19:02:31,681 INFO werkzeug Thread-20 : 127.0.0.1 - - [27/Jan/2022 19:02:31] "GET /main HTTP/1.1" 200 -
+2022-01-27 19:02:31,739 INFO werkzeug Thread-21 : 127.0.0.1 - - [27/Jan/2022 19:02:31] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:02:31,801 INFO werkzeug Thread-22 : 127.0.0.1 - - [27/Jan/2022 19:02:31] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:02:33,746 INFO werkzeug Thread-23 : 127.0.0.1 - - [27/Jan/2022 19:02:33] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 19:02:33,811 INFO werkzeug Thread-24 : 127.0.0.1 - - [27/Jan/2022 19:02:33] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 19:02:33,811 INFO werkzeug Thread-25 : 127.0.0.1 - - [27/Jan/2022 19:02:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 19:02:33,877 INFO werkzeug Thread-26 : 127.0.0.1 - - [27/Jan/2022 19:02:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:10:33,134 INFO werkzeug Thread-27 : 127.0.0.1 - - [27/Jan/2022 20:10:33] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:10:33,216 INFO werkzeug Thread-28 : 127.0.0.1 - - [27/Jan/2022 20:10:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:10:33,217 INFO werkzeug Thread-29 : 127.0.0.1 - - [27/Jan/2022 20:10:33] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:10:33,372 INFO werkzeug Thread-30 : 127.0.0.1 - - [27/Jan/2022 20:10:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:14:33,168 INFO werkzeug Thread-31 : 127.0.0.1 - - [27/Jan/2022 20:14:33] "GET /main HTTP/1.1" 200 -
+2022-01-27 20:14:33,246 INFO werkzeug Thread-32 : 127.0.0.1 - - [27/Jan/2022 20:14:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:14:33,361 INFO werkzeug Thread-33 : 127.0.0.1 - - [27/Jan/2022 20:14:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:37:04,007 INFO werkzeug Thread-34 : 127.0.0.1 - - [27/Jan/2022 20:37:04] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:37:04,069 INFO werkzeug Thread-35 : 127.0.0.1 - - [27/Jan/2022 20:37:04] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:37:04,071 INFO werkzeug Thread-36 : 127.0.0.1 - - [27/Jan/2022 20:37:04] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:37:04,236 INFO werkzeug Thread-37 : 127.0.0.1 - - [27/Jan/2022 20:37:04] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:37:24,621 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 20:37:24,624 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 20:37:24,625 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 20:37:24,625 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 20:37:24,626 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 20:37:24,626 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 20:37:24,628 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 20:37:24,630 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 20:37:24,757 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-27 20:37:24,759 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 20:37:25,602 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 20:37:25,605 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 20:37:25,607 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 20:37:25,607 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 20:37:25,608 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 20:37:25,608 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 20:37:25,608 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 20:37:25,610 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 20:37:28,297 INFO werkzeug Thread-3 : 127.0.0.1 - - [27/Jan/2022 20:37:28] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:37:28,376 INFO werkzeug Thread-5 : 127.0.0.1 - - [27/Jan/2022 20:37:28] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-27 20:37:28,385 INFO werkzeug Thread-4 : 127.0.0.1 - - [27/Jan/2022 20:37:28] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:37:28,537 INFO werkzeug Thread-6 : 127.0.0.1 - - [27/Jan/2022 20:37:28] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:44:43,427 INFO werkzeug Thread-7 : 127.0.0.1 - - [27/Jan/2022 20:44:43] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:44:43,504 INFO werkzeug Thread-8 : 127.0.0.1 - - [27/Jan/2022 20:44:43] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:44:43,504 INFO werkzeug Thread-9 : 127.0.0.1 - - [27/Jan/2022 20:44:43] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-27 20:44:43,920 INFO werkzeug Thread-10 : 127.0.0.1 - - [27/Jan/2022 20:44:43] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:44:44,826 INFO werkzeug Thread-11 : 127.0.0.1 - - [27/Jan/2022 20:44:44] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:44:44,899 INFO werkzeug Thread-12 : 127.0.0.1 - - [27/Jan/2022 20:44:44] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:44:44,902 INFO werkzeug Thread-13 : 127.0.0.1 - - [27/Jan/2022 20:44:44] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-27 20:44:45,013 INFO werkzeug Thread-14 : 127.0.0.1 - - [27/Jan/2022 20:44:45] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:45:08,092 INFO werkzeug Thread-15 : 127.0.0.1 - - [27/Jan/2022 20:45:08] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:45:08,165 INFO werkzeug Thread-16 : 127.0.0.1 - - [27/Jan/2022 20:45:08] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-27 20:45:08,169 INFO werkzeug Thread-17 : 127.0.0.1 - - [27/Jan/2022 20:45:08] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:45:08,253 INFO werkzeug Thread-18 : 127.0.0.1 - - [27/Jan/2022 20:45:08] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:47:29,898 INFO werkzeug Thread-19 : 127.0.0.1 - - [27/Jan/2022 20:47:29] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:47:29,971 INFO werkzeug Thread-20 : 127.0.0.1 - - [27/Jan/2022 20:47:29] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:47:29,972 INFO werkzeug Thread-21 : 127.0.0.1 - - [27/Jan/2022 20:47:29] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:47:30,062 INFO werkzeug Thread-22 : 127.0.0.1 - - [27/Jan/2022 20:47:30] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:48:08,103 INFO werkzeug Thread-23 : 127.0.0.1 - - [27/Jan/2022 20:48:08] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:48:08,148 INFO werkzeug Thread-24 : 127.0.0.1 - - [27/Jan/2022 20:48:08] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:48:08,152 INFO werkzeug Thread-25 : 127.0.0.1 - - [27/Jan/2022 20:48:08] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:48:08,211 INFO werkzeug Thread-26 : 127.0.0.1 - - [27/Jan/2022 20:48:08] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:50:15,730 INFO werkzeug Thread-27 : 127.0.0.1 - - [27/Jan/2022 20:50:15] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:50:15,805 INFO werkzeug Thread-28 : 127.0.0.1 - - [27/Jan/2022 20:50:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:50:15,806 INFO werkzeug Thread-29 : 127.0.0.1 - - [27/Jan/2022 20:50:15] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:50:15,886 INFO werkzeug Thread-30 : 127.0.0.1 - - [27/Jan/2022 20:50:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:53:47,703 INFO werkzeug Thread-31 : 127.0.0.1 - - [27/Jan/2022 20:53:47] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:53:47,771 INFO werkzeug Thread-33 : 127.0.0.1 - - [27/Jan/2022 20:53:47] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-27 20:53:47,773 INFO werkzeug Thread-32 : 127.0.0.1 - - [27/Jan/2022 20:53:47] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:53:47,868 INFO werkzeug Thread-34 : 127.0.0.1 - - [27/Jan/2022 20:53:47] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:54:33,529 INFO werkzeug Thread-35 : 127.0.0.1 - - [27/Jan/2022 20:54:33] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:54:33,602 INFO werkzeug Thread-36 : 127.0.0.1 - - [27/Jan/2022 20:54:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:54:33,605 INFO werkzeug Thread-37 : 127.0.0.1 - - [27/Jan/2022 20:54:33] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-01-27 20:54:33,743 INFO werkzeug Thread-38 : 127.0.0.1 - - [27/Jan/2022 20:54:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:59:00,596 INFO werkzeug Thread-39 : 127.0.0.1 - - [27/Jan/2022 20:59:00] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:59:00,675 INFO werkzeug Thread-40 : 127.0.0.1 - - [27/Jan/2022 20:59:00] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:59:00,683 INFO werkzeug Thread-41 : 127.0.0.1 - - [27/Jan/2022 20:59:00] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:59:02,120 INFO werkzeug Thread-42 : 127.0.0.1 - - [27/Jan/2022 20:59:02] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:59:17,342 INFO werkzeug Thread-43 : 127.0.0.1 - - [27/Jan/2022 20:59:17] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 20:59:17,419 INFO werkzeug Thread-45 : 127.0.0.1 - - [27/Jan/2022 20:59:17] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 20:59:17,420 INFO werkzeug Thread-44 : 127.0.0.1 - - [27/Jan/2022 20:59:17] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 20:59:17,881 INFO werkzeug Thread-46 : 127.0.0.1 - - [27/Jan/2022 20:59:17] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:00:06,971 INFO werkzeug Thread-47 : 127.0.0.1 - - [27/Jan/2022 21:00:06] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:00:07,052 INFO werkzeug Thread-49 : 127.0.0.1 - - [27/Jan/2022 21:00:07] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:00:07,052 INFO werkzeug Thread-48 : 127.0.0.1 - - [27/Jan/2022 21:00:07] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:00:07,439 INFO werkzeug Thread-50 : 127.0.0.1 - - [27/Jan/2022 21:00:07] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:05:19,860 INFO werkzeug Thread-51 : 127.0.0.1 - - [27/Jan/2022 21:05:19] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:05:19,943 INFO werkzeug Thread-52 : 127.0.0.1 - - [27/Jan/2022 21:05:19] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:05:19,951 INFO werkzeug Thread-53 : 127.0.0.1 - - [27/Jan/2022 21:05:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:05:21,402 INFO werkzeug Thread-54 : 127.0.0.1 - - [27/Jan/2022 21:05:21] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:06:57,537 INFO werkzeug Thread-55 : 127.0.0.1 - - [27/Jan/2022 21:06:57] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:06:57,611 INFO werkzeug Thread-57 : 127.0.0.1 - - [27/Jan/2022 21:06:57] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:06:57,613 INFO werkzeug Thread-56 : 127.0.0.1 - - [27/Jan/2022 21:06:57] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:06:59,059 INFO werkzeug Thread-58 : 127.0.0.1 - - [27/Jan/2022 21:06:59] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:08:35,751 INFO werkzeug Thread-59 : 127.0.0.1 - - [27/Jan/2022 21:08:35] "GET /main HTTP/1.1" 200 -
+2022-01-27 21:08:35,834 INFO werkzeug Thread-60 : 127.0.0.1 - - [27/Jan/2022 21:08:35] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:08:37,254 INFO werkzeug Thread-61 : 127.0.0.1 - - [27/Jan/2022 21:08:37] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:08:56,339 INFO werkzeug Thread-62 : 127.0.0.1 - - [27/Jan/2022 21:08:56] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:08:56,413 INFO werkzeug Thread-63 : 127.0.0.1 - - [27/Jan/2022 21:08:56] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:08:56,414 INFO werkzeug Thread-64 : 127.0.0.1 - - [27/Jan/2022 21:08:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:08:56,900 INFO werkzeug Thread-65 : 127.0.0.1 - - [27/Jan/2022 21:08:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:10:04,308 INFO werkzeug Thread-66 : 127.0.0.1 - - [27/Jan/2022 21:10:04] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:10:04,381 INFO werkzeug Thread-67 : 127.0.0.1 - - [27/Jan/2022 21:10:04] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:10:04,383 INFO werkzeug Thread-68 : 127.0.0.1 - - [27/Jan/2022 21:10:04] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:10:06,223 INFO werkzeug Thread-69 : 127.0.0.1 - - [27/Jan/2022 21:10:06] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:13:54,919 INFO werkzeug Thread-70 : 127.0.0.1 - - [27/Jan/2022 21:13:54] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:13:54,989 INFO werkzeug Thread-71 : 127.0.0.1 - - [27/Jan/2022 21:13:54] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:13:54,991 INFO werkzeug Thread-72 : 127.0.0.1 - - [27/Jan/2022 21:13:54] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:13:56,776 INFO werkzeug Thread-73 : 127.0.0.1 - - [27/Jan/2022 21:13:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:14:14,725 INFO werkzeug Thread-74 : 127.0.0.1 - - [27/Jan/2022 21:14:14] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:14:14,784 INFO werkzeug Thread-76 : 127.0.0.1 - - [27/Jan/2022 21:14:14] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:14:14,786 INFO werkzeug Thread-75 : 127.0.0.1 - - [27/Jan/2022 21:14:14] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:14:15,194 INFO werkzeug Thread-77 : 127.0.0.1 - - [27/Jan/2022 21:14:15] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:16:20,249 INFO werkzeug Thread-78 : 127.0.0.1 - - [27/Jan/2022 21:16:20] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:16:20,324 INFO werkzeug Thread-79 : 127.0.0.1 - - [27/Jan/2022 21:16:20] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:16:20,326 INFO werkzeug Thread-80 : 127.0.0.1 - - [27/Jan/2022 21:16:20] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:16:21,733 INFO werkzeug Thread-81 : 127.0.0.1 - - [27/Jan/2022 21:16:21] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:22:18,024 INFO werkzeug Thread-82 : 127.0.0.1 - - [27/Jan/2022 21:22:18] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:22:18,109 INFO werkzeug Thread-83 : 127.0.0.1 - - [27/Jan/2022 21:22:18] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:22:18,110 INFO werkzeug Thread-84 : 127.0.0.1 - - [27/Jan/2022 21:22:18] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:22:19,592 INFO werkzeug Thread-85 : 127.0.0.1 - - [27/Jan/2022 21:22:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:25:32,278 INFO werkzeug Thread-86 : 127.0.0.1 - - [27/Jan/2022 21:25:32] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:25:32,351 INFO werkzeug Thread-87 : 127.0.0.1 - - [27/Jan/2022 21:25:32] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:25:32,356 INFO werkzeug Thread-88 : 127.0.0.1 - - [27/Jan/2022 21:25:32] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:25:33,791 INFO werkzeug Thread-89 : 127.0.0.1 - - [27/Jan/2022 21:25:33] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:26:23,953 INFO werkzeug Thread-90 : 127.0.0.1 - - [27/Jan/2022 21:26:23] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:26:24,038 INFO werkzeug Thread-91 : 127.0.0.1 - - [27/Jan/2022 21:26:24] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:26:24,040 INFO werkzeug Thread-92 : 127.0.0.1 - - [27/Jan/2022 21:26:24] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:26:24,404 INFO werkzeug Thread-93 : 127.0.0.1 - - [27/Jan/2022 21:26:24] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:32:19,603 INFO werkzeug Thread-94 : 127.0.0.1 - - [27/Jan/2022 21:32:19] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:32:19,680 INFO werkzeug Thread-95 : 127.0.0.1 - - [27/Jan/2022 21:32:19] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:32:19,681 INFO werkzeug Thread-96 : 127.0.0.1 - - [27/Jan/2022 21:32:19] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:32:21,073 INFO werkzeug Thread-97 : 127.0.0.1 - - [27/Jan/2022 21:32:21] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:39:31,203 INFO werkzeug Thread-98 : 127.0.0.1 - - [27/Jan/2022 21:39:31] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 21:39:31,280 INFO werkzeug Thread-99 : 127.0.0.1 - - [27/Jan/2022 21:39:31] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 21:39:31,287 INFO werkzeug Thread-100 : 127.0.0.1 - - [27/Jan/2022 21:39:31] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 21:39:31,400 INFO werkzeug Thread-101 : 127.0.0.1 - - [27/Jan/2022 21:39:31] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:03:59,844 INFO werkzeug Thread-102 : 127.0.0.1 - - [27/Jan/2022 22:03:59] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 22:03:59,928 INFO werkzeug Thread-103 : 127.0.0.1 - - [27/Jan/2022 22:03:59] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:03:59,929 INFO werkzeug Thread-104 : 127.0.0.1 - - [27/Jan/2022 22:03:59] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 22:04:00,025 INFO werkzeug Thread-105 : 127.0.0.1 - - [27/Jan/2022 22:04:00] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:06:44,202 INFO werkzeug Thread-106 : 127.0.0.1 - - [27/Jan/2022 22:06:44] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 22:06:44,270 INFO werkzeug Thread-107 : 127.0.0.1 - - [27/Jan/2022 22:06:44] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:06:44,272 INFO werkzeug Thread-108 : 127.0.0.1 - - [27/Jan/2022 22:06:44] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 22:06:44,441 INFO werkzeug Thread-109 : 127.0.0.1 - - [27/Jan/2022 22:06:44] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:07:34,475 INFO werkzeug Thread-110 : 127.0.0.1 - - [27/Jan/2022 22:07:34] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 22:07:34,542 INFO werkzeug Thread-111 : 127.0.0.1 - - [27/Jan/2022 22:07:34] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:07:34,543 INFO werkzeug Thread-112 : 127.0.0.1 - - [27/Jan/2022 22:07:34] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 22:07:34,631 INFO werkzeug Thread-113 : 127.0.0.1 - - [27/Jan/2022 22:07:34] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:21:53,273 INFO werkzeug Thread-114 : 127.0.0.1 - - [27/Jan/2022 22:21:53] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
+2022-01-27 22:21:53,348 INFO werkzeug Thread-116 : 127.0.0.1 - - [27/Jan/2022 22:21:53] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:21:53,351 INFO werkzeug Thread-115 : 127.0.0.1 - - [27/Jan/2022 22:21:53] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-27 22:21:53,465 INFO werkzeug Thread-117 : 127.0.0.1 - - [27/Jan/2022 22:21:53] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-27 22:36:06,428 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 22:36:06,719 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 22:36:07,532 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 22:36:07,535 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 22:36:07,537 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 22:36:07,537 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 22:36:07,537 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 22:36:07,538 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 22:36:07,538 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 22:36:07,540 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 22:38:58,112 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 22:38:58,241 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 22:38:58,796 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 22:38:58,799 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 22:38:58,800 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 22:38:58,800 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 22:38:58,801 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 22:38:58,801 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 22:38:58,801 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 22:38:58,802 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 22:39:09,760 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 22:39:10,076 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 22:39:10,858 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 22:39:10,862 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 22:39:10,862 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 22:39:10,862 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 22:39:10,863 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 22:39:10,863 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 22:39:10,864 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 22:39:10,865 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-27 23:34:22,207 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/main/routes.py', reloading
+2022-01-27 23:34:22,543 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-27 23:34:23,220 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-27 23:34:23,224 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-27 23:34:23,225 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-27 23:34:23,225 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-27 23:34:23,225 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-27 23:34:23,225 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-27 23:34:23,226 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-27 23:34:23,227 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 09:36:46,067 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-28 09:36:46,071 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-28 09:36:46,073 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-28 09:36:46,073 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-28 09:36:46,074 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-28 09:36:46,075 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-28 09:36:46,076 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-28 09:36:46,078 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 09:36:46,216 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-28 09:36:46,217 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-28 09:36:46,994 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-28 09:36:46,997 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-28 09:36:46,999 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-28 09:36:46,999 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-28 09:36:47,000 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-28 09:36:47,000 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-28 09:36:47,001 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-28 09:36:47,004 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-28 09:36:51,312 INFO werkzeug Thread-3 : 127.0.0.1 - - [28/Jan/2022 09:36:51] "GET / HTTP/1.1" 200 -
+2022-01-28 09:36:51,394 INFO werkzeug Thread-4 : 127.0.0.1 - - [28/Jan/2022 09:36:51] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:51,512 INFO werkzeug Thread-5 : 127.0.0.1 - - [28/Jan/2022 09:36:51] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:53,121 INFO werkzeug Thread-6 : 127.0.0.1 - - [28/Jan/2022 09:36:53] "GET /main HTTP/1.1" 200 -
+2022-01-28 09:36:53,170 INFO werkzeug Thread-7 : 127.0.0.1 - - [28/Jan/2022 09:36:53] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:53,226 INFO werkzeug Thread-8 : 127.0.0.1 - - [28/Jan/2022 09:36:53] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:56,409 INFO werkzeug Thread-9 : 127.0.0.1 - - [28/Jan/2022 09:36:56] "GET /contribute HTTP/1.1" 200 -
+2022-01-28 09:36:56,468 INFO werkzeug Thread-10 : 127.0.0.1 - - [28/Jan/2022 09:36:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:56,499 INFO werkzeug Thread-11 : 127.0.0.1 - - [28/Jan/2022 09:36:56] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:58,819 INFO werkzeug Thread-12 : 127.0.0.1 - - [28/Jan/2022 09:36:58] "GET /line_entry_form HTTP/1.1" 200 -
+2022-01-28 09:36:58,888 INFO werkzeug Thread-13 : 127.0.0.1 - - [28/Jan/2022 09:36:58] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:58,890 INFO werkzeug Thread-14 : 127.0.0.1 - - [28/Jan/2022 09:36:58] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-01-28 09:36:58,959 INFO werkzeug Thread-15 : 127.0.0.1 - - [28/Jan/2022 09:36:58] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:36:58,981 INFO werkzeug Thread-16 : 127.0.0.1 - - [28/Jan/2022 09:36:58] "GET /galaxies HTTP/1.1" 200 -
+2022-01-28 09:41:34,778 INFO werkzeug Thread-17 : 127.0.0.1 - - [28/Jan/2022 09:41:34] "GET /line_entry_form HTTP/1.1" 200 -
+2022-01-28 09:41:34,847 INFO werkzeug Thread-18 : 127.0.0.1 - - [28/Jan/2022 09:41:34] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-01-28 09:41:34,849 INFO werkzeug Thread-19 : 127.0.0.1 - - [28/Jan/2022 09:41:34] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:41:36,493 INFO werkzeug Thread-20 : 127.0.0.1 - - [28/Jan/2022 09:41:36] "[33mGET /static/jquery.js HTTP/1.1[0m" 404 -
+2022-01-28 09:41:36,518 INFO werkzeug Thread-21 : 127.0.0.1 - - [28/Jan/2022 09:41:36] "GET /galaxies HTTP/1.1" 200 -
