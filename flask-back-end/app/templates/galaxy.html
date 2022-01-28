@@ -33,8 +33,8 @@
             <tr>
                 <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"> Update</a></td>
                 <td>{{ galaxy.name }}</td>
-                <td name="raCoordinates" id="181.346375"></td>
-                <td name="decCoordinates" id="-7.709094444444444">{{ galaxy.declination }}</td>
+                <td name="raCoordinates" id="{{ galaxy.right_ascension }}"></td>
+                <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
                 <td>{{ galaxy.coordinate_system }}</td>
                 <td>{{ galaxy.redshift }}</td>
                 <td>{{ galaxy.lensing_flag }}</td>
