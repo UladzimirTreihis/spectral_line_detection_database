@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Galaxy Entry Form
+    Add a New Galaxy
 {% endblock %}
 
 {% block content %}
-    
     
 
 
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <h1> Galaxy Entry Form</h1>
-    
+        <h1> Add a New Galaxy</h1>
+        <p> Note that all entries will be crossmatched with existing database entries to prevent duplication. </p>
+
     {% if same_temp_exists %}
     <p>Galaxy you have entered seems to be proposed already and awaits approval. 
         You can still add line detections to it by usings the galaxy's name and coordinates. </p>
@@ -60,7 +60,7 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.lensing_flag.label }}<br>
+            {{ form.lensing_flag.label }} <br>
             {{ form.lensing_flag(size=3) }}<br>
             {% for error in form.lensing_flag.errors %}
             <span style="color: red;">[{{error}}]</span>

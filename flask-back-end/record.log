@@ -5284,3 +5284,100 @@ IndexError: tuple index out of range
 2022-01-29 19:26:38,556 INFO werkzeug Thread-13 : 127.0.0.1 - - [29/Jan/2022 19:26:38] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
 2022-01-29 19:26:38,556 INFO werkzeug Thread-17 : 127.0.0.1 - - [29/Jan/2022 19:26:38] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
 2022-01-29 19:26:38,557 INFO werkzeug Thread-15 : 127.0.0.1 - - [29/Jan/2022 19:26:38] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-01-29 19:27:55,251 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:27:55,253 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:27:55,254 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:27:55,254 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:27:55,254 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:27:55,254 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:27:55,254 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:27:55,255 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:27:55,358 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-29 19:27:55,359 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-29 19:27:55,994 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:27:55,997 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:27:55,997 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:27:55,998 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:27:55,998 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:27:55,998 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:27:55,998 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:27:55,999 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:27:57,609 INFO werkzeug Thread-3 : 127.0.0.1 - - [29/Jan/2022 19:27:57] "GET /main HTTP/1.1" 200 -
+2022-01-29 19:27:57,628 INFO werkzeug Thread-6 : 127.0.0.1 - - [29/Jan/2022 19:27:57] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-01-29 19:27:57,628 INFO werkzeug Thread-4 : 127.0.0.1 - - [29/Jan/2022 19:27:57] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-01-29 19:27:57,629 INFO werkzeug Thread-5 : 127.0.0.1 - - [29/Jan/2022 19:27:57] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-01-29 19:27:57,662 INFO werkzeug Thread-7 : 127.0.0.1 - - [29/Jan/2022 19:27:57] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-01-29 19:27:57,666 INFO werkzeug Thread-8 : 127.0.0.1 - - [29/Jan/2022 19:27:57] "POST /process HTTP/1.1" 200 -
+2022-01-29 19:27:59,431 INFO werkzeug Thread-9 : 127.0.0.1 - - [29/Jan/2022 19:27:59] "GET /contribute HTTP/1.1" 200 -
+2022-01-29 19:28:02,023 INFO werkzeug Thread-10 : 127.0.0.1 - - [29/Jan/2022 19:28:02] "GET /galaxy_entry_form HTTP/1.1" 200 -
+2022-01-29 19:32:36,744 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:32:36,747 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:32:36,748 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:32:36,748 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:32:36,748 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:32:36,748 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:32:36,749 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:32:36,750 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:32:36,848 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-01-29 19:32:36,849 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-29 19:32:37,459 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:32:37,462 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:32:37,462 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:32:37,462 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:32:37,462 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:32:37,463 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:32:37,463 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:32:37,464 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:32:40,663 INFO werkzeug Thread-3 : 127.0.0.1 - - [29/Jan/2022 19:32:40] "GET /galaxy_entry_form HTTP/1.1" 200 -
+2022-01-29 19:33:49,318 INFO werkzeug MainThread :  * Detected change in '/Users/akanksha/Desktop/spectral_line_detection_database/flask-back-end/app/main/forms.py', reloading
+2022-01-29 19:33:49,396 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-29 19:33:50,029 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:33:50,032 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:33:50,033 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:33:50,033 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:33:50,033 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:33:50,033 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:33:50,033 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:33:50,034 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:33:52,848 INFO werkzeug Thread-3 : 127.0.0.1 - - [29/Jan/2022 19:33:52] "[35m[1mGET /galaxy_entry_form HTTP/1.1[0m" 500 -
+2022-01-29 19:33:52,854 INFO werkzeug Thread-4 : 127.0.0.1 - - [29/Jan/2022 19:33:52] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2022-01-29 19:33:52,854 INFO werkzeug Thread-5 : 127.0.0.1 - - [29/Jan/2022 19:33:52] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2022-01-29 19:33:52,858 INFO werkzeug Thread-6 : 127.0.0.1 - - [29/Jan/2022 19:33:52] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-29 19:33:52,868 INFO werkzeug Thread-7 : 127.0.0.1 - - [29/Jan/2022 19:33:52] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+2022-01-29 19:33:52,874 INFO werkzeug Thread-8 : 127.0.0.1 - - [29/Jan/2022 19:33:52] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-29 19:34:59,749 INFO werkzeug MainThread :  * Detected change in '/Users/akanksha/Desktop/spectral_line_detection_database/flask-back-end/app/main/forms.py', reloading
+2022-01-29 19:34:59,829 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-29 19:35:00,522 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:35:00,524 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:35:00,525 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:35:00,525 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:35:00,525 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:35:00,525 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:35:00,526 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:35:00,527 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:35:04,736 INFO werkzeug Thread-3 : 127.0.0.1 - - [29/Jan/2022 19:35:04] "GET /galaxy_entry_form HTTP/1.1" 200 -
+2022-01-29 19:37:18,345 INFO werkzeug MainThread :  * Detected change in '/Users/akanksha/Desktop/spectral_line_detection_database/flask-back-end/app/main/forms.py', reloading
+2022-01-29 19:37:18,426 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-29 19:37:19,161 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:37:19,164 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:37:19,165 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:37:19,165 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:37:19,165 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:37:19,165 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:37:19,166 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:37:19,167 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-01-29 19:37:22,756 INFO werkzeug Thread-3 : 127.0.0.1 - - [29/Jan/2022 19:37:22] "[35m[1mGET /galaxy_entry_form HTTP/1.1[0m" 500 -
+2022-01-29 19:37:22,763 INFO werkzeug Thread-4 : 127.0.0.1 - - [29/Jan/2022 19:37:22] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+2022-01-29 19:37:22,763 INFO werkzeug Thread-5 : 127.0.0.1 - - [29/Jan/2022 19:37:22] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+2022-01-29 19:37:22,768 INFO werkzeug Thread-6 : 127.0.0.1 - - [29/Jan/2022 19:37:22] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2022-01-29 19:37:22,781 INFO werkzeug Thread-7 : 127.0.0.1 - - [29/Jan/2022 19:37:22] "GET /galaxy_entry_form?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+2022-01-29 19:37:33,357 INFO werkzeug MainThread :  * Detected change in '/Users/akanksha/Desktop/spectral_line_detection_database/flask-back-end/app/main/forms.py', reloading
+2022-01-29 19:37:33,443 INFO werkzeug MainThread :  * Restarting with stat
+2022-01-29 19:37:34,162 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-01-29 19:37:34,165 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-01-29 19:37:34,166 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-01-29 19:37:34,166 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-01-29 19:37:34,166 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-01-29 19:37:34,166 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-01-29 19:37:34,167 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-01-29 19:37:34,168 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>

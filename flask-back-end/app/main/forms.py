@@ -96,7 +96,7 @@ class AddGalaxyForm(FlaskForm):
     classification = StringField('Classification', validators = [DataRequired ()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
-    new_line = SubmitField ('Add Line to this Galaxy')
+    new_line = SubmitField ('Add A New Line to this Galaxy')
 
 class EditGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
