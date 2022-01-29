@@ -111,7 +111,8 @@ class EditGalaxyForm(FlaskForm):
 
 class DynamicSearchForm(FlaskForm): 
     galaxy_name = StringField('Galaxy', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Galaxy Name"})
-
+    submit = SubmitField('View Galaxy')
+    
 class AddLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')

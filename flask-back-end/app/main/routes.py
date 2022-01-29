@@ -31,7 +31,8 @@ from app.main.forms import (
     EditLineForm,
     EditProfileForm,
     SearchForm,
-    UploadFileForm
+    UploadFileForm,
+    DynamicSearchForm
 )
 from werkzeug.urls import url_parse
 import csv
@@ -105,7 +106,17 @@ def main():
     On authenticated access: returns main menu and table with galaxy data
     '''
 
-    form = SearchForm()
+    if current_user.is_authenticated:
+        form = DynamicSearchForm()
+    session = Session()
+    if form.submit.data:
+        name = form.galaxy_name.data
+        galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+        line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
+        gdict = galaxy.__dict__
+        glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
+        return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
+
     session = Session()
     galaxies = session.query(Galaxy).all()
     galaxies_count = session.query(Galaxy.id).count()
@@ -1547,6 +1558,18 @@ def galaxydic():
     list_galaxies = [r.as_dict() for r in res1]
     list_temp_galaxies = [r.as_dict() for r in res2]
     list_galaxies.extend(list_temp_galaxies)
+    return jsonify(list_galaxies)
+
+@bp.route('/approvedgalaxies')
+@login_required
+def galaxies():
+
+    '''
+    '''
+
+    session = Session()
+    res = session.query(Galaxy)
+    list_galaxies = [r.as_dict() for r in res]
     return jsonify(list_galaxies)
 
 @bp.route('/process', methods=['POST'])
