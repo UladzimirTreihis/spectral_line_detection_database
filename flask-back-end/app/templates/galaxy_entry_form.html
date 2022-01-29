@@ -40,6 +40,10 @@
         </p>
         <p>
             {{ form.right_ascension.label }}<br>
+            (Fiducial Position) <br>
+            This is used for duplication checking.<br>
+            Note that the database will store the RA & Dec of the detetcion while the fiducial position is not stored.<br>
+            Accepted formats: decimal degrees or sexagessimal (09h32m16.35s, -1d20'13.567")<br>
             {{ form.right_ascension(size=32) }}<br>
             {% for error in form.right_ascension.errors %}
             <span style="color: red;">[{{ error }}]</span>
