@@ -1422,6 +1422,7 @@ def line_entry_form():
                                 line_width=form.line_width.data, 
                                 line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
                                 line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
+                                freq_type = form.freq_type.data,
                                 observed_line_frequency = frequency, 
                                 observed_line_frequency_uncertainty_positive = positive_uncertainty, 
                                 observed_line_frequency_uncertainty_negative = negative_uncertainty, 
@@ -1508,6 +1509,9 @@ def line_edit_form(id):
             if form.line_width_uncertainty_positive.data:
                 if float (line.line_width_uncertainty_positive) != float (form.line_width_uncertainty_positive.data):
                     changes = changes + "Initial Line Width Uncertainty: " + line.line_width_uncertainty_positive + " New Line Width Uncertainty: " + form.line_width_uncertainty_positive.data
+            if form.freq_type.data:
+                if line.freq_type != (form.freq_type.data):
+                    changes = changes + "Initial Freq Type: " + line.freq_type + " New Frequency Type: " + form.freq_type.data
             if form.observed_line_frequency.data:
                 if float (line.observed_line_frequency) != float (form.observed_line_frequency.data):
                     changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
