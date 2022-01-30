@@ -2,13 +2,14 @@ function showUncertainties() {
 // Get the checkbox
 var checkBox = document.getElementById("myCheck");
 // Get the output text
-var form = document.getElementsByName("uncertainty");
-
+var fields = document.getElementsByName("uncertainty");
+for (form in fields) {
 // If the checkbox is checked, display the output text
-if (checkBox.checked == true){
-    form.style.display = "block";
-} else {
-    form.style.display = "none";
+    if (checkBox.checked == true){
+        form.style.display = "block";
+    } else {
+        form.style.display = "none";
+    }
 }
 };
 
