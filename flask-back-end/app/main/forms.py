@@ -105,7 +105,7 @@ class EditGalaxyForm(FlaskForm):
     right_ascension = StringField('Right Ascension', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), DataRequired ()])
     declination = StringField('Declination', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), DataRequired ()])
     coordinate_system = StringField('Coordinate System - J2000 or ICRS only', validators = [DataRequired ()])
-    lensing_flag = StringField('Lensing Flag - Lensed, Unlensed or Either', validators = [DataRequired ()])
+    lensing_flag = StringField('Lensing Flag - Lensed, Unlensed or Unknown', validators = [DataRequired ()])
     classification = StringField('Classification', validators = [DataRequired ()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
