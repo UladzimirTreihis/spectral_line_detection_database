@@ -544,6 +544,7 @@ def test_frequency_for_family(family, species_type, input_frequency_str):
     species_type -- Species type of the corresponding line entry submitted by user (type::string).
     '''
     
+    nearest_frequency = 0
     message = ''
     input_frequency = float(input_frequency_str)
 
@@ -1360,7 +1361,7 @@ def line_entry_form():
     On submit: If the values areunappropriate, an error is return. 
     If the entry seems to exist already in the database, then no action taken. Otherwise, the entry is uploaded. 
     '''
-
+    name = ""
     form = AddLineForm()
     if form.galaxy_form.data:
         return redirect(url_for('main.galaxy_entry_form'))
@@ -1369,22 +1370,21 @@ def line_entry_form():
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
             try:
-                id = galaxy_id[0]
+                id = galaxy_id
                 name = session.query(Galaxy.name).filter(Galaxy.id==id).scalar()
             except:
                 id = None
             existed = id
             tempgalaxy_id = None
             
-
             if galaxy_id == None:
                 galaxy_id = session.query(TempGalaxy.id).filter(TempGalaxy.name==form.galaxy_name.data).scalar()
-                id = galaxy_id[0]
+                id = galaxy_id
                 name = session.query(TempGalaxy.name).filter(TempGalaxy.id==id).scalar()
                 tempgalaxy_id = id
                 existed = None
             if galaxy_id==None:
-                raise Exception ('Please enter the name exactly as proposed using Caps if necesarry')
+                raise Exception ('Please enter the name exactly as proposed using Caps if necessary')
 
             try:
                 dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
@@ -1422,7 +1422,6 @@ def line_entry_form():
                                 line_width=form.line_width.data, 
                                 line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
                                 line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
-                                freq_type = form.freq_type.data,
                                 observed_line_frequency = frequency, 
                                 observed_line_frequency_uncertainty_positive = positive_uncertainty, 
                                 observed_line_frequency_uncertainty_negative = negative_uncertainty, 
