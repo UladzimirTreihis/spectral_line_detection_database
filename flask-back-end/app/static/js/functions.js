@@ -2,15 +2,32 @@ function showUncertainties() {
 // Get the checkbox
 var checkBox = document.getElementById("myCheck");
 // Get the output text
-var fields = document.getElementsByName("uncertainty");
-for (form in fields) {
-// If the checkbox is checked, display the output text
-    if (checkBox.checked == true){
-        form.style.display = "block";
+fields = []
+var one = document.getElementById("uncertainty1");
+if (checkBox.checked == true){
+        one.style.display = "block";
     } else {
-        form.style.display = "none";
+        one.style.display = "none";
     }
-}
+var two = document.getElementById("uncertainty2");
+if (checkBox.checked == true){
+        two.style.display = "block";
+    } else {
+        two.style.display = "none";
+    }
+
+var three = document.getElementById("uncertainty3");
+if (checkBox.checked == true){
+        three.style.display = "block";
+    } else {
+        three.style.display = "none";
+    }
+var four = document.getElementById("uncertainty4");
+if (checkBox.checked == true){
+        four.style.display = "block";
+    } else {
+        four.style.display = "none";
+    }
 };
 
 function onlyOne(checkbox) {

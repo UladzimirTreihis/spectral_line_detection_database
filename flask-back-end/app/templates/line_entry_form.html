@@ -73,7 +73,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty1" style="display:none">
             {{ form.integrated_line_flux_uncertainty_negative.label }}<br>
             {{ form.integrated_line_flux_uncertainty_negative(size=32) }}<br>
             {% for error in form.integrated_line_flux_uncertainty_negative.errors %}
@@ -97,7 +97,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty2" style="display:none">
             {{ form.peak_line_flux_uncertainty_negative.label }}<br>
             {{ form.peak_line_flux_uncertainty_negative(size=32) }}<br>
             {% for error in form.peak_line_flux_uncertainty_negative.errors %}
@@ -121,7 +121,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty3" style="display:none">
             {{ form.line_width_uncertainty_negative.label }}<br>
             {{ form.line_width_uncertainty_negative(size=32) }}<br>
             {% for error in form.line_width_uncertainty_negative.errors %}
@@ -153,7 +153,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty4" style="display:none">
             {{ form.observed_line_frequency_uncertainty_negative.label }}<br>
             {{ form.observed_line_frequency_uncertainty_negative(size=32) }}<br>
             {% for error in form.observed_line_frequency_uncertainty_negative.errors %}
