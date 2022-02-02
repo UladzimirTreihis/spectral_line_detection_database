@@ -52,7 +52,7 @@
         </p>
         <p>
             {{ form.species.label }}<br>
-            {{ form.species(size=3) }}<br>
+            {{ form.species }}<br>
             {% for error in form.species.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -131,7 +131,7 @@
         </p>
         <p>
             {{ form.freq_type.label }}<br>
-            {{ form.freq_type(size=2) }}<br>
+            {{ form.freq_type }}<br>
             {% for error in form.freq_type.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -163,7 +163,7 @@
         </p>
         <p>
             {{ form.detection_type.label }}<br>
-            {{ form.detection_type(size=3) }}<br>
+            {{ form.detection_type}}<br>
             {% for error in form.detection_type.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
