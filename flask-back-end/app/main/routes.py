@@ -1190,29 +1190,13 @@ def galaxy_edit_form(id):
 
     session=Session()
     galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
-    declination = galaxy.declination
-    if declination > 0:
-        declination = '{:+}'.format(declination) 
-    form = EditGalaxyForm(name = galaxy.name, right_ascension = galaxy.right_ascension, declination = declination, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
+    form = EditGalaxyForm(name = galaxy.name, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
     original_id = galaxy.id
     if form.validate_on_submit ():
         if form.submit.data:
-            try:
-                DEC = dec_to_float(form.declination.data)
-            except:
-                DEC = float(form.declination.data)
-            try:
-                RA = ra_to_float(form.right_ascension.data)
-            except:
-                RA = float(form.right_ascension.data)
-
             changes = ""
             if (galaxy.name != form.name.data):
                 changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
-            if (galaxy.right_ascension != float(RA)):
-                changes = changes + 'Initial RA: ' + str(galaxy.right_ascension) + ' New RA: ' + str (RA)
-            if (galaxy.declination != float (DEC)):
-                changes = changes + 'Initial DEC: ' + str(galaxy.declination) + ' New DEC: ' + str (DEC)
             if (galaxy.coordinate_system != form.coordinate_system.data):
                 changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System: ' + form.coordinate_system.data
             if (galaxy.lensing_flag != form.lensing_flag.data):
@@ -1221,7 +1205,7 @@ def galaxy_edit_form(id):
                 changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + form.classification.data
             if (galaxy.notes != form.notes.data):
                 changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
+            galaxy = EditGalaxy(name=form.name.data, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
             db.session.commit()
 

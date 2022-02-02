@@ -31,20 +31,6 @@
             {% endfor %}
         </p>
         <p>
-            {{ form.right_ascension.label }}<br>
-            {{ form.right_ascension(size=32) }}<br>
-            {% for error in form.right_ascension.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.declination.label }}<br>
-            {{ form.declination(size=32) }}<br>
-            {% for error in form.declination.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
             {{ form.coordinate_system.label }}<br>
             {{ form.coordinate_system() }}<br>
             {% for error in form.coordinate_system.errors %}
