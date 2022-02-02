@@ -47,7 +47,7 @@
         </p>
         <p>
             {{ form.classification.label }}<br>
-            {{ form.classification(size=32) }}<br>
+            {{ form.classification }}<br>
             {% for error in form.classification.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
