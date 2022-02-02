@@ -7615,3 +7615,82 @@ IndexError: tuple index out of range
 2022-02-02 16:59:03,055 INFO werkzeug Thread-13 : 127.0.0.1 - - [02/Feb/2022 16:59:03] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
 2022-02-02 16:59:04,330 INFO werkzeug Thread-14 : 127.0.0.1 - - [02/Feb/2022 16:59:04] "GET /galaxy_edit_form/1 HTTP/1.1" 200 -
 2022-02-02 16:59:23,038 INFO werkzeug Thread-15 : 127.0.0.1 - - [02/Feb/2022 16:59:23] "GET /galaxy_edit_form/1 HTTP/1.1" 200 -
+2022-02-02 17:32:20,385 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-02 17:32:20,388 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-02 17:32:20,389 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-02 17:32:20,389 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-02 17:32:20,389 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-02 17:32:20,389 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-02 17:32:20,390 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-02 17:32:20,392 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-02 17:32:20,495 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-02 17:32:20,496 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-02 17:32:21,106 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-02 17:32:21,109 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-02 17:32:21,109 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-02 17:32:21,109 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-02 17:32:21,110 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-02 17:32:21,110 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-02 17:32:21,110 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-02 17:32:21,111 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-02 17:32:24,451 INFO werkzeug Thread-3 : 127.0.0.1 - - [02/Feb/2022 17:32:24] "GET /main HTTP/1.1" 200 -
+2022-02-02 17:32:24,466 INFO werkzeug Thread-5 : 127.0.0.1 - - [02/Feb/2022 17:32:24] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:32:24,466 INFO werkzeug Thread-4 : 127.0.0.1 - - [02/Feb/2022 17:32:24] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-02-02 17:32:24,468 INFO werkzeug Thread-6 : 127.0.0.1 - - [02/Feb/2022 17:32:24] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-02 17:32:24,497 INFO werkzeug Thread-7 : 127.0.0.1 - - [02/Feb/2022 17:32:24] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-02 17:32:24,501 INFO werkzeug Thread-8 : 127.0.0.1 - - [02/Feb/2022 17:32:24] "POST /process HTTP/1.1" 200 -
+2022-02-02 17:32:27,994 INFO werkzeug Thread-9 : 127.0.0.1 - - [02/Feb/2022 17:32:27] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-02 17:32:28,001 INFO werkzeug Thread-10 : 127.0.0.1 - - [02/Feb/2022 17:32:28] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:32:29,712 INFO werkzeug Thread-11 : 127.0.0.1 - - [02/Feb/2022 17:32:29] "GET /galaxy_edit_form/1 HTTP/1.1" 200 -
+2022-02-02 17:33:13,256 INFO werkzeug Thread-12 : 127.0.0.1 - - [02/Feb/2022 17:33:13] "GET /main HTTP/1.1" 200 -
+2022-02-02 17:33:13,274 INFO werkzeug Thread-14 : 127.0.0.1 - - [02/Feb/2022 17:33:13] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:13,275 INFO werkzeug Thread-13 : 127.0.0.1 - - [02/Feb/2022 17:33:13] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:13,276 INFO werkzeug Thread-15 : 127.0.0.1 - - [02/Feb/2022 17:33:13] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:13,312 INFO werkzeug Thread-17 : 127.0.0.1 - - [02/Feb/2022 17:33:13] "POST /process HTTP/1.1" 200 -
+2022-02-02 17:33:13,313 INFO werkzeug Thread-16 : 127.0.0.1 - - [02/Feb/2022 17:33:13] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-02 17:33:34,669 INFO werkzeug Thread-18 : 127.0.0.1 - - [02/Feb/2022 17:33:34] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-02 17:33:34,680 INFO werkzeug Thread-19 : 127.0.0.1 - - [02/Feb/2022 17:33:34] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:35,734 INFO werkzeug Thread-20 : 127.0.0.1 - - [02/Feb/2022 17:33:35] "GET /galaxy_edit_form/1 HTTP/1.1" 200 -
+2022-02-02 17:33:43,135 INFO werkzeug Thread-21 : 127.0.0.1 - - [02/Feb/2022 17:33:43] "GET /main HTTP/1.1" 200 -
+2022-02-02 17:33:43,152 INFO werkzeug Thread-23 : 127.0.0.1 - - [02/Feb/2022 17:33:43] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:43,152 INFO werkzeug Thread-22 : 127.0.0.1 - - [02/Feb/2022 17:33:43] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:43,153 INFO werkzeug Thread-24 : 127.0.0.1 - - [02/Feb/2022 17:33:43] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:43,189 INFO werkzeug Thread-25 : 127.0.0.1 - - [02/Feb/2022 17:33:43] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-02 17:33:43,189 INFO werkzeug Thread-26 : 127.0.0.1 - - [02/Feb/2022 17:33:43] "POST /process HTTP/1.1" 200 -
+2022-02-02 17:33:45,776 INFO werkzeug Thread-27 : 127.0.0.1 - - [02/Feb/2022 17:33:45] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-02 17:33:45,782 INFO werkzeug Thread-28 : 127.0.0.1 - - [02/Feb/2022 17:33:45] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:47,027 INFO werkzeug Thread-29 : 127.0.0.1 - - [02/Feb/2022 17:33:47] "GET /galaxy_edit_form/1 HTTP/1.1" 200 -
+2022-02-02 17:33:59,599 INFO werkzeug Thread-30 : 127.0.0.1 - - [02/Feb/2022 17:33:59] "GET /main HTTP/1.1" 200 -
+2022-02-02 17:33:59,616 INFO werkzeug Thread-31 : 127.0.0.1 - - [02/Feb/2022 17:33:59] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:59,619 INFO werkzeug Thread-32 : 127.0.0.1 - - [02/Feb/2022 17:33:59] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:59,620 INFO werkzeug Thread-33 : 127.0.0.1 - - [02/Feb/2022 17:33:59] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-02-02 17:33:59,654 INFO werkzeug Thread-35 : 127.0.0.1 - - [02/Feb/2022 17:33:59] "POST /process HTTP/1.1" 200 -
+2022-02-02 17:33:59,654 INFO werkzeug Thread-34 : 127.0.0.1 - - [02/Feb/2022 17:33:59] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-02 17:34:21,642 INFO werkzeug Thread-36 : 127.0.0.1 - - [02/Feb/2022 17:34:21] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-02 17:34:21,652 INFO werkzeug Thread-37 : 127.0.0.1 - - [02/Feb/2022 17:34:21] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-02 17:35:34,321 INFO werkzeug MainThread :  * Detected change in '/Users/akanksha/Desktop/spectral_line_detection_database/flask-back-end/app/main/forms.py', reloading
+2022-02-02 17:35:34,408 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-02 17:35:35,101 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-02 17:35:35,104 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-02 17:35:35,105 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-02 17:35:35,105 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-02 17:35:35,105 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-02 17:35:35,105 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-02 17:35:35,106 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-02 17:35:35,107 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-02 17:36:17,881 INFO werkzeug MainThread :  * Detected change in '/Users/akanksha/Desktop/spectral_line_detection_database/flask-back-end/app/main/forms.py', reloading
+2022-02-02 17:36:17,959 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-02 17:36:18,642 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-02 17:36:18,645 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-02 17:36:18,646 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-02 17:36:18,646 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-02 17:36:18,646 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-02 17:36:18,646 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-02 17:36:18,647 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-02 17:36:18,648 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-02 17:36:51,308 INFO werkzeug Thread-3 : 127.0.0.1 - - [02/Feb/2022 17:36:51] "GET /main HTTP/1.1" 200 -
+2022-02-02 17:36:51,322 INFO werkzeug Thread-5 : 127.0.0.1 - - [02/Feb/2022 17:36:51] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-02-02 17:36:51,323 INFO werkzeug Thread-4 : 127.0.0.1 - - [02/Feb/2022 17:36:51] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-02 17:36:51,323 INFO werkzeug Thread-6 : 127.0.0.1 - - [02/Feb/2022 17:36:51] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-02-02 17:36:51,351 INFO werkzeug Thread-7 : 127.0.0.1 - - [02/Feb/2022 17:36:51] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-02 17:36:51,352 INFO werkzeug Thread-8 : 127.0.0.1 - - [02/Feb/2022 17:36:51] "POST /process HTTP/1.1" 200 -
