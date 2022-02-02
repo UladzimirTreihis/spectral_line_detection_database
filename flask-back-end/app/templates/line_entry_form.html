@@ -52,7 +52,7 @@
         </p>
         <p>
             {{ form.species.label }}<br>
-            {{ form.species(size=3) }}<br>
+            {{ form.species }}<br>
             {% for error in form.species.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -73,7 +73,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty1" style="display:none">
             {{ form.integrated_line_flux_uncertainty_negative.label }}<br>
             {{ form.integrated_line_flux_uncertainty_negative(size=32) }}<br>
             {% for error in form.integrated_line_flux_uncertainty_negative.errors %}
@@ -97,7 +97,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty2" style="display:none">
             {{ form.peak_line_flux_uncertainty_negative.label }}<br>
             {{ form.peak_line_flux_uncertainty_negative(size=32) }}<br>
             {% for error in form.peak_line_flux_uncertainty_negative.errors %}
@@ -121,7 +121,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty3" style="display:none">
             {{ form.line_width_uncertainty_negative.label }}<br>
             {{ form.line_width_uncertainty_negative(size=32) }}<br>
             {% for error in form.line_width_uncertainty_negative.errors %}
@@ -131,7 +131,7 @@
         </p>
         <p>
             {{ form.freq_type.label }}<br>
-            {{ form.freq_type(size=2) }}<br>
+            {{ form.freq_type }}<br>
             {% for error in form.freq_type.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -153,7 +153,7 @@
             {% endfor %}
 
         </p>
-        <p id="uncertainty" style="display:none">
+        <p id="uncertainty4" style="display:none">
             {{ form.observed_line_frequency_uncertainty_negative.label }}<br>
             {{ form.observed_line_frequency_uncertainty_negative(size=32) }}<br>
             {% for error in form.observed_line_frequency_uncertainty_negative.errors %}
@@ -163,7 +163,7 @@
         </p>
         <p>
             {{ form.detection_type.label }}<br>
-            {{ form.detection_type(size=3) }}<br>
+            {{ form.detection_type}}<br>
             {% for error in form.detection_type.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -212,7 +212,7 @@
         <p>{{ form.submit() }}</p>
     </form>
 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/search.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/searchall.js') }}"></script>
 
  
 {% endblock %}

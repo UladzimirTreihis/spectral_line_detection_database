@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Galaxy Entry Form
+    Add a New Galaxy
 {% endblock %}
 
 {% block content %}
-    
     
 
 
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <h1> Galaxy Entry Form</h1>
-    
+        <h1> Add a New Galaxy</h1>
+        <p> Note that all entries will be crossmatched with existing database entries to prevent duplication. </p>
+
     {% if same_temp_exists %}
     <p>Galaxy you have entered seems to be proposed already and awaits approval. 
         You can still add line detections to it by usings the galaxy's name and coordinates. </p>
@@ -40,6 +40,10 @@
         </p>
         <p>
             {{ form.right_ascension.label }}<br>
+            (Fiducial Position) <br>
+            This is used for duplication checking.<br>
+            Note that the database will store the RA & Dec of the detetcion while the fiducial position is not stored.<br>
+            Accepted formats: decimal degrees or sexagessimal (09h32m16.35s, -1d20'13.567")<br>
             {{ form.right_ascension(size=32) }}<br>
             {% for error in form.right_ascension.errors %}
             <span style="color: red;">[{{ error }}]</span>
@@ -54,14 +58,14 @@
         </p>
         <p>
             {{ form.coordinate_system.label }}<br>
-            {{ form.coordinate_system(size=2) }}<br>
+            {{ form.coordinate_system() }}<br>
             {% for error in form.coordinate_system.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
         <p>
-            {{ form.lensing_flag.label }}<br>
-            {{ form.lensing_flag(size=3) }}<br>
+            {{ form.lensing_flag.label }} <br>
+            {{ form.lensing_flag() }}<br>
             {% for error in form.lensing_flag.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -69,7 +73,7 @@
         </p>
         <p>
             {{ form.classification.label }}<br>
-            {{ form.classification(size=32) }}<br>
+            {{ form.classification() }}<br>
             {% for error in form.classification.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
