@@ -108,35 +108,35 @@ def main():
 
     if current_user.is_authenticated:
         form = DynamicSearchForm()
-    session = Session()
-    if form.submit.data:
-        name = form.galaxy_name.data
-        galaxy = Galaxy.query.filter_by(name=name).first_or_404()
-        line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
-        gdict = galaxy.__dict__
-        glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
-        return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
+        session = Session()
+        if form.submit.data:
+            name = form.galaxy_name.data
+            galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+            line = session.query(Line).filter_by(galaxy_id = galaxy.id).all()
+            gdict = galaxy.__dict__
+            glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
+            return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
 
-    session = Session()
-    galaxies = session.query(Galaxy).all()
-    galaxies_count = session.query(Galaxy.id).count()
+        session = Session()
+        galaxies = session.query(Galaxy).all()
+        galaxies_count = session.query(Galaxy.id).count()
 
-    count_list = []
-    for i in range(galaxies_count):
-        count_list.append(i)
+        count_list = []
+        for i in range(galaxies_count):
+            count_list.append(i)
 
-    list_of_lines_per_species = []
-    for i in range(galaxies_count):
-        list_of_lines_per_species.append([])
-        id = galaxies[i].id
-        species = session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
-        if species != None:
-            for s in species:
-                lines_count = session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
-                list_of_lines_per_species[i].append((s, lines_count)) 
+        list_of_lines_per_species = []
+        for i in range(galaxies_count):
+            list_of_lines_per_species.append([])
+            id = galaxies[i].id
+            species = session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
+            if species != None:
+                for s in species:
+                    lines_count = session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
+                    list_of_lines_per_species[i].append((s, lines_count)) 
 
 
-    lines = session.query(Line.galaxy_id, Line.species).distinct().all()
+        lines = session.query(Line.galaxy_id, Line.species).distinct().all()
 
     return render_template("/main.html", galaxies=galaxies, lines=lines, list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
 
