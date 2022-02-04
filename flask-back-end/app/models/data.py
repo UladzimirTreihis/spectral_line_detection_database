@@ -2,6 +2,31 @@ from sqlalchemy.orm import backref
 from ._db import db
 from datetime import datetime
 
+class BaseMixin(object):
+
+    @classmethod
+    def delete(cls, **kwargs):
+        obj = cls(**kwargs)
+        db.session.delete(obj)
+        db.session.commit()
+
+    @classmethod
+    def delete_object(cls, obj):
+        db.session.delete(obj)
+        db.session.commit()
+
+    @classmethod
+    def approve(cls, **kwargs):
+        obj = cls(**kwargs)
+        db.session.add(obj)
+        db.session.commit()
+    
+    @classmethod
+    def approve_object(cls, obj):
+        db.session.add(obj)
+        db.session.commit()
+
+
 class Post(db.Model):
     __tablename__ = 'post'
     __table_args__ = {'extend_existing': True}
@@ -20,7 +45,7 @@ class Post(db.Model):
     galaxies = db.relationship('Galaxy', backref='post', foreign_keys=[galaxy_id])
     editlines = db.relationship('EditLine', backref='post', foreign_keys=[editline_id])
 
-class Galaxy(db.Model):
+class Galaxy(BaseMixin, db.Model):
     __tablename__ = 'galaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -48,7 +73,7 @@ class Galaxy(db.Model):
     def as_dict(self):
         return {'name': self.name}
 
-class TempGalaxy(db.Model):
+class TempGalaxy(BaseMixin, db.Model):
     __tablename__ = 'tempgalaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
