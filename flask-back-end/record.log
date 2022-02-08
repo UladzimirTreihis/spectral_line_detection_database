@@ -8717,3 +8717,1381 @@ IndexError: tuple index out of range
 2022-02-04 09:10:15,082 INFO werkzeug Thread-82 : 127.0.0.1 - - [04/Feb/2022 09:10:15] "POST /process HTTP/1.1" 200 -
 2022-02-04 09:10:41,679 INFO werkzeug Thread-83 : 127.0.0.1 - - [04/Feb/2022 09:10:41] "GET /galaxy/BR1202-0725S HTTP/1.1" 200 -
 2022-02-04 09:10:41,728 INFO werkzeug Thread-84 : 127.0.0.1 - - [04/Feb/2022 09:10:41] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-08 18:58:16,729 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-08 18:58:16,732 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-08 18:58:16,733 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-08 18:58:16,733 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-08 18:58:16,734 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-08 18:58:16,734 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-08 18:58:16,735 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-08 18:58:16,737 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-08 18:58:16,837 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-08 18:58:45,168 INFO werkzeug Thread-1 : 127.0.0.1 - - [08/Feb/2022 18:58:45] "GET / HTTP/1.1" 200 -
+2022-02-08 18:58:48,890 INFO werkzeug Thread-2 : 127.0.0.1 - - [08/Feb/2022 18:58:48] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-08 18:58:49,014 INFO werkzeug Thread-3 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 18:58:49,017 INFO werkzeug Thread-5 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-02-08 18:58:49,020 INFO werkzeug Thread-4 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 18:58:49,020 INFO werkzeug Thread-6 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 18:58:49,020 INFO werkzeug Thread-7 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-02-08 18:58:49,021 INFO werkzeug Thread-8 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 18:58:49,032 INFO werkzeug Thread-9 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:49,033 INFO werkzeug Thread-10 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:58:49,034 INFO werkzeug Thread-11 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:49,261 INFO werkzeug Thread-12 : 127.0.0.1 - - [08/Feb/2022 18:58:49] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-02-08 18:58:50,366 INFO werkzeug Thread-13 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 18:58:50,419 INFO werkzeug Thread-14 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,429 INFO werkzeug Thread-16 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,429 INFO werkzeug Thread-17 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,430 INFO werkzeug Thread-15 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,434 INFO werkzeug Thread-19 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,436 INFO werkzeug Thread-18 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,439 INFO werkzeug Thread-20 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,444 INFO werkzeug Thread-21 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,445 INFO werkzeug Thread-22 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:58:50,446 INFO werkzeug Thread-23 : 127.0.0.1 - - [08/Feb/2022 18:58:50] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:10,426 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-08 18:59:10,429 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-08 18:59:10,430 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-08 18:59:10,430 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-08 18:59:10,430 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-08 18:59:10,431 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-08 18:59:10,431 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-08 18:59:10,432 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-08 18:59:10,593 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-08 18:59:13,282 INFO werkzeug Thread-1 : 127.0.0.1 - - [08/Feb/2022 18:59:13] "GET / HTTP/1.1" 200 -
+2022-02-08 18:59:15,041 INFO werkzeug Thread-2 : 127.0.0.1 - - [08/Feb/2022 18:59:15] "GET /main HTTP/1.1" 200 -
+2022-02-08 18:59:15,180 INFO werkzeug Thread-3 : 127.0.0.1 - - [08/Feb/2022 18:59:15] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-08 18:59:15,193 INFO werkzeug Thread-4 : 127.0.0.1 - - [08/Feb/2022 18:59:15] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 18:59:15,202 INFO werkzeug Thread-5 : 127.0.0.1 - - [08/Feb/2022 18:59:15] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-02-08 18:59:15,450 INFO werkzeug Thread-6 : 127.0.0.1 - - [08/Feb/2022 18:59:15] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-08 18:59:15,463 INFO werkzeug Thread-7 : 127.0.0.1 - - [08/Feb/2022 18:59:15] "POST /process HTTP/1.1" 200 -
+2022-02-08 18:59:16,586 INFO werkzeug Thread-8 : 127.0.0.1 - - [08/Feb/2022 18:59:16] "GET /contribute HTTP/1.1" 200 -
+2022-02-08 18:59:17,530 INFO werkzeug Thread-9 : 127.0.0.1 - - [08/Feb/2022 18:59:17] "GET /entry_file HTTP/1.1" 200 -
+2022-02-08 18:59:33,212 INFO werkzeug Thread-10 : 127.0.0.1 - - [08/Feb/2022 18:59:33] "POST /entry_file HTTP/1.1" 200 -
+2022-02-08 18:59:34,586 INFO werkzeug Thread-11 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-08 18:59:34,785 INFO werkzeug Thread-12 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 18:59:34,795 INFO werkzeug Thread-13 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 18:59:34,799 INFO werkzeug Thread-14 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1" 200 -
+2022-02-08 18:59:34,801 INFO werkzeug Thread-16 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-02-08 18:59:34,820 INFO werkzeug Thread-17 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 18:59:34,857 INFO werkzeug Thread-18 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-02-08 18:59:34,876 INFO werkzeug Thread-15 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1" 200 -
+2022-02-08 18:59:34,899 INFO werkzeug Thread-19 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 18:59:34,907 INFO werkzeug Thread-20 : 127.0.0.1 - - [08/Feb/2022 18:59:34] "GET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 18:59:35,025 INFO werkzeug Thread-21 : 127.0.0.1 - - [08/Feb/2022 18:59:35] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-02-08 18:59:36,208 INFO werkzeug Thread-22 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 18:59:36,267 INFO werkzeug Thread-23 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,274 INFO werkzeug Thread-25 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,280 INFO werkzeug Thread-27 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-02-08 18:59:36,282 INFO werkzeug Thread-26 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,283 INFO werkzeug Thread-24 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,317 INFO werkzeug Thread-29 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,349 INFO werkzeug Thread-28 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,372 INFO werkzeug Thread-30 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,405 INFO werkzeug Thread-31 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:36,412 INFO werkzeug Thread-32 : 127.0.0.1 - - [08/Feb/2022 18:59:36] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,575 INFO werkzeug Thread-33 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[32mGET /resolve/4/5/different/temp_temp HTTP/1.1[0m" 302 -
+2022-02-08 18:59:39,584 INFO werkzeug Thread-34 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[32mGET /posts HTTP/1.1[0m" 308 -
+2022-02-08 18:59:39,609 INFO werkzeug Thread-35 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 18:59:39,666 INFO werkzeug Thread-39 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,670 INFO werkzeug Thread-37 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,673 INFO werkzeug Thread-38 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,673 INFO werkzeug Thread-36 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,684 INFO werkzeug Thread-41 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,689 INFO werkzeug Thread-40 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,690 INFO werkzeug Thread-43 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,692 INFO werkzeug Thread-44 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,692 INFO werkzeug Thread-45 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:39,692 INFO werkzeug Thread-42 : 127.0.0.1 - - [08/Feb/2022 18:59:39] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,690 INFO werkzeug Thread-46 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 18:59:41,737 INFO werkzeug Thread-48 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,741 INFO werkzeug Thread-47 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,746 INFO werkzeug Thread-49 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,752 INFO werkzeug Thread-50 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,753 INFO werkzeug Thread-51 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,762 INFO werkzeug Thread-52 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,765 INFO werkzeug Thread-54 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,765 INFO werkzeug Thread-53 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,769 INFO werkzeug Thread-55 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:41,771 INFO werkzeug Thread-56 : 127.0.0.1 - - [08/Feb/2022 18:59:41] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:48,940 INFO werkzeug Thread-57 : 127.0.0.1 - - [08/Feb/2022 18:59:48] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-08 18:59:49,007 INFO werkzeug Thread-58 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,010 INFO werkzeug Thread-59 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 18:59:49,014 INFO werkzeug Thread-62 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,014 INFO werkzeug Thread-60 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1" 200 -
+2022-02-08 18:59:49,015 INFO werkzeug Thread-61 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1" 200 -
+2022-02-08 18:59:49,016 INFO werkzeug Thread-63 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,024 INFO werkzeug Thread-64 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,035 INFO werkzeug Thread-65 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1" 200 -
+2022-02-08 18:59:49,036 INFO werkzeug Thread-66 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1" 200 -
+2022-02-08 18:59:49,040 INFO werkzeug Thread-67 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,042 INFO werkzeug Thread-68 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,045 INFO werkzeug Thread-69 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,048 INFO werkzeug Thread-70 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,053 INFO werkzeug Thread-71 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:49,055 INFO werkzeug Thread-72 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 18:59:49,056 INFO werkzeug Thread-73 : 127.0.0.1 - - [08/Feb/2022 18:59:49] "GET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 18:59:50,506 INFO werkzeug Thread-74 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 18:59:50,566 INFO werkzeug Thread-75 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,574 INFO werkzeug Thread-77 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,575 INFO werkzeug Thread-76 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,576 INFO werkzeug Thread-80 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,576 INFO werkzeug Thread-79 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,577 INFO werkzeug Thread-78 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,587 INFO werkzeug Thread-81 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,591 INFO werkzeug Thread-82 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,591 INFO werkzeug Thread-84 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:50,592 INFO werkzeug Thread-83 : 127.0.0.1 - - [08/Feb/2022 18:59:50] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:53,872 ERROR app Thread-85 : Exception on /posts/ [POST]
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_admin/base.py", line 69, in inner
+    return self._run_view(f, *args, **kwargs)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_admin/base.py", line 368, in _run_view
+    return fn(self, *args, **kwargs)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/adm/__init__.py", line 561, in post_view
+    db.session.delete (tempgalaxy)
+  File "<string>", line 2, in delete
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2641, in delete
+    self._delete_impl(state, instance, head=True)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2653, in _delete_impl
+    to_attach = self._before_attach(state, obj)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 3262, in _before_attach
+    raise sa_exc.InvalidRequestError(
+sqlalchemy.exc.InvalidRequestError: Object '<TempGalaxy at 0x7f7bee10a850>' is already attached to session '135' (this is '134')
+2022-02-08 18:59:53,879 INFO werkzeug Thread-85 : 127.0.0.1 - - [08/Feb/2022 18:59:53] "[35m[1mPOST /posts/ HTTP/1.1[0m" 500 -
+2022-02-08 18:59:55,557 INFO werkzeug Thread-86 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 18:59:55,624 INFO werkzeug Thread-88 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,633 INFO werkzeug Thread-91 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,634 INFO werkzeug Thread-87 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,635 INFO werkzeug Thread-89 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,637 INFO werkzeug Thread-90 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,640 INFO werkzeug Thread-92 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,659 INFO werkzeug Thread-94 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,660 INFO werkzeug Thread-93 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,661 INFO werkzeug Thread-96 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 18:59:55,664 INFO werkzeug Thread-95 : 127.0.0.1 - - [08/Feb/2022 18:59:55] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:03:43,937 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-08 19:03:43,940 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-08 19:03:43,941 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-08 19:03:43,941 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-08 19:03:43,942 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-08 19:03:43,942 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-08 19:03:43,942 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-08 19:03:43,943 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-08 19:03:44,106 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-08 19:03:47,668 INFO werkzeug Thread-1 : 127.0.0.1 - - [08/Feb/2022 19:03:47] "GET / HTTP/1.1" 200 -
+2022-02-08 19:03:48,978 INFO werkzeug Thread-2 : 127.0.0.1 - - [08/Feb/2022 19:03:48] "GET /main HTTP/1.1" 200 -
+2022-02-08 19:03:49,020 INFO werkzeug Thread-4 : 127.0.0.1 - - [08/Feb/2022 19:03:49] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:03:49,021 INFO werkzeug Thread-3 : 127.0.0.1 - - [08/Feb/2022 19:03:49] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-08 19:03:49,023 INFO werkzeug Thread-5 : 127.0.0.1 - - [08/Feb/2022 19:03:49] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-02-08 19:03:49,262 INFO werkzeug Thread-6 : 127.0.0.1 - - [08/Feb/2022 19:03:49] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-08 19:03:49,273 INFO werkzeug Thread-7 : 127.0.0.1 - - [08/Feb/2022 19:03:49] "POST /process HTTP/1.1" 200 -
+2022-02-08 19:03:50,198 INFO werkzeug Thread-8 : 127.0.0.1 - - [08/Feb/2022 19:03:50] "GET /contribute HTTP/1.1" 200 -
+2022-02-08 19:03:51,377 INFO werkzeug Thread-9 : 127.0.0.1 - - [08/Feb/2022 19:03:51] "GET /entry_file HTTP/1.1" 200 -
+2022-02-08 19:03:56,818 INFO werkzeug Thread-10 : 127.0.0.1 - - [08/Feb/2022 19:03:56] "POST /entry_file HTTP/1.1" 200 -
+2022-02-08 19:03:58,885 INFO werkzeug Thread-11 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-08 19:03:58,944 INFO werkzeug Thread-14 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1" 200 -
+2022-02-08 19:03:58,945 INFO werkzeug Thread-12 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:03:58,948 INFO werkzeug Thread-13 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:03:58,951 INFO werkzeug Thread-15 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1" 200 -
+2022-02-08 19:03:58,954 INFO werkzeug Thread-16 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-02-08 19:03:58,954 INFO werkzeug Thread-17 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:03:58,962 INFO werkzeug Thread-18 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-02-08 19:03:58,965 INFO werkzeug Thread-19 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 19:03:58,966 INFO werkzeug Thread-20 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:03:58,999 INFO werkzeug Thread-21 : 127.0.0.1 - - [08/Feb/2022 19:03:58] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-02-08 19:04:01,119 INFO werkzeug Thread-22 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:04:01,178 INFO werkzeug Thread-26 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,180 INFO werkzeug Thread-23 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,185 INFO werkzeug Thread-25 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,186 INFO werkzeug Thread-24 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,187 INFO werkzeug Thread-28 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,193 INFO werkzeug Thread-27 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-02-08 19:04:01,197 INFO werkzeug Thread-29 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,201 INFO werkzeug Thread-30 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,203 INFO werkzeug Thread-31 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:01,204 INFO werkzeug Thread-32 : 127.0.0.1 - - [08/Feb/2022 19:04:01] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,272 INFO werkzeug Thread-33 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[32mGET /resolve/4/5/different/temp_temp HTTP/1.1[0m" 302 -
+2022-02-08 19:04:03,281 INFO werkzeug Thread-34 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[32mGET /posts HTTP/1.1[0m" 308 -
+2022-02-08 19:04:03,312 INFO werkzeug Thread-35 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:04:03,372 INFO werkzeug Thread-36 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,374 INFO werkzeug Thread-37 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,375 INFO werkzeug Thread-38 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,378 INFO werkzeug Thread-39 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,384 INFO werkzeug Thread-41 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,385 INFO werkzeug Thread-40 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,393 INFO werkzeug Thread-42 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,394 INFO werkzeug Thread-44 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,394 INFO werkzeug Thread-43 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:03,394 INFO werkzeug Thread-45 : 127.0.0.1 - - [08/Feb/2022 19:04:03] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:07,414 ERROR app Thread-46 : Exception on /posts/ [POST]
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_admin/base.py", line 69, in inner
+    return self._run_view(f, *args, **kwargs)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_admin/base.py", line 368, in _run_view
+    return fn(self, *args, **kwargs)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/adm/__init__.py", line 561, in post_view
+    db.session.delete (tempgalaxy)
+  File "<string>", line 2, in delete
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2641, in delete
+    self._delete_impl(state, instance, head=True)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 2653, in _delete_impl
+    to_attach = self._before_attach(state, obj)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 3262, in _before_attach
+    raise sa_exc.InvalidRequestError(
+sqlalchemy.exc.InvalidRequestError: Object '<TempGalaxy at 0x7fd3a71add60>' is already attached to session '94' (this is '93')
+2022-02-08 19:04:07,420 INFO werkzeug Thread-46 : 127.0.0.1 - - [08/Feb/2022 19:04:07] "[35m[1mPOST /posts/ HTTP/1.1[0m" 500 -
+2022-02-08 19:04:09,318 INFO werkzeug Thread-47 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:04:09,365 INFO werkzeug Thread-49 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,366 INFO werkzeug Thread-48 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,372 INFO werkzeug Thread-50 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,379 INFO werkzeug Thread-52 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,384 INFO werkzeug Thread-51 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,389 INFO werkzeug Thread-53 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,393 INFO werkzeug Thread-54 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,395 INFO werkzeug Thread-55 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,396 INFO werkzeug Thread-56 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:04:09,398 INFO werkzeug Thread-57 : 127.0.0.1 - - [08/Feb/2022 19:04:09] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,075 INFO werkzeug Thread-58 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-08 19:07:17,148 INFO werkzeug Thread-59 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,156 INFO werkzeug Thread-60 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,159 INFO werkzeug Thread-61 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,164 INFO werkzeug Thread-62 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,164 INFO werkzeug Thread-64 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1" 200 -
+2022-02-08 19:07:17,165 INFO werkzeug Thread-63 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 19:07:17,168 INFO werkzeug Thread-65 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1" 200 -
+2022-02-08 19:07:17,184 INFO werkzeug Thread-67 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,185 INFO werkzeug Thread-66 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,187 INFO werkzeug Thread-68 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,201 INFO werkzeug Thread-70 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,203 INFO werkzeug Thread-69 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:07:17,206 INFO werkzeug Thread-71 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1" 200 -
+2022-02-08 19:07:17,208 INFO werkzeug Thread-72 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1" 200 -
+2022-02-08 19:07:17,210 INFO werkzeug Thread-73 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:07:17,213 INFO werkzeug Thread-74 : 127.0.0.1 - - [08/Feb/2022 19:07:17] "GET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:16:15,829 INFO werkzeug Thread-75 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "GET /tempgalaxy/ HTTP/1.1" 200 -
+2022-02-08 19:16:15,893 INFO werkzeug Thread-77 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,894 INFO werkzeug Thread-76 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,895 INFO werkzeug Thread-78 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,895 INFO werkzeug Thread-80 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,899 INFO werkzeug Thread-79 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,907 INFO werkzeug Thread-81 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,912 INFO werkzeug Thread-82 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,922 INFO werkzeug Thread-83 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,923 INFO werkzeug Thread-84 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,927 INFO werkzeug Thread-85 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,931 INFO werkzeug Thread-86 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,934 INFO werkzeug Thread-88 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,936 INFO werkzeug Thread-87 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,944 INFO werkzeug Thread-89 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,944 INFO werkzeug Thread-91 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,944 INFO werkzeug Thread-92 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:15,945 INFO werkzeug Thread-90 : 127.0.0.1 - - [08/Feb/2022 19:16:15] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,751 INFO werkzeug Thread-93 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "GET /post/ HTTP/1.1" 200 -
+2022-02-08 19:16:25,817 INFO werkzeug Thread-94 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,823 INFO werkzeug Thread-95 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,829 INFO werkzeug Thread-97 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,830 INFO werkzeug Thread-96 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,830 INFO werkzeug Thread-98 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,839 INFO werkzeug Thread-99 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,843 INFO werkzeug Thread-100 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,848 INFO werkzeug Thread-101 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,852 INFO werkzeug Thread-103 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,855 INFO werkzeug Thread-102 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,859 INFO werkzeug Thread-105 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,860 INFO werkzeug Thread-104 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,867 INFO werkzeug Thread-107 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,871 INFO werkzeug Thread-106 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,872 INFO werkzeug Thread-108 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,875 INFO werkzeug Thread-109 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:25,876 INFO werkzeug Thread-110 : 127.0.0.1 - - [08/Feb/2022 19:16:25] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,012 INFO werkzeug Thread-111 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:16:32,068 INFO werkzeug Thread-112 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,073 INFO werkzeug Thread-113 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,075 INFO werkzeug Thread-115 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,079 INFO werkzeug Thread-114 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,080 INFO werkzeug Thread-116 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,083 INFO werkzeug Thread-117 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,086 INFO werkzeug Thread-118 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,094 INFO werkzeug Thread-120 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,094 INFO werkzeug Thread-119 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:16:32,095 INFO werkzeug Thread-121 : 127.0.0.1 - - [08/Feb/2022 19:16:32] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,904 INFO werkzeug Thread-122 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "GET /templine/ HTTP/1.1" 200 -
+2022-02-08 19:17:23,960 INFO werkzeug Thread-125 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,966 INFO werkzeug Thread-126 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,970 INFO werkzeug Thread-123 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,970 INFO werkzeug Thread-124 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,980 INFO werkzeug Thread-127 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,981 INFO werkzeug Thread-128 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,983 INFO werkzeug Thread-129 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,988 INFO werkzeug Thread-131 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:23,991 INFO werkzeug Thread-130 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,000 INFO werkzeug Thread-132 : 127.0.0.1 - - [08/Feb/2022 19:17:23] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,002 INFO werkzeug Thread-133 : 127.0.0.1 - - [08/Feb/2022 19:17:24] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,005 INFO werkzeug Thread-134 : 127.0.0.1 - - [08/Feb/2022 19:17:24] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,007 INFO werkzeug Thread-135 : 127.0.0.1 - - [08/Feb/2022 19:17:24] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,007 INFO werkzeug Thread-136 : 127.0.0.1 - - [08/Feb/2022 19:17:24] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,009 INFO werkzeug Thread-137 : 127.0.0.1 - - [08/Feb/2022 19:17:24] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:17:24,010 INFO werkzeug Thread-138 : 127.0.0.1 - - [08/Feb/2022 19:17:24] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:07,916 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-08 19:22:07,918 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-08 19:22:07,919 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-08 19:22:07,919 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-08 19:22:07,919 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-08 19:22:07,919 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-08 19:22:07,919 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-08 19:22:07,921 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-08 19:22:08,087 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-08 19:22:11,221 INFO werkzeug Thread-1 : 127.0.0.1 - - [08/Feb/2022 19:22:11] "GET / HTTP/1.1" 200 -
+2022-02-08 19:22:12,537 INFO werkzeug Thread-2 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-08 19:22:12,590 INFO werkzeug Thread-3 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,598 INFO werkzeug Thread-5 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,598 INFO werkzeug Thread-4 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,602 INFO werkzeug Thread-6 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,608 INFO werkzeug Thread-7 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,615 INFO werkzeug Thread-9 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,619 INFO werkzeug Thread-8 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,620 INFO werkzeug Thread-10 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:12,622 INFO werkzeug Thread-11 : 127.0.0.1 - - [08/Feb/2022 19:22:12] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,874 INFO werkzeug Thread-12 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:22:14,934 INFO werkzeug Thread-16 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,936 INFO werkzeug Thread-14 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,937 INFO werkzeug Thread-13 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,938 INFO werkzeug Thread-17 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,941 INFO werkzeug Thread-15 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,947 INFO werkzeug Thread-18 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,954 INFO werkzeug Thread-19 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,957 INFO werkzeug Thread-22 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,958 INFO werkzeug Thread-20 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:14,958 INFO werkzeug Thread-21 : 127.0.0.1 - - [08/Feb/2022 19:22:14] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:15,863 INFO werkzeug Thread-23 : 127.0.0.1 - - [08/Feb/2022 19:22:15] "GET / HTTP/1.1" 200 -
+2022-02-08 19:22:16,620 INFO werkzeug Thread-24 : 127.0.0.1 - - [08/Feb/2022 19:22:16] "GET /main HTTP/1.1" 200 -
+2022-02-08 19:22:16,679 INFO werkzeug Thread-27 : 127.0.0.1 - - [08/Feb/2022 19:22:16] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-02-08 19:22:16,679 INFO werkzeug Thread-25 : 127.0.0.1 - - [08/Feb/2022 19:22:16] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-08 19:22:16,680 INFO werkzeug Thread-26 : 127.0.0.1 - - [08/Feb/2022 19:22:16] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:22:16,735 INFO werkzeug Thread-28 : 127.0.0.1 - - [08/Feb/2022 19:22:16] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-08 19:22:16,748 INFO werkzeug Thread-29 : 127.0.0.1 - - [08/Feb/2022 19:22:16] "POST /process HTTP/1.1" 200 -
+2022-02-08 19:22:17,533 INFO werkzeug Thread-30 : 127.0.0.1 - - [08/Feb/2022 19:22:17] "GET /contribute HTTP/1.1" 200 -
+2022-02-08 19:22:18,645 INFO werkzeug Thread-31 : 127.0.0.1 - - [08/Feb/2022 19:22:18] "GET /entry_file HTTP/1.1" 200 -
+2022-02-08 19:22:24,432 INFO werkzeug Thread-32 : 127.0.0.1 - - [08/Feb/2022 19:22:24] "POST /entry_file HTTP/1.1" 200 -
+2022-02-08 19:22:26,283 INFO werkzeug Thread-33 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-08 19:22:26,340 INFO werkzeug Thread-34 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:22:26,352 INFO werkzeug Thread-35 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:22:26,352 INFO werkzeug Thread-38 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-02-08 19:22:26,353 INFO werkzeug Thread-37 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1" 200 -
+2022-02-08 19:22:26,354 INFO werkzeug Thread-39 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:22:26,356 INFO werkzeug Thread-36 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1" 200 -
+2022-02-08 19:22:26,372 INFO werkzeug Thread-40 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-02-08 19:22:26,374 INFO werkzeug Thread-41 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 19:22:26,375 INFO werkzeug Thread-42 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:22:26,391 INFO werkzeug Thread-43 : 127.0.0.1 - - [08/Feb/2022 19:22:26] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-02-08 19:22:28,640 INFO werkzeug Thread-44 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:22:28,697 INFO werkzeug Thread-45 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,700 INFO werkzeug Thread-47 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,703 INFO werkzeug Thread-48 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,705 INFO werkzeug Thread-46 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,711 INFO werkzeug Thread-50 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,716 INFO werkzeug Thread-51 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,721 INFO werkzeug Thread-53 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,721 INFO werkzeug Thread-49 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-02-08 19:22:28,722 INFO werkzeug Thread-52 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:28,723 INFO werkzeug Thread-54 : 127.0.0.1 - - [08/Feb/2022 19:22:28] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:37,219 INFO werkzeug Thread-55 : 127.0.0.1 - - [08/Feb/2022 19:22:37] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:22:40,688 INFO werkzeug Thread-56 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-08 19:22:40,759 INFO werkzeug Thread-57 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,769 INFO werkzeug Thread-60 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,770 INFO werkzeug Thread-58 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,771 INFO werkzeug Thread-61 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 19:22:40,773 INFO werkzeug Thread-62 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1" 200 -
+2022-02-08 19:22:40,776 INFO werkzeug Thread-59 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,788 INFO werkzeug Thread-63 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1" 200 -
+2022-02-08 19:22:40,789 INFO werkzeug Thread-64 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,791 INFO werkzeug Thread-65 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,803 INFO werkzeug Thread-68 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,806 INFO werkzeug Thread-67 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,811 INFO werkzeug Thread-66 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:40,811 INFO werkzeug Thread-70 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1" 200 -
+2022-02-08 19:22:40,811 INFO werkzeug Thread-69 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1" 200 -
+2022-02-08 19:22:40,812 INFO werkzeug Thread-71 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:22:40,814 INFO werkzeug Thread-72 : 127.0.0.1 - - [08/Feb/2022 19:22:40] "GET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:22:42,561 INFO werkzeug Thread-73 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:22:42,629 INFO werkzeug Thread-75 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,629 INFO werkzeug Thread-76 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,634 INFO werkzeug Thread-77 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,637 INFO werkzeug Thread-74 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,639 INFO werkzeug Thread-78 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,639 INFO werkzeug Thread-79 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,648 INFO werkzeug Thread-80 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,649 INFO werkzeug Thread-81 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,649 INFO werkzeug Thread-82 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:42,651 INFO werkzeug Thread-83 : 127.0.0.1 - - [08/Feb/2022 19:22:42] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:22:57,616 INFO werkzeug Thread-84 : 127.0.0.1 - - [08/Feb/2022 19:22:57] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:29:49,134 ERROR app Thread-85 : Exception on /posts/ [POST]
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1516, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1502, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_admin/base.py", line 69, in inner
+    return self._run_view(f, *args, **kwargs)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_admin/base.py", line 368, in _run_view
+    return fn(self, *args, **kwargs)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/adm/__init__.py", line 583, in post_view
+    original_line_id = line[1]
+TypeError: 'NoneType' object is not subscriptable
+2022-02-08 19:29:49,138 INFO werkzeug Thread-85 : 127.0.0.1 - - [08/Feb/2022 19:29:49] "[35m[1mPOST /posts/ HTTP/1.1[0m" 500 -
+2022-02-08 19:29:53,194 INFO werkzeug Thread-86 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:29:53,253 INFO werkzeug Thread-88 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,253 INFO werkzeug Thread-90 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,255 INFO werkzeug Thread-87 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,259 INFO werkzeug Thread-89 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,264 INFO werkzeug Thread-92 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,265 INFO werkzeug Thread-91 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,273 INFO werkzeug Thread-93 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,274 INFO werkzeug Thread-94 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,275 INFO werkzeug Thread-95 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:29:53,276 INFO werkzeug Thread-96 : 127.0.0.1 - - [08/Feb/2022 19:29:53] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:08,923 INFO werkzeug Thread-97 : 127.0.0.1 - - [08/Feb/2022 19:30:08] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:11,256 INFO werkzeug Thread-98 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:11,357 INFO werkzeug Thread-99 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,363 INFO werkzeug Thread-102 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,364 INFO werkzeug Thread-100 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,366 INFO werkzeug Thread-103 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,366 INFO werkzeug Thread-104 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,380 INFO werkzeug Thread-105 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,382 INFO werkzeug Thread-106 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,384 INFO werkzeug Thread-107 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,385 INFO werkzeug Thread-101 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:11,385 INFO werkzeug Thread-108 : 127.0.0.1 - - [08/Feb/2022 19:30:11] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:16,404 INFO werkzeug Thread-109 : 127.0.0.1 - - [08/Feb/2022 19:30:16] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:18,564 INFO werkzeug Thread-110 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:18,628 INFO werkzeug Thread-113 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,631 INFO werkzeug Thread-114 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,634 INFO werkzeug Thread-111 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,634 INFO werkzeug Thread-112 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,640 INFO werkzeug Thread-115 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,650 INFO werkzeug Thread-116 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,652 INFO werkzeug Thread-117 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,652 INFO werkzeug Thread-118 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,655 INFO werkzeug Thread-119 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:18,656 INFO werkzeug Thread-120 : 127.0.0.1 - - [08/Feb/2022 19:30:18] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,720 INFO werkzeug Thread-121 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "GET /line/ HTTP/1.1" 200 -
+2022-02-08 19:30:20,771 INFO werkzeug Thread-122 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,787 INFO werkzeug Thread-124 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,788 INFO werkzeug Thread-123 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,792 INFO werkzeug Thread-125 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,795 INFO werkzeug Thread-127 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,800 INFO werkzeug Thread-126 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,803 INFO werkzeug Thread-128 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,810 INFO werkzeug Thread-129 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,811 INFO werkzeug Thread-130 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,821 INFO werkzeug Thread-131 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,822 INFO werkzeug Thread-132 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,827 INFO werkzeug Thread-133 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,830 INFO werkzeug Thread-134 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,833 INFO werkzeug Thread-135 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,833 INFO werkzeug Thread-136 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:20,835 INFO werkzeug Thread-137 : 127.0.0.1 - - [08/Feb/2022 19:30:20] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:24,929 INFO werkzeug Thread-138 : 127.0.0.1 - - [08/Feb/2022 19:30:24] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:24,996 INFO werkzeug Thread-139 : 127.0.0.1 - - [08/Feb/2022 19:30:24] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:24,997 INFO werkzeug Thread-140 : 127.0.0.1 - - [08/Feb/2022 19:30:24] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:24,999 INFO werkzeug Thread-143 : 127.0.0.1 - - [08/Feb/2022 19:30:24] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,003 INFO werkzeug Thread-141 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,004 INFO werkzeug Thread-142 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,008 INFO werkzeug Thread-144 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,014 INFO werkzeug Thread-145 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,015 INFO werkzeug Thread-147 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,016 INFO werkzeug Thread-146 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:25,018 INFO werkzeug Thread-148 : 127.0.0.1 - - [08/Feb/2022 19:30:25] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:33,001 INFO werkzeug Thread-149 : 127.0.0.1 - - [08/Feb/2022 19:30:33] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:35,051 INFO werkzeug Thread-150 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:35,106 INFO werkzeug Thread-151 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,114 INFO werkzeug Thread-152 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,114 INFO werkzeug Thread-153 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,120 INFO werkzeug Thread-154 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,126 INFO werkzeug Thread-155 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,130 INFO werkzeug Thread-156 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,134 INFO werkzeug Thread-157 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,136 INFO werkzeug Thread-158 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,137 INFO werkzeug Thread-160 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:35,137 INFO werkzeug Thread-159 : 127.0.0.1 - - [08/Feb/2022 19:30:35] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:53,594 INFO werkzeug Thread-161 : 127.0.0.1 - - [08/Feb/2022 19:30:53] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:55,064 INFO werkzeug Thread-162 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:30:55,121 INFO werkzeug Thread-163 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,122 INFO werkzeug Thread-165 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,125 INFO werkzeug Thread-166 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,134 INFO werkzeug Thread-167 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,135 INFO werkzeug Thread-164 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,138 INFO werkzeug Thread-168 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,145 INFO werkzeug Thread-170 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,146 INFO werkzeug Thread-171 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,147 INFO werkzeug Thread-169 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:30:55,148 INFO werkzeug Thread-172 : 127.0.0.1 - - [08/Feb/2022 19:30:55] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:03,598 INFO werkzeug Thread-173 : 127.0.0.1 - - [08/Feb/2022 19:31:03] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:31:05,285 INFO werkzeug Thread-174 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:31:05,342 INFO werkzeug Thread-175 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,347 INFO werkzeug Thread-177 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,351 INFO werkzeug Thread-176 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,354 INFO werkzeug Thread-178 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,363 INFO werkzeug Thread-179 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,372 INFO werkzeug Thread-180 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,376 INFO werkzeug Thread-181 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,377 INFO werkzeug Thread-182 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,379 INFO werkzeug Thread-183 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:31:05,379 INFO werkzeug Thread-184 : 127.0.0.1 - - [08/Feb/2022 19:31:05] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,334 INFO werkzeug Thread-185 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:06,383 INFO werkzeug Thread-186 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,383 INFO werkzeug Thread-187 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,392 INFO werkzeug Thread-188 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,395 INFO werkzeug Thread-189 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,398 INFO werkzeug Thread-190 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,402 INFO werkzeug Thread-191 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,405 INFO werkzeug Thread-193 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,406 INFO werkzeug Thread-192 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,408 INFO werkzeug Thread-195 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:06,408 INFO werkzeug Thread-194 : 127.0.0.1 - - [08/Feb/2022 19:32:06] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,193 INFO werkzeug Thread-196 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-08 19:32:08,245 INFO werkzeug Thread-199 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,248 INFO werkzeug Thread-197 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,249 INFO werkzeug Thread-200 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,250 INFO werkzeug Thread-198 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,256 INFO werkzeug Thread-202 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,257 INFO werkzeug Thread-201 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,263 INFO werkzeug Thread-203 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,271 INFO werkzeug Thread-204 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,278 INFO werkzeug Thread-205 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,283 INFO werkzeug Thread-207 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,289 INFO werkzeug Thread-206 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,294 INFO werkzeug Thread-209 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,294 INFO werkzeug Thread-208 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,300 INFO werkzeug Thread-210 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,301 INFO werkzeug Thread-211 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:08,301 INFO werkzeug Thread-212 : 127.0.0.1 - - [08/Feb/2022 19:32:08] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,439 INFO werkzeug Thread-213 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "GET /line/ HTTP/1.1" 200 -
+2022-02-08 19:32:10,502 INFO werkzeug Thread-214 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,506 INFO werkzeug Thread-215 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,516 INFO werkzeug Thread-216 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,517 INFO werkzeug Thread-217 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,519 INFO werkzeug Thread-218 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,522 INFO werkzeug Thread-219 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,524 INFO werkzeug Thread-220 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,530 INFO werkzeug Thread-221 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,539 INFO werkzeug Thread-222 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,540 INFO werkzeug Thread-223 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,546 INFO werkzeug Thread-224 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,550 INFO werkzeug Thread-226 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,552 INFO werkzeug Thread-225 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,558 INFO werkzeug Thread-227 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,560 INFO werkzeug Thread-228 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:10,560 INFO werkzeug Thread-229 : 127.0.0.1 - - [08/Feb/2022 19:32:10] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,050 INFO werkzeug Thread-230 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:12,110 INFO werkzeug Thread-231 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,112 INFO werkzeug Thread-233 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,113 INFO werkzeug Thread-232 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,116 INFO werkzeug Thread-234 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,123 INFO werkzeug Thread-235 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,128 INFO werkzeug Thread-236 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,135 INFO werkzeug Thread-238 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,136 INFO werkzeug Thread-237 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,138 INFO werkzeug Thread-239 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:12,139 INFO werkzeug Thread-240 : 127.0.0.1 - - [08/Feb/2022 19:32:12] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,043 INFO werkzeug Thread-241 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[32mGET /resolve/4/5/different/temp_temp HTTP/1.1[0m" 302 -
+2022-02-08 19:32:18,052 INFO werkzeug Thread-242 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[32mGET /posts HTTP/1.1[0m" 308 -
+2022-02-08 19:32:18,071 INFO werkzeug Thread-243 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:18,149 INFO werkzeug Thread-244 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,152 INFO werkzeug Thread-247 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,159 INFO werkzeug Thread-245 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,160 INFO werkzeug Thread-246 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,169 INFO werkzeug Thread-248 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,170 INFO werkzeug Thread-251 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,170 INFO werkzeug Thread-249 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,173 INFO werkzeug Thread-250 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,177 INFO werkzeug Thread-252 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:18,177 INFO werkzeug Thread-253 : 127.0.0.1 - - [08/Feb/2022 19:32:18] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,007 INFO werkzeug Thread-254 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:26,071 INFO werkzeug Thread-255 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,073 INFO werkzeug Thread-257 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,073 INFO werkzeug Thread-256 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,076 INFO werkzeug Thread-259 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,080 INFO werkzeug Thread-258 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,080 INFO werkzeug Thread-260 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,091 INFO werkzeug Thread-261 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,093 INFO werkzeug Thread-262 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,094 INFO werkzeug Thread-263 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:26,095 INFO werkzeug Thread-264 : 127.0.0.1 - - [08/Feb/2022 19:32:26] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,056 INFO werkzeug Thread-265 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:28,118 INFO werkzeug Thread-266 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,119 INFO werkzeug Thread-268 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,123 INFO werkzeug Thread-267 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,123 INFO werkzeug Thread-270 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,132 INFO werkzeug Thread-271 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,134 INFO werkzeug Thread-269 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,140 INFO werkzeug Thread-272 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,143 INFO werkzeug Thread-273 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,145 INFO werkzeug Thread-275 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:28,146 INFO werkzeug Thread-274 : 127.0.0.1 - - [08/Feb/2022 19:32:28] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,159 INFO werkzeug Thread-276 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:29,219 INFO werkzeug Thread-277 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,221 INFO werkzeug Thread-278 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,224 INFO werkzeug Thread-280 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,226 INFO werkzeug Thread-279 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,226 INFO werkzeug Thread-281 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,231 INFO werkzeug Thread-282 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,237 INFO werkzeug Thread-283 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,238 INFO werkzeug Thread-285 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,238 INFO werkzeug Thread-284 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,241 INFO werkzeug Thread-286 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,833 INFO werkzeug Thread-287 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:29,884 INFO werkzeug Thread-288 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,899 INFO werkzeug Thread-289 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,908 INFO werkzeug Thread-290 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,910 INFO werkzeug Thread-294 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,912 INFO werkzeug Thread-293 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,913 INFO werkzeug Thread-291 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,915 INFO werkzeug Thread-292 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,920 INFO werkzeug Thread-295 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,923 INFO werkzeug Thread-296 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:29,923 INFO werkzeug Thread-297 : 127.0.0.1 - - [08/Feb/2022 19:32:29] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,423 INFO werkzeug Thread-298 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:30,476 INFO werkzeug Thread-299 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,479 INFO werkzeug Thread-300 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,480 INFO werkzeug Thread-302 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,483 INFO werkzeug Thread-301 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,485 INFO werkzeug Thread-303 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,486 INFO werkzeug Thread-304 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,497 INFO werkzeug Thread-306 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,497 INFO werkzeug Thread-305 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,501 INFO werkzeug Thread-308 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:30,502 INFO werkzeug Thread-307 : 127.0.0.1 - - [08/Feb/2022 19:32:30] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:31,989 INFO werkzeug Thread-309 : 127.0.0.1 - - [08/Feb/2022 19:32:31] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:32,042 INFO werkzeug Thread-311 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,046 INFO werkzeug Thread-310 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,047 INFO werkzeug Thread-312 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,053 INFO werkzeug Thread-313 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,056 INFO werkzeug Thread-315 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,065 INFO werkzeug Thread-314 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,066 INFO werkzeug Thread-316 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,066 INFO werkzeug Thread-317 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,069 INFO werkzeug Thread-318 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:32,070 INFO werkzeug Thread-319 : 127.0.0.1 - - [08/Feb/2022 19:32:32] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:35,705 INFO werkzeug Thread-320 : 127.0.0.1 - - [08/Feb/2022 19:32:35] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:37,237 INFO werkzeug Thread-321 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:37,294 INFO werkzeug Thread-325 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,296 INFO werkzeug Thread-323 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,301 INFO werkzeug Thread-326 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,302 INFO werkzeug Thread-322 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,307 INFO werkzeug Thread-327 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,314 INFO werkzeug Thread-324 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,317 INFO werkzeug Thread-329 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,320 INFO werkzeug Thread-328 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,323 INFO werkzeug Thread-330 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:37,323 INFO werkzeug Thread-331 : 127.0.0.1 - - [08/Feb/2022 19:32:37] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,575 INFO werkzeug Thread-332 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:32:38,650 INFO werkzeug Thread-333 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,653 INFO werkzeug Thread-334 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,654 INFO werkzeug Thread-335 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,654 INFO werkzeug Thread-336 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,660 INFO werkzeug Thread-337 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,663 INFO werkzeug Thread-338 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,670 INFO werkzeug Thread-339 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,672 INFO werkzeug Thread-340 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,672 INFO werkzeug Thread-341 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:38,672 INFO werkzeug Thread-342 : 127.0.0.1 - - [08/Feb/2022 19:32:38] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:32:39,715 INFO werkzeug Thread-343 : 127.0.0.1 - - [08/Feb/2022 19:32:39] "GET / HTTP/1.1" 200 -
+2022-02-08 19:32:41,207 INFO werkzeug Thread-344 : 127.0.0.1 - - [08/Feb/2022 19:32:41] "GET /main HTTP/1.1" 200 -
+2022-02-08 19:32:41,261 INFO werkzeug Thread-345 : 127.0.0.1 - - [08/Feb/2022 19:32:41] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-08 19:32:41,265 INFO werkzeug Thread-347 : 127.0.0.1 - - [08/Feb/2022 19:32:41] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-02-08 19:32:41,266 INFO werkzeug Thread-346 : 127.0.0.1 - - [08/Feb/2022 19:32:41] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:32:41,329 INFO werkzeug Thread-348 : 127.0.0.1 - - [08/Feb/2022 19:32:41] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-08 19:32:41,341 INFO werkzeug Thread-349 : 127.0.0.1 - - [08/Feb/2022 19:32:41] "POST /process HTTP/1.1" 200 -
+2022-02-08 19:32:53,783 ERROR app Thread-350 : Exception on /user/admin [GET]
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_principal.py", line 477, in _on_before_request
+    identity = loader()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 245, in _identity_loader
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-02-08 19:32:53,798 INFO werkzeug Thread-350 : 127.0.0.1 - - [08/Feb/2022 19:32:53] "[35m[1mGET /user/admin HTTP/1.1[0m" 500 -
+2022-02-08 19:32:53,809 ERROR werkzeug Thread-350 : Error on request:
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_principal.py", line 477, in _on_before_request
+    identity = loader()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 245, in _identity_loader
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/serving.py", line 319, in run_wsgi
+    execute(self.server.app)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/serving.py", line 308, in execute
+    application_iter = app(environ, start_response)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1440, in handle_exception
+    server_error = self.ensure_sync(handler)(server_error)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/errors/handlers.py", line 10, in internal_error
+    return render_template('./errors/500.html'), 500
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/templating.py", line 146, in render_template
+    ctx.app.update_template_context(context)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 756, in update_template_context
+    context.update(func())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 379, in _user_context_processor
+    return dict(current_user=_get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-02-08 19:32:55,460 ERROR app Thread-351 : Exception on /process [POST]
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_principal.py", line 477, in _on_before_request
+    identity = loader()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 245, in _identity_loader
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-02-08 19:32:55,465 INFO werkzeug Thread-351 : 127.0.0.1 - - [08/Feb/2022 19:32:55] "[35m[1mPOST /process HTTP/1.1[0m" 500 -
+2022-02-08 19:32:55,479 ERROR werkzeug Thread-351 : Error on request:
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_principal.py", line 477, in _on_before_request
+    identity = loader()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 245, in _identity_loader
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/serving.py", line 319, in run_wsgi
+    execute(self.server.app)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/serving.py", line 308, in execute
+    application_iter = app(environ, start_response)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1440, in handle_exception
+    server_error = self.ensure_sync(handler)(server_error)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/errors/handlers.py", line 10, in internal_error
+    return render_template('./errors/500.html'), 500
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/templating.py", line 146, in render_template
+    ctx.app.update_template_context(context)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 756, in update_template_context
+    context.update(func())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 379, in _user_context_processor
+    return dict(current_user=_get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-02-08 19:32:56,100 ERROR app Thread-352 : Exception on /main [GET]
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_principal.py", line 477, in _on_before_request
+    identity = loader()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 245, in _identity_loader
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-02-08 19:32:56,104 INFO werkzeug Thread-352 : 127.0.0.1 - - [08/Feb/2022 19:32:56] "[35m[1mGET /main HTTP/1.1[0m" 500 -
+2022-02-08 19:32:56,115 ERROR werkzeug Thread-352 : Error on request:
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2073, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1518, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1514, in full_dispatch_request
+    rv = self.preprocess_request()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1857, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_principal.py", line 477, in _on_before_request
+    identity = loader()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 245, in _identity_loader
+    if not isinstance(current_user._get_current_object(), AnonymousUserMixin):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/local.py", line 554, in _get_current_object
+    return self.__local()  # type: ignore
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 26, in <lambda>
+    current_user = LocalProxy(lambda: _get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.OperationalError: no such table: user
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/serving.py", line 319, in run_wsgi
+    execute(self.server.app)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/werkzeug/serving.py", line 308, in execute
+    application_iter = app(environ, start_response)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2091, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 2076, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 1440, in handle_exception
+    server_error = self.ensure_sync(handler)(server_error)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/errors/handlers.py", line 10, in internal_error
+    return render_template('./errors/500.html'), 500
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/templating.py", line 146, in render_template
+    ctx.app.update_template_context(context)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask/app.py", line 756, in update_template_context
+    context.update(func())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 379, in _user_context_processor
+    return dict(current_user=_get_user())
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/utils.py", line 346, in _get_user
+    current_app.login_manager._load_user()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_login/login_manager.py", line 318, in _load_user
+    user = self._user_callback(user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/core.py", line 221, in _user_loader
+    return _security.datastore.find_user(id=user_id)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/flask_security/datastore.py", line 254, in find_user
+    return self.user_model.query.filter_by(**kwargs).first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2810, in first
+    return self.limit(1)._iter().first()
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/query.py", line 2894, in _iter
+    result = self.session.execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/orm/session.py", line 1689, in execute
+    result = conn._execute_20(statement, params or {}, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1614, in _execute_20
+    return meth(self, args_10style, kwargs_10style, execution_options)
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/sql/elements.py", line 325, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1481, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1845, in _execute_context
+    self._handle_dbapi_exception(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 2026, in _handle_dbapi_exception
+    util.raise_(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/util/compat.py", line 207, in raise_
+    raise exception
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/base.py", line 1802, in _execute_context
+    self.dialect.do_execute(
+  File "/home/ulad/Desktop/code/spectral_line_detection_database/.venv/lib/python3.8/site-packages/sqlalchemy/engine/default.py", line 719, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.OperationalError: (sqlite3.OperationalError) no such table: user
+[SQL: SELECT user.id AS user_id, user.email AS user_email, user.username AS user_username, user.password AS user_password, user.active AS user_active, user.confirmed_at AS user_confirmed_at, user.university AS user_university, user.website AS user_website, user.about_me AS user_about_me 
+FROM user 
+WHERE user.id = ?
+ LIMIT ? OFFSET ?]
+[parameters: ('2', 1, 0)]
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+2022-02-08 19:33:06,359 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-08 19:33:06,361 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-08 19:33:06,362 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-08 19:33:06,362 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-08 19:33:06,362 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-08 19:33:06,362 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-08 19:33:06,363 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-08 19:33:06,363 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-08 19:33:06,503 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-08 19:33:09,425 INFO werkzeug Thread-1 : 127.0.0.1 - - [08/Feb/2022 19:33:09] "GET /main HTTP/1.1" 200 -
+2022-02-08 19:33:09,482 INFO werkzeug Thread-2 : 127.0.0.1 - - [08/Feb/2022 19:33:09] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-08 19:33:09,484 INFO werkzeug Thread-3 : 127.0.0.1 - - [08/Feb/2022 19:33:09] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:33:09,485 INFO werkzeug Thread-4 : 127.0.0.1 - - [08/Feb/2022 19:33:09] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-02-08 19:33:09,546 INFO werkzeug Thread-5 : 127.0.0.1 - - [08/Feb/2022 19:33:09] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-08 19:33:09,560 INFO werkzeug Thread-6 : 127.0.0.1 - - [08/Feb/2022 19:33:09] "POST /process HTTP/1.1" 200 -
+2022-02-08 19:33:11,763 INFO werkzeug Thread-7 : 127.0.0.1 - - [08/Feb/2022 19:33:11] "GET /contribute HTTP/1.1" 200 -
+2022-02-08 19:33:12,548 INFO werkzeug Thread-8 : 127.0.0.1 - - [08/Feb/2022 19:33:12] "GET /entry_file HTTP/1.1" 200 -
+2022-02-08 19:33:16,938 INFO werkzeug Thread-9 : 127.0.0.1 - - [08/Feb/2022 19:33:16] "POST /entry_file HTTP/1.1" 200 -
+2022-02-08 19:33:18,529 INFO werkzeug Thread-10 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-08 19:33:18,591 INFO werkzeug Thread-11 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:33:18,594 INFO werkzeug Thread-12 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:33:18,598 INFO werkzeug Thread-15 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-02-08 19:33:18,599 INFO werkzeug Thread-13 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1" 200 -
+2022-02-08 19:33:18,601 INFO werkzeug Thread-16 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-02-08 19:33:18,617 INFO werkzeug Thread-17 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-02-08 19:33:18,620 INFO werkzeug Thread-18 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-02-08 19:33:18,620 INFO werkzeug Thread-14 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1" 200 -
+2022-02-08 19:33:18,623 INFO werkzeug Thread-19 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-08 19:33:18,651 INFO werkzeug Thread-20 : 127.0.0.1 - - [08/Feb/2022 19:33:18] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-02-08 19:33:19,984 INFO werkzeug Thread-21 : 127.0.0.1 - - [08/Feb/2022 19:33:19] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:33:20,030 INFO werkzeug Thread-22 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,038 INFO werkzeug Thread-23 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,045 INFO werkzeug Thread-25 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,051 INFO werkzeug Thread-24 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,060 INFO werkzeug Thread-26 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-02-08 19:33:20,066 INFO werkzeug Thread-28 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,066 INFO werkzeug Thread-27 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,069 INFO werkzeug Thread-30 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,069 INFO werkzeug Thread-31 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,071 INFO werkzeug Thread-29 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:20,093 INFO werkzeug Thread-32 : 127.0.0.1 - - [08/Feb/2022 19:33:20] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,614 INFO werkzeug Thread-33 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[32mGET /resolve/4/5/different/temp_temp HTTP/1.1[0m" 302 -
+2022-02-08 19:33:27,624 INFO werkzeug Thread-34 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[32mGET /posts HTTP/1.1[0m" 308 -
+2022-02-08 19:33:27,648 INFO werkzeug Thread-35 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:33:27,715 INFO werkzeug Thread-36 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,720 INFO werkzeug Thread-37 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,723 INFO werkzeug Thread-38 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,727 INFO werkzeug Thread-40 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,732 INFO werkzeug Thread-39 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,736 INFO werkzeug Thread-41 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,741 INFO werkzeug Thread-43 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,742 INFO werkzeug Thread-42 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,742 INFO werkzeug Thread-44 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,743 INFO werkzeug Thread-45 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:27,778 INFO werkzeug Thread-46 : 127.0.0.1 - - [08/Feb/2022 19:33:27] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,741 INFO werkzeug Thread-47 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:33:38,801 INFO werkzeug Thread-48 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,805 INFO werkzeug Thread-49 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,807 INFO werkzeug Thread-50 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,812 INFO werkzeug Thread-51 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,814 INFO werkzeug Thread-52 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,820 INFO werkzeug Thread-53 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,823 INFO werkzeug Thread-54 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,827 INFO werkzeug Thread-57 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,827 INFO werkzeug Thread-55 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,829 INFO werkzeug Thread-56 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:38,851 INFO werkzeug Thread-58 : 127.0.0.1 - - [08/Feb/2022 19:33:38] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:50,799 INFO werkzeug Thread-59 : 127.0.0.1 - - [08/Feb/2022 19:33:50] "POST /posts/ HTTP/1.1" 200 -
+2022-02-08 19:33:52,121 INFO werkzeug Thread-60 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "GET /posts/ HTTP/1.1" 200 -
+2022-02-08 19:33:52,170 INFO werkzeug Thread-61 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,187 INFO werkzeug Thread-62 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,191 INFO werkzeug Thread-63 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,195 INFO werkzeug Thread-65 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,200 INFO werkzeug Thread-64 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,202 INFO werkzeug Thread-66 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,203 INFO werkzeug Thread-67 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,210 INFO werkzeug Thread-68 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,210 INFO werkzeug Thread-69 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,214 INFO werkzeug Thread-70 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-08 19:33:52,222 INFO werkzeug Thread-71 : 127.0.0.1 - - [08/Feb/2022 19:33:52] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -

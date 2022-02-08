@@ -539,10 +539,9 @@ class PostsView(BaseView):
                             db.session.commit ()
 
 
-
                         elif tempgalaxy_id != None:
 
-                            tempgalaxy = session.query(TempGalaxy).filter(TempGalaxy.id==id).first()
+                            tempgalaxy = TempGalaxy.query.filter(TempGalaxy.id==tempgalaxy_id).first()
                             g = Galaxy (
                                 name = tempgalaxy.name,
                                 right_ascension = tempgalaxy.right_ascension,
@@ -553,12 +552,13 @@ class PostsView(BaseView):
                                 notes = tempgalaxy.notes
                                 )
 
-                            db.session.add (g)
+                            db.session.add(g)
                             db.session.commit ()
                             from_existed = session.query(func.max(Galaxy.id)).first()
                             existed = from_existed[0]
                             db.session.query(TempLine).filter(TempLine.galaxy_id == tempgalaxy_id).update({TempLine.from_existed_id: existed})
-                            db.session.delete (tempgalaxy)
+                            db.session.commit()
+                            db.session.delete(tempgalaxy)
                             db.session.commit()
 
                         elif editgalaxy_id != None:
