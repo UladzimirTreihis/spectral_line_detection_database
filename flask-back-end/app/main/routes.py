@@ -1202,7 +1202,9 @@ def galaxy_edit_form(id):
             if (galaxy.lensing_flag != form.lensing_flag.data):
                 changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag: ' + form.lensing_flag.data
             if (galaxy.classification != form.classification.data):
-                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + form.classification.data
+                #error: back-end receives a list, not a string
+                pass
+                #changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + form.classification.data
             if (galaxy.notes != form.notes.data):
                 changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
             galaxy = EditGalaxy(name=form.name.data, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
@@ -1471,11 +1473,11 @@ def line_edit_form(id):
                 negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
 
             changes = ""
-            if int(line.emitted_frequency) != int (form.emitted_frequency.data):
-                changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + str (form.emitted_frequency.data)
-            if int(line.species) != form.species.data:
-                changes = changes + "Initial Species: " + str (line.species) + " New Species: " + str (form.species.data)
-            if float(line.integrated_line_flux) !=  float (form.integrated_line_flux.data):
+            if line.emitted_frequency != float (form.emitted_frequency.data):
+                changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + form.emitted_frequency.data
+            if line.species != form.species.data:
+                changes = changes + "Initial Species: " + str (line.species) + " New Species: " + form.species.data
+            if line.integrated_line_flux !=  float (form.integrated_line_flux.data):
                 changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
             if form.integrated_line_flux_uncertainty_positive.data:
                 if float (line.integrated_line_flux_uncertainty_positive) != float(form.integrated_line_flux_uncertainty_positive.data):
@@ -1501,9 +1503,6 @@ def line_edit_form(id):
             if form.line_width_uncertainty_negative.data:
                 if float (line.line_width_uncertainty_negative) != float (form.line_width_uncertainty_negative.data):
                     changes = changes + "Initial Line Width Negative Uncertainty: " + line.line_width_uncertainty_negative + " New Line Width Negative Uncertainty: " + form.line_width_uncertainty_negative.data
-            if form.freq_type.data:
-                if line.freq_type != (form.freq_type.data):
-                    changes = changes + "Initial Freq Type: " + line.freq_type + " New Frequency Type: " + form.freq_type.data
             if form.observed_line_frequency.data:
                 if float (line.observed_line_frequency) != float (form.observed_line_frequency.data):
                     changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
@@ -1540,6 +1539,7 @@ def line_edit_form(id):
             editline_id = int(editline[0])
             post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
             db.session.add(post)
+            db.session.commit()
 
             flash ('Line has been edited. ')
             return redirect(url_for('main.main'))

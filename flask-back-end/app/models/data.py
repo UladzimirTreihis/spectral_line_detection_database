@@ -146,8 +146,8 @@ class Line(db.Model):
     galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id')) 
     emitted_frequency = db.Column(db.Float(32), nullable = False)
     species = db.Column(db.String(32))
-    integrated_line_flux = db.Column(db.Float(32), nullable = False)
-    integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
+    integrated_line_flux = db.Column(db.Float(32))
+    integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
     peak_line_flux = db.Column(db.Float(32))
     peak_line_flux_uncertainty_positive = db.Column(db.Float(32))
@@ -170,8 +170,8 @@ class Line(db.Model):
     approved_user_email = db.Column(db.String(128))
     approved_username = db.Column(db.String(128))
     approved_time = db.Column(db.DateTime, default=datetime.utcnow)
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
 
 
 
@@ -183,7 +183,7 @@ class TempLine(db.Model):
     from_existed_id = db.Column(db.Integer)
     emitted_frequency = db.Column(db.Float(32), nullable = False)
     species = db.Column(db.String(32))
-    integrated_line_flux = db.Column(db.Float(32), nullable = False)
+    integrated_line_flux = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
     peak_line_flux = db.Column(db.Float(32))
@@ -205,8 +205,8 @@ class TempLine(db.Model):
     user_email = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
 
 
 class EditLine(db.Model):
@@ -240,8 +240,8 @@ class EditLine(db.Model):
     user_email = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
 
 
 
