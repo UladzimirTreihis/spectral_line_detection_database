@@ -8230,3 +8230,45 @@ IndexError: tuple index out of range
 2022-02-10 12:19:55,541 INFO werkzeug Thread-65 : 127.0.0.1 - - [10/Feb/2022 12:19:55] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
 2022-02-10 12:19:55,580 INFO werkzeug Thread-67 : 127.0.0.1 - - [10/Feb/2022 12:19:55] "GET /approvedgalaxies HTTP/1.1" 200 -
 2022-02-10 12:19:55,582 INFO werkzeug Thread-68 : 127.0.0.1 - - [10/Feb/2022 12:19:55] "POST /process HTTP/1.1" 200 -
+2022-02-10 12:22:27,214 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:22:27,217 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:22:27,217 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:22:27,217 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:22:27,218 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:22:27,218 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:22:27,218 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:22:27,219 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:22:27,312 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-10 12:22:27,313 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-10 12:22:27,935 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:22:27,937 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:22:27,938 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:22:27,938 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:22:27,938 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:22:27,938 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:22:27,938 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:22:27,939 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:22:32,214 INFO werkzeug Thread-3 : 127.0.0.1 - - [10/Feb/2022 12:22:32] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:22:32,220 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Feb/2022 12:22:32] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-10 12:24:46,149 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:24:46,152 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:24:46,153 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:24:46,153 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:24:46,153 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:24:46,153 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:24:46,154 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:24:46,155 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:24:46,257 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-10 12:24:46,258 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-10 12:24:46,894 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:24:46,897 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:24:46,897 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:24:46,897 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:24:46,897 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:24:46,897 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:24:46,898 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:24:46,899 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:24:54,064 INFO werkzeug Thread-3 : 127.0.0.1 - - [10/Feb/2022 12:24:54] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:24:54,078 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Feb/2022 12:24:54] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:25:04,068 INFO werkzeug Thread-5 : 127.0.0.1 - - [10/Feb/2022 12:25:04] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:25:04,081 INFO werkzeug Thread-6 : 127.0.0.1 - - [10/Feb/2022 12:25:04] "GET /static/js/coordinates.js HTTP/1.1" 200 -

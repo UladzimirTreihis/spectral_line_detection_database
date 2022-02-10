@@ -31,7 +31,7 @@
         
         <tbody>
             <tr>
-                <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"> Update</a></td>
+                <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"> Update </a></td>
                 <td>{{ galaxy.name }}</td>
                 <td name="raCoordinates" id="{{ galaxy.right_ascension }}"></td>
                 <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
@@ -83,6 +83,8 @@
             <tbody>
                 {% for l in line %}
                 <tr>
+                    <td> <a href="{{ url_for ('main.line_edit_form', id = l.id) }}" > Update </a> </td>
+                </td>
                     <td>{{ l.species }}</td>
                     <td>{{ l.emitted_frequency }}</td>
                     <td>{{ l.integrated_line_flux }}</td>
@@ -103,9 +105,6 @@
                     <td>{{ l.observed_beam_angle }}</td>
                     <td>{{ l.reference }}</td>
                     <td>{{ l.notes }}</td>
-                </tr>
-                <tr>
-                    <td colspan = "19"> <a href="{{ url_for ('main.line_edit_form', id = l.id) }}" class="btn btn-info" role="button" > Update Above Line Information </a> </td>
                 </tr>
                 {% endfor %}
             </tbody>
