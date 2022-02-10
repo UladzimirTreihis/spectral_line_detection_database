@@ -10692,3 +10692,220 @@ WHERE user.id = ?
 2022-02-10 00:54:47,079 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
 2022-02-10 00:54:47,079 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
 2022-02-10 00:54:47,080 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-11 02:19:16,972 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-11 02:19:16,976 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-11 02:19:16,978 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-11 02:19:16,978 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-11 02:19:16,978 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-11 02:19:16,978 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-11 02:19:16,980 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-11 02:19:16,982 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-11 02:19:17,172 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-11 02:19:17,174 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-11 02:19:17,993 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-11 02:19:17,996 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-11 02:19:17,998 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-11 02:19:17,998 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-11 02:19:17,999 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-11 02:19:17,999 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-11 02:19:18,000 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-11 02:19:18,001 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-11 02:19:22,026 INFO werkzeug Thread-3 : 127.0.0.1 - - [11/Feb/2022 02:19:22] "GET / HTTP/1.1" 200 -
+2022-02-11 02:19:24,300 INFO werkzeug Thread-4 : 127.0.0.1 - - [11/Feb/2022 02:19:24] "GET /main HTTP/1.1" 200 -
+2022-02-11 02:19:24,379 INFO werkzeug Thread-7 : 127.0.0.1 - - [11/Feb/2022 02:19:24] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:24,379 INFO werkzeug Thread-5 : 127.0.0.1 - - [11/Feb/2022 02:19:24] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:24,382 INFO werkzeug Thread-6 : 127.0.0.1 - - [11/Feb/2022 02:19:24] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:24,469 INFO werkzeug Thread-8 : 127.0.0.1 - - [11/Feb/2022 02:19:24] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-11 02:19:24,488 INFO werkzeug Thread-9 : 127.0.0.1 - - [11/Feb/2022 02:19:24] "POST /process HTTP/1.1" 200 -
+2022-02-11 02:19:25,416 INFO werkzeug Thread-10 : 127.0.0.1 - - [11/Feb/2022 02:19:25] "GET /contribute HTTP/1.1" 200 -
+2022-02-11 02:19:26,683 INFO werkzeug Thread-11 : 127.0.0.1 - - [11/Feb/2022 02:19:26] "GET /entry_file HTTP/1.1" 200 -
+2022-02-11 02:19:31,168 INFO werkzeug Thread-12 : 127.0.0.1 - - [11/Feb/2022 02:19:31] "POST /entry_file HTTP/1.1" 200 -
+2022-02-11 02:19:32,767 INFO werkzeug Thread-13 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-11 02:19:32,804 INFO werkzeug Thread-14 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-11 02:19:32,831 INFO werkzeug Thread-15 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1" 200 -
+2022-02-11 02:19:32,833 INFO werkzeug Thread-16 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1" 200 -
+2022-02-11 02:19:32,836 INFO werkzeug Thread-18 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1" 200 -
+2022-02-11 02:19:32,836 INFO werkzeug Thread-17 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1" 200 -
+2022-02-11 02:19:32,839 INFO werkzeug Thread-20 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1" 200 -
+2022-02-11 02:19:32,839 INFO werkzeug Thread-19 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1" 200 -
+2022-02-11 02:19:32,848 INFO werkzeug Thread-21 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1" 200 -
+2022-02-11 02:19:32,849 INFO werkzeug Thread-22 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-11 02:19:32,892 INFO werkzeug Thread-23 : 127.0.0.1 - - [11/Feb/2022 02:19:32] "GET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 200 -
+2022-02-11 02:19:34,378 INFO werkzeug Thread-24 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "GET /posts/ HTTP/1.1" 200 -
+2022-02-11 02:19:34,445 INFO werkzeug Thread-27 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,446 INFO werkzeug Thread-25 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,449 INFO werkzeug Thread-26 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,450 INFO werkzeug Thread-28 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,456 INFO werkzeug Thread-29 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-02-11 02:19:34,457 INFO werkzeug Thread-30 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,472 INFO werkzeug Thread-31 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,473 INFO werkzeug Thread-32 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,474 INFO werkzeug Thread-34 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:34,477 INFO werkzeug Thread-33 : 127.0.0.1 - - [11/Feb/2022 02:19:34] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:36,952 INFO werkzeug Thread-35 : 127.0.0.1 - - [11/Feb/2022 02:19:36] "[32mGET /resolve/4/5/different/temp_temp HTTP/1.1[0m" 302 -
+2022-02-11 02:19:36,966 INFO werkzeug Thread-36 : 127.0.0.1 - - [11/Feb/2022 02:19:36] "[32mGET /posts HTTP/1.1[0m" 308 -
+2022-02-11 02:19:37,004 INFO werkzeug Thread-37 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "GET /posts/ HTTP/1.1" 200 -
+2022-02-11 02:19:37,091 INFO werkzeug Thread-41 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,093 INFO werkzeug Thread-39 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,094 INFO werkzeug Thread-40 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,100 INFO werkzeug Thread-38 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,110 INFO werkzeug Thread-42 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,117 INFO werkzeug Thread-43 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,132 INFO werkzeug Thread-44 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,137 INFO werkzeug Thread-45 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,137 INFO werkzeug Thread-46 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:37,140 INFO werkzeug Thread-47 : 127.0.0.1 - - [11/Feb/2022 02:19:37] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,236 INFO werkzeug Thread-48 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-11 02:19:39,305 INFO werkzeug Thread-49 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,307 INFO werkzeug Thread-51 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,308 INFO werkzeug Thread-50 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,309 INFO werkzeug Thread-52 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,317 INFO werkzeug Thread-53 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1" 200 -
+2022-02-11 02:19:39,324 INFO werkzeug Thread-54 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1" 200 -
+2022-02-11 02:19:39,333 INFO werkzeug Thread-55 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1" 200 -
+2022-02-11 02:19:39,337 INFO werkzeug Thread-57 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,340 INFO werkzeug Thread-56 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,344 INFO werkzeug Thread-58 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,355 INFO werkzeug Thread-60 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,364 INFO werkzeug Thread-59 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:39,368 INFO werkzeug Thread-61 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1" 200 -
+2022-02-11 02:19:39,371 INFO werkzeug Thread-63 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-11 02:19:39,372 INFO werkzeug Thread-62 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1" 200 -
+2022-02-11 02:19:39,374 INFO werkzeug Thread-64 : 127.0.0.1 - - [11/Feb/2022 02:19:39] "GET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1" 200 -
+2022-02-11 02:19:41,596 INFO werkzeug Thread-65 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "GET /posts/ HTTP/1.1" 200 -
+2022-02-11 02:19:41,681 INFO werkzeug Thread-66 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,686 INFO werkzeug Thread-68 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,687 INFO werkzeug Thread-69 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,689 INFO werkzeug Thread-67 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,693 INFO werkzeug Thread-70 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,698 INFO werkzeug Thread-71 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,710 INFO werkzeug Thread-72 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,716 INFO werkzeug Thread-73 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,717 INFO werkzeug Thread-75 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:41,717 INFO werkzeug Thread-74 : 127.0.0.1 - - [11/Feb/2022 02:19:41] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,309 INFO werkzeug Thread-76 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "POST /posts/ HTTP/1.1" 200 -
+2022-02-11 02:19:47,744 INFO werkzeug Thread-77 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "GET /posts/ HTTP/1.1" 200 -
+2022-02-11 02:19:47,806 INFO werkzeug Thread-79 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,807 INFO werkzeug Thread-78 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,813 INFO werkzeug Thread-80 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,821 INFO werkzeug Thread-81 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,828 INFO werkzeug Thread-82 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,832 INFO werkzeug Thread-83 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,837 INFO werkzeug Thread-85 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,840 INFO werkzeug Thread-84 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,842 INFO werkzeug Thread-86 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:47,844 INFO werkzeug Thread-87 : 127.0.0.1 - - [11/Feb/2022 02:19:47] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,630 INFO werkzeug Thread-88 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-11 02:19:49,695 INFO werkzeug Thread-89 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,696 INFO werkzeug Thread-90 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,698 INFO werkzeug Thread-91 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,700 INFO werkzeug Thread-92 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,710 INFO werkzeug Thread-93 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,711 INFO werkzeug Thread-94 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,727 INFO werkzeug Thread-95 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,729 INFO werkzeug Thread-96 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,731 INFO werkzeug Thread-97 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,731 INFO werkzeug Thread-98 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,741 INFO werkzeug Thread-100 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,745 INFO werkzeug Thread-99 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,755 INFO werkzeug Thread-101 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,758 INFO werkzeug Thread-103 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,761 INFO werkzeug Thread-104 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:49,763 INFO werkzeug Thread-102 : 127.0.0.1 - - [11/Feb/2022 02:19:49] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:19:52,150 INFO werkzeug Thread-105 : 127.0.0.1 - - [11/Feb/2022 02:19:52] "GET / HTTP/1.1" 200 -
+2022-02-11 02:19:53,500 INFO werkzeug Thread-106 : 127.0.0.1 - - [11/Feb/2022 02:19:53] "GET /main HTTP/1.1" 200 -
+2022-02-11 02:19:53,575 INFO werkzeug Thread-107 : 127.0.0.1 - - [11/Feb/2022 02:19:53] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-11 02:19:53,577 INFO werkzeug Thread-108 : 127.0.0.1 - - [11/Feb/2022 02:19:53] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-02-11 02:19:53,579 INFO werkzeug Thread-109 : 127.0.0.1 - - [11/Feb/2022 02:19:53] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-02-11 02:19:53,666 INFO werkzeug Thread-110 : 127.0.0.1 - - [11/Feb/2022 02:19:53] "GET /approvedgalaxies HTTP/1.1" 200 -
+2022-02-11 02:19:53,702 INFO werkzeug Thread-111 : 127.0.0.1 - - [11/Feb/2022 02:19:53] "POST /process HTTP/1.1" 200 -
+2022-02-11 02:20:41,567 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-11 02:20:41,571 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-11 02:20:41,572 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-11 02:20:41,572 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-11 02:20:41,573 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-11 02:20:41,573 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-11 02:20:41,574 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-11 02:20:41,575 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-11 02:20:41,674 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-11 02:20:41,675 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-11 02:20:42,462 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-11 02:20:42,467 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-11 02:20:42,469 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-11 02:20:42,469 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-11 02:20:42,470 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-11 02:20:42,471 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-11 02:20:42,472 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-11 02:20:42,474 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-11 02:20:44,889 INFO werkzeug Thread-3 : 127.0.0.1 - - [11/Feb/2022 02:20:44] "GET /admin/?username=admin HTTP/1.1" 200 -
+2022-02-11 02:20:44,995 INFO werkzeug Thread-6 : 127.0.0.1 - - [11/Feb/2022 02:20:44] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:44,996 INFO werkzeug Thread-5 : 127.0.0.1 - - [11/Feb/2022 02:20:44] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,001 INFO werkzeug Thread-7 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,002 INFO werkzeug Thread-4 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,019 INFO werkzeug Thread-9 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,024 INFO werkzeug Thread-8 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,039 INFO werkzeug Thread-10 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,043 INFO werkzeug Thread-12 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,045 INFO werkzeug Thread-11 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:45,049 INFO werkzeug Thread-13 : 127.0.0.1 - - [11/Feb/2022 02:20:45] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/fonts/glyphicons-halflings-regular.woff2 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,088 INFO werkzeug Thread-14 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-11 02:20:47,173 INFO werkzeug Thread-15 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,175 INFO werkzeug Thread-16 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,193 INFO werkzeug Thread-17 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,197 INFO werkzeug Thread-18 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,212 INFO werkzeug Thread-19 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,216 INFO werkzeug Thread-20 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,221 INFO werkzeug Thread-21 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,232 INFO werkzeug Thread-23 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,235 INFO werkzeug Thread-24 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,236 INFO werkzeug Thread-22 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,257 INFO werkzeug Thread-25 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,257 INFO werkzeug Thread-27 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,266 INFO werkzeug Thread-28 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,268 INFO werkzeug Thread-26 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,271 INFO werkzeug Thread-29 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:20:47,273 INFO werkzeug Thread-30 : 127.0.0.1 - - [11/Feb/2022 02:20:47] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,206 INFO werkzeug Thread-31 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "GET /line/ HTTP/1.1" 200 -
+2022-02-11 02:21:05,315 INFO werkzeug Thread-32 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,318 INFO werkzeug Thread-36 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,319 INFO werkzeug Thread-33 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,319 INFO werkzeug Thread-35 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,320 INFO werkzeug Thread-34 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,324 INFO werkzeug Thread-37 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,341 INFO werkzeug Thread-38 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,360 INFO werkzeug Thread-39 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,362 INFO werkzeug Thread-40 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,373 INFO werkzeug Thread-41 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,376 INFO werkzeug Thread-42 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,379 INFO werkzeug Thread-44 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,380 INFO werkzeug Thread-43 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,394 INFO werkzeug Thread-45 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,397 INFO werkzeug Thread-46 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:21:05,399 INFO werkzeug Thread-47 : 127.0.0.1 - - [11/Feb/2022 02:21:05] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,404 INFO werkzeug Thread-48 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "GET /galaxy/ HTTP/1.1" 200 -
+2022-02-11 02:23:41,494 INFO werkzeug Thread-49 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/bootstrap/bootstrap3/swatch/default/bootstrap.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,499 INFO werkzeug Thread-50 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/bootstrap/bootstrap3/css/bootstrap-theme.min.css?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,509 INFO werkzeug Thread-51 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/admin/css/bootstrap3/admin.css?v=1.1.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,512 INFO werkzeug Thread-53 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/select2/select2.css?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,516 INFO werkzeug Thread-52 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/admin/css/bootstrap3/submenu.css HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,521 INFO werkzeug Thread-54 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/select2/select2-bootstrap3.css?v=1.4.6 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,536 INFO werkzeug Thread-55 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker-bs3.css?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,540 INFO werkzeug Thread-56 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/jquery.min.js?v=3.3.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,546 INFO werkzeug Thread-58 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/moment.min.js?v=2.22.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,546 INFO werkzeug Thread-57 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/bootstrap/bootstrap3/js/bootstrap.min.js?v=3.3.5 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,553 INFO werkzeug Thread-59 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/select2/select2.min.js?v=3.5.2 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,553 INFO werkzeug Thread-60 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/admin/js/helpers.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,573 INFO werkzeug Thread-61 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/vendor/bootstrap-daterangepicker/daterangepicker.js?v=1.3.22 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,581 INFO werkzeug Thread-63 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/admin/js/filters.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,583 INFO werkzeug Thread-62 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/admin/js/form.js?v=1.0.1 HTTP/1.1[0m" 304 -
+2022-02-11 02:23:41,588 INFO werkzeug Thread-64 : 127.0.0.1 - - [11/Feb/2022 02:23:41] "[36mGET /admin/static/admin/js/actions.js?v=1.0.0 HTTP/1.1[0m" 304 -
+2022-02-11 02:26:16,857 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/spectral_line_detection_database/flask-back-end/app/adm/__init__.py', reloading
+2022-02-11 02:26:17,148 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-11 02:26:17,913 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-11 02:26:17,916 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-11 02:26:17,916 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-11 02:26:17,916 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-11 02:26:17,917 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-11 02:26:17,917 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-11 02:26:17,917 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-11 02:26:17,918 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
