@@ -8272,3 +8272,137 @@ IndexError: tuple index out of range
 2022-02-10 12:24:54,078 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Feb/2022 12:24:54] "GET /static/js/coordinates.js HTTP/1.1" 200 -
 2022-02-10 12:25:04,068 INFO werkzeug Thread-5 : 127.0.0.1 - - [10/Feb/2022 12:25:04] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
 2022-02-10 12:25:04,081 INFO werkzeug Thread-6 : 127.0.0.1 - - [10/Feb/2022 12:25:04] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:33:15,758 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:33:15,761 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:33:15,762 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:33:15,762 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:33:15,762 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:33:15,762 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:33:15,763 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:33:15,764 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:33:15,864 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-10 12:33:15,864 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-10 12:33:16,491 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:33:16,493 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:33:16,494 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:33:16,494 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:33:16,494 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:33:16,494 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:33:16,494 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:33:16,495 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:33:24,502 INFO werkzeug Thread-3 : 127.0.0.1 - - [10/Feb/2022 12:33:24] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:33:24,518 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Feb/2022 12:33:24] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:34:24,616 INFO werkzeug Thread-5 : 127.0.0.1 - - [10/Feb/2022 12:34:24] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:34:24,632 INFO werkzeug Thread-6 : 127.0.0.1 - - [10/Feb/2022 12:34:24] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:34:43,878 INFO werkzeug Thread-7 : 127.0.0.1 - - [10/Feb/2022 12:34:43] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:34:43,889 INFO werkzeug Thread-8 : 127.0.0.1 - - [10/Feb/2022 12:34:43] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:35:26,755 INFO werkzeug Thread-9 : 127.0.0.1 - - [10/Feb/2022 12:35:26] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:35:26,775 INFO werkzeug Thread-10 : 127.0.0.1 - - [10/Feb/2022 12:35:26] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:35:59,839 INFO werkzeug Thread-11 : 127.0.0.1 - - [10/Feb/2022 12:35:59] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:35:59,850 INFO werkzeug Thread-12 : 127.0.0.1 - - [10/Feb/2022 12:35:59] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:36:12,373 INFO werkzeug Thread-13 : 127.0.0.1 - - [10/Feb/2022 12:36:12] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:36:12,382 INFO werkzeug Thread-14 : 127.0.0.1 - - [10/Feb/2022 12:36:12] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:37:33,435 INFO werkzeug Thread-15 : 127.0.0.1 - - [10/Feb/2022 12:37:33] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:37:33,448 INFO werkzeug Thread-16 : 127.0.0.1 - - [10/Feb/2022 12:37:33] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:38:10,537 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:38:10,540 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:38:10,541 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:38:10,541 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:38:10,541 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:38:10,541 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:38:10,542 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:38:10,543 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:38:10,645 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-02-10 12:38:10,645 INFO werkzeug MainThread :  * Restarting with stat
+2022-02-10 12:38:11,245 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-02-10 12:38:11,248 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-02-10 12:38:11,248 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-02-10 12:38:11,248 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-02-10 12:38:11,249 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-02-10 12:38:11,249 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-02-10 12:38:11,249 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-02-10 12:38:11,250 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-02-10 12:38:14,147 INFO werkzeug Thread-3 : 127.0.0.1 - - [10/Feb/2022 12:38:14] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:38:14,161 INFO werkzeug Thread-4 : 127.0.0.1 - - [10/Feb/2022 12:38:14] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:39:21,800 INFO werkzeug Thread-5 : 127.0.0.1 - - [10/Feb/2022 12:39:21] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:39:21,820 INFO werkzeug Thread-6 : 127.0.0.1 - - [10/Feb/2022 12:39:21] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:39:50,314 INFO werkzeug Thread-7 : 127.0.0.1 - - [10/Feb/2022 12:39:50] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:39:50,335 INFO werkzeug Thread-8 : 127.0.0.1 - - [10/Feb/2022 12:39:50] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:40:00,307 INFO werkzeug Thread-9 : 127.0.0.1 - - [10/Feb/2022 12:40:00] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:40:00,318 INFO werkzeug Thread-10 : 127.0.0.1 - - [10/Feb/2022 12:40:00] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:40:01,368 INFO werkzeug Thread-11 : 127.0.0.1 - - [10/Feb/2022 12:40:01] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:40:01,378 INFO werkzeug Thread-12 : 127.0.0.1 - - [10/Feb/2022 12:40:01] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:43:22,594 INFO werkzeug Thread-13 : 127.0.0.1 - - [10/Feb/2022 12:43:22] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:43:22,608 INFO werkzeug Thread-14 : 127.0.0.1 - - [10/Feb/2022 12:43:22] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:47:12,192 INFO werkzeug Thread-15 : 127.0.0.1 - - [10/Feb/2022 12:47:12] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:47:12,209 INFO werkzeug Thread-16 : 127.0.0.1 - - [10/Feb/2022 12:47:12] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:47:30,481 INFO werkzeug Thread-17 : 127.0.0.1 - - [10/Feb/2022 12:47:30] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:47:30,501 INFO werkzeug Thread-18 : 127.0.0.1 - - [10/Feb/2022 12:47:30] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:49:07,610 INFO werkzeug Thread-19 : 127.0.0.1 - - [10/Feb/2022 12:49:07] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:49:07,623 INFO werkzeug Thread-20 : 127.0.0.1 - - [10/Feb/2022 12:49:07] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:49:08,659 INFO werkzeug Thread-21 : 127.0.0.1 - - [10/Feb/2022 12:49:08] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:49:08,679 INFO werkzeug Thread-22 : 127.0.0.1 - - [10/Feb/2022 12:49:08] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:49:19,353 INFO werkzeug Thread-23 : 127.0.0.1 - - [10/Feb/2022 12:49:19] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:49:19,363 INFO werkzeug Thread-24 : 127.0.0.1 - - [10/Feb/2022 12:49:19] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:50:18,827 INFO werkzeug Thread-25 : 127.0.0.1 - - [10/Feb/2022 12:50:18] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:50:18,853 INFO werkzeug Thread-26 : 127.0.0.1 - - [10/Feb/2022 12:50:18] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:51:09,564 INFO werkzeug Thread-27 : 127.0.0.1 - - [10/Feb/2022 12:51:09] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:51:09,581 INFO werkzeug Thread-28 : 127.0.0.1 - - [10/Feb/2022 12:51:09] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:51:17,259 INFO werkzeug Thread-29 : 127.0.0.1 - - [10/Feb/2022 12:51:17] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:51:17,278 INFO werkzeug Thread-30 : 127.0.0.1 - - [10/Feb/2022 12:51:17] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:51:30,054 INFO werkzeug Thread-31 : 127.0.0.1 - - [10/Feb/2022 12:51:30] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:51:30,070 INFO werkzeug Thread-32 : 127.0.0.1 - - [10/Feb/2022 12:51:30] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:51:41,831 INFO werkzeug Thread-33 : 127.0.0.1 - - [10/Feb/2022 12:51:41] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:51:41,851 INFO werkzeug Thread-34 : 127.0.0.1 - - [10/Feb/2022 12:51:41] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:51:49,524 INFO werkzeug Thread-35 : 127.0.0.1 - - [10/Feb/2022 12:51:49] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:51:49,543 INFO werkzeug Thread-36 : 127.0.0.1 - - [10/Feb/2022 12:51:49] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:52:14,614 INFO werkzeug Thread-37 : 127.0.0.1 - - [10/Feb/2022 12:52:14] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:52:14,632 INFO werkzeug Thread-38 : 127.0.0.1 - - [10/Feb/2022 12:52:14] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:52:47,254 INFO werkzeug Thread-39 : 127.0.0.1 - - [10/Feb/2022 12:52:47] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:52:47,264 INFO werkzeug Thread-40 : 127.0.0.1 - - [10/Feb/2022 12:52:47] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:53:02,654 INFO werkzeug Thread-41 : 127.0.0.1 - - [10/Feb/2022 12:53:02] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:53:02,669 INFO werkzeug Thread-42 : 127.0.0.1 - - [10/Feb/2022 12:53:02] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:53:21,105 INFO werkzeug Thread-43 : 127.0.0.1 - - [10/Feb/2022 12:53:21] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:53:21,117 INFO werkzeug Thread-44 : 127.0.0.1 - - [10/Feb/2022 12:53:21] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:53:41,294 INFO werkzeug Thread-45 : 127.0.0.1 - - [10/Feb/2022 12:53:41] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:53:41,315 INFO werkzeug Thread-46 : 127.0.0.1 - - [10/Feb/2022 12:53:41] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:55:37,415 INFO werkzeug Thread-47 : 127.0.0.1 - - [10/Feb/2022 12:55:37] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:55:37,433 INFO werkzeug Thread-48 : 127.0.0.1 - - [10/Feb/2022 12:55:37] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:56:27,234 INFO werkzeug Thread-49 : 127.0.0.1 - - [10/Feb/2022 12:56:27] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:56:27,256 INFO werkzeug Thread-50 : 127.0.0.1 - - [10/Feb/2022 12:56:27] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:57:55,642 INFO werkzeug Thread-51 : 127.0.0.1 - - [10/Feb/2022 12:57:55] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:57:55,663 INFO werkzeug Thread-52 : 127.0.0.1 - - [10/Feb/2022 12:57:55] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 12:59:34,928 INFO werkzeug Thread-53 : 127.0.0.1 - - [10/Feb/2022 12:59:34] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 12:59:34,947 INFO werkzeug Thread-54 : 127.0.0.1 - - [10/Feb/2022 12:59:34] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:01:04,917 INFO werkzeug Thread-55 : 127.0.0.1 - - [10/Feb/2022 13:01:04] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:01:04,936 INFO werkzeug Thread-56 : 127.0.0.1 - - [10/Feb/2022 13:01:04] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:01:44,663 INFO werkzeug Thread-57 : 127.0.0.1 - - [10/Feb/2022 13:01:44] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:01:44,672 INFO werkzeug Thread-58 : 127.0.0.1 - - [10/Feb/2022 13:01:44] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:02:13,271 INFO werkzeug Thread-59 : 127.0.0.1 - - [10/Feb/2022 13:02:13] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:02:13,288 INFO werkzeug Thread-60 : 127.0.0.1 - - [10/Feb/2022 13:02:13] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:02:47,427 INFO werkzeug Thread-61 : 127.0.0.1 - - [10/Feb/2022 13:02:47] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:02:47,448 INFO werkzeug Thread-62 : 127.0.0.1 - - [10/Feb/2022 13:02:47] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:03:56,094 INFO werkzeug Thread-63 : 127.0.0.1 - - [10/Feb/2022 13:03:56] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:03:56,110 INFO werkzeug Thread-64 : 127.0.0.1 - - [10/Feb/2022 13:03:56] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:04:33,730 INFO werkzeug Thread-65 : 127.0.0.1 - - [10/Feb/2022 13:04:33] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:04:33,746 INFO werkzeug Thread-66 : 127.0.0.1 - - [10/Feb/2022 13:04:33] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:04:40,491 INFO werkzeug Thread-67 : 127.0.0.1 - - [10/Feb/2022 13:04:40] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:04:40,502 INFO werkzeug Thread-68 : 127.0.0.1 - - [10/Feb/2022 13:04:40] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:05:00,999 INFO werkzeug Thread-69 : 127.0.0.1 - - [10/Feb/2022 13:05:00] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:05:01,010 INFO werkzeug Thread-70 : 127.0.0.1 - - [10/Feb/2022 13:05:01] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:05:10,819 INFO werkzeug Thread-71 : 127.0.0.1 - - [10/Feb/2022 13:05:10] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:05:10,843 INFO werkzeug Thread-72 : 127.0.0.1 - - [10/Feb/2022 13:05:10] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:05:17,140 INFO werkzeug Thread-73 : 127.0.0.1 - - [10/Feb/2022 13:05:17] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:05:17,153 INFO werkzeug Thread-74 : 127.0.0.1 - - [10/Feb/2022 13:05:17] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 13:05:25,996 INFO werkzeug Thread-75 : 127.0.0.1 - - [10/Feb/2022 13:05:25] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 13:05:26,005 INFO werkzeug Thread-76 : 127.0.0.1 - - [10/Feb/2022 13:05:26] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 14:38:09,810 INFO werkzeug Thread-77 : 127.0.0.1 - - [10/Feb/2022 14:38:09] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 14:38:09,833 INFO werkzeug Thread-78 : 127.0.0.1 - - [10/Feb/2022 14:38:09] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 14:45:42,900 INFO werkzeug Thread-79 : 127.0.0.1 - - [10/Feb/2022 14:45:42] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 14:45:42,940 INFO werkzeug Thread-80 : 127.0.0.1 - - [10/Feb/2022 14:45:42] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 14:46:47,513 INFO werkzeug Thread-81 : 127.0.0.1 - - [10/Feb/2022 14:46:47] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 14:46:47,549 INFO werkzeug Thread-82 : 127.0.0.1 - - [10/Feb/2022 14:46:47] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 14:48:09,696 INFO werkzeug Thread-83 : 127.0.0.1 - - [10/Feb/2022 14:48:09] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 14:48:09,721 INFO werkzeug Thread-84 : 127.0.0.1 - - [10/Feb/2022 14:48:09] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-02-10 14:50:21,314 INFO werkzeug Thread-85 : 127.0.0.1 - - [10/Feb/2022 14:50:21] "GET /galaxy/Cloverleaf HTTP/1.1" 200 -
+2022-02-10 14:50:21,346 INFO werkzeug Thread-86 : 127.0.0.1 - - [10/Feb/2022 14:50:21] "GET /static/js/coordinates.js HTTP/1.1" 200 -
