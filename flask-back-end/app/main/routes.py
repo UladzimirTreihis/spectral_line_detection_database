@@ -117,26 +117,26 @@ def main():
             glist = [gdict['name'], gdict['right_ascension'], gdict['declination'], gdict['coordinate_system'], gdict['lensing_flag'], gdict['classification'], gdict['notes']]
             return render_template('galaxy.html', galaxy=galaxy, line = line, glist= glist)
 
-        session = Session()
-        galaxies = session.query(Galaxy).all()
-        galaxies_count = session.query(Galaxy.id).count()
+    session = Session()
+    galaxies = session.query(Galaxy).all()
+    galaxies_count = session.query(Galaxy.id).count()
 
-        count_list = []
-        for i in range(galaxies_count):
-            count_list.append(i)
+    count_list = []
+    for i in range(galaxies_count):
+        count_list.append(i)
 
-        list_of_lines_per_species = []
-        for i in range(galaxies_count):
-            list_of_lines_per_species.append([])
-            id = galaxies[i].id
-            species = session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
-            if species != None:
-                for s in species:
-                    lines_count = session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
-                    list_of_lines_per_species[i].append((s, lines_count)) 
+    list_of_lines_per_species = []
+    for i in range(galaxies_count):
+        list_of_lines_per_species.append([])
+        id = galaxies[i].id
+        species = session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
+        if species != None:
+            for s in species:
+                lines_count = session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
+                list_of_lines_per_species[i].append((s, lines_count)) 
 
 
-        lines = session.query(Line.galaxy_id, Line.species).distinct().all()
+    lines = session.query(Line.galaxy_id, Line.species).distinct().all()
 
     return render_template("/main.html", galaxies=galaxies, lines=lines, list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
 
@@ -1195,17 +1195,18 @@ def galaxy_edit_form(id):
     if form.validate_on_submit ():
         if form.submit.data:
             changes = ""
+            classifications = ' '.join([str(elem) + ", " for elem in form.classification.data])[:-2]
             if (galaxy.name != form.name.data):
                 changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
             if (galaxy.coordinate_system != form.coordinate_system.data):
                 changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System: ' + form.coordinate_system.data
             if (galaxy.lensing_flag != form.lensing_flag.data):
                 changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag: ' + form.lensing_flag.data
-            if (galaxy.classification != form.classification.data):
-                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + form.classification.data
+            if (galaxy.classification != classifications):
+                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + classifications
             if (galaxy.notes != form.notes.data):
                 changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
-            galaxy = EditGalaxy(name=form.name.data, coordinate_system = form.coordinate_system.data, classification = form.classification.data, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
+            galaxy = EditGalaxy(name=form.name.data, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = form.coordinate_system.data, classification = classifications, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
             db.session.commit()
 
