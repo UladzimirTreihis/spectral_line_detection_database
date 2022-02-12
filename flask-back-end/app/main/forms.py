@@ -39,7 +39,6 @@ class SearchForm(FlaskForm):
 
 class AdvancedSearchForm(FlaskForm):
     
-
     name = StringField('Galaxy Name', validators = [Optional ()])
     right_ascension_min = StringField('Right Ascension from:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
     right_ascension_max = StringField('Right Ascension to:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
@@ -55,8 +54,8 @@ class AdvancedSearchForm(FlaskForm):
 
     redshift_min = FloatField('Redshift from:', validators = [Optional ()])
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
-    lensing_flag = SelectField(u'Lensing Flag',
-        choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validate_choice=False)
+    lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')], validate_choice=False)
+    classification = SelectMultipleField(u'Classification', choices = [('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')], validate_choice=False)
     
     # Line data
 

@@ -1190,7 +1190,8 @@ def galaxy_edit_form(id):
 
     session=Session()
     galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
-    form = EditGalaxyForm(name = galaxy.name, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = galaxy.classification, notes = galaxy.notes)
+    classifications = galaxy.classification.split(",")
+    form = EditGalaxyForm(name = galaxy.name, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = classifications, notes = galaxy.notes)
     original_id = galaxy.id
     if form.validate_on_submit ():
         if form.submit.data:
