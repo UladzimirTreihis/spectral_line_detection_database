@@ -47,8 +47,24 @@
         </p>
         <p>
             {{ form.classification.label }}<br>
-            {{ form.classification }} <br>
+            {{ form.classification (size = 100)}} <br>
             {% for error in form.classification.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.remove_classification.label }}<br>
+            {{ form.remove_classification}} <br>
+            {% for error in form.remove_classification.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.add_classification.label }}<br>
+            {{ form.add_classification}} <br>
+            {% for error in form.add_classification.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
