@@ -1137,7 +1137,7 @@ def galaxy_entry_form():
                 else:
                     same_temp_exists = False
                 return render_template('galaxy_entry_form.html', title= 'Galaxy Entry Form', form=form, galaxies=galaxies, same_temp_exists=same_temp_exists, another_exists=another_exists)
-            classifications = ' '.join([str(elem) + ", " for elem in form.classification.data])[:-2]
+            classifications = ' '.join([elem + ", " for elem in form.classification.data])[:-2]
             galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination = DEC, coordinate_system = form.coordinate_system.data, classification = classifications, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_similar = None, time_submitted = datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()
@@ -1192,6 +1192,7 @@ def galaxy_edit_form(id):
     galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
     classifications = galaxy.classification.split(",")
     form = EditGalaxyForm(name = galaxy.name, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = classifications, notes = galaxy.notes)
+    form.classification.data = classifications
     original_id = galaxy.id
     if form.validate_on_submit ():
         if form.submit.data:
