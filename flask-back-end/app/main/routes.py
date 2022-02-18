@@ -1,3 +1,4 @@
+from pydoc import classify_class_attrs
 from sqlalchemy.orm import session
 from app import (
     db,
@@ -1190,13 +1191,13 @@ def galaxy_edit_form(id):
 
     session=Session()
     galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
-    classifications = ' '.join([str(elem) + ", " for elem in galaxy.classification.split(',')])[:-2]
-    classlist = galaxy.classification.split(',')
+    classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-2]
+    classlist = galaxy.classification.split(', ')
     for c in classlist:
-        c = c.strip()
+        c = c[1:]
     form = EditGalaxyForm(name = galaxy.name, coordinate_system = galaxy.coordinate_system, lensing_flag = galaxy.lensing_flag, classification = classifications, notes = galaxy.notes)
     form.classification.data = classifications
-    original_id = galaxy.id
+    original_id = galaxy.id 
     if form.validate_on_submit ():
         if form.submit.data:
             changes = ""
@@ -1205,9 +1206,13 @@ def galaxy_edit_form(id):
             for element in removeclass:
                 if element in classlist:
                     classlist.remove(element)
+                else:
+                    flash (element + " was not in the existing list")
             for element in addclass:
                 if element not in classlist:
                     classlist.append(element)
+                else:
+                    flash (element + " already exists")
             newclasslist = ' '.join([str(elem) + ", " for elem in classlist])[:-2]
             if (galaxy.name != form.name.data):
                 changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
@@ -1217,7 +1222,7 @@ def galaxy_edit_form(id):
                 changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag: ' + form.lensing_flag.data
             if (galaxy.classification != newclasslist):
                 changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + newclasslist
-            if (galaxy.notes != form.notes.data):
+            if (form.notes.data and galaxy.notes != form.notes.data):
                 changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
             galaxy = EditGalaxy(name=form.name.data, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = form.coordinate_system.data, classification = newclasslist, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
