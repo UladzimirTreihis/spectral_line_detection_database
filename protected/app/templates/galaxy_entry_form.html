@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Add a New Galaxy
+{% endblock %}
+
+{% block content %}
+    
+
+
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <h1> Add a New Galaxy</h1>
+        <p> Note that all entries will be crossmatched with existing database entries to prevent duplication. </p>
+
+    {% if same_temp_exists %}
+    <p>Galaxy you have entered seems to be proposed already and awaits approval. 
+        You can still add line detections to it by usings the galaxy's name and coordinates. </p>
+    {% endif %}
+
+    {% if another_exists %}
+    <p>The galaxy you have entered seems to already exist. Do you mean one of these?</p>
+    {% for element in galaxies %}
+        {% set l = element[1] %}  
+        {% set g = element[0] %}
+         
+        <p1><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></p1>
+    {% endfor %}
+    <br>
+    <p> Click Submit to Submit Anyway. </p>
+    <p>{{ form.submit_anyway() }}</p>    
+    <p>{{ form.do_not_submit() }}</p>
+    {% endif %}
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}<br>
+            {% for error in form.name.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.right_ascension.label }}<br>
+            (Fiducial Position) <br>
+            This is used for duplication checking.<br>
+            Note that the database will store the RA & Dec of the detetcion while the fiducial position is not stored.<br>
+            Accepted formats: decimal degrees or sexagessimal (09h32m16.35s, -1d20'13.567")<br>
+            {{ form.right_ascension(size=32) }}<br>
+            {% for error in form.right_ascension.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.declination.label }}<br>
+            {{ form.declination(size=32) }}<br>
+            {% for error in form.declination.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.coordinate_system.label }}<br>
+            {{ form.coordinate_system() }}<br>
+            {% for error in form.coordinate_system.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.lensing_flag.label }} <br>
+            {{ form.lensing_flag() }}<br>
+            {% for error in form.lensing_flag.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.classification.label }}<br>
+            {{ form.classification() }}<br>
+            {% for error in form.classification.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.notes.label }}<br>
+            {{ form.notes(size=32) }}<br>
+            {% for error in form.notes.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+        <p> If you want to add a line to this galaxy, you must first click Submit to add the galaxy to the database. Then click the Add a New Line to this Galaxy button. </p>
+        <p>{{ form.new_line() }}
+    </form>
+{% endblock %}

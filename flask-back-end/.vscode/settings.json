@@ -1,5 +1,0 @@
-{
-    "python.pythonPath": "/bin/python3",
-    "python.analysis.extraPaths": ["./flask-back-end/app"]
-}
-
