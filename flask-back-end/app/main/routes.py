@@ -690,6 +690,8 @@ def entry_file():
         csv_file = TextIOWrapper(csvfile, encoding='windows-1252')
         reader = csv.DictReader(csv_file)
         data = [row for row in reader]
+        classification_options = {"LBG": "LBG (Lyman Break Galaxy)", "MS": "MS (Main Sequence Galaxy)", "SMB": "SMB (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)", "SB": "SB (Starburst)", "AGN": "AGN (Contains a Known Active Galactic Nucleus)", "QSO": "QSO (Optically Bright AGN)", "Quasar": "Quasar (Optical and Radio Bright AGN)", "RQ-AGN": "RQ-AGN (Radio-Quiet AGN)", "RL-AGN": "RL-AGN (Radio-Loud AGN)", "RG": "RG (Radio Galaxy)", "BZK": "BZK (BZK-Selected Galaxy)"}
+
         if data == []:
             flash ("CSV File is empty. ")
         else:
@@ -857,7 +859,12 @@ def entry_file():
                 row_name = row[COL_NAMES['name']].strip()
                 row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
                 row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
-                row_classification = row[COL_NAMES['classification']].strip()
+                entered_classification = row[COL_NAMES['classification']].strip()
+                row_classification = ""
+                for key, value in classification_options.items():
+                    if key in entered_classification:
+                        row_classification = row_classification + ", " + value
+                row_classification = row_classification [2:]
                 row_right_ascension = row[COL_NAMES['right_ascension']].strip()
                 row_declination = row[COL_NAMES['declination']].strip()
                 row_g_notes = row[COL_NAMES['g_notes']].strip()
@@ -1193,7 +1200,7 @@ def galaxy_edit_form(id):
 
     session=Session()
     galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
-    classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-2]
+    classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-1]
     classlist = galaxy.classification.split(', ')
     for c in classlist:
         c = c[1:]
