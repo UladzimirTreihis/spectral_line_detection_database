@@ -12,15 +12,16 @@
     </p>
     <p>
       Note that:
-      - Coordinate System must be ICRS or J2000 only
-      - For Lensing Flag, enter either Lensed, Unlensed or Unknown
-      - For Galaxy Classifications, enter one or more of the following:
-      LBG: LBG (Lyman Break Galaxy), MS: MS (Main Sequence Galaxy), SMB: SMB (Submillimeter Galaxy), DSFG: DSFG (Dusty Star-Forming Galaxy), SB B (Starburst) GN GN (Contains a Known Active Galactic Nucleus) SO SO (Optically Bright AGN) uasar uasar (Optical and Radio Bright AGN) Q-AGN Q-AGN (Radio-Quiet AGN) L-AGN L-AGN (Radio-Loud AGN) G G (Radio Galaxy) ZK ZK (BZK-Selected Galaxy)
+    <ul>
+      <li> Coordinate System must be ICRS or J2000 only </li>
+      <li> For Lensing Flag, enter either Lensed, Unlensed or Unknown</li>
+      <li> For Galaxy Classifications, enter one or more of the following: </li>
+    </ul>
+      LBG (Lyman Break Galaxy), MS (Main Sequence Galaxy), SMB (Submillimeter Galaxy), DSFG (Dusty Star-Forming Galaxy), SB (Starburst), AGN (Contains a Known Active Galactic Nucleus), QSO (Optically Bright AGN), Quasar (Optical and Radio Bright AGN), Q-AGN (Radio-Quiet AGN), RL-AGN (Radio-Loud AGN), RG (Radio Galaxy), BZK (BZK-Selected Galaxy)
 
     </p>
     <br>
     <a href="{{ url_for ('main.convert_to_CSV', table = 'Empty', identifier = 'None') }}" class="btn btn-info" role="button">Download Sample CSV</a>
-    <br>
     <br>
     <br>
     <form action="" method="post" novalidate enctype="multipart/form-data">
@@ -33,6 +34,7 @@
         </p>
       <p>{{ form.submit() }}</p>
     </form>
+    <br>
     <a href="{{ url_for ('main.main') }}" class="btn btn-info" role="button">Back to Database</a>
 </div>
 {% endblock %}

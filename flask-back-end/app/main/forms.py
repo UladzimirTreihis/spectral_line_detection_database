@@ -169,5 +169,5 @@ class EditLineForm(FlaskForm):
     submit = SubmitField('Submit')
 
 class UploadFileForm(FlaskForm):
-    file = FileField('Choose file for Upload')
+    file = FileField('Choose File For Upload')
     submit = SubmitField('Submit')
