@@ -711,7 +711,7 @@ def entry_file():
                     row_name = row[COL_NAMES['name']].strip()
                     row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
                     row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
-                    row_classification = row[COL_NAMES['classification']].strip()
+                    entered_classification = row[COL_NAMES['classification']].strip()
                     row_right_ascension = row[COL_NAMES['right_ascension']].strip()
                     row_declination = row[COL_NAMES['declination']].strip()
                     row_g_notes = row[COL_NAMES['g_notes']].strip()
@@ -753,9 +753,17 @@ def entry_file():
                             if row_lensing_flag == "U" or row_lensing_flag == "u":
                                 row_lensing_flag = "Unlensed"
                             else: row_lensing_flag = "Lensed"
-                    if row_classification == "":
+                    if entered_classification == "":
                         validated = False
                         flash ("Entry " + str(row_count) + ": Classification is Mandatory")
+                    row_classification = ""
+                    for key, value in classification_options.items():
+                        if key.upper() in entered_classification.upper():
+                            row_classification = row_classification + ", " + value
+                    row_classification = row_classification [2:]
+                    if row_classification == "":
+                        validated = False
+                        flash ("Entry " + str(row_count) + ": Please enter Correction Classifications")
                     if row_right_ascension == "":
                         validated = False
                         flash ("Entry " + str(row_count) + ": Right Ascension is Mandatory")
@@ -859,16 +867,15 @@ def entry_file():
                 row_name = row[COL_NAMES['name']].strip()
                 row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
                 row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
+                row_right_ascension = row[COL_NAMES['right_ascension']].strip()
+                row_declination = row[COL_NAMES['declination']].strip()
+                row_g_notes = row[COL_NAMES['g_notes']].strip()
                 entered_classification = row[COL_NAMES['classification']].strip()
                 row_classification = ""
                 for key, value in classification_options.items():
                     if key in entered_classification:
                         row_classification = row_classification + ", " + value
                 row_classification = row_classification [2:]
-                row_right_ascension = row[COL_NAMES['right_ascension']].strip()
-                row_declination = row[COL_NAMES['declination']].strip()
-                row_g_notes = row[COL_NAMES['g_notes']].strip()
-
                 row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
                 row_species = row[COL_NAMES['species']].strip()
                 row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
