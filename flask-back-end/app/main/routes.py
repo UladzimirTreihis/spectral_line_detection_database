@@ -1635,9 +1635,9 @@ def galaxy(name):
 def submit():
     return render_template("submit.html")
 
-@bp.route("/convert_to_CSV/<table>/<identifier>/<symmetrical>", methods=['GET', 'POST'])
+@bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
 @login_required
-def convert_to_CSV(table, identifier, symmetrical):
+def convert_to_CSV(table, identifier):
 
     '''
     Converts a query to CSV route
@@ -1734,10 +1734,7 @@ def convert_to_CSV(table, identifier, symmetrical):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        if symmetrical == "True":
-            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species','integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
-        else:
-            out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'freq_type', 'line_width_uncertainty_negative', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()
