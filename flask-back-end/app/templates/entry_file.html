@@ -10,6 +10,14 @@
     <p> 
       In order to upload multiple detections from a file, you must use a CSV file with correct format. Please download one of the template files below (for symmetric or assymetric uncertainties). Files that do not match the required format be automatically rejected. If your submission is rejected, please see the output warnings for possible corrections, and then resubmit. If you have further issues, please contact the database admin. All submissions will be manually approved before becoming publically accessible.
     </p>
+    <p>
+      Note that:
+      - Coordinate System must be ICRS or J2000 only
+      - For Lensing Flag, enter either Lensed, Unlensed or Unknown
+      - For Galaxy Classifications, enter one or more of the following:
+      LBG: LBG (Lyman Break Galaxy), MS: MS (Main Sequence Galaxy), SMB: SMB (Submillimeter Galaxy), DSFG: DSFG (Dusty Star-Forming Galaxy), SB B (Starburst) GN GN (Contains a Known Active Galactic Nucleus) SO SO (Optically Bright AGN) uasar uasar (Optical and Radio Bright AGN) Q-AGN Q-AGN (Radio-Quiet AGN) L-AGN L-AGN (Radio-Loud AGN) G G (Radio Galaxy) ZK ZK (BZK-Selected Galaxy)
+
+    </p>
     <br>
     <a href="{{ url_for ('main.convert_to_CSV', table = 'Empty', identifier = 'None') }}" class="btn btn-info" role="button">Download Sample CSV</a>
     <br>
