@@ -106,8 +106,7 @@ def main():
     On authenticated access: returns main menu and table with galaxy data
     '''
 
-    if current_user.is_authenticated:
-        form = DynamicSearchForm()
+    form = DynamicSearchForm()
     session = Session()
     if form.submit.data:
         name = form.galaxy_name.data

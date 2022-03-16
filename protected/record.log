@@ -8537,3 +8537,183 @@ jinja2.exceptions.TemplateNotFound: ./errors/500.html
 2022-03-13 18:34:58,723 INFO werkzeug Thread-13 : 127.0.0.1 - - [13/Mar/2022 18:34:58] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
 2022-03-13 18:34:58,779 INFO werkzeug Thread-14 : 127.0.0.1 - - [13/Mar/2022 18:34:58] "GET /approvedgalaxies HTTP/1.1" 200 -
 2022-03-13 18:34:58,799 INFO werkzeug Thread-15 : 127.0.0.1 - - [13/Mar/2022 18:34:58] "POST /process HTTP/1.1" 200 -
+2022-03-14 02:13:24,921 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:13:24,924 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:13:24,925 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:13:24,925 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:13:24,926 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:13:24,926 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:13:24,926 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:13:24,928 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:13:25,106 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-14 02:13:25,107 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-14 02:13:25,735 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:13:25,738 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:13:25,739 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:13:25,739 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:13:25,740 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:13:25,740 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:13:25,740 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:13:25,742 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:13:35,291 INFO werkzeug Thread-3 : 127.0.0.1 - - [14/Mar/2022 02:13:35] "GET / HTTP/1.1" 200 -
+2022-03-14 02:17:12,157 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:17:12,160 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:17:12,162 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:17:12,162 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:17:12,163 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:17:12,163 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:17:12,163 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:17:12,165 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:17:12,408 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-14 02:17:12,409 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-14 02:17:13,126 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:17:13,130 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:17:13,131 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:17:13,131 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:17:13,132 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:17:13,132 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:17:13,132 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:17:13,135 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:18:07,372 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:18:07,376 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:18:07,377 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:18:07,377 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:18:07,378 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:18:07,378 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:18:07,378 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:18:07,380 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:18:07,546 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-14 02:18:07,548 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-14 02:18:08,210 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:18:08,213 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:18:08,214 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:18:08,214 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:18:08,215 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:18:08,215 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:18:08,216 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:18:08,217 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:31:47,296 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:31:47,298 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:31:47,299 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:31:47,299 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:31:47,299 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:31:47,299 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:31:47,299 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:31:47,301 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:31:47,418 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-14 02:31:47,418 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-14 02:31:47,928 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 02:31:47,931 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 02:31:47,931 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 02:31:47,932 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 02:31:47,932 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 02:31:47,932 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 02:31:47,932 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 02:31:47,934 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-14 02:31:56,676 INFO werkzeug Thread-3 : 127.0.0.1 - - [14/Mar/2022 02:31:56] "GET / HTTP/1.1" 200 -
+2022-03-14 03:14:29,912 INFO werkzeug MainThread :  * Detected change in '/home/ulad/Desktop/code/deploy1/home/spectral_line_detection_database/protected/app/main/routes.py', reloading
+2022-03-14 03:14:30,059 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-14 03:14:30,602 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-14 03:14:30,604 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-14 03:14:30,605 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-14 03:14:30,605 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-14 03:14:30,605 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-14 03:14:30,605 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-14 03:14:30,605 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-14 03:14:30,606 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 08:45:26,806 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 08:45:26,810 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 08:45:26,811 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 08:45:26,811 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 08:45:26,812 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 08:45:26,812 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 08:45:26,813 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 08:45:26,814 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 08:45:26,964 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-16 08:45:26,965 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-16 08:45:27,517 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 08:45:27,520 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 08:45:27,520 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 08:45:27,521 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 08:45:27,521 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 08:45:27,521 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 08:45:27,521 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 08:45:27,522 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 08:45:34,215 INFO werkzeug Thread-3 : 127.0.0.1 - - [16/Mar/2022 08:45:34] "GET / HTTP/1.1" 200 -
+2022-03-16 08:45:37,095 INFO werkzeug Thread-4 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "GET /main HTTP/1.1" 200 -
+2022-03-16 08:45:37,145 INFO werkzeug Thread-6 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-03-16 08:45:37,145 INFO werkzeug Thread-5 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-03-16 08:45:37,148 INFO werkzeug Thread-7 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-03-16 08:45:37,442 INFO werkzeug Thread-8 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "[32mGET /approvedgalaxies HTTP/1.1[0m" 302 -
+2022-03-16 08:45:37,451 INFO werkzeug Thread-9 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "[32mPOST /process HTTP/1.1[0m" 302 -
+2022-03-16 08:45:37,497 INFO werkzeug Thread-10 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "GET /login?next=%2Fapprovedgalaxies HTTP/1.1" 200 -
+2022-03-16 08:45:37,503 INFO werkzeug Thread-11 : 127.0.0.1 - - [16/Mar/2022 08:45:37] "GET /login?next=%2Fprocess HTTP/1.1" 200 -
+2022-03-16 08:46:31,439 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 08:46:31,442 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 08:46:31,442 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 08:46:31,442 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 08:46:31,442 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 08:46:31,442 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 08:46:31,443 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 08:46:31,444 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 08:46:31,617 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-16 08:46:31,618 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-16 08:46:32,129 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 08:46:32,132 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 08:46:32,132 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 08:46:32,133 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 08:46:32,133 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 08:46:32,133 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 08:46:32,133 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 08:46:32,134 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 08:49:29,195 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 08:49:29,197 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 08:49:29,198 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 08:49:29,198 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 08:49:29,198 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 08:49:29,198 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 08:49:29,199 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 08:49:29,200 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 08:59:40,021 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 08:59:40,023 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 08:59:40,024 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 08:59:40,024 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 08:59:40,024 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 08:59:40,024 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 08:59:40,025 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 08:59:40,026 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 09:02:43,979 DEBUG passlib.registry MainThread : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 09:02:43,982 DEBUG passlib.registry MainThread : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 09:02:43,982 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 09:02:43,983 DEBUG passlib.registry MainThread : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 09:02:43,983 DEBUG passlib.registry MainThread : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 09:02:43,983 DEBUG passlib.registry MainThread : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 09:02:43,984 DEBUG passlib.registry MainThread : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 09:02:43,985 DEBUG passlib.registry MainThread : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 09:02:44,116 INFO werkzeug MainThread :  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+2022-03-16 09:02:44,117 INFO werkzeug MainThread :  * Restarting with stat
+2022-03-16 09:02:44,650 DEBUG passlib.registry Thread-1 : registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'>
+2022-03-16 09:02:44,652 DEBUG passlib.registry Thread-1 : registered 'des_crypt' handler: <class 'passlib.handlers.des_crypt.des_crypt'>
+2022-03-16 09:02:44,653 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha256' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha256'>
+2022-03-16 09:02:44,653 DEBUG passlib.registry Thread-1 : registered 'pbkdf2_sha512' handler: <class 'passlib.handlers.pbkdf2.pbkdf2_sha512'>
+2022-03-16 09:02:44,654 DEBUG passlib.registry Thread-1 : registered 'sha256_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha256_crypt'>
+2022-03-16 09:02:44,654 DEBUG passlib.registry Thread-1 : registered 'sha512_crypt' handler: <class 'passlib.handlers.sha2_crypt.sha512_crypt'>
+2022-03-16 09:02:44,654 DEBUG passlib.registry Thread-1 : registered 'plaintext' handler: <class 'passlib.handlers.misc.plaintext'>
+2022-03-16 09:02:44,655 DEBUG passlib.registry Thread-1 : registered 'hex_md5' handler: <class 'passlib.handlers.digests.hex_md5'>
+2022-03-16 09:03:03,877 INFO werkzeug Thread-3 : 127.0.0.1 - - [16/Mar/2022 09:03:03] "GET /main HTTP/1.1" 200 -
+2022-03-16 09:03:03,909 INFO werkzeug Thread-4 : 127.0.0.1 - - [16/Mar/2022 09:03:03] "[36mGET /static/js/coordinates.js HTTP/1.1[0m" 304 -
+2022-03-16 09:03:03,913 INFO werkzeug Thread-5 : 127.0.0.1 - - [16/Mar/2022 09:03:03] "[36mGET /static/js/functions.js HTTP/1.1[0m" 304 -
+2022-03-16 09:03:03,917 INFO werkzeug Thread-6 : 127.0.0.1 - - [16/Mar/2022 09:03:03] "[36mGET /static/js/searchapproved.js HTTP/1.1[0m" 304 -
+2022-03-16 09:03:04,370 INFO werkzeug Thread-7 : 127.0.0.1 - - [16/Mar/2022 09:03:04] "[32mGET /approvedgalaxies HTTP/1.1[0m" 302 -
+2022-03-16 09:03:04,378 INFO werkzeug Thread-8 : 127.0.0.1 - - [16/Mar/2022 09:03:04] "[32mPOST /process HTTP/1.1[0m" 302 -
+2022-03-16 09:03:04,443 INFO werkzeug Thread-9 : 127.0.0.1 - - [16/Mar/2022 09:03:04] "GET /login?next=%2Fapprovedgalaxies HTTP/1.1" 200 -
+2022-03-16 09:03:04,443 INFO werkzeug Thread-10 : 127.0.0.1 - - [16/Mar/2022 09:03:04] "GET /login?next=%2Fprocess HTTP/1.1" 200 -
+2022-03-16 09:03:06,598 INFO werkzeug Thread-11 : 127.0.0.1 - - [16/Mar/2022 09:03:06] "GET /login HTTP/1.1" 200 -
+2022-03-16 09:03:07,387 INFO werkzeug Thread-12 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "GET /main HTTP/1.1" 200 -
+2022-03-16 09:03:07,432 INFO werkzeug Thread-13 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "GET /static/js/coordinates.js HTTP/1.1" 200 -
+2022-03-16 09:03:07,432 INFO werkzeug Thread-15 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "GET /static/js/searchapproved.js HTTP/1.1" 200 -
+2022-03-16 09:03:07,433 INFO werkzeug Thread-14 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "GET /static/js/functions.js HTTP/1.1" 200 -
+2022-03-16 09:03:07,500 INFO werkzeug Thread-16 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "[32mGET /approvedgalaxies HTTP/1.1[0m" 302 -
+2022-03-16 09:03:07,516 INFO werkzeug Thread-17 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "[32mPOST /process HTTP/1.1[0m" 302 -
+2022-03-16 09:03:07,520 INFO werkzeug Thread-18 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "GET /login?next=%2Fapprovedgalaxies HTTP/1.1" 200 -
+2022-03-16 09:03:07,537 INFO werkzeug Thread-19 : 127.0.0.1 - - [16/Mar/2022 09:03:07] "GET /login?next=%2Fprocess HTTP/1.1" 200 -
