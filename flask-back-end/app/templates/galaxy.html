@@ -39,7 +39,7 @@
 
     <h2> Galaxy Details </h2>
 
-    <table class = "table" id = "Galaxy">
+    <table class = "table table-hover" id = "Galaxy" style="width: 100%;">
         <thead>
         <tr>
             <th></th>
@@ -48,7 +48,7 @@
             <th>Average Dec.</th>
             <th>Coordinate System</th>
             <th>Redshift</th>
-            <th>Lensing Flag</th>
+            <th>Lensed?</th>
             <th>Classification</th>
             <th>Notes</th>
         </tr>
@@ -56,15 +56,15 @@
         
         <tbody>
             <tr>
-                <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"> Update </a></td>
-                <td>{{ galaxy.name }}</td>
-                <td name="raCoordinates" id="{{ galaxy.right_ascension }}"></td>
-                <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
-                <td>{{ galaxy.coordinate_system }}</td>
-                <td>{{ galaxy.redshift }}</td>
-                <td>{{ galaxy.lensing_flag }}</td>
-                <td>{{ galaxy.classification }}</td>
-                <td>{{ galaxy.notes }}</td>
+                <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"  style="width: 5%;"> Update</a></td>
+                <td style="width: 5%;">{{ galaxy.name }}</td>
+                <td name="raCoordinates" id="{{ galaxy.right_ascension }}" style="width: 5%;"></td>
+                <td name="decCoordinates" id="{{ galaxy.declination }}"  style="width: 5%;"></td>
+                <td style="width: 10%;">{{ galaxy.coordinate_system }}</td>
+                <td style="width: 5%;">{{ galaxy.redshift }}</td>
+                <td style="width: 5%;">{{ galaxy.lensing_flag }}</td>
+                <td style="width: 5%;">{{ galaxy.classification }}</td>
+                <td style="width: 55%;">{{ galaxy.notes }}</td>
             </tr>
         </tbody>
     </table>
