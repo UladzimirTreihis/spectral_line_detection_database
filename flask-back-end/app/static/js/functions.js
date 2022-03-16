@@ -2,14 +2,32 @@ function showUncertainties() {
 // Get the checkbox
 var checkBox = document.getElementById("myCheck");
 // Get the output text
-var form = document.getElementById("uncertainty");
-
-// If the checkbox is checked, display the output text
+fields = []
+var one = document.getElementById("uncertainty1");
 if (checkBox.checked == true){
-    form.style.display = "block";
-} else {
-    form.style.display = "none";
-}
+        one.style.display = "block";
+    } else {
+        one.style.display = "none";
+    }
+var two = document.getElementById("uncertainty2");
+if (checkBox.checked == true){
+        two.style.display = "block";
+    } else {
+        two.style.display = "none";
+    }
+
+var three = document.getElementById("uncertainty3");
+if (checkBox.checked == true){
+        three.style.display = "block";
+    } else {
+        three.style.display = "none";
+    }
+var four = document.getElementById("uncertainty4");
+if (checkBox.checked == true){
+        four.style.display = "block";
+    } else {
+        four.style.display = "none";
+    }
 };
 
 function onlyOne(checkbox) {
@@ -94,20 +112,4 @@ function checkFromIdList(){
     });
 }
 
-
-
-
-$.ajax({
-    type: "POST",
-    url: "http://127.0.0.1:5000/posts_delete",
-    contentType: "application/json",
-    data: JSON.stringify({'delete': checked}),
-    dataType: "json",
-    success: function(response) {
-        console.log(response);
-    },
-    error: function(err) {
-        console.log(err);
-    }
-});
 

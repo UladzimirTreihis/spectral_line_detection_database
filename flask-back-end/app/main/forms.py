@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, FloatField, StringField, SubmitField, TextAreaField, SelectField
+from wtforms import FileField, FloatField, StringField, SubmitField, TextAreaField, SelectField, SelectMultipleField
 from wtforms.validators import Regexp, ValidationError, DataRequired, Email, EqualTo, Length, URL, Optional, NumberRange
 from flask import request
 from config import dec_reg_exp, ra_reg_exp
@@ -39,7 +39,6 @@ class SearchForm(FlaskForm):
 
 class AdvancedSearchForm(FlaskForm):
     
-
     name = StringField('Galaxy Name', validators = [Optional ()])
     right_ascension_min = StringField('Right Ascension from:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
     right_ascension_max = StringField('Right Ascension to:', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional ()])
@@ -55,8 +54,8 @@ class AdvancedSearchForm(FlaskForm):
 
     redshift_min = FloatField('Redshift from:', validators = [Optional ()])
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
-    lensing_flag = SelectField(u'Lensing Flag',
-        choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validate_choice=False)
+    lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')], validate_choice=False)
+    classification = SelectMultipleField(u'Classification', choices = [('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')], validate_choice=False)
     
     # Line data
 
@@ -92,84 +91,83 @@ class AddGalaxyForm(FlaskForm):
     submit_anyway = SubmitField('Submit Anyway')
     do_not_submit = SubmitField('No, go back to Home. ')
     coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS')], validators = [DataRequired ()])
-    lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Either', 'Either')], validators = [DataRequired ()])
-    classification = StringField('Classification', validators = [DataRequired ()])
+    lensing_flag = SelectField(u'Is it gravitationally lensed?', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')], validators = [DataRequired ()])
+    classification = SelectMultipleField(u'Classification (Press Shift to Select All That Apply)', choices = [('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')], validators = [DataRequired ()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
-    new_line = SubmitField ('Add Line to this Galaxy')
+    new_line = SubmitField ('Add A New Line to this Galaxy')
 
 class EditGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators = [DataRequired ()])
-    right_ascension = StringField('Right Ascension', validators = [Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), DataRequired ()])
-    declination = StringField('Declination', validators = [Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), DataRequired ()])
     submit_anyway = SubmitField('Submit Anyway')
     do_not_submit = SubmitField('No, go back to Home. ')
-    coordinate_system = StringField('Coordinate System - J2000 or ICRS only', validators = [DataRequired ()])
-    lensing_flag = StringField('Lensing Flag - Lensed, Unlensed or Either', validators = [DataRequired ()])
-    classification = StringField('Classification', validators = [DataRequired ()])
+    coordinate_system = SelectField(u'Coordinate System', choices = [('J2000', 'J2000'), ('ICRS', 'ICRS')], validators = [DataRequired ()])
+    lensing_flag = SelectField(u'Is it gravitationally lensed?', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')], validators = [DataRequired ()])
+    classification = StringField('Current Classification', validators = [DataRequired ()])
+    remove_classification = SelectMultipleField(u'Remove Classification (Press Shift to Select All That Apply)', choices = [('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')])
+    add_classification = SelectMultipleField(u'Add Classification (Press Shift to Select All That Apply)', choices = [('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
     new_line = SubmitField ('Add Line to this Galaxy')
 
 class DynamicSearchForm(FlaskForm): 
     galaxy_name = StringField('Galaxy', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Galaxy Name"})
-
+    submit = SubmitField('View Galaxy')
+    
 class AddLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
-   
     emitted_frequency = StringField('Emitted Frequency', validators = [DataRequired ()])
     species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other')], validators = [DataRequired ()])
-
+    right_ascension = StringField('Right Ascension', validators = [DataRequired ()])
+    declination = StringField('Declination', validators = [DataRequired ()])
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
-    integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
-    integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_positive = FloatField('Integrated Line Flux Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_negative = FloatField('Integrated Line Flux Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     peak_line_flux = FloatField('Peak Line Flux', validators = [Optional (), NumberRange(min = 0)])
-    peak_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    peak_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_uncertainty_positive = FloatField('Peak Line Flux Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_uncertainty_negative = FloatField('Peak Line Flux Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     line_width = FloatField('Line Width', validators = [Optional (), NumberRange(min = 0)])
-    line_width_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    line_width_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    line_width_uncertainty_positive = FloatField('Line Width Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    line_width_uncertainty_negative = FloatField('Line Width Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     freq_type = SelectField(u'Enter as redshift (z) or observed frequency (f)', choices = [('z', 'z'), ('f', 'f')], validators = [DataRequired ()])
-    observed_line_frequency = FloatField('Observable Line Frequency', validators = [Optional (), NumberRange(min = 0)])
-    observed_line_frequency_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    observed_line_frequency_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    detection_type = SelectField(u'Detection Type', choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric'), ('Either', 'Either')], validators = [Optional ()])
-    observed_beam_major = FloatField('Observed Beam Major (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
-    observed_beam_minor = FloatField('Observed Beam Minor (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
-    observed_beam_angle = FloatField('Observed Beam Angle (strongly recommend) ', validators = [Optional ()])
-    reference = StringField('Reference', validators = [DataRequired()])
+    observed_line_frequency = FloatField('Observed Frequency/Redshift', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_uncertainty_positive = FloatField('Observed Frequency/Redshift Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_uncertainty_negative = FloatField('Observed Frequency/Redshift Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    detection_type = SelectField(u'Telescope Type used for Detection', choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')], validators = [Optional ()])
+    observed_beam_major = FloatField('Observed Beam Major (FwHM in arcsec) (strongly recommended) ', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor = FloatField('Observed Beam Minor (FwHM in arcsec) (strongly recommended) ', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_angle = FloatField('Observed Beam Position Angle in Degrees (strongly recommended)', validators = [Optional ()])
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators = [DataRequired()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
 
 class EditLineForm(FlaskForm):
     galaxy_name = StringField('Galaxy Name', validators=[DataRequired(),Length(max=40)],render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
-        
     emitted_frequency = FloatField('Emitted Frequency', validators = [DataRequired (), NumberRange(min = 0)])
     species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other')], validators = [DataRequired ()])
-    
     integrated_line_flux = FloatField('Integrated Line Flux', validators = [DataRequired(), NumberRange(min = 0)])
-    integrated_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
-    integrated_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_positive = FloatField('Integrated Line Flux Positive Uncertainty', validators = [DataRequired (), NumberRange(min = 0)])
+    integrated_line_flux_uncertainty_negative = FloatField('Integrated Line Flux Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     peak_line_flux = FloatField('Peak Line Flux', validators = [Optional (), NumberRange(min = 0)])
-    peak_line_flux_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    peak_line_flux_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_uncertainty_positive = FloatField('Peak Line Flux Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    peak_line_flux_uncertainty_negative = FloatField('Peak Line Flux Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     line_width = FloatField('Line Width', validators = [Optional (), NumberRange(min = 0)])
-    line_width_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    line_width_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    line_width_uncertainty_positive = FloatField('Line Width Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    line_width_uncertainty_negative = FloatField('Line Width Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
     freq_type = SelectField(u'Enter as redshift (z) or observed frequency (f)', choices = [('z', 'z'), ('f', 'f')], validators = [DataRequired ()])
     observed_line_frequency = FloatField('Observable Line Frequency', validators = [Optional (), NumberRange(min = 0)])
-    observed_line_frequency_uncertainty_positive = FloatField('Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    observed_line_frequency_uncertainty_negative = FloatField('Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
-    detection_type = StringField('Detection Type - Single Dish, Interferometric or Either only', validators = [Optional ()])
-    observed_beam_major = FloatField('Observed Beam Major (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
-    observed_beam_minor = FloatField('Observed Beam Minor (strongly recommend) ', validators = [Optional (), NumberRange(min = 0)])
-    observed_beam_angle = FloatField('Observed Beam Angle (strongly recommend) ', validators = [Optional ()])
-    reference = StringField('Reference', validators = [DataRequired()])
+    observed_line_frequency_uncertainty_positive = FloatField('Observable Line Frequency Positive Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    observed_line_frequency_uncertainty_negative = FloatField('Observable Line Frequency Negative Uncertainty', validators = [Optional (), NumberRange(min = 0)])
+    detection_type = SelectField(u'Telescope Type used for Detection', choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')], validators = [Optional ()])
+    observed_beam_major = FloatField('Observed Beam Major (FwHM in arcsec) (strongly recommended) ', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_minor = FloatField('Observed Beam Minor (FwHM in arcsec) (strongly recommended) ', validators = [Optional (), NumberRange(min = 0)])
+    observed_beam_angle = FloatField('Observed Beam Position Angle in Degrees (strongly recommended) ', validators = [Optional ()])
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators = [DataRequired()])
     notes = StringField('Notes', validators = [Optional ()])
     submit = SubmitField('Submit')
 
 class UploadFileForm(FlaskForm):
-    file = FileField('Choose file for Upload')
+    file = FileField('Choose File For Upload')
     submit = SubmitField('Submit')

@@ -3,6 +3,10 @@
 {% block title %}
     Main 
 {% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
+{% endblock %}
 {% block style %}
 <style>
    ul#menu li {
@@ -14,40 +18,34 @@
 {% block content %}
 <div class="container">
 <hr>
-<h1> Main Page </h1>
-<p> This is the content for the main page. </p>
+<h1> The High-z FIR/radio Spectral Line Detection Database </h1>
 <br>
 
-<a href="{{ url_for('main.galaxy_entry_form') }}" class="btn btn-info" role="button">Create a New Galaxy</a>
-<a href="{{ url_for('main.line_entry_form') }}" class="btn btn-info" role="button">Add a Line to an Existing Galaxy</a>
-<a href="{{ url_for('main.entry_file') }}" class="btn btn-info" role="button">Enter Values Through a File</a>
 <a href="{{ url_for('main.query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
+<a href="{{ url_for('main.contribute') }}" class="btn btn-info" role="button">Contribute Data</a>
+
 
 <br>
 <br>
-{% if form %}
-<li class="list-inline-item">
-   <form class="navbar-form navbar-left" method="get" action="{{ url_for('main.query_results') }}">
-     <ul class="list-inline text-right" >
-         <li class="list-inline-item">
-            <div class="form-group">
-               {{ form.search(size=20, class='form-control',placeholder=form.search.label.text) }}
-            </div>
-         </li>
-         <li class="list-inline-item">
-            <button type="submit" value="Search">
-               {{ form.submit() }}
-            </button>
-         </li>
-     </ul>
-   </form> 
-</li>
-{% endif %}
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<form class="form-inline" action="" method="post" novalidate> 
+   <h3> Search for a Galaxy within the Database </h3>
+   {{ form.galaxy_name(size=32) }}
+   {{ form.submit()}}
+   {% for error in form.galaxy_name.errors %}
+   <span style="color: red;">[{{ error }}]</span>
+   {% endfor %}
+</form>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/searchapproved.js') }}"></script>
 
 <br> 
 <br>
 
-<h2> Galaxy (click on each galaxy name to view associated lines) </h2>
+<h2> Database sorted by galaxy name </h2>
 <table class = "table" id = "Galaxy">
          <thead>
             <tr>
@@ -62,13 +60,13 @@
          
          <tbody>
 
-            {% for g, galaxy_count in galaxies|zip(count_list) %}
+            {% for galaxy, galaxy_count in galaxies|zip(count_list) %}
 
                <tr>
-                  <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-                  <td>{{ g.right_ascension }}</td>
-                  <td>{{ g.declination }}</td>
-                  {% set id = g.id %}
+                  <td><a href="{{ url_for('main.galaxy', name=galaxy.name) }}">{{ galaxy.name }}</a></td>
+                  <td name="raCoordinates" id="{{ galaxy.right_ascension }}">{{ galaxy.right_ascension }}</td>
+                  <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
+                  {% set id = galaxy.id %}
                   <td>
                      <ul id="menu">
                      {% for species in list_of_lines_per_species[galaxy_count] %}
@@ -76,8 +74,8 @@
                      {% endfor %}
                      </ul>
                   </td>
-                  <td>{{ g.redshift }}</td>
-                  <td>{{ g.classification }}</td>
+                  <td>{{ galaxy.redshift }}</td>
+                  <td>{{ galaxy.classification }}</td>
                </tr>
                
             {% endfor %}
@@ -90,6 +88,7 @@
 <br> 
 <br>
 
+<script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
 
 </div>
 {% endblock %}
