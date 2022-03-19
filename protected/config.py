@@ -5,19 +5,19 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 template_dir = '../../../public/templates'
 
 with open('../protected/etc/config.json') as config_file:
-    config = json.load(config_file)
+    config_file = json.load(config_file)
 
 
 class Config(object):
     DEBUG = False
     TESTING = False
     #the dir is still /app but database is supposed to be outside with other config files?
-    SQLALCHEMY_DATABASE_URI = config.get('SQLALCHEMY_DATABASE_URI') 
+    SQLALCHEMY_DATABASE_URI = config_file.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, '../tmp/app.db')
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace(
      #   'postgres://', 'postgresql://') or \
       #  'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = config.get('SECRET_KEY')
+    SECRET_KEY = config_file.get('SECRET_KEY') or 'you-will-never-guess'
     
     # For Postgresql
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT') 
@@ -28,8 +28,8 @@ class Config(object):
     MAIL_PORT = os.environ.get('MAIL_PORT') or 465
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL') or True
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') or False
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME') or 'line.database.test@gmail.com'
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD') or 'enrjbkfrbkzxboxk'
+    MAIL_USERNAME = config_file.get('MAIL_USERNAME') or 'line.database.test@gmail.com'
+    MAIL_PASSWORD = config_file.get('MAIL_PASSWORD') or 'enrjbkfrbkzxboxk'
     MAIL_DEFAULT_SENDER = MAIL_USERNAME
     MAIL_MAX_EMAILS = os.environ.get('MAIL_MAX_EMAILS') or None
     MAIL_SUPPRESS_SEND = os.environ.get('MAIL_SUPPRESS_SEND') or False

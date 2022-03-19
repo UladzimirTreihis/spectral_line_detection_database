@@ -1,7 +1,6 @@
 
 {
 	"SECRET_KEY": "adfh8347ad6gsdfhs54fg",
-	"SQLALCHEMY_DATABASE_URI": "sqlite:////home/ulad/Desktop/code/deploy1/home/spectral_line_detection_database/public/app.db",
 	"MAIL_USERNAME": "line.database.test@gmail.com",
 	"MAIL_PASSWORD": "yale-nus",
 	"SECURITY_PASSWORD_SALT": "dgdfsgdsfghf5hf6",

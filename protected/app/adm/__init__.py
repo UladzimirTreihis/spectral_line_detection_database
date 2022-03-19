@@ -508,8 +508,6 @@ class PostsView(BaseView):
 
                             approve_editline(editline_id)
 
-                        db.session.delete (post)
-                        db.session.commit ()  
 
 
         session = Session()

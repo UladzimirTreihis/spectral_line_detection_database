@@ -1,27 +1,51 @@
 from re import template
-from flask import Flask, request, redirect, url_for
+from flask import (
+    Flask,
+    request,
+    redirect,
+    url_for
+)
 from flask_migrate import Migrate
-from flask_security import SQLAlchemyUserDatastore, Security, current_user
-from config import *
+from flask_security import (
+    SQLAlchemyUserDatastore,
+    Security,
+    current_user
+)
+from config import (
+    config_file,
+    Config,
+    DevelopmentConfig,
+    ProductionConfig,
+    TestingConfig
+)
 import logging
-from logging.handlers import SMTPHandler, RotatingFileHandler
+from logging.handlers import (
+    SMTPHandler,
+    RotatingFileHandler
+)
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import math
 from sqlalchemy import event
-from flask_admin import Admin, AdminIndexView
+from flask_admin import (
+    Admin,
+    AdminIndexView
+)
 from flask_admin.contrib.sqla import ModelView
 from .models import db, User, Role
 from datetime import datetime
-from flask_security.forms import ConfirmRegisterForm, Required, StringField
+from flask_security.forms import (
+    ConfirmRegisterForm,
+    Required,
+    StringField
+)
 from flask_mail import Mail
-
 
 
 migrate = Migrate()
 mail = Mail()
-engine = create_engine(config.get('SQLALCHEMY_DATABASE_URI'), echo=False, connect_args={"check_same_thread": False})
+engine = create_engine(Config.SQLALCHEMY_DATABASE_URI, echo=False, connect_args={"check_same_thread": False})
 admin = Admin (template_mode='bootstrap3')
 
 #Flask-Security
@@ -72,7 +96,7 @@ def create_app(config_class = DevelopmentConfig):
     admin.init_app(app, index_view=RestrictedAdminIndexView(name='Index'), url='/')
     app.jinja_env.filters['zip'] = zip
 
-    engine = create_engine(config.get('SQLALCHEMY_DATABASE_URI'), echo=False, connect_args={"check_same_thread": False})
+    engine = create_engine(Config.SQLALCHEMY_DATABASE_URI, echo=False, connect_args={"check_same_thread": False})
     Session = sessionmaker()
     Session.configure(bind=engine)
 
