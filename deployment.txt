@@ -12,22 +12,73 @@ You may need to install using flathub (find the flathub installation guide here:
 - Apache 2.4 Generic Production
 - Follow similar steps as per Django guide here: https://blog.nearlyfreespeech.net/2014/11/17/how-to-django-on-nearlyfreespeech-net/
 
-4. Connect to the site using dolphin -> Network using the address as per the format:
+4. Using your terminal, open dolphin:
+$ dolphin
 
-fish://username:password@domain
+5 (optional). Install konsole to send commands if necessary (if there are issues with opening dolphin's terminal), otherwise access konsole using Shift+F4
 
-5. Install konsole to send commands if necessary, otherwise access konsole using Shift+F4
+$ sudo apt-get install dolphin konsole
 
-"sudo apt-get install dolphin konsole"
-
-6. Regarding the fourth point, you actually need to start dolphin from the terminal with command 'dolphin'. Then you can log in to the server as follows and have the remote terminal available: 
+6. From dolphin's terminal you can log in to the server as follows: 
 $ ssh uladzimir_linedb@ssh.phx.nearlyfreespeech.net 
--> then enter password. 
+It will prompt you to enter your server password, enter it. 
 
-fish://uladzimir_linedb:yale-nus@ssh.phx.nearlyfreespeech.net
+7. You are in a public directory. You can go one directory up (/home) to see the full picture. Now you have a few directories that we will use as follows:
+   /home/public - we paste there our templates folder (all html files and any other static files if necessary (images/pdfs/docuemnts)). This folder can have the following permissions: rwxrwxr__ or rwxrwxr_x. Here are the files to move there:
+   		/templates
+   		run.sh
+   /home/protected - here we store all our code. The protection is the default. This folder should be extemely secure. (rwxrwx___). These are the files we would want to move from our github repository:
+		/app
+		/etc --? may not be necessary
+		/migrations
+		config.py
+		run.py
+		tests.py
+		requirements.txt
+    /home/conf - here we will store our config.json with very sensetive information and configuration. Should be very secure (rwxrwx___). We import the contents of config.json to our config.py. This file will not be commited to GitHub as a public file. The following files need to be updated:
+    	       config.json
+    /home/tmp - we use this directory to create and store our app.db file. Permissions: rwxrwxrw_ or rwxrwxrwx. Files do not need to be moved, unless we want to change the db file:
+    	      app.db
+    /home/logs - we do not move there anything, but it stores the server's logs. Useful for debug. Permissions: I assume rwxrwx___ should be enough.
+    /home/private - we do not use this filder for now, but generally this is the folder for the root user, which we use by default. A good practise is to set up users with their access codes, which could be an option.
+
+8. Once you have moved all the files from above to the corresponding directories, you need to set up the /.venv - virtual environment with dependencies we will be using. Here are the commands:
+$ cd /home/protected
+$ python3 -m venv .venv
+$ . .venv/bin/activate
+$ pip install -r requirements.txt
+You will not see the folder appear, but it is there. In general, to see the hidden contents and their permissions use this command:
+$ ls -la
+Note that copying all the files and installing all the dependancies may take up to 20 minutes. If the update is minor, you may want to substitute only a particular file. 
+
+9. Now we want to set up a Daemon. Go to the managing panel of NFS, and press add daemon button.
+a) Set up tag: run
+b) Command line should direct to the .sh file that will start our app, in out case: /home/public/run.sh
+c) Working directory: /home/protected
+d) Run daemon as: web
+
+That is the example of run.sh file, in our case we only need to activate .venv and run flask:
+
+#!/bin/sh
+. ../protected/.venv/bin/activate
+cd ../protected
+exec flask run
 
 
-7. I used two out of the proposed folders and the third one is used by default:
-protected -> main code, supposed to be restricted and definitely not avaialble to the public.
-public -> includes only the static files (images, html files) and the bash .sh file that daemon is configured to start (bash file is a starting point of the application, it activates the venv and directs to the run.py file using flask run). I may reconsider keeping the dash file in public (I should).
-logs -> automatically stores logs there, even though our app is configured to keep its own logs independently in /protected/record.log (hidden).
+10. Now we want to set up a proxy. Generally, proxies are used to tell the server where (which folder) should particular requests be directed. In our case we set them all up within the flask, so we only need to set up one:
+a) Protocol: HTTP
+b) Base URI: /
+c) Document URI: /
+d) Target Port: 5000
+
+11. Set up some important permissions:
+$ cd /home/protected
+$ chmod 776 record.log
+$ cd /home/public
+$ chmod 775 run.sh
+
+12. Now start daemon on NFS website.
+
+done?
+
+

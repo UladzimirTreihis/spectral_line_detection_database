@@ -4,7 +4,7 @@ import json
 basedir = os.path.abspath(os.path.dirname(__file__))
 template_dir = '../../../public/templates'
 
-with open('../protected/etc/config.json') as config_file:
+with open('../conf/config.json') as config_file:
     config_file = json.load(config_file)
 
 
