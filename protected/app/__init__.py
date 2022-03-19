@@ -21,7 +21,7 @@ from flask_mail import Mail
 
 migrate = Migrate()
 mail = Mail()
-engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
+engine = create_engine(config.get('SQLALCHEMY_DATABASE_URI'), echo=False, connect_args={"check_same_thread": False})
 admin = Admin (template_mode='bootstrap3')
 
 #Flask-Security
@@ -72,7 +72,7 @@ def create_app(config_class = DevelopmentConfig):
     admin.init_app(app, index_view=RestrictedAdminIndexView(name='Index'), url='/')
     app.jinja_env.filters['zip'] = zip
 
-    engine = create_engine('sqlite:///app.db', echo=False, connect_args={"check_same_thread": False})
+    engine = create_engine(config.get('SQLALCHEMY_DATABASE_URI'), echo=False, connect_args={"check_same_thread": False})
     Session = sessionmaker()
     Session.configure(bind=engine)
 

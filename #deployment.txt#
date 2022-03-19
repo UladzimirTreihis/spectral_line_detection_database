@@ -1,0 +1,35 @@
+Deployment:
+
+1. Install dolphin or an appropriate shh file browser:
+
+Ubuntu:
+https://apps.kde.org/dolphin/
+You may need to install using flathub (find the flathub installation guide here: https://flathub.org/apps/details/org.kde.dolphin)
+
+2. Register at nearlyfreespeech.net (create user)
+
+3. Create a site 
+- Apache 2.4 Generic Production
+- Follow similar steps as per Django guide here: https://blog.nearlyfreespeech.net/2014/11/17/how-to-django-on-nearlyfreespeech-net/
+
+4. Connect to the site using dolphin -> Network using the address as per the format:
+
+fish://username:password@domain
+
+5. Install konsole to send commands if necessary, otherwise access konsole using Shift+F4
+
+"sudo apt-get install dolphin konsole"
+
+6. Regarding the fourth point, you actually need to start dolphin from the terminal with command 'dolphin'. Then you can log in to the server as follows and have the remote terminal available: 
+$ ssh uladzimir_linedb@ssh.phx.nearlyfreespeech.net 
+-> then enter password. 
+
+fish://uladzimir_linedb:yale-nus@ssh.phx.nearlyfreespeech.net
+
+
+7. I used two out of the proposed folders and the third one is used by default:
+protected -> main code, supposed to be restricted and definitely not avaialble to the public.
+public -> includes only the static files (images, html files) and the bash .sh file that daemon is configured to start (bash file is a starting point of the application, it activates the venv and directs to the run.py file using flask run). I may reconsider keeping the dash file in public (I should).
+logs -> automatically stores logs there, even though our app is configured to keep its own logs independently in /protected/record.log (hidden).
+
+
