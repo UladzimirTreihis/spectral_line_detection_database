@@ -2,6 +2,31 @@ from sqlalchemy.orm import backref
 from ._db import db
 from datetime import datetime
 
+class BaseMixin(object):
+
+    @classmethod
+    def delete(cls, **kwargs):
+        obj = cls(**kwargs)
+        db.session.delete(obj)
+        db.session.commit()
+
+    @classmethod
+    def delete_object(cls, obj):
+        db.session.delete(obj)
+        db.session.commit()
+
+    @classmethod
+    def approve(cls, **kwargs):
+        obj = cls(**kwargs)
+        db.session.add(obj)
+        db.session.commit()
+    
+    @classmethod
+    def approve_object(cls, obj):
+        db.session.add(obj)
+        db.session.commit()
+
+
 class Post(db.Model):
     __tablename__ = 'post'
     __table_args__ = {'extend_existing': True}
@@ -20,7 +45,7 @@ class Post(db.Model):
     galaxies = db.relationship('Galaxy', backref='post', foreign_keys=[galaxy_id])
     editlines = db.relationship('EditLine', backref='post', foreign_keys=[editline_id])
 
-class Galaxy(db.Model):
+class Galaxy(BaseMixin, db.Model):
     __tablename__ = 'galaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -48,7 +73,7 @@ class Galaxy(db.Model):
     def as_dict(self):
         return {'name': self.name}
 
-class TempGalaxy(db.Model):
+class TempGalaxy(BaseMixin, db.Model):
     __tablename__ = 'tempgalaxy'
     __table_args__ = {'extend_existing': True}
     id = db.Column(db.Integer, primary_key=True)
@@ -121,8 +146,8 @@ class Line(db.Model):
     galaxy_id = db.Column(db.Integer, db.ForeignKey('galaxy.id')) 
     emitted_frequency = db.Column(db.Float(32), nullable = False)
     species = db.Column(db.String(32))
-    integrated_line_flux = db.Column(db.Float(32), nullable = False)
-    integrated_line_flux_uncertainty_positive = db.Column(db.Float(32), nullable = False)
+    integrated_line_flux = db.Column(db.Float(32))
+    integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
     peak_line_flux = db.Column(db.Float(32))
     peak_line_flux_uncertainty_positive = db.Column(db.Float(32))
@@ -145,8 +170,8 @@ class Line(db.Model):
     approved_user_email = db.Column(db.String(128))
     approved_username = db.Column(db.String(128))
     approved_time = db.Column(db.DateTime, default=datetime.utcnow)
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
 
 
 
@@ -158,7 +183,7 @@ class TempLine(db.Model):
     from_existed_id = db.Column(db.Integer)
     emitted_frequency = db.Column(db.Float(32), nullable = False)
     species = db.Column(db.String(32))
-    integrated_line_flux = db.Column(db.Float(32), nullable = False)
+    integrated_line_flux = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_positive = db.Column(db.Float(32))
     integrated_line_flux_uncertainty_negative = db.Column(db.Float(32))
     peak_line_flux = db.Column(db.Float(32))
@@ -180,8 +205,8 @@ class TempLine(db.Model):
     user_email = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
 
 
 class EditLine(db.Model):
@@ -215,8 +240,8 @@ class EditLine(db.Model):
     user_email = db.Column(db.String(128))
     time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
     galaxy_name = db.Column(db.String(128))
-    right_ascension = db.Column(db.Float(32), nullable = False) 
-    declination = db.Column(db.Float(32), nullable = False) 
+    right_ascension = db.Column(db.Float(32)) 
+    declination = db.Column(db.Float(32)) 
 
 
 
