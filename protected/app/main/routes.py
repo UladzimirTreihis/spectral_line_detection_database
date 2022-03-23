@@ -1662,7 +1662,7 @@ def convert_to_CSV(table, identifier):
             COL_NAMES['redshift'], 
             COL_NAMES['lensing_flag'], 
             COL_NAMES['classification'], 
-            COL_NAMES['notes']
+            COL_NAMES['g_notes']
             ])
                     
         for item in Galaxy.query.all():
@@ -1710,7 +1710,7 @@ def convert_to_CSV(table, identifier):
             COL_NAMES['observed_beam_minor'],
             COL_NAMES['observed_beam_angle'],
             COL_NAMES['reference'],
-            COL_NAMES['notes']
+            COL_NAMES['l_notes']
             ])
         for item in Line.query.all():
             out.writerow([
@@ -1757,7 +1757,7 @@ def convert_to_CSV(table, identifier):
             COL_NAMES['redshift'], 
             COL_NAMES['lensing_flag'], 
             COL_NAMES['classification'], 
-            COL_NAMES['notes'],
+            COL_NAMES['g_notes'],
             COL_NAMES['right_ascension'], 
             COL_NAMES['declination'], 
             COL_NAMES['emitted_frequency'],
@@ -1779,7 +1779,7 @@ def convert_to_CSV(table, identifier):
             COL_NAMES['observed_beam_minor'],
             COL_NAMES['observed_beam_angle'],
             COL_NAMES['reference'],
-            COL_NAMES['notes']
+            COL_NAMES['l_notes']
             ])
         for item in galaxy_lines:
             l = item [1]
@@ -1840,7 +1840,7 @@ def convert_to_CSV(table, identifier):
             COL_NAMES['redshift'], 
             COL_NAMES['lensing_flag'], 
             COL_NAMES['classification'], 
-            COL_NAMES['notes'],
+            COL_NAMES['g_notes'],
             COL_NAMES['right_ascension'], 
             COL_NAMES['declination'], 
             COL_NAMES['emitted_frequency'],
@@ -1862,7 +1862,7 @@ def convert_to_CSV(table, identifier):
             COL_NAMES['observed_beam_minor'],
             COL_NAMES['observed_beam_angle'],
             COL_NAMES['reference'],
-            COL_NAMES['notes']
+            COL_NAMES['l_notes']
             ])
         for item in data:
             l = item [1]
