@@ -113,7 +113,7 @@
       </div>
       <p>
             {{ form_advanced.lensing_flag.label }}<br>
-            {{ form_advanced.lensing_flag(size=3) }}<br>
+            {{ form_advanced.lensing_flag }}<br>
             {% for error in form_advanced.lensing_flag.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
@@ -149,7 +149,7 @@
          </p>
          <p>
             {{ form_advanced.species.label }}<br>
-            {{ form_advanced.species(size=3) }}<br>
+            {{ form_advanced.species }}<br>
             {% for error in form_advanced.species.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
@@ -221,7 +221,7 @@
       </div>
       <p>
          {{ form_advanced.detection_type.label }}<br>
-         {{ form_advanced.detection_type(size=3) }}<br>
+         {{ form_advanced.detection_type }}<br>
          {% for error in form_advanced.detection_type.errors %}
          <span style="color: red;">[{{ error }}]</span>
          {% endfor %}
