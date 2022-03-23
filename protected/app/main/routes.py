@@ -880,16 +880,24 @@ def entry_file():
                 row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
                 row_integrated_line_flux_uncertainty_positive = row[COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
                 row_integrated_line_flux_uncertainty_negative = row[COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
+                if row_integrated_line_flux_uncertainty_negative == "":
+                    row_integrated_line_flux_uncertainty_negative = row_integrated_line_flux_uncertainty_positive
                 row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
                 row_peak_line_flux_uncertainty_positive = row[COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
                 row_peak_line_flux_uncertainty_negative = row[COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
+                if row_peak_line_flux_uncertainty_negative == "":
+                    row_peak_line_flux_uncertainty_negative = row_peak_line_flux_uncertainty_positive
                 row_line_width = row[COL_NAMES['line_width']].strip()
                 row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
                 row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
+                if row_line_width_uncertainty_negative == "":
+                    row_line_width_uncertainty_negative = row_line_width_uncertainty_positive
                 row_freq_type = row[COL_NAMES['freq_type']].strip()
                 row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
                 row_observed_line_frequency_uncertainty_positive = row[COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
                 row_observed_line_frequency_uncertainty_negative = row[COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
+                if row_observed_line_frequency_uncertainty_negative == "":
+                    row_observed_line_frequency_uncertainty_negative = row_observed_line_frequency_uncertainty_positive
                 row_detection_type = row[COL_NAMES['detection_type']].strip()
                 row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
                 row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
