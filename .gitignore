@@ -21,7 +21,10 @@ __pycache__
 
 # Installer logs
 pip-log.txt
-
+record.log
 
 .venv
 app.db
+
+#Config
+config.json
