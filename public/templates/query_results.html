@@ -119,6 +119,15 @@
             {% endfor %}
 
       </p>
+      <p>
+         {{ form_advanced.classification.label }}<br>
+         {{ form_advanced.classification }}<br>
+         {% for error in form_advanced.classification.errors %}
+         <span style="color: red;">[{{error}}]</span>
+         {% endfor %}
+
+   </p>
+      <br>
       <br>
       </div>
       <div class = "entry">
