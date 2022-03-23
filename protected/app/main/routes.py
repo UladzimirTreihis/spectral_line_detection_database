@@ -1245,8 +1245,15 @@ def galaxy_edit_form(id):
                 changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag: ' + form.lensing_flag.data
             if (galaxy.classification != newclasslist):
                 changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + newclasslist
-            if (form.notes.data and galaxy.notes != form.notes.data):
-                changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
+            if (galaxy.notes != form.notes.data):
+                try:
+                    changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
+                except: 
+                    if galaxy.notes == None:
+                        changes = changes + 'Initial Notes: ' + "None " + 'New Notes: ' + form.notes.data
+                    elif form.notes.data == None:
+                        changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + "None"
+
             galaxy = EditGalaxy(name=form.name.data, right_ascension = galaxy.right_ascension, declination = galaxy.declination, coordinate_system = form.coordinate_system.data, classification = newclasslist, lensing_flag = form.lensing_flag.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes, original_id = original_id)
             db.session.add(galaxy)
             db.session.commit()
