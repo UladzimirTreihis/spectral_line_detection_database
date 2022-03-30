@@ -5,7 +5,31 @@
 {% endblock %}
 
 {% block script %}
-
+    <script src=
+"https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+                integrity=
+"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+                crossorigin="anonymous">
+    </script>
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+                integrity=
+"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+                crossorigin="anonymous">
+    </script>
+    <script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+                integrity=
+"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous">
+    </script>
+    <script src=
+"https://code.jquery.com/jquery-3.5.1.js"
+                integrity=
+"sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+                crossorigin="anonymous">
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -127,6 +151,14 @@
          {% endfor %}
 
    </p>
+   <p>
+      {{ form_advanced.remove_classification.label }}<br>
+      {{ form_advanced.remove_classification }}<br>
+      {% for error in form_advanced.classification.errors %}
+      <span style="color: red;">[{{error}}]</span>
+      {% endfor %}
+
+</p>
       <br>
       <br>
       </div>
@@ -317,8 +349,8 @@
             <td>{{ g.redshift }}</td>
             <td>{{ g.lensing_flag }}</td>
             <td>{{ g.classification }}</td>
-            <td>{{ g.notes }}</td>
-         </tr>
+            <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
+            <td class = "notes" style = "display:none"> {{g.notes}} </td>          </tr>
       {% endfor %}
    </tbody>
 </table>
@@ -399,10 +431,54 @@
             <td>{{ l.observed_beam_minor }}</td>
             <td>{{ l.observed_beam_angle }}</td>
             <td>{{ l.reference }}</td>
-            <td>{{ l.notes }}</td>
+            <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
+            <td class = "notes" style = "display:none"> {{l.notes}} </td> 
          </tr>
       {% endfor %}
    </tbody>
 </table> 
 {% endif %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+    <script>
+        $(function () {
+            $(".gfgselect").click(function () {
+                var notes = $(this).parents("tr").find(".notes").text();
+                var p = "";
+                p += "<p> " + notes + "</p>";
+                $("#divGFG").empty();
+                $("#divGFG").append(p);
+            });
+        });
+    </script>
+    <div class="modal fade" 
+         id="gfgmodal"
+         tabindex="-1"
+         role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title"
+                        id="gfgmodallabel">
+                      Notes</h2>
+                    <button type="button" 
+                            class="close"
+                            data-dismiss="modal" 
+                            aria-label="Close">
+                        <span aria-hidden="true">
+                          ×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="GFGclass" 
+                         id="divGFG"></div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary" 
+                                data-dismiss="modal">
+                          Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
