@@ -343,7 +343,7 @@ def query_results():
         for c in form_advanced.classification.data:
             buffer.append(c)
             index = index + 1
-        for i in range (index, 11):
+        for i in range (index, 12):
             buffer.append(")")
         
         # Query displaying galaxies based on the data from form_advanced
@@ -362,7 +362,7 @@ def query_results():
             l_data = form_advanced.lensing_flag.data + form_advanced.lensing_flag.data
             # Filters in respect to galaxy parameters
             galaxies=galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)), ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (Galaxy.declination.between(dec_to_float(to_m_inf(form_advanced.declination_min.data)), dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (Galaxy.redshift.between(form_advanced.redshift_min.data, form_advanced.redshift_max.data) | (Galaxy.redshift == None)) & (l_flag.contains(l_data) | (Galaxy.lensing_flag == None)))
-            galaxies=galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(buffer[1]) | (Galaxy.classification == None))
+            galaxies=galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(buffer[11]) | (Galaxy.classification == None))
 
             galaxies=galaxies.filter(~Galaxy.classification.contains(form_advanced.remove_classification.data))
 
