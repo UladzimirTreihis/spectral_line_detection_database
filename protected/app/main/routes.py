@@ -340,11 +340,19 @@ def query_results():
 
         buffer = []
         index = 0
+        is_all = False
         for c in form_advanced.classification.data:
-            buffer.append(c)
-            index = index + 1
+            if c == "All":
+                is_all = True
+            else:
+                buffer.append(c)
+                index = index + 1
+        
         for i in range (index, 12):
-            buffer.append(")")
+            if is_all:
+                buffer.append("(")
+            else:
+                buffer.append("asyunujnjnghfawek")
         
         # Query displaying galaxies based on the data from form_advanced
         if form_advanced.galaxySearch.data:
