@@ -54,14 +54,15 @@ class AdvancedSearchForm(FlaskForm):
 
     redshift_min = FloatField('Redshift from:', validators = [Optional ()])
     redshift_max = FloatField('Redshift to:', validators = [Optional ()])
-    lensing_flag = SelectField(u'Lensing Flag', choices = [('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')], validate_choice=False)
-    classification = SelectMultipleField(u'Classification', choices = [('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')], validate_choice=False)
-    
+    lensing_flag = SelectField(u'Lensing Flag', choices = [('Either', 'Either'), ('Lensed', 'Lensed'), ('Unlensed', 'Unlensed')], validate_choice=False)
+    classification = SelectMultipleField(u'Include Classification', choices = [('All', 'All'), ('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')], validate_choice=False)
+    remove_classification = SelectField(u'Exclude Classification', choices = [('None', 'None'), ('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'), ('SMB (Submillimeter Galaxy)', 'SMB (Submillimeter Galaxy)'), ('DSFG (Dusty Star-Forming Galaxy)', 'DSFG (Dusty Star-Forming Galaxy)'), ('SB (Starburst)', 'SB (Starburst)'), ('AGN (Contains a Known Active Galactic Nucleus)', 'AGN (Contains a Known Active Galactic Nucleus)'), ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), ('Quasar (Optical and Radio Bright AGN)', 'Quasar (Optical and Radio Bright AGN)'), ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'), ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'), ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'), ('BZK (BZK-Selected Galaxy)', 'BZK (BZK-Selected Galaxy)')], validate_choice=False)
+
     # Line data
 
     emitted_frequency_min = FloatField('Emitted Frequency from:', validators = [Optional (), NumberRange(min = 0)])
     emitted_frequency_max = FloatField('Emitted Frequency to:', validators = [Optional (), NumberRange(min = 0)])
-    species = SelectField(u'Select Species', choices = [('CO', 'CO'), ('Other', 'Other'), ('Either', 'Either')], validate_choice=False)
+    species = SelectField(u'Select Species', choices = [('Any', 'Any'), ('CO', 'CO'), ('Other', 'Other')], validate_choice=False)
     integrated_line_flux_min = FloatField('Integrated Line Flux from:', validators = [Optional(), NumberRange(min = 0)])
     integrated_line_flux_max = FloatField('Integrated Line Flux to:', validators = [Optional(), NumberRange(min = 0)])
     peak_line_flux_min = FloatField('Peak Line Flux from:', validators = [Optional (), NumberRange(min = 0)])
@@ -73,7 +74,7 @@ class AdvancedSearchForm(FlaskForm):
     observed_line_frequency_max = FloatField('Observable Line Frequency to:', validators = [Optional (), NumberRange(min = 0)])
 
     detection_type = SelectField(u'Detection Type',
-        choices = [('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric'), ('Either', 'Either')], validate_choice=False)
+        choices = [('Either','Either'), ('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')], validate_choice=False)
     observed_beam_major_min = FloatField('Observed Beam Major from:', validators = [Optional (), NumberRange(min = 0)])
     observed_beam_major_max = FloatField('Observed Beam Major to:', validators = [Optional (), NumberRange(min = 0)])
     observed_beam_minor_min = FloatField('Observed Beam Minor from:', validators = [Optional (), NumberRange(min = 0)])
