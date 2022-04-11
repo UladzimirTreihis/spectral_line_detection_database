@@ -1,0 +1,94 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Main 
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
+{% endblock %}
+{% block style %}
+<style>
+   ul#menu li {
+     display:inline;
+   }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+<hr>
+<h1> The High-z FIR/radio Spectral Line Detection Database </h1>
+<br>
+
+<a href="{{ url_for('main.query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
+<a href="{{ url_for('main.contribute') }}" class="btn btn-info" role="button">Contribute Data</a>
+
+
+<br>
+<br>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<form class="form-inline" action="" method="post" novalidate> 
+   <h3> Search for a Galaxy within the Database </h3>
+   {{ form.galaxy_name(size=32) }}
+   {{ form.submit()}}
+   {% for error in form.galaxy_name.errors %}
+   <span style="color: red;">[{{ error }}]</span>
+   {% endfor %}
+</form>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/searchapproved.js') }}"></script>
+
+<br> 
+<br>
+
+<h2> Database sorted by galaxy name </h2>
+<table class = "table" id = "Galaxy">
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>Right Ascension</th>
+               <th>Declination</th>
+               <th>Lines per Species</th>
+               <th>Redshift</th>
+               <th>Classification</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+
+            {% for galaxy, galaxy_count in galaxies|zip(count_list) %}
+
+               <tr>
+                  <td><a href="{{ url_for('main.galaxy', name=galaxy.name) }}">{{ galaxy.name }}</a></td>
+                  <td name="raCoordinates" id="{{ galaxy.right_ascension }}">{{ galaxy.right_ascension }}</td>
+                  <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
+                  {% set id = galaxy.id %}
+                  <td>
+                     <ul id="menu">
+                     {% for species in list_of_lines_per_species[galaxy_count] %}
+                        <li>{{species}}</li>
+                     {% endfor %}
+                     </ul>
+                  </td>
+                  <td>{{ galaxy.redshift }}</td>
+                  <td>{{ galaxy.classification }}</td>
+               </tr>
+               
+            {% endfor %}
+         </tbody>
+      </table>
+
+<a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy", identifier = "None", symmetrical = "False") }}" class="btn btn-info" role="button">Download All Galaxies as CSV</a>
+<a href="{{ url_for ('main.convert_to_CSV', table = "Everything", identifier = "None", symmetrical = "False") }}" class="btn btn-info" role="button">Download All Galaxies and Lines as CSV</a>
+
+<br> 
+<br>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+
+</div>
+{% endblock %}

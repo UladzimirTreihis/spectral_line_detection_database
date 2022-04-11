@@ -1,0 +1,115 @@
+{% extends "./base.html" %}
+
+{% block title %}
+    Galaxy {{ galaxy.name }} 
+{% endblock %}
+{% block script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+
+    <h2> Galaxy Details </h2>
+
+    <table class = "table table-hover" id = "Galaxy" style="width: 100%;">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Average R.A.</th>
+            <th>Average Dec.</th>
+            <th>Coordinate System</th>
+            <th>Redshift</th>
+            <th>Lensed?</th>
+            <th>Classification</th>
+            <th>Notes</th>
+        </tr>
+        </thead>
+        
+        <tbody>
+            <tr>
+                <td><a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}"  style="width: 5%;"> Update</a></td>
+                <td style="width: 5%;">{{ galaxy.name }}</td>
+                <td name="raCoordinates" id="{{ galaxy.right_ascension }}" style="width: 5%;"></td>
+                <td name="decCoordinates" id="{{ galaxy.declination }}"  style="width: 5%;"></td>
+                <td style="width: 10%;">{{ galaxy.coordinate_system }}</td>
+                <td style="width: 5%;">{{ galaxy.redshift }}</td>
+                <td style="width: 5%;">{{ galaxy.lensing_flag }}</td>
+                <td style="width: 5%;">{{ galaxy.classification }}</td>
+                <td style="width: 55%;">{{ galaxy.notes }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{{ url_for ('main.galaxy_edit_form', id = galaxy.id) }}" class="btn btn-info" role="button"> Update Galaxy Information </a>
+
+    <br>
+    <br>
+    <h2> Lines in this Galaxy </h2>
+    <p>
+        To see individual lines' individual positions, please download. 
+    </p>
+    <a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, symmetrical = "False") }}" class="btn btn-info" role="button">Download line entries for this galaxy</a>
+
+    <div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
+        <table class = "table table-hover" id = "Line" style="width: 100%">
+            <thead>
+                <tr>
+                    <th>\( Species \)</th>
+                    <th>\( f_{rest} \) \( (GHz) \)</th>
+                    <th>\( S \Delta V \) \((Jy \ km \ s^{-1}) \)</th>
+                    <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+                    <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+                    <th>\( S_{max} \) \( (mJy) \)</th>
+                    <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
+                    <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+                    <th>\( FwHM \) \( (kms^{-1}) \)</th>
+                    <th>\( +\sigma_{FwHM} \) \( (kms^{-1}) \)</th>
+                    <th>\( -\sigma_{FwHM} \) \( (kms^{-1}) \)</th>
+                    <th>\( f_{obs} \) \( (GHz) \)</th>
+                    <th>\( +\sigma_{f_{obs}} \) \( (GHz) \)</th>
+                    <th>\( -\sigma_{f_{obs}} \) \( (GHz) \)</th>
+                    <th>\( Telescope \) \( Type \)</th>
+                    <th>\( Beam \ Maj. \) \(FwHM ('') \)</th>
+                    <th>\( Beam \ Min. \) \(FwHM ('') \)</th>
+                    <th>\( Beam \ P.A. \) \( (*) \)</th>
+                    <th>\( Reference \)</th>
+                    <th>\( Notes \)</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                {% for l in line %}
+                <tr>
+                    <td>{{ l.species }}</td>
+                    <td>{{ l.emitted_frequency }}</td>
+                    <td>{{ l.integrated_line_flux }}</td>
+                    <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
+                    <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
+                    <td>{{ l.peak_line_flux }}</td>
+                    <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
+                    <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
+                    <td>{{ l.line_width }}</td>
+                    <td>{{ l.line_width_uncertainty_positive }}</td>
+                    <td>{{ l.line_width_uncertainty_negative }}</td>
+                    <td>{{ l.observed_line_frequency }}</td>
+                    <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
+                    <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
+                    <td>{{ l.detection_type }}</td>
+                    <td>{{ l.observed_beam_major }}</td>
+                    <td>{{ l.observed_beam_minor }}</td>
+                    <td>{{ l.observed_beam_angle }}</td>
+                    <td>{{ l.reference }}</td>
+                    <td>{{ l.notes }}</td>
+                </tr>
+                <tr>
+                    <td colspan = "19"> <a href="{{ url_for ('main.line_edit_form', id = l.id) }}" class="btn btn-info" role="button" > Update Above Line Information </a> </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>   
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+{% endblock %}
