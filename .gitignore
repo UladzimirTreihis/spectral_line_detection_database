@@ -23,6 +23,9 @@ __pycache__
 pip-log.txt
 record.log
 
+#PyCharm
+.idea
+
 .venv
 app.db
 

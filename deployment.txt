@@ -76,6 +76,9 @@ $ cd /home/protected
 $ chmod 776 record.log
 $ cd /home/public
 $ chmod 775 run.sh
+$ cd /home/tmp
+$ chmod 776 app.db
+
 
 12. Now start daemon on NFS website.
 

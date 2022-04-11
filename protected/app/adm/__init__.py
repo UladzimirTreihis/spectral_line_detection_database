@@ -110,16 +110,16 @@ def update_redshift_error(session, galaxy_id, sum_upper):
 def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_beam_angle = False, temporary = False):
     
     '''
-    Takes in a point's coordinates \form_ra and \form_dec and a \distance to check if any galaxy from \query is within the \distance.
+    Takes in a point's coordinates \form_ra and \form_dec and a distance to check if any galaxy from query is within the \distance.
     Employs Great-circle distance: https://en.wikipedia.org/wiki/Great-circle_distance
-    If the \distance is not provided, it is assumed to be 3 * Line.observed_beam_minor.
+    If the distance is not provided, it is assumed to be 3 * Line.observed_beam_minor.
     If Line.observed_beam_minor is not available, the distance is assumed to be 5 arcsec to be in an extreme proximity. 
 
     Returns:
     galaxies -- a query object containing all galaxies that satisfy the distance formula (type::Query). 
 
     Parameters:
-    session -- the session in which the \query is evoked is passed (type::Session).
+    session -- the session in which the query is evoked is passed (type::Session).
 
     query -- predefined query object is passed containing galaxies that are to be considered in terms of their proximity 
     to some point/galaxy with given coordinates. It has to contain the Galaxy & Line table data if the distance is not passed and \based_on_beam_angle == True
@@ -132,20 +132,20 @@ def within_distance(session, query, form_ra, form_dec, distance = 0, based_on_be
     temporary -- (type::Boolean), indicator if the check should be performed among not yet approved galaxies (TempGalaxy).
     '''
 
-    if based_on_beam_angle == False:
+    if not based_on_beam_angle:
         galaxies=query.filter(func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < distance)
         return galaxies
     else:
-        if temporary == True:
+        if temporary:
             galaxies = query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(TempGalaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(TempGalaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - TempGalaxy.declination)))   ) < func.radians(5/3600)) )
         else:
             subqry = session.query(func.max(Line.observed_beam_angle))
             sub = subqry.first()
             sub1 = sub[0]
-            if sub1  != None:
-                galaxies=query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )   
+            if sub1 is not None:
+                galaxies = query.filter(((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < (func.radians(subqry))/1200) & (subqry != None)) | (func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
             else:
-                galaxies=query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
+                galaxies = query.filter((func.acos(func.sin(func.radians(ra_to_float(form_ra))) * func.sin(func.radians(Galaxy.right_ascension)) + func.cos(func.radians(ra_to_float(form_ra))) * func.cos(func.radians(Galaxy.right_ascension)) * func.cos(func.radians(func.abs(dec_to_float(form_dec) - Galaxy.declination)))   ) < func.radians(5/3600)) )
         return galaxies
 
 def update_right_ascension(galaxy_id):
@@ -181,19 +181,19 @@ def update_declination(galaxy_id):
 def approve_tempgalaxy(id):
     tempgalaxy = TempGalaxy.query.filter(TempGalaxy.id==id).first()
     Galaxy.approve(
-        name = tempgalaxy.name,
-        right_ascension = tempgalaxy.right_ascension,
-        declination = tempgalaxy.declination,
-        coordinate_system = tempgalaxy.coordinate_system,
-        lensing_flag = tempgalaxy.lensing_flag,
-        classification = tempgalaxy.classification,
-        notes = tempgalaxy.notes,
-        user_submitted = tempgalaxy.user_submitted, 
-        user_email = tempgalaxy.user_email, 
-        time_submitted = tempgalaxy.time_submitted,
-        approved_username = current_user.username,
-        approved_user_email = current_user.email,
-        approved_time = datetime.utcnow()
+        name=tempgalaxy.name,
+        right_ascension=tempgalaxy.right_ascension,
+        declination=tempgalaxy.declination,
+        coordinate_system=tempgalaxy.coordinate_system,
+        lensing_flag=tempgalaxy.lensing_flag,
+        classification=tempgalaxy.classification,
+        notes=tempgalaxy.notes,
+        user_submitted=tempgalaxy.user_submitted,
+        user_email=tempgalaxy.user_email,
+        time_submitted=tempgalaxy.time_submitted,
+        approved_username=current_user.username,
+        approved_user_email=current_user.email,
+        approved_time=datetime.utcnow()
         )
 
     from_existed_id = db.session.query(func.max(Galaxy.id)).first()[0]
@@ -208,7 +208,7 @@ def approve_tempgalaxy(id):
 def approve_templine(id):
     templine = TempLine.query.filter(TempLine.id==id).first()
             
-    if (templine.from_existed_id == None):
+    if templine.from_existed_id is None:
         
         raise Exception('You have not yet approved the galaxy to which the line belongs to')
     else:
@@ -306,6 +306,20 @@ def approve_editline(id):
     #deletes the edit
     db.session.delete (editline)
     db.session.commit ()
+
+class AdminView(ModelView):
+    def is_accessible(self):
+        return current_user.has_role('admin')
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('security.login', next = request.url))
+
+class AdminBaseView(BaseView):
+    def is_accessible(self):
+        return current_user.has_role('admin')
+
+    def inaccessible_callback(self, name, **kwargs):
+        return redirect(url_for('security.login', next = request.url))
 
 
 class GalaxyView (ModelView):
@@ -449,7 +463,7 @@ class EditLineView(ModelView):
 
         flash('Record was successfully deleted.')
 
-class PostsView(BaseView):
+class PostsView(AdminBaseView):
 
     @expose('/', methods=['GET', 'POST'])
     def post_view(self):
@@ -477,9 +491,11 @@ class PostsView(BaseView):
                         elif editgalaxy_id != None:
                             editgalaxy = EditGalaxy.query.filter_by(id=editgalaxy_id).first()
                             db.session.delete(editgalaxy)
-                        else:
+                        elif editline_id != None:
                             editline = EditLine.query.filter_by(id=editline_id).first()
                             db.session.delete(editline)
+                        else:
+                            return "one of the posts has an id ({}) compatability issue, it doesn't seem to belong to any group".format(id)
                         db.session.delete (post)
                         db.session.commit ()
                 elif key == 'approve':
@@ -504,9 +520,12 @@ class PostsView(BaseView):
 
                             approve_editgalaxy(editgalaxy_id)
 
-                        else:
+                        elif editline_id != None:
 
                             approve_editline(editline_id)
+                        
+                        else:
+                            return "one of the posts has an id ({}) compatability issue, it doesn't seem to belong to any group".format(id)
 
 
 
@@ -799,14 +818,6 @@ def post_approve(id):
     db.session.delete (post)
     db.session.commit ()    
     return redirect("/posts")
-
-
-class AdminView(ModelView):
-    def is_accessible(self):
-        return current_user.has_role('admin')
-
-    def inaccessible_callback(self, name, **kwargs):
-        return redirect(url_for('security.login', next = request.url))
     
 class UserView(AdminView):
     @action('make admin',

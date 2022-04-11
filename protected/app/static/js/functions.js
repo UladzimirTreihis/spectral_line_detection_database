@@ -56,60 +56,57 @@ function checkAll(myCheckbox){
 var inputs = document.getElementsByTagName("input");
 var checked = [];
 var list = [1, 2];
-var action_delete = "delete";
-var action_approve = "approve";
 
 // Cycle our input elements list and find the checkboxes 
 // that are checked.
+function fromIDList(){
+  for ( let i = 0; i < checkboxes.length; i++ ) {
+    if ( checkboxes[i].name == "rowid" && checkboxes[i].checked ) {
+        checked.push(checkboxes[i].value);
+        rows[i-1].style.display = "none";
+        checkboxes[i] = false;
+    }
+};
+}
+
+function unCheckAll(){
+checkboxes.forEach(function(checkbox){
+        checkbox.checked = false;
+});
+}
+
+function emptyChecked(){
+    checked.length = 0;
+}
+
 function deleteFromIdList(){
-    for ( var i = 0; i < checkboxes.length; i++ ) {
-        if ( checkboxes[i].name == "rowid" && checkboxes[i].checked ) {
-            checked.push(checkboxes[i].value);
-            rows[i-1].style.display = "none";
-        }
-    };
+    fromIDList()
+    console.log(checked)
     $.ajax({
         type: "POST",
-        url:"http://127.0.0.1:5000/posts/",
+        url:document.URL,
         data: JSON.stringify({'delete': checked}),
         dataType: 'json'
     }).done(function(data) { 
         console.log(data);
     });
+    emptyChecked();
+    unCheckAll();
 }
 
 function approveFromIdList(){
-    for ( var i = 0; i < checkboxes.length; i++ ) {
-        if ( checkboxes[i].name == "rowid" && checkboxes[i].checked ) {
-            checked.push(checkboxes[i].value);
-            rows[i-1].style.display = "none";
-        }
-    };
+    fromIDList()
     $.ajax({
         type: "POST",
-        url:"http://127.0.0.1:5000/posts/",
+        url:document.URL,
         data: JSON.stringify({'approve': checked}),
         dataType: 'json'
     }).done(function(data) { 
         console.log(data);
     });
+    emptyChecked();
+    unCheckAll();
 }
 
-function checkFromIdList(){
-    for ( var i = 0; i < checkboxes.length; i++ ) {
-        if ( checkboxes[i].name == "rowid" && checkboxes[i].checked ) {
-            checked.push(checkboxes[i].value);
-            rows[i-1].style.display = "none";
-        }
-    };
-    $.ajax({
-        type: "POST",
-        url:"http://127.0.0.1:5000/posts/",
-        data: JSON.stringify({'check': checked}),
-        dataType: 'json'
-    }).done(function(data) { 
-        console.log(data);
-    });
-}
 
 
