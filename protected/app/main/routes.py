@@ -708,7 +708,7 @@ def entry_file():
     form = UploadFileForm()
     if request.method == 'POST':
         csvfile = request.files['file']
-        csv_file = TextIOWrapper(csvfile, encoding='windows-1252')
+        csv_file = TextIOWrapper(csvfile, encoding='utf-8-sig')
         reader = csv.DictReader(csv_file)
         data = [row for row in reader]
         classification_options = {"LBG": "LBG (Lyman Break Galaxy)", "MS": "MS (Main Sequence Galaxy)", "SMB": "SMB (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)", "SB": "SB (Starburst)", "AGN": "AGN (Contains a Known Active Galactic Nucleus)", "QSO": "QSO (Optically Bright AGN)", "Quasar": "Quasar (Optical and Radio Bright AGN)", "RQ-AGN": "RQ-AGN (Radio-Quiet AGN)", "RL-AGN": "RL-AGN (Radio-Loud AGN)", "RG": "RG (Radio Galaxy)", "BZK": "BZK (BZK-Selected Galaxy)"}
