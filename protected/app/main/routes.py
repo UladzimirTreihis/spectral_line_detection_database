@@ -1450,76 +1450,77 @@ def line_entry_form():
                 name = session.query(TempGalaxy.name).filter(TempGalaxy.id==id).scalar()
                 tempgalaxy_id = id
                 existed = None
+            
             if galaxy_id==None:
-                raise Exception ('Please enter the name exactly as proposed using Caps if necessary')
+                flash ('Please enter the name exactly as proposed using Caps if necessary')
+            else:
+                try:
+                    dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
+                    if dict_frequency == False:
+                        raise Exception (message)
+                except:
+                    pass
 
-            try:
                 dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-                if dict_frequency == False:
-                    raise Exception (message)
-            except:
-                pass
+                if form.freq_type.data == 'z':
+                    frequency, positive_uncertainty = redshift_to_frequency(dict_frequency, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                    negative_uncertainty = None
+                else:
+                    frequency = form.observed_line_frequency.data
+                    positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
+                    negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
 
-            dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-            if form.freq_type.data == 'z':
-                frequency, positive_uncertainty = redshift_to_frequency(dict_frequency, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
-                negative_uncertainty = None
-            else:
-                frequency = form.observed_line_frequency.data
-                positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
-                negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
-
-            # Check whether this line entry has been previously uploaded and/or approved
-            check_same_temp_line = db.session.query(TempLine.id).filter((TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (TempLine.galaxy_name == form.galaxy_name.data) & (TempLine.species == form.species.data) & (TempLine.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (TempLine.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data))).first()
+                # Check whether this line entry has been previously uploaded and/or approved
+                check_same_temp_line = db.session.query(TempLine.id).filter((TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (TempLine.galaxy_name == form.galaxy_name.data) & (TempLine.species == form.species.data) & (TempLine.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (TempLine.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data))).first()
 
 
-            check_same_line = db.session.query(Line.id).filter((Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (Line.observed_line_frequency == frequency) & (Line.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (Line.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data)) & (Line.species == form.species.data)).first()
+                check_same_line = db.session.query(Line.id).filter((Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (Line.observed_line_frequency == frequency) & (Line.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (Line.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data)) & (Line.species == form.species.data)).first()
 
-            # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
-            if (check_same_line == None) & (check_same_temp_line == None):
-                line = TempLine(galaxy_id=id, 
-                                emitted_frequency=form.emitted_frequency.data, 
-                                species=form.species.data, 
-                                integrated_line_flux = form.integrated_line_flux.data, 
-                                integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data,
-                                integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, 
-                                peak_line_flux = form.peak_line_flux.data, 
-                                peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, 
-                                peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, 
-                                line_width=form.line_width.data, 
-                                line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
-                                line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
-                                observed_line_frequency = frequency, 
-                                observed_line_frequency_uncertainty_positive = positive_uncertainty, 
-                                observed_line_frequency_uncertainty_negative = negative_uncertainty, 
-                                detection_type = form.detection_type.data, 
-                                observed_beam_major = form.observed_beam_major.data, 
-                                observed_beam_minor = form.observed_beam_minor.data, 
-                                observed_beam_angle = form.observed_beam_angle.data, 
-                                reference = form.reference.data, 
-                                notes = form.notes.data, 
-                                user_submitted = current_user.username, 
+                # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
+                if (check_same_line == None) & (check_same_temp_line == None):
+                    line = TempLine(galaxy_id=id, 
+                                    emitted_frequency=form.emitted_frequency.data, 
+                                    species=form.species.data, 
+                                    integrated_line_flux = form.integrated_line_flux.data, 
+                                    integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data,
+                                    integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, 
+                                    peak_line_flux = form.peak_line_flux.data, 
+                                    peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, 
+                                    peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, 
+                                    line_width=form.line_width.data, 
+                                    line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
+                                    line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
+                                    observed_line_frequency = frequency, 
+                                    observed_line_frequency_uncertainty_positive = positive_uncertainty, 
+                                    observed_line_frequency_uncertainty_negative = negative_uncertainty, 
+                                    detection_type = form.detection_type.data, 
+                                    observed_beam_major = form.observed_beam_major.data, 
+                                    observed_beam_minor = form.observed_beam_minor.data, 
+                                    observed_beam_angle = form.observed_beam_angle.data, 
+                                    reference = form.reference.data, 
+                                    notes = form.notes.data, 
+                                    user_submitted = current_user.username, 
+                                    user_email = current_user.email, 
+                                    from_existed_id = existed, 
+                                    galaxy_name = name,
+                                    right_ascension = form.right_ascension.data,
+                                    declination = form.declination.data
+                                    )
+                    db.session.add(line)
+                    db.session.commit()
+                    templine = session.query(func.max(TempLine.id)).first()
+                    templine_id = int(templine[0])
+                    post = Post(templine_id=templine_id, 
+                                tempgalaxy_id=tempgalaxy_id, 
                                 user_email = current_user.email, 
-                                from_existed_id = existed, 
-                                galaxy_name = name,
-                                right_ascension = form.right_ascension.data,
-                                declination = form.declination.data
+                                time_submitted = datetime.utcnow()
                                 )
-                db.session.add(line)
-                db.session.commit()
-                templine = session.query(func.max(TempLine.id)).first()
-                templine_id = int(templine[0])
-                post = Post(templine_id=templine_id, 
-                            tempgalaxy_id=tempgalaxy_id, 
-                            user_email = current_user.email, 
-                            time_submitted = datetime.utcnow()
-                            )
-                db.session.add(post)
-                db.session.commit()
-            else:
-                pass
-            flash ('Line has been added. ')
-            return redirect(url_for('main.main'))
+                    db.session.add(post)
+                    db.session.commit()
+                else:
+                    pass
+                flash ('Line has been added. ')
+                return redirect(url_for('main.main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
 
