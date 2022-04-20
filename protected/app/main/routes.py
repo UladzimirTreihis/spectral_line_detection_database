@@ -727,8 +727,8 @@ def entry_file():
                     missing_column.append(k)
 
             if not validated:
-                flash ("Incorrect column names - please check sample file")     
-                flash("Missing Column/s : " + str(missing_column))
+                flash ("Incorrect column names - please check sample file") 
+                flash( "Missing Column/s : " + str(missing_column))
             for row in data:
                 row_count += 1
                 is_empty = True
