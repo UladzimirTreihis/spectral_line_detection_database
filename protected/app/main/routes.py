@@ -728,7 +728,7 @@ def entry_file():
 
             if not validated:
                 flash ("Incorrect column names - please check sample file") 
-                flash( "Missing Column/s : " + str(missing_column))
+                flash ("Missing Column/s : " + str(missing_column))
             for row in data:
                 row_count += 1
                 is_empty = True
@@ -1964,7 +1964,7 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'g_notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'l_notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()
