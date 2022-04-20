@@ -140,13 +140,11 @@ COL_NAMES = {
     'right_ascension' : 'right_ascension',
     'declination':'declination',
     'coordinate_system':'coordinate_system',
-    'redshift':'redshift',
     'lensing_flag':'lensing_flag',
     'classification':'classification',
-    'g_notes':'notes',
+    'g_notes':'g_notes',
     'emitted_frequency':'emitted_frequency',
     'species':'species',
-    'j_upper':'j_upper',
     'integrated_line_flux':'integrated_line_flux',
     'integrated_line_flux_uncertainty_positive':'integrated_line_flux_uncertainty_positive',
     'integrated_line_flux_uncertainty_negative':'integrated_line_flux_uncertainty_negative',
@@ -165,7 +163,7 @@ COL_NAMES = {
     'observed_beam_minor':'observed_beam_minor',
     'observed_beam_angle':'observed_beam_angle',
     'reference':'reference',
-    'l_notes':'notes'
+    'l_notes':'l_notes'
 }
 
 dec_reg_exp = '((([+]+)|([-]+))[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|((([+]+)|([-]+))[0-9.]+[.]*[0-9]*)'
