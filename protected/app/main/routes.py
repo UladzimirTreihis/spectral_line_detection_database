@@ -708,8 +708,8 @@ def entry_file():
     form = UploadFileForm()
     if request.method == 'POST':
         csvfile = request.files['file']
-        csv_file = TextIOWrapper(csvfile, encoding='utf-8-sig')
-        reader = csv.DictReader(csv_file)
+        csv_file = TextIOWrapper(csvfile, encoding='utf-8-sig', errors = 'ignore')
+        reader = csv.DictReader(x.replace('\0', '') for x in csv_file)
         data = [row for row in reader]
         classification_options = {"LBG": "LBG (Lyman Break Galaxy)", "MS": "MS (Main Sequence Galaxy)", "SMB": "SMB (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)", "SB": "SB (Starburst)", "AGN": "AGN (Contains a Known Active Galactic Nucleus)", "QSO": "QSO (Optically Bright AGN)", "Quasar": "Quasar (Optical and Radio Bright AGN)", "RQ-AGN": "RQ-AGN (Radio-Quiet AGN)", "RL-AGN": "RL-AGN (Radio-Loud AGN)", "RG": "RG (Radio Galaxy)", "BZK": "BZK (BZK-Selected Galaxy)"}
 
@@ -717,7 +717,18 @@ def entry_file():
             flash ("CSV File is empty. ")
         else:
             validated = True
-            row_count = 0
+            row_count = 0   
+            keys = COL_NAMES.keys()
+            key_list = list(keys)    
+            missing_column = []
+            for k in key_list:
+                if k not in data[0]:
+                    validated = False
+                    missing_column.append(k)
+
+            if not validated:
+                flash ("Incorrect column names - please check sample file")     
+                flash(" Missing Column/s : " + str(missing_column))
             for row in data:
                 row_count += 1
                 is_empty = True
@@ -728,12 +739,6 @@ def entry_file():
                     if row == []:
                         flash ("Entry " + str(row_count) + ' was an empty row')
                     
-                    for key in COL_NAMES:
-                        if COL_NAMES[key] in row:
-                            validated = False
-
-                    if not validated:        
-                        flash ("Incorrect column names, please check the sample.")
                     # Assign and strip string values for each row
                     if validated:
                         row_name = row[COL_NAMES['name']].strip()
