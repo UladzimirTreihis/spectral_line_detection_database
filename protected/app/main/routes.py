@@ -1546,85 +1546,89 @@ def line_edit_form(id):
         if form.submit.data:
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
-            if form.freq_type.data == 'z':
-                frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
-                negative_uncertainty = None
+
+            if galaxy_id==None:
+                flash ('Please enter the name exactly as proposed using Caps if necessary')
             else:
-                frequency = form.observed_line_frequency.data
-                positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
-                negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
+                if form.freq_type.data == 'z':
+                    frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                    negative_uncertainty = None
+                else:
+                    frequency = form.observed_line_frequency.data
+                    positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
+                    negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
 
-            changes = ""
-            if line.emitted_frequency != float (form.emitted_frequency.data):
-                changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + form.emitted_frequency.data
-            if line.species != form.species.data:
-                changes = changes + "Initial Species: " + str (line.species) + " New Species: " + form.species.data
-            if line.integrated_line_flux !=  float (form.integrated_line_flux.data):
-                changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
-            if form.integrated_line_flux_uncertainty_positive.data:
-                if float (line.integrated_line_flux_uncertainty_positive) != float(form.integrated_line_flux_uncertainty_positive.data):
-                    changes = changes + "Initial Integrated Line Flux Positive Uncertainty: " + line.integrated_line_flux_uncertainty_positive + " New Integrated Line Flux Positive Uncertainty: " + form.integrated_line_flux_uncertainty_positive.data
-            if form.integrated_line_flux_uncertainty_negative.data:
-                if float (line.integrated_line_flux_uncertainty_negative) != float(form.integrated_line_flux_uncertainty_negative.data):
-                    changes = changes + "Initial Integrated Line Flux Negative Uncertainty: " + line.integrated_line_flux_uncertainty_negative + " New Integrated Line Flux Negative Uncertainty: " + form.integrated_line_flux_uncertainty_negative.data
-            if form.peak_line_flux.data:
-                if float(line.peak_line_flux) != float (form.peak_line_flux.data):
-                    changes = changes + "Initial Peak Line Flux: " + line.peak_line_flux + " New Peak Line Flux: " + form.peak_line_flux.data
-            if form.peak_line_flux_uncertainty_positive.data:
-                if float (line.peak_line_flux_uncertainty_positive) != float (form.peak_line_flux_uncertainty_positive.data):
-                    changes = changes + "Initial Peak Line Flux Positive Uncertainty: " + line.peak_line_flux_uncertainty_positive + " New Peak Line Flux Positive Uncertainty: " + form.peak_line_flux_uncertainty_positive.data
-            if form.peak_line_flux_uncertainty_negative.data:
-                if float (line.peak_line_flux_uncertainty_negative) != float (form.peak_line_flux_uncertainty_negative.data):
-                    changes = changes + "Initial Peak Line Flux Negative Uncertainty: " + line.peak_line_flux_uncertainty_negative + " New Peak Line Flux Negative Uncertainty: " + form.peak_line_flux_uncertainty_negative.data
-            if form.line_width.data:
-                if float (line.line_width) != float (form.line_width.data):
-                    changes = changes + "Initial Line Width: " + line.line_width + " New Line Width: " + form.line_width.data
-            if form.line_width_uncertainty_positive.data:
-                if float (line.line_width_uncertainty_positive) != float (form.line_width_uncertainty_positive.data):
-                    changes = changes + "Initial Line Width Positive Uncertainty: " + line.line_width_uncertainty_positive + " New Line Width Positive Uncertainty: " + form.line_width_uncertainty_positive.data
-            if form.line_width_uncertainty_negative.data:
-                if float (line.line_width_uncertainty_negative) != float (form.line_width_uncertainty_negative.data):
-                    changes = changes + "Initial Line Width Negative Uncertainty: " + line.line_width_uncertainty_negative + " New Line Width Negative Uncertainty: " + form.line_width_uncertainty_negative.data
-            if form.observed_line_frequency.data:
-                if float (line.observed_line_frequency) != float (form.observed_line_frequency.data):
-                    changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
-            if form.observed_line_frequency_uncertainty_positive.data:
-                if float (line.observed_line_frequency_uncertainty_positive) != float (form.observed_line_frequency_uncertainty_positive.data):
-                    changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " + line.observed_line_frequency_uncertainty_positive + " New Observed Line Frequency Positive Uncertainty: " + form.observed_line_frequency_uncertainty_positive.data
-            if form.observed_line_frequency_uncertainty_negative.data:
-                if float (line.observed_line_frequency_uncertainty_negative) != float (form.observed_line_frequency_uncertainty_negative.data):
-                    changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " + line.observed_line_frequency_uncertainty_negative + " New Observed Line Frequency Negative Uncertainty: " + form.observed_line_frequency_uncertainty_negative.data
-            if form.detection_type.data:
-                if line.detection_type != form.detection_type.data:
-                    changes = changes + "Initial Detection Type: " + line.detection_type + " New Detection Type: " + form.detection_type.data
-            if form.observed_beam_major.data:
-                if float (line.observed_beam_major) != float (form.observed_beam_major.data):
-                    changes = changes + "Initial Observed Beam Major: " + line.observed_beam_major + " New Observed Beam Major: " + form.observed_beam_major.data
-            if form.observed_beam_minor.data:
-                if float (line.observed_beam_minor) != float (form.observed_beam_minor.data):
-                    changes = changes + "Initial Observed Beam Minor: " + line.observed_beam_minor + " New Observed Beam Minor: " + form.observed_beam_minor.data
-            if form.observed_beam_angle.data:
-                if float (line.observed_beam_angle) != float (form.observed_beam_angle.data):
-                    changes = changes + "Initial Observed Beam Angle: " + line.observed_beam_angle + " New Observed Beam Angle: " + form.observed_beam_angle.data
-            if form.reference.data:
-                if line.reference != form.reference.data:
-                    changes = changes + "Initial Reference: " + line.reference + " New Reference: " + form.reference.data
-            if form.notes.data:
-                if line.notes != form.notes.data:
-                    changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
-            line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes)
-            db.session.add(line)
-            db.session.commit()
+                changes = ""
+                if line.emitted_frequency != float (form.emitted_frequency.data):
+                    changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + form.emitted_frequency.data
+                if line.species != form.species.data:
+                    changes = changes + "Initial Species: " + str (line.species) + " New Species: " + form.species.data
+                if line.integrated_line_flux !=  float (form.integrated_line_flux.data):
+                    changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
+                if form.integrated_line_flux_uncertainty_positive.data:
+                    if float (line.integrated_line_flux_uncertainty_positive) != float(form.integrated_line_flux_uncertainty_positive.data):
+                        changes = changes + "Initial Integrated Line Flux Positive Uncertainty: " + line.integrated_line_flux_uncertainty_positive + " New Integrated Line Flux Positive Uncertainty: " + form.integrated_line_flux_uncertainty_positive.data
+                if form.integrated_line_flux_uncertainty_negative.data:
+                    if float (line.integrated_line_flux_uncertainty_negative) != float(form.integrated_line_flux_uncertainty_negative.data):
+                        changes = changes + "Initial Integrated Line Flux Negative Uncertainty: " + line.integrated_line_flux_uncertainty_negative + " New Integrated Line Flux Negative Uncertainty: " + form.integrated_line_flux_uncertainty_negative.data
+                if form.peak_line_flux.data:
+                    if float(line.peak_line_flux) != float (form.peak_line_flux.data):
+                        changes = changes + "Initial Peak Line Flux: " + line.peak_line_flux + " New Peak Line Flux: " + form.peak_line_flux.data
+                if form.peak_line_flux_uncertainty_positive.data:
+                    if float (line.peak_line_flux_uncertainty_positive) != float (form.peak_line_flux_uncertainty_positive.data):
+                        changes = changes + "Initial Peak Line Flux Positive Uncertainty: " + line.peak_line_flux_uncertainty_positive + " New Peak Line Flux Positive Uncertainty: " + form.peak_line_flux_uncertainty_positive.data
+                if form.peak_line_flux_uncertainty_negative.data:
+                    if float (line.peak_line_flux_uncertainty_negative) != float (form.peak_line_flux_uncertainty_negative.data):
+                        changes = changes + "Initial Peak Line Flux Negative Uncertainty: " + line.peak_line_flux_uncertainty_negative + " New Peak Line Flux Negative Uncertainty: " + form.peak_line_flux_uncertainty_negative.data
+                if form.line_width.data:
+                    if float (line.line_width) != float (form.line_width.data):
+                        changes = changes + "Initial Line Width: " + line.line_width + " New Line Width: " + form.line_width.data
+                if form.line_width_uncertainty_positive.data:
+                    if float (line.line_width_uncertainty_positive) != float (form.line_width_uncertainty_positive.data):
+                        changes = changes + "Initial Line Width Positive Uncertainty: " + line.line_width_uncertainty_positive + " New Line Width Positive Uncertainty: " + form.line_width_uncertainty_positive.data
+                if form.line_width_uncertainty_negative.data:
+                    if float (line.line_width_uncertainty_negative) != float (form.line_width_uncertainty_negative.data):
+                        changes = changes + "Initial Line Width Negative Uncertainty: " + line.line_width_uncertainty_negative + " New Line Width Negative Uncertainty: " + form.line_width_uncertainty_negative.data
+                if form.observed_line_frequency.data:
+                    if float (line.observed_line_frequency) != float (form.observed_line_frequency.data):
+                        changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
+                if form.observed_line_frequency_uncertainty_positive.data:
+                    if float (line.observed_line_frequency_uncertainty_positive) != float (form.observed_line_frequency_uncertainty_positive.data):
+                        changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " + line.observed_line_frequency_uncertainty_positive + " New Observed Line Frequency Positive Uncertainty: " + form.observed_line_frequency_uncertainty_positive.data
+                if form.observed_line_frequency_uncertainty_negative.data:
+                    if float (line.observed_line_frequency_uncertainty_negative) != float (form.observed_line_frequency_uncertainty_negative.data):
+                        changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " + line.observed_line_frequency_uncertainty_negative + " New Observed Line Frequency Negative Uncertainty: " + form.observed_line_frequency_uncertainty_negative.data
+                if form.detection_type.data:
+                    if line.detection_type != form.detection_type.data:
+                        changes = changes + "Initial Detection Type: " + line.detection_type + " New Detection Type: " + form.detection_type.data
+                if form.observed_beam_major.data:
+                    if float (line.observed_beam_major) != float (form.observed_beam_major.data):
+                        changes = changes + "Initial Observed Beam Major: " + line.observed_beam_major + " New Observed Beam Major: " + form.observed_beam_major.data
+                if form.observed_beam_minor.data:
+                    if float (line.observed_beam_minor) != float (form.observed_beam_minor.data):
+                        changes = changes + "Initial Observed Beam Minor: " + line.observed_beam_minor + " New Observed Beam Minor: " + form.observed_beam_minor.data
+                if form.observed_beam_angle.data:
+                    if float (line.observed_beam_angle) != float (form.observed_beam_angle.data):
+                        changes = changes + "Initial Observed Beam Angle: " + line.observed_beam_angle + " New Observed Beam Angle: " + form.observed_beam_angle.data
+                if form.reference.data:
+                    if line.reference != form.reference.data:
+                        changes = changes + "Initial Reference: " + line.reference + " New Reference: " + form.reference.data
+                if form.notes.data:
+                    if line.notes != form.notes.data:
+                        changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
+                line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes)
+                db.session.add(line)
+                db.session.commit()
 
-            # Add the corresponding post
-            editline = session.query(func.max(EditLine.id)).first()
-            editline_id = int(editline[0])
-            post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
-            db.session.add(post)
-            db.session.commit()
+                # Add the corresponding post
+                editline = session.query(func.max(EditLine.id)).first()
+                editline_id = int(editline[0])
+                post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+                db.session.add(post)
+                db.session.commit()
 
-            flash ('Line has been edited. ')
-            return redirect(url_for('main.main'))
+                flash ('Line has been edited. ')
+                return redirect(url_for('main.main'))
     return render_template('line_edit_form.html', title= 'Line Edit Form', form=form)
 
 @bp.route('/galaxies')
