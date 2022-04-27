@@ -1503,9 +1503,8 @@ def line_entry_form():
                                     user_email = current_user.email, 
                                     from_existed_id = existed, 
                                     galaxy_name = name,
-                                    right_ascension = form.right_ascension.data,
-                                    declination = form.declination.data
-                                    )
+                                    right_ascension = ra_to_float (form.right_ascension.data),
+                                    declination = dec_to_float (form.declination.data))
                     db.session.add(line)
                     db.session.commit()
                     templine = session.query(func.max(TempLine.id)).first()
