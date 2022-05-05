@@ -14,7 +14,8 @@
     
     <form class="form-inline" action="" method="post" novalidate>
         <br>
-        <label class="container">My uncertainties for values are not symmetrical 
+        <label class="container">My uncertainties for values are not symmetric
+            <br> 
             <input type="checkbox" id="myCheck" onclick="showUncertainties()">
             <span class="checkmark"></span>
         </label>
@@ -27,7 +28,7 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </p>
-        <p> If the Galaxy you're looking for does not exist, go to the Add a New Galaxy Page. </p>
+        <p> If the galaxy you're looking for does not exist, go to the Add a New Galaxy Page. </p>
         <p>{{ form.galaxy_form() }}</p>
         <p>
             {{ form.right_ascension.label }}<br>

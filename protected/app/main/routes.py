@@ -893,7 +893,7 @@ def entry_file():
             
         # If passed all conditions
         if validated:
-            flash ("All entered values have been validated")
+            flash ("All entered values are valid")
             for row in data:
 
                 # Assign and strip string values for each row
@@ -1056,7 +1056,7 @@ def entry_file():
                     # If this line entry already exists in db, pass.
                     pass
 
-            flash('Entries have been successfully uploaded')
+            flash('Entries have been successfully uploaded and await moderator approval.')
         else:
             flash('File not uploaded. Please resubmit the file once corrected.')
 
