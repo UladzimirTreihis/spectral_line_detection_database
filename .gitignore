@@ -25,9 +25,12 @@ record.log
 
 #PyCharm
 .idea
-
+.flaskenv
 .venv
 app.db
 
 #Config
-config.json
+#config.json
+
+#Logs
+record.log
