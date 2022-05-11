@@ -709,8 +709,8 @@ def entry_file():
     form = UploadFileForm()
     if request.method == 'POST':
         csvfile = request.files['file']
-        csv_file = TextIOWrapper(csvfile, encoding='windows-1252')
-        reader = csv.DictReader(csv_file)
+        csv_file = TextIOWrapper(csvfile, encoding='utf-8-sig', errors = 'ignore')
+        reader = csv.DictReader(x.replace('\0', '') for x in csv_file)
         data = [row for row in reader]
         classification_options = {"LBG": "LBG (Lyman Break Galaxy)", "MS": "MS (Main Sequence Galaxy)", "SMB": "SMB (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)", "SB": "SB (Starburst)", "AGN": "AGN (Contains a Known Active Galactic Nucleus)", "QSO": "QSO (Optically Bright AGN)", "Quasar": "Quasar (Optical and Radio Bright AGN)", "RQ-AGN": "RQ-AGN (Radio-Quiet AGN)", "RL-AGN": "RL-AGN (Radio-Loud AGN)", "RG": "RG (Radio Galaxy)", "BZK": "BZK (BZK-Selected Galaxy)"}
 
@@ -718,7 +718,18 @@ def entry_file():
             flash ("CSV File is empty. ")
         else:
             validated = True
-            row_count = 0
+            row_count = 0   
+            keys = COL_NAMES.keys()
+            key_list = list(keys)    
+            missing_column = []
+            for k in key_list:
+                if k not in data[0]:
+                    validated = False
+                    missing_column.append(k)
+
+            if not validated:
+                flash ("Incorrect column names - please check sample file") 
+                flash ("Missing Column/s : " + str(missing_column))
             for row in data:
                 row_count += 1
                 is_empty = True
@@ -728,161 +739,162 @@ def entry_file():
                 if not is_empty:
                     if row == []:
                         flash ("Entry " + str(row_count) + ' was an empty row')
-
+                    
                     # Assign and strip string values for each row
-                    row_name = row[COL_NAMES['name']].strip()
-                    row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
-                    row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
-                    entered_classification = row[COL_NAMES['classification']].strip()
-                    row_right_ascension = row[COL_NAMES['right_ascension']].strip()
-                    row_declination = row[COL_NAMES['declination']].strip()
-                    row_g_notes = row[COL_NAMES['g_notes']].strip()
+                    if validated:
+                        row_name = row[COL_NAMES['name']].strip()
+                        row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
+                        row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
+                        entered_classification = row[COL_NAMES['classification']].strip()
+                        row_right_ascension = row[COL_NAMES['right_ascension']].strip()
+                        row_declination = row[COL_NAMES['declination']].strip()
+                        row_g_notes = row[COL_NAMES['g_notes']].strip()
 
-                    row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
-                    row_species = row[COL_NAMES['species']].strip()
-                    row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
-                    row_integrated_line_flux_uncertainty_positive = row[COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
-                    row_integrated_line_flux_uncertainty_negative = row[COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
-                    row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
-                    row_peak_line_flux_uncertainty_positive = row[COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
-                    row_peak_line_flux_uncertainty_negative = row[COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
-                    row_line_width = row[COL_NAMES['line_width']].strip()
-                    row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
-                    row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
-                    row_freq_type = row[COL_NAMES['freq_type']].strip()
-                    row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
-                    row_observed_line_frequency_uncertainty_positive = row[COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
-                    row_observed_line_frequency_uncertainty_negative = row[COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
-                    row_detection_type = row[COL_NAMES['detection_type']].strip()
-                    row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
-                    row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
-                    row_observed_beam_angle = row[COL_NAMES['observed_beam_angle']].strip()
-                    row_reference = row[COL_NAMES['reference']].strip()
-                    row_notes = row[COL_NAMES['l_notes']].strip()
+                        row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
+                        row_species = row[COL_NAMES['species']].strip()
+                        row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
+                        row_integrated_line_flux_uncertainty_positive = row[COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
+                        row_integrated_line_flux_uncertainty_negative = row[COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
+                        row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
+                        row_peak_line_flux_uncertainty_positive = row[COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
+                        row_peak_line_flux_uncertainty_negative = row[COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
+                        row_line_width = row[COL_NAMES['line_width']].strip()
+                        row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
+                        row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
+                        row_freq_type = row[COL_NAMES['freq_type']].strip()
+                        row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
+                        row_observed_line_frequency_uncertainty_positive = row[COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
+                        row_observed_line_frequency_uncertainty_negative = row[COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
+                        row_detection_type = row[COL_NAMES['detection_type']].strip()
+                        row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
+                        row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
+                        row_observed_beam_angle = row[COL_NAMES['observed_beam_angle']].strip()
+                        row_reference = row[COL_NAMES['reference']].strip()
+                        row_notes = row[COL_NAMES['l_notes']].strip()
 
-                    # Check whether the values pass the conditions
-                    if row_name == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Galaxy Name is Mandatory")
-                    if row_coordinate_system != "ICRS" and row_coordinate_system != "J2000":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
-                    if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "":
-                        if row_lensing_flag != "L" and row_lensing_flag != "U" and row_lensing_flag != "l" and row_lensing_flag != "u":
+                        # Check whether the values pass the conditions
+                        if row_name == "":
                             validated = False
-                            flash ("Entry " + str(row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"L\", \"U\" under {}.".format(row_lensing_flag))
-                        else:
-                            if row_lensing_flag == "U" or row_lensing_flag == "u":
-                                row_lensing_flag = "Unlensed"
-                            else: row_lensing_flag = "Lensed"
-                    if entered_classification == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Classification is Mandatory")
-                    row_classification = ""
-                    for key, value in classification_options.items():
-                        if key.upper() in entered_classification.upper():
-                            row_classification = row_classification + ", " + value
-                    row_classification = row_classification [2:]
-                    if row_classification == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Please enter Correction Classifications")
-                    if row_right_ascension == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Right Ascension is Mandatory")
-                    if re.search(ra_reg_exp, row_right_ascension) == None:
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Enter Right Ascension in a proper format")
-                    if row_declination == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Declination is Mandatory")
-                    if re.search(dec_reg_exp, row_declination) == None:
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Enter Declination in a proper format")
-                    if row_emitted_frequency == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
-                    try:
-                        dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
-                        if dict_frequency == False:
-                            flash("Entry " + str(row_count) + message)
+                            flash ("Entry " + str(row_count) + ": Galaxy Name is Mandatory")
+                        if row_coordinate_system != "ICRS" and row_coordinate_system != "J2000":
                             validated = False
-                    except:
-                        pass
-                    if row_species == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Please specify species")
-                    if row_integrated_line_flux == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Integrated Line Flux is Mandatory")
-                    if row_integrated_line_flux_uncertainty_positive == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
-                    if row_integrated_line_flux_uncertainty_negative == "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty is Mandatory")
-                    if row_integrated_line_flux_uncertainty_positive != "":
-                        try:
-                            if float (row_integrated_line_flux_uncertainty_positive) < 0:
+                            flash ("Entry " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
+                        if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "":
+                            if row_lensing_flag != "L" and row_lensing_flag != "U" and row_lensing_flag != "l" and row_lensing_flag != "u":
                                 validated = False
-                                flash ("Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
+                                flash ("Entry " + str(row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"L\", \"U\" under {}.".format(row_lensing_flag))
+                            else:
+                                if row_lensing_flag == "U" or row_lensing_flag == "u":
+                                    row_lensing_flag = "Unlensed"
+                                else: row_lensing_flag = "Lensed"
+                        if entered_classification == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Classification is Mandatory")
+                        row_classification = ""
+                        for key, value in classification_options.items():
+                            if key.upper() in entered_classification.upper():
+                                row_classification = row_classification + ", " + value
+                        row_classification = row_classification [2:]
+                        if row_classification == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Please enter Correction Classifications")
+                        if row_right_ascension == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Right Ascension is Mandatory")
+                        if re.search(ra_reg_exp, row_right_ascension) == None:
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Enter Right Ascension in a proper format")
+                        if row_declination == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Declination is Mandatory")
+                        if re.search(dec_reg_exp, row_declination) == None:
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Enter Declination in a proper format")
+                        if row_emitted_frequency == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
+                        try:
+                            dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+                            if dict_frequency == False:
+                                flash("Entry " + str(row_count) + message)
+                                validated = False
                         except:
                             pass
-                    if row_integrated_line_flux_uncertainty_negative != "":
-                        try:
-                            if float (row_integrated_line_flux_uncertainty_negative) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
-                        except:
-                            pass
-                    if row_peak_line_flux_uncertainty_positive != "":
-                        try:
-                            if float (row_peak_line_flux_uncertainty_positive) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Peak Line Flux Positive Uncertainty must be greater than 0")
-                        except:
-                            pass                
-                    if row_peak_line_flux_uncertainty_negative != "":
-                        try:
-                            if float (row_peak_line_flux_uncertainty_negative) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Peak Line Flux Negative Uncertainty must be greater than 0")
-                        except:
-                            pass
-                    if row_line_width_uncertainty_positive != "":
-                        try:
-                            if float (row_line_width_uncertainty_positive) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Line Width Positive Uncertainty must be greater than 0")
-                        except:
-                            pass
-                    if row_line_width_uncertainty_negative != "":
-                        try:
-                            if float (row_line_width_uncertainty_negative) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Line Width Negative Uncertainty must be greater than 0")
-                        except:
-                            pass
-                    if row_freq_type != "z" and row_freq_type != "f" and row_freq_type != "":
-                        validated = False
-                        flash ("Entry " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(row_freq_type))
-                    if row_observed_line_frequency_uncertainty_positive != "":
-                        try:
-                            if float (row_observed_line_frequency_uncertainty_positive) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
-                        except:
-                            pass
-                    if row_observed_line_frequency_uncertainty_negative != "":
-                        try:
-                            if float (row_observed_line_frequency_uncertainty_negative) < 0:
-                                validated = False
-                                flash ("Entry " + str(row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
-                        except:
-                            pass
-        
+                        if row_species == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Please specify species")
+                        if row_integrated_line_flux == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Integrated Line Flux is Mandatory")
+                        if row_integrated_line_flux_uncertainty_positive == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
+                        if row_integrated_line_flux_uncertainty_negative == "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty is Mandatory")
+                        if row_integrated_line_flux_uncertainty_positive != "":
+                            try:
+                                if float (row_integrated_line_flux_uncertainty_positive) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
+                            except:
+                                pass
+                        if row_integrated_line_flux_uncertainty_negative != "":
+                            try:
+                                if float (row_integrated_line_flux_uncertainty_negative) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
+                            except:
+                                pass
+                        if row_peak_line_flux_uncertainty_positive != "":
+                            try:
+                                if float (row_peak_line_flux_uncertainty_positive) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Peak Line Flux Positive Uncertainty must be greater than 0")
+                            except:
+                                pass                
+                        if row_peak_line_flux_uncertainty_negative != "":
+                            try:
+                                if float (row_peak_line_flux_uncertainty_negative) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Peak Line Flux Negative Uncertainty must be greater than 0")
+                            except:
+                                pass
+                        if row_line_width_uncertainty_positive != "":
+                            try:
+                                if float (row_line_width_uncertainty_positive) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Line Width Positive Uncertainty must be greater than 0")
+                            except:
+                                pass
+                        if row_line_width_uncertainty_negative != "":
+                            try:
+                                if float (row_line_width_uncertainty_negative) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Line Width Negative Uncertainty must be greater than 0")
+                            except:
+                                pass
+                        if row_freq_type != "z" and row_freq_type != "f" and row_freq_type != "":
+                            validated = False
+                            flash ("Entry " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(row_freq_type))
+                        if row_observed_line_frequency_uncertainty_positive != "":
+                            try:
+                                if float (row_observed_line_frequency_uncertainty_positive) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
+                            except:
+                                pass
+                        if row_observed_line_frequency_uncertainty_negative != "":
+                            try:
+                                if float (row_observed_line_frequency_uncertainty_negative) < 0:
+                                    validated = False
+                                    flash ("Entry " + str(row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
+                            except:
+                                pass
+            
         # If passed all conditions
         if validated:
-            flash ("All entered values have been validated")
+            flash ("All entered values are valid")
             for row in data:
 
                 # Assign and strip string values for each row
@@ -1045,7 +1057,7 @@ def entry_file():
                     # If this line entry already exists in db, pass.
                     pass
 
-            flash('Entries have been successfully uploaded')
+            flash('Entries have been successfully uploaded and await moderator approval.')
         else:
             flash('File not uploaded. Please resubmit the file once corrected.')
 
@@ -1439,76 +1451,76 @@ def line_entry_form():
                 name = session.query(TempGalaxy.name).filter(TempGalaxy.id==id).scalar()
                 tempgalaxy_id = id
                 existed = None
+            
             if galaxy_id==None:
-                raise Exception ('Please enter the name exactly as proposed using Caps if necessary')
+                flash ('Please enter the name exactly as proposed using Caps if necessary')
+            else:
+                try:
+                    dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
+                    if dict_frequency == False:
+                        raise Exception (message)
+                except:
+                    pass
 
-            try:
                 dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-                if dict_frequency == False:
-                    raise Exception (message)
-            except:
-                pass
+                if form.freq_type.data == 'z':
+                    frequency, positive_uncertainty = redshift_to_frequency(dict_frequency, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                    negative_uncertainty = None
+                else:
+                    frequency = form.observed_line_frequency.data
+                    positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
+                    negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
 
-            dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-            if form.freq_type.data == 'z':
-                frequency, positive_uncertainty = redshift_to_frequency(dict_frequency, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
-                negative_uncertainty = None
-            else:
-                frequency = form.observed_line_frequency.data
-                positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
-                negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
-
-            # Check whether this line entry has been previously uploaded and/or approved
-            check_same_temp_line = db.session.query(TempLine.id).filter((TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (TempLine.galaxy_name == form.galaxy_name.data) & (TempLine.species == form.species.data) & (TempLine.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (TempLine.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data))).first()
+                # Check whether this line entry has been previously uploaded and/or approved
+                check_same_temp_line = db.session.query(TempLine.id).filter((TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (TempLine.galaxy_name == form.galaxy_name.data) & (TempLine.species == form.species.data) & (TempLine.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (TempLine.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data))).first()
 
 
-            check_same_line = db.session.query(Line.id).filter((Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (Line.observed_line_frequency == frequency) & (Line.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (Line.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data)) & (Line.species == form.species.data)).first()
+                check_same_line = db.session.query(Line.id).filter((Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (Line.observed_line_frequency == frequency) & (Line.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (Line.integrated_line_flux_uncertainty_positive == to_none(form.integrated_line_flux_uncertainty_positive.data)) & (Line.species == form.species.data)).first()
 
-            # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
-            if (check_same_line == None) & (check_same_temp_line == None):
-                line = TempLine(galaxy_id=id, 
-                                emitted_frequency=form.emitted_frequency.data, 
-                                species=form.species.data, 
-                                integrated_line_flux = form.integrated_line_flux.data, 
-                                integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data,
-                                integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, 
-                                peak_line_flux = form.peak_line_flux.data, 
-                                peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, 
-                                peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, 
-                                line_width=form.line_width.data, 
-                                line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
-                                line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
-                                observed_line_frequency = frequency, 
-                                observed_line_frequency_uncertainty_positive = positive_uncertainty, 
-                                observed_line_frequency_uncertainty_negative = negative_uncertainty, 
-                                detection_type = form.detection_type.data, 
-                                observed_beam_major = form.observed_beam_major.data, 
-                                observed_beam_minor = form.observed_beam_minor.data, 
-                                observed_beam_angle = form.observed_beam_angle.data, 
-                                reference = form.reference.data, 
-                                notes = form.notes.data, 
-                                user_submitted = current_user.username, 
+                # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
+                if (check_same_line == None) & (check_same_temp_line == None):
+                    line = TempLine(galaxy_id=id, 
+                                    emitted_frequency=form.emitted_frequency.data, 
+                                    species=form.species.data, 
+                                    integrated_line_flux = form.integrated_line_flux.data, 
+                                    integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data,
+                                    integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, 
+                                    peak_line_flux = form.peak_line_flux.data, 
+                                    peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, 
+                                    peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, 
+                                    line_width=form.line_width.data, 
+                                    line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, 
+                                    line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, 
+                                    observed_line_frequency = frequency, 
+                                    observed_line_frequency_uncertainty_positive = positive_uncertainty, 
+                                    observed_line_frequency_uncertainty_negative = negative_uncertainty, 
+                                    detection_type = form.detection_type.data, 
+                                    observed_beam_major = form.observed_beam_major.data, 
+                                    observed_beam_minor = form.observed_beam_minor.data, 
+                                    observed_beam_angle = form.observed_beam_angle.data, 
+                                    reference = form.reference.data, 
+                                    notes = form.notes.data, 
+                                    user_submitted = current_user.username, 
+                                    user_email = current_user.email, 
+                                    from_existed_id = existed, 
+                                    galaxy_name = name,
+                                    right_ascension = ra_to_float (form.right_ascension.data),
+                                    declination = dec_to_float (form.declination.data))
+                    db.session.add(line)
+                    db.session.commit()
+                    templine = session.query(func.max(TempLine.id)).first()
+                    templine_id = int(templine[0])
+                    post = Post(templine_id=templine_id, 
+                                tempgalaxy_id=tempgalaxy_id, 
                                 user_email = current_user.email, 
-                                from_existed_id = existed, 
-                                galaxy_name = name,
-                                right_ascension = form.right_ascension.data,
-                                declination = form.declination.data
+                                time_submitted = datetime.utcnow()
                                 )
-                db.session.add(line)
-                db.session.commit()
-                templine = session.query(func.max(TempLine.id)).first()
-                templine_id = int(templine[0])
-                post = Post(templine_id=templine_id, 
-                            tempgalaxy_id=tempgalaxy_id, 
-                            user_email = current_user.email, 
-                            time_submitted = datetime.utcnow()
-                            )
-                db.session.add(post)
-                db.session.commit()
-            else:
-                pass
-            flash ('Line has been added. ')
-            return redirect(url_for('main.main'))
+                    db.session.add(post)
+                    db.session.commit()
+                else:
+                    pass
+                flash ('Line has been added. ')
+                return redirect(url_for('main.main'))
     return render_template('line_entry_form.html', title= 'Line Entry Form', form=form)
 
 
@@ -1534,85 +1546,89 @@ def line_edit_form(id):
         if form.submit.data:
             session = Session()
             galaxy_id = session.query(Galaxy.id).filter(Galaxy.name==form.galaxy_name.data).scalar()
-            if form.freq_type.data == 'z':
-                frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
-                negative_uncertainty = None
+
+            if galaxy_id==None:
+                flash ('Please enter the name exactly as proposed using Caps if necessary')
             else:
-                frequency = form.observed_line_frequency.data
-                positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
-                negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
+                if form.freq_type.data == 'z':
+                    frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data, form.observed_line_frequency.data, form.observed_line_frequency_uncertainty_positive.data, form.observed_line_frequency_uncertainty_negative.data)
+                    negative_uncertainty = None
+                else:
+                    frequency = form.observed_line_frequency.data
+                    positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
+                    negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
 
-            changes = ""
-            if line.emitted_frequency != float (form.emitted_frequency.data):
-                changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + form.emitted_frequency.data
-            if line.species != form.species.data:
-                changes = changes + "Initial Species: " + str (line.species) + " New Species: " + form.species.data
-            if line.integrated_line_flux !=  float (form.integrated_line_flux.data):
-                changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
-            if form.integrated_line_flux_uncertainty_positive.data:
-                if float (line.integrated_line_flux_uncertainty_positive) != float(form.integrated_line_flux_uncertainty_positive.data):
-                    changes = changes + "Initial Integrated Line Flux Positive Uncertainty: " + line.integrated_line_flux_uncertainty_positive + " New Integrated Line Flux Positive Uncertainty: " + form.integrated_line_flux_uncertainty_positive.data
-            if form.integrated_line_flux_uncertainty_negative.data:
-                if float (line.integrated_line_flux_uncertainty_negative) != float(form.integrated_line_flux_uncertainty_negative.data):
-                    changes = changes + "Initial Integrated Line Flux Negative Uncertainty: " + line.integrated_line_flux_uncertainty_negative + " New Integrated Line Flux Negative Uncertainty: " + form.integrated_line_flux_uncertainty_negative.data
-            if form.peak_line_flux.data:
-                if float(line.peak_line_flux) != float (form.peak_line_flux.data):
-                    changes = changes + "Initial Peak Line Flux: " + line.peak_line_flux + " New Peak Line Flux: " + form.peak_line_flux.data
-            if form.peak_line_flux_uncertainty_positive.data:
-                if float (line.peak_line_flux_uncertainty_positive) != float (form.peak_line_flux_uncertainty_positive.data):
-                    changes = changes + "Initial Peak Line Flux Positive Uncertainty: " + line.peak_line_flux_uncertainty_positive + " New Peak Line Flux Positive Uncertainty: " + form.peak_line_flux_uncertainty_positive.data
-            if form.peak_line_flux_uncertainty_negative.data:
-                if float (line.peak_line_flux_uncertainty_negative) != float (form.peak_line_flux_uncertainty_negative.data):
-                    changes = changes + "Initial Peak Line Flux Negative Uncertainty: " + line.peak_line_flux_uncertainty_negative + " New Peak Line Flux Negative Uncertainty: " + form.peak_line_flux_uncertainty_negative.data
-            if form.line_width.data:
-                if float (line.line_width) != float (form.line_width.data):
-                    changes = changes + "Initial Line Width: " + line.line_width + " New Line Width: " + form.line_width.data
-            if form.line_width_uncertainty_positive.data:
-                if float (line.line_width_uncertainty_positive) != float (form.line_width_uncertainty_positive.data):
-                    changes = changes + "Initial Line Width Positive Uncertainty: " + line.line_width_uncertainty_positive + " New Line Width Positive Uncertainty: " + form.line_width_uncertainty_positive.data
-            if form.line_width_uncertainty_negative.data:
-                if float (line.line_width_uncertainty_negative) != float (form.line_width_uncertainty_negative.data):
-                    changes = changes + "Initial Line Width Negative Uncertainty: " + line.line_width_uncertainty_negative + " New Line Width Negative Uncertainty: " + form.line_width_uncertainty_negative.data
-            if form.observed_line_frequency.data:
-                if float (line.observed_line_frequency) != float (form.observed_line_frequency.data):
-                    changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
-            if form.observed_line_frequency_uncertainty_positive.data:
-                if float (line.observed_line_frequency_uncertainty_positive) != float (form.observed_line_frequency_uncertainty_positive.data):
-                    changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " + line.observed_line_frequency_uncertainty_positive + " New Observed Line Frequency Positive Uncertainty: " + form.observed_line_frequency_uncertainty_positive.data
-            if form.observed_line_frequency_uncertainty_negative.data:
-                if float (line.observed_line_frequency_uncertainty_negative) != float (form.observed_line_frequency_uncertainty_negative.data):
-                    changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " + line.observed_line_frequency_uncertainty_negative + " New Observed Line Frequency Negative Uncertainty: " + form.observed_line_frequency_uncertainty_negative.data
-            if form.detection_type.data:
-                if line.detection_type != form.detection_type.data:
-                    changes = changes + "Initial Detection Type: " + line.detection_type + " New Detection Type: " + form.detection_type.data
-            if form.observed_beam_major.data:
-                if float (line.observed_beam_major) != float (form.observed_beam_major.data):
-                    changes = changes + "Initial Observed Beam Major: " + line.observed_beam_major + " New Observed Beam Major: " + form.observed_beam_major.data
-            if form.observed_beam_minor.data:
-                if float (line.observed_beam_minor) != float (form.observed_beam_minor.data):
-                    changes = changes + "Initial Observed Beam Minor: " + line.observed_beam_minor + " New Observed Beam Minor: " + form.observed_beam_minor.data
-            if form.observed_beam_angle.data:
-                if float (line.observed_beam_angle) != float (form.observed_beam_angle.data):
-                    changes = changes + "Initial Observed Beam Angle: " + line.observed_beam_angle + " New Observed Beam Angle: " + form.observed_beam_angle.data
-            if form.reference.data:
-                if line.reference != form.reference.data:
-                    changes = changes + "Initial Reference: " + line.reference + " New Reference: " + form.reference.data
-            if form.notes.data:
-                if line.notes != form.notes.data:
-                    changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
-            line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes)
-            db.session.add(line)
-            db.session.commit()
+                changes = ""
+                if line.emitted_frequency != float (form.emitted_frequency.data):
+                    changes = changes + "Initial Emitted Frequency: " + str (line.emitted_frequency) + " New Emitted Frequency: " + form.emitted_frequency.data
+                if line.species != form.species.data:
+                    changes = changes + "Initial Species: " + str (line.species) + " New Species: " + form.species.data
+                if line.integrated_line_flux !=  float (form.integrated_line_flux.data):
+                    changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
+                if form.integrated_line_flux_uncertainty_positive.data:
+                    if float (line.integrated_line_flux_uncertainty_positive) != float(form.integrated_line_flux_uncertainty_positive.data):
+                        changes = changes + "Initial Integrated Line Flux Positive Uncertainty: " + line.integrated_line_flux_uncertainty_positive + " New Integrated Line Flux Positive Uncertainty: " + form.integrated_line_flux_uncertainty_positive.data
+                if form.integrated_line_flux_uncertainty_negative.data:
+                    if float (line.integrated_line_flux_uncertainty_negative) != float(form.integrated_line_flux_uncertainty_negative.data):
+                        changes = changes + "Initial Integrated Line Flux Negative Uncertainty: " + line.integrated_line_flux_uncertainty_negative + " New Integrated Line Flux Negative Uncertainty: " + form.integrated_line_flux_uncertainty_negative.data
+                if form.peak_line_flux.data:
+                    if float(line.peak_line_flux) != float (form.peak_line_flux.data):
+                        changes = changes + "Initial Peak Line Flux: " + line.peak_line_flux + " New Peak Line Flux: " + form.peak_line_flux.data
+                if form.peak_line_flux_uncertainty_positive.data:
+                    if float (line.peak_line_flux_uncertainty_positive) != float (form.peak_line_flux_uncertainty_positive.data):
+                        changes = changes + "Initial Peak Line Flux Positive Uncertainty: " + line.peak_line_flux_uncertainty_positive + " New Peak Line Flux Positive Uncertainty: " + form.peak_line_flux_uncertainty_positive.data
+                if form.peak_line_flux_uncertainty_negative.data:
+                    if float (line.peak_line_flux_uncertainty_negative) != float (form.peak_line_flux_uncertainty_negative.data):
+                        changes = changes + "Initial Peak Line Flux Negative Uncertainty: " + line.peak_line_flux_uncertainty_negative + " New Peak Line Flux Negative Uncertainty: " + form.peak_line_flux_uncertainty_negative.data
+                if form.line_width.data:
+                    if float (line.line_width) != float (form.line_width.data):
+                        changes = changes + "Initial Line Width: " + line.line_width + " New Line Width: " + form.line_width.data
+                if form.line_width_uncertainty_positive.data:
+                    if float (line.line_width_uncertainty_positive) != float (form.line_width_uncertainty_positive.data):
+                        changes = changes + "Initial Line Width Positive Uncertainty: " + line.line_width_uncertainty_positive + " New Line Width Positive Uncertainty: " + form.line_width_uncertainty_positive.data
+                if form.line_width_uncertainty_negative.data:
+                    if float (line.line_width_uncertainty_negative) != float (form.line_width_uncertainty_negative.data):
+                        changes = changes + "Initial Line Width Negative Uncertainty: " + line.line_width_uncertainty_negative + " New Line Width Negative Uncertainty: " + form.line_width_uncertainty_negative.data
+                if form.observed_line_frequency.data:
+                    if float (line.observed_line_frequency) != float (form.observed_line_frequency.data):
+                        changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
+                if form.observed_line_frequency_uncertainty_positive.data:
+                    if float (line.observed_line_frequency_uncertainty_positive) != float (form.observed_line_frequency_uncertainty_positive.data):
+                        changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " + line.observed_line_frequency_uncertainty_positive + " New Observed Line Frequency Positive Uncertainty: " + form.observed_line_frequency_uncertainty_positive.data
+                if form.observed_line_frequency_uncertainty_negative.data:
+                    if float (line.observed_line_frequency_uncertainty_negative) != float (form.observed_line_frequency_uncertainty_negative.data):
+                        changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " + line.observed_line_frequency_uncertainty_negative + " New Observed Line Frequency Negative Uncertainty: " + form.observed_line_frequency_uncertainty_negative.data
+                if form.detection_type.data:
+                    if line.detection_type != form.detection_type.data:
+                        changes = changes + "Initial Detection Type: " + line.detection_type + " New Detection Type: " + form.detection_type.data
+                if form.observed_beam_major.data:
+                    if float (line.observed_beam_major) != float (form.observed_beam_major.data):
+                        changes = changes + "Initial Observed Beam Major: " + line.observed_beam_major + " New Observed Beam Major: " + form.observed_beam_major.data
+                if form.observed_beam_minor.data:
+                    if float (line.observed_beam_minor) != float (form.observed_beam_minor.data):
+                        changes = changes + "Initial Observed Beam Minor: " + line.observed_beam_minor + " New Observed Beam Minor: " + form.observed_beam_minor.data
+                if form.observed_beam_angle.data:
+                    if float (line.observed_beam_angle) != float (form.observed_beam_angle.data):
+                        changes = changes + "Initial Observed Beam Angle: " + line.observed_beam_angle + " New Observed Beam Angle: " + form.observed_beam_angle.data
+                if form.reference.data:
+                    if line.reference != form.reference.data:
+                        changes = changes + "Initial Reference: " + line.reference + " New Reference: " + form.reference.data
+                if form.notes.data:
+                    if line.notes != form.notes.data:
+                        changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
+                line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data, species=form.species.data, integrated_line_flux = form.integrated_line_flux.data, integrated_line_flux_uncertainty_positive = form.integrated_line_flux_uncertainty_positive.data, integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_negative.data, peak_line_flux = form.peak_line_flux.data, peak_line_flux_uncertainty_positive = form.peak_line_flux_uncertainty_positive.data, peak_line_flux_uncertainty_negative=form.peak_line_flux_uncertainty_negative.data, line_width=form.line_width.data, line_width_uncertainty_positive = form.line_width_uncertainty_positive.data, line_width_uncertainty_negative = form.line_width_uncertainty_negative.data, observed_line_frequency = frequency, observed_line_frequency_uncertainty_positive = positive_uncertainty, observed_line_frequency_uncertainty_negative = negative_uncertainty, detection_type = form.detection_type.data, observed_beam_major = form.observed_beam_major.data, observed_beam_minor = form.observed_beam_minor.data, observed_beam_angle = form.observed_beam_angle.data, reference = form.reference.data, notes = form.notes.data, user_submitted = current_user.username, user_email = current_user.email, is_edited = changes)
+                db.session.add(line)
+                db.session.commit()
 
-            # Add the corresponding post
-            editline = session.query(func.max(EditLine.id)).first()
-            editline_id = int(editline[0])
-            post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
-            db.session.add(post)
-            db.session.commit()
+                # Add the corresponding post
+                editline = session.query(func.max(EditLine.id)).first()
+                editline_id = int(editline[0])
+                post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email = current_user.email, time_submitted = datetime.utcnow())
+                db.session.add(post)
+                db.session.commit()
 
-            flash ('Line has been edited. ')
-            return redirect(url_for('main.main'))
+                flash ('Line has been edited. ')
+                return redirect(url_for('main.main'))
     return render_template('line_edit_form.html', title= 'Line Edit Form', form=form)
 
 @bp.route('/galaxies')
@@ -1953,7 +1969,7 @@ def convert_to_CSV(table, identifier):
         session = Session ()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'notes'])
+        out.writerow(['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'g_notes', 'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive', 'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive', 'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive', 'line_width_uncertainty_negative', 'freq_type', 'observed_line_frequency', 'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative', 'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference', 'l_notes'])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()

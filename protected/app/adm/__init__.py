@@ -238,57 +238,57 @@ def approve_templine(id):
 
     if templine.from_existed_id is None:
 
-        raise Exception('You have not yet approved the galaxy to which the line belongs to')
+        flash ('You have not yet approved the galaxy to which the line belongs to')
     else:
         galaxy_id = templine.from_existed_id
-    l = Line(galaxy_id=galaxy_id,
-             emitted_frequency=templine.emitted_frequency,
-             integrated_line_flux=templine.integrated_line_flux,
-             integrated_line_flux_uncertainty_positive=templine.integrated_line_flux_uncertainty_positive,
-             integrated_line_flux_uncertainty_negative=templine.integrated_line_flux_uncertainty_negative,
-             peak_line_flux=templine.peak_line_flux,
-             peak_line_flux_uncertainty_positive=templine.peak_line_flux_uncertainty_positive,
-             peak_line_flux_uncertainty_negative=templine.peak_line_flux_uncertainty_negative,
-             line_width=templine.line_width,
-             line_width_uncertainty_positive=templine.line_width_uncertainty_positive,
-             line_width_uncertainty_negative=templine.line_width_uncertainty_negative,
-             observed_line_frequency=templine.observed_line_frequency,
-             observed_line_frequency_uncertainty_positive=templine.observed_line_frequency_uncertainty_positive,
-             observed_line_frequency_uncertainty_negative=templine.observed_line_frequency_uncertainty_negative,
-             detection_type=templine.detection_type,
-             observed_beam_major=templine.observed_beam_major,
-             observed_beam_minor=templine.observed_beam_minor,
-             observed_beam_angle=templine.observed_beam_angle,
-             reference=templine.reference,
-             notes=templine.notes,
-             user_submitted=templine.user_submitted,
-             user_email=templine.user_email,
-             time_submitted=templine.time_submitted,
-             species=templine.species,
-             right_ascension=templine.right_ascension,
-             declination=templine.declination,
-             approved_username=current_user.username,
-             approved_user_email=current_user.email,
-             approved_time=datetime.utcnow()
-             )
-    db.session.add(l)
-    db.session.commit()
-    session = Session()
-    total = update_redshift(session, galaxy_id)
-    update_redshift_error(session, galaxy_id, total)
-    db.session.commit()
-    # Update the coordinates
-    update_right_ascension(galaxy_id)
-    update_declination(galaxy_id)
+        l = Line(galaxy_id = galaxy_id, 
+                emitted_frequency = templine.emitted_frequency, 
+                integrated_line_flux = templine.integrated_line_flux, 
+                integrated_line_flux_uncertainty_positive = templine.integrated_line_flux_uncertainty_positive, 
+                integrated_line_flux_uncertainty_negative = templine.integrated_line_flux_uncertainty_negative, 
+                peak_line_flux = templine.peak_line_flux, 
+                peak_line_flux_uncertainty_positive = templine.peak_line_flux_uncertainty_positive, 
+                peak_line_flux_uncertainty_negative = templine.peak_line_flux_uncertainty_negative, 
+                line_width = templine.line_width, 
+                line_width_uncertainty_positive = templine.line_width_uncertainty_positive, 
+                line_width_uncertainty_negative = templine.line_width_uncertainty_negative, 
+                observed_line_frequency = templine.observed_line_frequency, 
+                observed_line_frequency_uncertainty_positive = templine.observed_line_frequency_uncertainty_positive, 
+                observed_line_frequency_uncertainty_negative = templine.observed_line_frequency_uncertainty_negative, 
+                detection_type = templine.detection_type, 
+                observed_beam_major = templine.observed_beam_major, 
+                observed_beam_minor = templine.observed_beam_minor, 
+                observed_beam_angle = templine.observed_beam_angle, 
+                reference = templine.reference, 
+                notes = templine.notes, 
+                user_submitted = templine.user_submitted, 
+                user_email = templine.user_email, 
+                time_submitted = templine.time_submitted,
+                species = templine.species,
+                right_ascension = templine.right_ascension,
+                declination = templine.declination,
+                approved_username = current_user.username,
+                approved_user_email = current_user.email,
+                approved_time = datetime.utcnow()
+                )
+        db.session.add (l)
+        db.session.commit ()
+        session = Session()
+        total = update_redshift(session, galaxy_id)
+        update_redshift_error(session, galaxy_id, total)
+        db.session.commit ()
+        # Update the coordinates
+        update_right_ascension(galaxy_id)
+        update_declination(galaxy_id)
 
-    # delete the corresponding post
-    post = Post.query.filter(Post.templine_id == id).first()
-    db.session.delete(post)
-    db.session.commit()
-    # delete the corresponding templine
-    l_temp = TempLine.query.filter_by(id=id).first()
-    db.session.delete(l_temp)
-    db.session.commit()
+        #delete the corresponding post
+        post = Post.query.filter(Post.templine_id==id).first()
+        db.session.delete(post)
+        db.session.commit ()
+        #delete the corresponding templine
+        l_temp = TempLine.query.filter_by(id=id).first()
+        db.session.delete (l_temp)
+        db.session.commit ()
 
 
 def approve_editgalaxy(id):
