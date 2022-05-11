@@ -38,7 +38,8 @@ from app.main.forms import (
 from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
-from config import *
+from config import COL_NAMES, ra_reg_exp, dec_reg_exp
+from species import *
 from io import TextIOWrapper
 from flask_security import (
     current_user,
