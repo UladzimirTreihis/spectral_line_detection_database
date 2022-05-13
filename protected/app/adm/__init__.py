@@ -48,7 +48,7 @@ from datetime import datetime
 bp = Blueprint('adm', __name__, template_folder=template_dir + '/admin')
 
 
-def update_redshift(session, galaxy_id):
+def update_redshift(galaxy_id):
     line_redshift = db.session.query(
         Line.emitted_frequency,
         Line.observed_line_frequency,
@@ -84,11 +84,11 @@ def update_redshift(session, galaxy_id):
     return sum_upper
 
 
-def update_redshift_error(session, galaxy_id, sum_upper):
+def update_redshift_error(galaxy_id, sum_upper):
     if sum_upper != -1:
 
         redshift_error_weighted = 0
-        line_redshift = session.query(
+        line_redshift = db.session.query(
             Line.emitted_frequency,
             Line.observed_line_frequency,
             Line.observed_line_frequency_uncertainty_negative,
@@ -109,10 +109,10 @@ def update_redshift_error(session, galaxy_id, sum_upper):
             weight = (z / delta_z) / sum_upper
             redshift_error_weighted = redshift_error_weighted = + (weight * delta_z)
         if redshift_error_weighted != 0:
-            session.query(Galaxy).filter(
+            db.session.query(Galaxy).filter(
                 Galaxy.id == galaxy_id
             ).update({"redshift_error": redshift_error_weighted})
-            session.commit()
+            db.session.commit()
 
 
 def within_distance(session, query, form_ra, form_dec, distance=0, based_on_beam_angle=False, temporary=False):
@@ -152,7 +152,7 @@ def within_distance(session, query, form_ra, form_dec, distance=0, based_on_beam
                 func.radians(TempGalaxy.right_ascension)) * func.cos(
                 func.radians(func.abs(dec_to_float(form_dec) - TempGalaxy.declination)))) < func.radians(5 / 3600)))
         else:
-            subqry = session.query(func.max(Line.observed_beam_angle))
+            subqry = db.session.query(func.max(Line.observed_beam_angle))
             sub = subqry.first()
             sub1 = sub[0]
             if sub1 is not None:
@@ -274,8 +274,8 @@ def approve_templine(id):
         db.session.add (l)
         db.session.commit ()
         session = Session()
-        total = update_redshift(session, galaxy_id)
-        update_redshift_error(session, galaxy_id, total)
+        total = update_redshift(galaxy_id)
+        update_redshift_error(galaxy_id, total)
         db.session.commit ()
         # Update the coordinates
         update_right_ascension(galaxy_id)
@@ -338,8 +338,8 @@ def approve_editline(id):
               "approved_time": datetime.utcnow()})
 
     session = Session()
-    total = update_redshift(session, galaxy_id)
-    update_redshift_error(session, galaxy_id, total)
+    total = update_redshift(galaxy_id)
+    update_redshift_error(galaxy_id, total)
     db.session.commit()
 
     # Update the coordinates
@@ -592,12 +592,12 @@ class PostsView(AdminBaseView):
             right_ascension = tempgalaxy.right_ascension
             declination = tempgalaxy.declination
 
-            galaxies = session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = db.session.query(Galaxy, Line).outerjoin(Line)
 
             galaxies = within_distance(session, galaxies, right_ascension, declination, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
 
-            tempgalaxies = session.query(TempGalaxy)
+            tempgalaxies = db.session.query(TempGalaxy)
             tempgalaxies = within_distance(session, tempgalaxies, right_ascension, declination,
                                            based_on_beam_angle=True, temporary=True)
 
@@ -850,8 +850,8 @@ def post_approve(id):
                  reference=line[18], notes=line[19], user_submitted=line[21], user_email=line[22], species=line[24])
         db.session.add(l)
         db.session.commit()
-        total = update_redshift(session, g_id)
-        update_redshift_error(session, g_id, total)
+        total = update_redshift(g_id)
+        update_redshift_error(g_id, total)
         db.session.delete(templine)
         db.session.commit()
 

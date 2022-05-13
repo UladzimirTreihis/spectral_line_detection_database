@@ -107,30 +107,30 @@
             </thead>
             
             <tbody>
-                {% for l in line %}
+                {% for line in lines %}
                 <tr>
-                    <td><a href="{{ url_for ('main.line_edit_form', id = l.id) }}"  style="width: 5%;"> Update</a></td>
-                    <td>{{ l.species }}</td>
-                    <td>{{ l.emitted_frequency }}</td>
-                    <td>{{ l.integrated_line_flux }}</td>
-                    <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-                    <td>{{ l.integrated_line_flux_uncertainty_negative }}</td>
-                    <td>{{ l.peak_line_flux }}</td>
-                    <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-                    <td>{{ l.peak_line_flux_uncertainty_negative }}</td>
-                    <td>{{ l.line_width }}</td>
-                    <td>{{ l.line_width_uncertainty_positive }}</td>
-                    <td>{{ l.line_width_uncertainty_negative }}</td>
-                    <td>{{ l.observed_line_frequency }}</td>
-                    <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
-                    <td>{{ l.observed_line_frequency_uncertainty_negative }}</td>                
-                    <td>{{ l.detection_type }}</td>
-                    <td>{{ l.observed_beam_major }}</td>
-                    <td>{{ l.observed_beam_minor }}</td>
-                    <td>{{ l.observed_beam_angle }}</td>
-                    <td>{{ l.reference }}</td>
+                    <td><a href="{{ url_for ('main.line_edit_form', id = line.id) }}"  style="width: 5%;"> Update</a></td>
+                    <td>{{ line.species }}</td>
+                    <td>{{ line.emitted_frequency }}</td>
+                    <td>{{ line.integrated_line_flux }}</td>
+                    <td>{{ line.integrated_line_flux_uncertainty_positive }}</td>
+                    <td>{{ line.integrated_line_flux_uncertainty_negative }}</td>
+                    <td>{{ line.peak_line_flux }}</td>
+                    <td>{{ line.peak_line_flux_uncertainty_positive }}</td>
+                    <td>{{ line.peak_line_flux_uncertainty_negative }}</td>
+                    <td>{{ line.line_width }}</td>
+                    <td>{{ line.line_width_uncertainty_positive }}</td>
+                    <td>{{ line.line_width_uncertainty_negative }}</td>
+                    <td>{{ line.observed_line_frequency }}</td>
+                    <td>{{ line.observed_line_frequency_uncertainty_positive }}</td>
+                    <td>{{ line.observed_line_frequency_uncertainty_negative }}</td>
+                    <td>{{ line.detection_type }}</td>
+                    <td>{{ line.observed_beam_major }}</td>
+                    <td>{{ line.observed_beam_minor }}</td>
+                    <td>{{ line.observed_beam_angle }}</td>
+                    <td>{{ line.reference }}</td>
                     <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
-                    <td class = "notes" style = "display:none"> {{l.notes}} </td>  
+                    <td class = "notes" style = "display:none"> {{line.notes}} </td>
                 </tr>
                 {% endfor %}
             </tbody>
