@@ -1,4 +1,3 @@
-from pydoc import classify_class_attrs
 from sqlalchemy.orm import session
 from app import (
     db,
@@ -35,7 +34,6 @@ from app.main.forms import (
     UploadFileForm,
     DynamicSearchForm
 )
-from werkzeug.urls import url_parse
 import csv
 from sqlalchemy import func
 from config import COL_NAMES, ra_reg_exp, dec_reg_exp
@@ -524,6 +522,174 @@ def update_declination(galaxy_id):
         return False
 
 
+def ra_to_float(coordinates):
+    """
+    Given right ascension value as either a string representing a float number or a string of the 00h00m00s format,
+    return the corresponding float value.
+
+    Parameters:
+        coordinates (str | float | int): A string representing a float or 00h00m00s format right ascension.
+
+    Returns:
+        coordinates (float): Float value of right ascension.
+    """
+
+    if isinstance(coordinates, float) or isinstance(coordinates, int):
+        coordinates = str(coordinates)
+    if coordinates.find('s') != -1:
+        h = float(coordinates[0:2])
+        m = float(coordinates[3:5])
+        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
+        return h * 15 + m / 4 + s / 240
+    else:
+        return float(coordinates)
+
+
+def dec_to_float(coordinates):
+    """
+    Given right declination value as either a string representing a float number or a string of the +/-00d00m00s format,
+    return the corresponding float value.
+
+    Parameters:
+        coordinates (str | float | int): A string representing a float or +/-00d00m00s format declination.
+
+    Returns:
+        coordinates (float): Float value of declination.
+    """
+
+    if isinstance(coordinates, float) or isinstance(coordinates, int):
+        coordinates = str(coordinates)
+    if coordinates.find('s') != -1:
+        d = float(coordinates[1:3])
+        m = float(coordinates[4:6])
+        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
+        if coordinates[0] == "-":
+            return (-1) * (d + m / 60 + s / 3600)
+        else:
+            return d + m / 60 + s / 3600
+    elif coordinates == '-inf' or coordinates == 'inf':
+        return float(coordinates)
+    else:
+        if coordinates[0] == '+':
+            dec = coordinates.replace("+", "")
+        else:
+            dec = coordinates
+        return float(dec)
+
+
+def update_redshift(galaxy_id):
+    """
+    Update redshift value for a particular galaxy.
+
+    Parameters:
+        galaxy_id (int): id of the galaxy, which redshift has to be updated.
+
+    Returns:
+        sum_upper (float): Returns -1 if redshift could not be calculated, or the sum of weighted redshifts otherwise.
+    """
+
+    line_redshift = db.session.query(
+        Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative,
+        Line.observed_line_frequency_uncertainty_positive
+    ).outerjoin(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).all()
+
+    sum_upper = sum_lower = 0
+    for l in line_redshift:
+
+        # Do not account for line entries that either do not have observed frequency value or its positive uncertainty
+        if (l.observed_line_frequency_uncertainty_positive is None) or (l.observed_line_frequency is None):
+            continue
+        if l.observed_line_frequency_uncertainty_negative is None:
+            delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+        else:
+            delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+
+        z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
+        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+        sum_upper = sum_upper = + (z / delta_z)
+        sum_lower = sum_lower = + (1 / delta_z)
+    # This case passes -1 to change redshift error, which will signal that no change needed
+    if sum_lower == 0:
+        return -1
+
+    redshift_weighted = sum_upper / sum_lower
+    db.session.query(Galaxy).filter(
+        Galaxy.id == galaxy_id
+    ).update({"redshift": redshift_weighted})
+    db.session.commit()
+
+    return sum_upper
+
+
+def update_redshift_error(galaxy_id, sum_upper):
+    """
+    Update redshift error value for a particular galaxy.
+
+    Parameters:
+        galaxy_id (int): id of the galaxy, which redshift has to be updated.
+        sum_upper (int | float) Sum of weighted redshifts returned by update_redshift.
+
+    Returns:
+    """
+
+    if sum_upper != -1:
+
+        redshift_error_weighted = 0
+        line_redshift = db.session.query(
+            Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative,
+            Line.observed_line_frequency_uncertainty_positive
+        ).outerjoin(Galaxy).filter(
+            Galaxy.id == galaxy_id
+        ).all()
+        for l in line_redshift:
+            if (l.observed_line_frequency_uncertainty_positive is None) or (l.observed_line_frequency is None):
+                continue
+            if l.observed_line_frequency_uncertainty_negative is None:
+                delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+            else:
+                delta_nu = l.observed_line_frequency_uncertainty_positive + \
+                           l.observed_line_frequency_uncertainty_negative
+
+            z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
+            delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+            weight = (z / delta_z) / sum_upper
+            redshift_error_weighted = redshift_error_weighted + (weight * delta_z)
+        if redshift_error_weighted != 0:
+            db.session.query(Galaxy).filter(
+                Galaxy.id == galaxy_id
+            ).update({"redshift_error": redshift_error_weighted})
+            db.session.commit()
+
+
+def redshift_to_frequency(emitted_frequency, z, positive_uncertainty, negative_uncertainty):
+    """
+    Converts redshift value to frequency.
+
+    Parameters:
+        emitted_frequency (float): Emitted frequency value as per dictionary.
+        z (float): Submitted redshift value.
+        positive_uncertainty (float): Submitted positive uncertainty of the redshift value.
+        negative_uncertainty (float): Submitted negative uncertainty of the redshift value.
+
+    Returns:
+        nu_obs (float): Observed frequency.
+        positive_uncertainty (float | NoneType): Positive uncertainty of the nu_obs value or None
+    """
+
+    if z is None:
+        return None, None
+    nu_obs = emitted_frequency / (z + 1)
+    if positive_uncertainty is None:
+        return nu_obs, None
+    if negative_uncertainty is None:
+        negative_uncertainty = positive_uncertainty
+    delta_z = positive_uncertainty + negative_uncertainty
+    delta_nu = delta_z * nu_obs / (z + 1)
+    return nu_obs, delta_nu / 2
+
+
 @bp.route("/", methods=['GET'])
 @bp.route("/home", methods=['GET'])
 def home():
@@ -775,7 +941,7 @@ def query_results():
                     to_zero(form_advanced.radius_d.data) + to_zero(form_advanced.radius_m.data) / 60 + to_zero(
                         form_advanced.radius_s.data) / 3600)
                 galaxies = db.session.query(Galaxy, Line).outerjoin(Line)
-                galaxies = within_distance(session, galaxies, form_advanced.right_ascension_point.data,
+                galaxies = within_distance(galaxies, form_advanced.right_ascension_point.data,
                                            form_advanced.declination_point.data, distance=distance)
 
             else:
@@ -792,54 +958,54 @@ def query_results():
                                                dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
                                                Galaxy.redshift.between(form_advanced.redshift_min.data,
                                                                        form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift == None)) & (
-                                               l_flag.contains(l_data) | (Galaxy.lensing_flag == None)))
+                                                       Galaxy.redshift is None)) & (
+                                               l_flag.contains(l_data) | (Galaxy.lensing_flag is None)))
             galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
                 buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(
                 buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(
                 buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(
                 buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(
                 buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(buffer[11]) | (
-                                               Galaxy.classification == None))
+                                               Galaxy.classification is None))
 
             galaxies = galaxies.filter(~Galaxy.classification.contains(form_advanced.remove_classification.data))
 
-            galaxies = galaxies.filter((Line.id == None) | ((Line.emitted_frequency.between(
+            galaxies = galaxies.filter((Line.id is None) | ((Line.emitted_frequency.between(
                 form_advanced.emitted_frequency_min.data, form_advanced.emitted_frequency_max.data) | (
-                                                                     Line.emitted_frequency == None)) & ((
-                                                                                                             Line.species.contains(
-                                                                                                                 form_advanced.species.data)) | (
-                                                                                                                 Line.species == None)) & (
+                                                                     Line.emitted_frequency is None)) & ((
+                                                                     Line.species.contains(
+                                                                         form_advanced.species.data)) | (
+                                                                         Line.species is None)) & (
                                                                     Line.integrated_line_flux.between(
                                                                         form_advanced.integrated_line_flux_min.data,
                                                                         form_advanced.integrated_line_flux_max.data) | (
-                                                                            Line.integrated_line_flux == None)) & (
+                                                                            Line.integrated_line_flux is None)) & (
                                                                     Line.peak_line_flux.between(
                                                                         form_advanced.peak_line_flux_min.data,
                                                                         form_advanced.peak_line_flux_max.data) | (
-                                                                            Line.peak_line_flux == None)) & (
+                                                                            Line.peak_line_flux is None)) & (
                                                                     Line.line_width.between(
                                                                         form_advanced.line_width_min.data,
                                                                         form_advanced.line_width_max.data) | (
-                                                                            Line.line_width == None)) & (
+                                                                            Line.line_width is None)) & (
                                                                     Line.observed_line_frequency.between(
                                                                         form_advanced.observed_line_frequency_min.data,
                                                                         form_advanced.observed_line_frequency_max.data) | (
-                                                                            Line.observed_line_frequency == None)) & (
+                                                                            Line.observed_line_frequency is None)) & (
                                                                     Line.observed_beam_major.between(
                                                                         form_advanced.observed_beam_major_min.data,
                                                                         form_advanced.observed_beam_major_max.data) | (
-                                                                            Line.observed_beam_major == None)) & (
+                                                                            Line.observed_beam_major is None)) & (
                                                                     Line.observed_beam_minor.between(
                                                                         form_advanced.observed_beam_minor_min.data,
                                                                         form_advanced.observed_beam_minor_max.data) | (
-                                                                            Line.observed_beam_minor == None)) & (
+                                                                            Line.observed_beam_minor is None)) & (
                                                                     Line.reference.contains(
                                                                         form_advanced.reference.data) | (
-                                                                            Line.reference == None)) & (
+                                                                            Line.reference is None)) & (
                                                                     Line.detection_type.contains(
                                                                         form_advanced.detection_type.data) | (
-                                                                            Line.detection_type == None))))
+                                                                            Line.detection_type is None))))
 
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
@@ -847,10 +1013,10 @@ def query_results():
 
             # Query displaying lines based on the data from form_advanced
         elif form_advanced.lineSearch.data:
-            if (form_advanced.right_ascension_point.data != None) and (
-                    form_advanced.declination_point.data != None) and (
-                    (form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (
-                    form_advanced.radius_s.data != None)):
+            if (form_advanced.right_ascension_point.data is not None) and (
+                    form_advanced.declination_point.data is not None) and (
+                    (form_advanced.radius_d.data is not None) or (form_advanced.radius_m.data is not None) or (
+                    form_advanced.radius_s.data is not None)):
                 distance = math.radians(
                     to_zero(form_advanced.radius_d.data) + to_zero(form_advanced.radius_m.data) / 60 + to_zero(
                         form_advanced.radius_s.data) / 3600)
@@ -869,39 +1035,39 @@ def query_results():
                                                dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
                                                Galaxy.redshift.between(form_advanced.redshift_min.data,
                                                                        form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift == None)) & (
+                                                       Galaxy.redshift is None)) & (
                                                Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (
-                                               Galaxy.lensing_flag == None)) & (
+                                               Galaxy.lensing_flag is None)) & (
                                                Galaxy.classification.contains(form_advanced.classification.data) | (
-                                               Galaxy.classification == None)))
+                                               Galaxy.classification is None)))
 
             galaxies = galaxies.filter((Line.emitted_frequency.between(form_advanced.emitted_frequency_min.data,
                                                                        form_advanced.emitted_frequency_max.data) | (
-                                                Line.emitted_frequency == None)) & (
+                                                Line.emitted_frequency is None)) & (
                                                (Line.species.contains(form_advanced.species.data)) | (
-                                               Line.species == None)) & (Line.integrated_line_flux.between(
+                                               Line.species is None)) & (Line.integrated_line_flux.between(
                 form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (
-                                                                                 Line.integrated_line_flux == None)) & (
+                                                                                 Line.integrated_line_flux is None)) & (
                                                Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data,
                                                                            form_advanced.peak_line_flux_max.data) | (
-                                                       Line.peak_line_flux == None)) & (
+                                                       Line.peak_line_flux is None)) & (
                                                Line.line_width.between(form_advanced.line_width_min.data,
                                                                        form_advanced.line_width_max.data) | (
-                                                       Line.line_width == None)) & (
+                                                       Line.line_width is None)) & (
                                                Line.observed_line_frequency.between(
                                                    form_advanced.observed_line_frequency_min.data,
                                                    form_advanced.observed_line_frequency_max.data) | (
-                                                       Line.observed_line_frequency == None)) & (
+                                                       Line.observed_line_frequency is None)) & (
                                                Line.observed_beam_major.between(
                                                    form_advanced.observed_beam_major_min.data,
                                                    form_advanced.observed_beam_major_max.data) | (
-                                                       Line.observed_beam_major == None)) & (
+                                                       Line.observed_beam_major is None)) & (
                                                Line.observed_beam_minor.between(
                                                    form_advanced.observed_beam_minor_min.data,
                                                    form_advanced.observed_beam_minor_max.data) | (
-                                                       Line.observed_beam_minor == None)) & (
+                                                       Line.observed_beam_minor is None)) & (
                                                Line.reference.contains(form_advanced.reference.data) | (
-                                               Line.reference == None)))
+                                               Line.reference is None)))
 
             galaxies = galaxies.order_by(Galaxy.name).all()
 
@@ -925,7 +1091,8 @@ def query_results():
 @login_required
 def entry_file():
     """
-    Submit CSV route. Evaluates and validates each value. If all are valid, submits for moderation, otherwise rejects.
+    Submit CSV route. Evaluates and validates each value. If all are valid, submits for moderation, otherwise rejects
+    with appropriate error message / messages.
 
     On GET:
         Parameters:
@@ -940,12 +1107,7 @@ def entry_file():
             'file' (.csv): Submission file
 
         Returns:
-
-
-
-    For a given CSV:
-    First parses all entries checking if values are within the requirements and according to the format.
-    If not, a separate error message for each error is displayed. Otherwise, entries are being submitted.
+            db commit.
     """
 
     form = UploadFileForm()
@@ -1219,7 +1381,6 @@ def entry_file():
                         row_lensing_flag = "Lensed"
 
                 # Check whether this galaxy entry has been previously uploaded and/or approved
-                # session = Session()
                 galaxies = db.session.query(Galaxy, Line).outerjoin(Line).filter(Galaxy.name == row_name)
                 galaxies = within_distance(galaxies, ra, dec, based_on_beam_angle=True)
                 galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
@@ -1231,7 +1392,7 @@ def entry_file():
                 similar_tempgalaxy = tempgalaxies.first()
 
                 # If this galaxy entry has not been previously uploaded and/or approved, then upload.
-                if (similar_tempgalaxy == None) & (similar_galaxy == None):
+                if (similar_tempgalaxy is None) & (similar_galaxy is None):
 
                     galaxy = TempGalaxy(name=row_name,
                                         right_ascension=ra,
@@ -1244,22 +1405,22 @@ def entry_file():
                                         user_email=current_user.email,
                                         time_submitted=datetime.utcnow())
                     db.session.add(galaxy)
-                    new_id = db.session.query(func.max(TempGalaxy.id)).first()
-                    id = new_id[0]
+
                     from_existed = None
-                    tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
-                    tempgalaxy_id = int(tempgalaxy[0])
+                    tempgalaxy_id = db.session.query(func.max(TempGalaxy.id)).first()[0]
                     post = Post(tempgalaxy_id=tempgalaxy_id, user_email=current_user.email,
                                 time_submitted=datetime.utcnow())
+                    # We use the id variable in line submission below.
+                    id = tempgalaxy_id
                     db.session.add(post)
                     db.session.commit()
                 # If this galaxy has been previously uploaded but not yet approved / deleted,
                 # then remember id to assign the corresponding line submission.
-                elif (similar_tempgalaxy != None) & (similar_galaxy == None):
+                elif (similar_tempgalaxy is not None) & (similar_galaxy is None):
                     id = similar_tempgalaxy.id
                     from_existed = None
                 # If this galaxy has been previously approved and is stored in db,
-                # then remember id to assign the correspondin line submissions.
+                # then remember id to assign the corresponding line submissions.
                 else:
                     id = similar_galaxy[0].id
                     from_existed = id
@@ -1286,7 +1447,7 @@ def entry_file():
                             TempLine.galaxy_name == row_name) & (TempLine.species == row_species) & (
                             TempLine.integrated_line_flux == to_none(row_integrated_line_flux)) & (
                             TempLine.integrated_line_flux_uncertainty_positive == to_none(
-                        row_integrated_line_flux_uncertainty_positive))).first()
+                            row_integrated_line_flux_uncertainty_positive))).first()
 
                 galaxy_id = db.session.query(Galaxy.id).filter_by(name=row_name).scalar()
 
@@ -1295,10 +1456,10 @@ def entry_file():
                             Line.observed_line_frequency == frequency) & (
                             Line.integrated_line_flux == to_none(row_integrated_line_flux)) & (
                             Line.integrated_line_flux_uncertainty_positive == to_none(
-                        row_integrated_line_flux_uncertainty_positive)) & (Line.species == row_species)).first()
+                            row_integrated_line_flux_uncertainty_positive)) & (Line.species == row_species)).first()
 
                 # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
-                if (check_same_temp_line == None) & (check_same_line == None):
+                if (check_same_temp_line is None) & (check_same_line is None):
 
                     line = TempLine(galaxy_id=id,
                                     from_existed_id=from_existed,
@@ -1346,7 +1507,6 @@ def entry_file():
                         # flash ("Entry number {} has been successfully uploaded.".format(row_count))
                     except:
                         db.session.rollback()
-                        raise
 
                 else:
                     # If this line entry already exists in db, pass.
@@ -1359,149 +1519,74 @@ def entry_file():
     return render_template("/entry_file.html", title="Upload File", form=form)
 
 
-def ra_to_float(coordinates):
-    '''
-    Given right ascension value as either a string representing a float number or a string of the 00h00m00s format,
-    return the corresponding float value.
-
-    Returns:
-    coordinates -- float value of right ascension (type::float).
-
-    Parameters:
-    coordinates -- a string representing a float or 00h00m00s format right ascension.
-    '''
-
-    if isinstance(coordinates, float) or isinstance(coordinates, int):
-        coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
-        h = float(coordinates[0:2])
-        m = float(coordinates[3:5])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
-        return h * 15 + m / 4 + s / 240
-    else:
-        return float(coordinates)
-
-
-def dec_to_float(coordinates):
-    '''
-    Given declination value as either a string representing a float number or a string of the +/-00d00m00s format,
-    return the corresponding float value.
-
-    Returns:
-    coordinates -- float value of declination (type::float).
-
-    Parameters:
-    coordinates -- a string representing a float or +/-00d00m00s format declination.
-    '''
-
-    if isinstance(coordinates, float) or isinstance(coordinates, int):
-        coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
-        d = float(coordinates[1:3])
-        m = float(coordinates[4:6])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
-        if coordinates[0] == "-":
-            return (-1) * (d + m / 60 + s / 3600)
-        else:
-            return d + m / 60 + s / 3600
-    elif coordinates == '-inf' or coordinates == 'inf':
-        return float(coordinates)
-    else:
-        if coordinates[0] == '+':
-            dec = coordinates.replace("+", "")
-        else:
-            dec = coordinates
-        return float(dec)
-
-
-def ra_to_string(ra_float):
-    '''
-    Analogue to JS function in coordinates.js
-    '''
-    ra_string = ""
-    h = round(ra_float // 15)
-    m = round((ra_float - h * 15) // 0.25)
-    s = round(((ra_float - h * 15) - m * 0.25) * 240, 3)
-    if h < 10:
-        h = "0" + str(h) + "h"
-    else:
-        h = str(h) + "h"
-    if m < 10:
-        m = "0" + str(m) + "m"
-    else:
-        m = str(m) + "m"
-    if s < 10:
-        s = "0" + str(s) + "s"
-    else:
-        s = str(s) + "s"
-    ra_string = h + m + s
-    return ra_string
-
-
-def dec_to_string(dec_float):
-    pass
-
-
 @bp.route("/galaxy_entry_form", methods=['GET', 'POST'])
 @login_required
 def galaxy_entry_form():
-    '''
-    Galaxy entry form route
+    """
+    Galaxy entry form route. If the entry seems to exist already in the database or if its coordinates
+    closely resemble the coordinates of an existing galaxy, then a clarification is returned
+    with the list of the galaxies that the User could potentially mean. Otherwise, the entry is uploaded.
 
-    On access: Returns a form to submit a galaxy entry.
-    On submit: If the values areunappropriate, an error is returned. 
-    If the entry seems to exist already in the database or if its coordinates closely resemble the coordinates of an existing galaxy,
-    then a clarification is returned with the list of the galaxies that the User could potentially mean. 
-    Otherwise, the entry is uploaded. 
-    '''
+    On GET:
+        Parameters:
+            /galaxy_entry_form
+
+        Returns:
+            form (FlaskForm): AddGalaxyForm
+            galaxy_entry_form.html
+
+    On POST:
+        Parameters:
+            form (FlaskForm): Filled form with data to be committed.
+
+        Returns:
+            db commit.
+    """
 
     form = AddGalaxyForm()
     session = Session()
     if form.validate_on_submit():
 
         if form.submit.data:
-            try:
-                DEC = dec_to_float(form.declination.data)
-            except:
-                DEC = form.declination.data
-            try:
-                RA = ra_to_float(form.right_ascension.data)
-            except:
-                RA = form.right_ascension.data
 
-                # Check whether this galaxy entry has been previously uploaded and/or approved
-            galaxies = session.query(Galaxy, Line).outerjoin(Line)
-            galaxies = within_distance(session, galaxies, RA, DEC, based_on_beam_angle=True)
+            dec = dec_to_float(form.declination.data)
+            ra = ra_to_float(form.right_ascension.data)
+
+            # Check whether this galaxy entry has been previously uploaded and/or approved
+            galaxies = db.session.query(Galaxy, Line).outerjoin(Line)
+            galaxies = within_distance(galaxies, ra, dec, based_on_beam_angle=True)
             galaxies = galaxies.group_by(Galaxy.name).order_by(Galaxy.name)
 
             tempgalaxies = session.query(TempGalaxy)
-            tempgalaxies = within_distance(session, tempgalaxies, RA, DEC, based_on_beam_angle=True, temporary=True)
+            tempgalaxies = within_distance(tempgalaxies, ra, dec, based_on_beam_angle=True, temporary=True)
 
             similar_galaxy = galaxies.first()
             similar_tempgalaxy = tempgalaxies.first()
 
-            if (similar_galaxy != None) or (similar_tempgalaxy != None):
-                if similar_galaxy != None:
+            # If was previously submitted / approved, redirect the user to the confirmation post whether they still
+            # want to submit.
+            if (similar_galaxy is not None) or (similar_tempgalaxy is not None):
+                if similar_galaxy is not None:
                     another_exists = True
                 else:
                     another_exists = False
-                if similar_tempgalaxy != None:
+                if similar_tempgalaxy is not None:
                     same_temp_exists = True
                 else:
                     same_temp_exists = False
                 return render_template('galaxy_entry_form.html', title='Galaxy Entry Form', form=form,
                                        galaxies=galaxies, same_temp_exists=same_temp_exists,
                                        another_exists=another_exists)
+            # Otherwise, if the galaxy was not found in db, submit.
             classifications = ' '.join([elem + ", " for elem in form.classification.data])[:-2]
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination=DEC,
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=ra, declination=dec,
                                 coordinate_system=form.coordinate_system.data, classification=classifications,
                                 lensing_flag=form.lensing_flag.data, notes=form.notes.data,
                                 user_submitted=current_user.username, user_email=current_user.email, is_similar=None,
                                 time_submitted=datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()
-            tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
-            tempgalaxy_id = int(tempgalaxy[0])
+            tempgalaxy_id = db.session.query(func.max(TempGalaxy.id)).first()[0]
             post = Post(tempgalaxy_id=tempgalaxy_id, user_email=current_user.email, time_submitted=datetime.utcnow())
             db.session.add(post)
             db.session.commit()
@@ -1509,24 +1594,17 @@ def galaxy_entry_form():
 
         # If User still wants to submit the entry even though similar exist.
         if form.submit_anyway.data:
-            try:
-                DEC = dec_to_float(form.declination.data)
-            except:
-                DEC = form.declination.data
-            try:
-                RA = ra_to_float(form.right_ascension.data)
-            except:
-                RA = form.right_ascension.data
+            dec = dec_to_float(form.declination.data)
+            ra = ra_to_float(form.right_ascension.data)
 
-            galaxy = TempGalaxy(name=form.name.data, right_ascension=RA, declination=DEC,
+            galaxy = TempGalaxy(name=form.name.data, right_ascension=ra, declination=dec,
                                 coordinate_system=form.coordinate_system.data, classification=form.classification.data,
                                 lensing_flag=form.lensing_flag.data, notes=form.notes.data,
                                 user_submitted=current_user.username, user_email=current_user.email,
                                 time_submitted=datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()
-            tempgalaxy = db.session.query(func.max(TempGalaxy.id)).first()
-            tempgalaxy_id = int(tempgalaxy[0])
+            tempgalaxy_id = db.session.query(func.max(TempGalaxy.id)).first()[0]
             post = Post(tempgalaxy_id=tempgalaxy_id, user_email=current_user.email, time_submitted=datetime.utcnow())
             db.session.add(post)
             db.session.commit()
@@ -1545,14 +1623,27 @@ def galaxy_entry_form():
 @bp.route("/galaxy_edit_form/<id>", methods=['GET', 'POST'])
 @login_required
 def galaxy_edit_form(id):
-    '''
+    """
     Galaxy edit route
     On access: Prefills the form with the desired galaxy to be edited.
-    On submit: Submits the edits. An error is raised if unappropriated values are entered. 
-    '''
+    On submit: Submits the edits. An error is raised if unappropriated values are entered.
+    On GET:
+        Parameters:
+            /galaxy_edit_form
+            id (str): The id of the galaxy under edit.
 
-    session = Session()
-    galaxy = session.query(Galaxy).filter(Galaxy.id == id).first()
+        Returns:
+            form (FlaskForm): EditGalaxyForm
+            galaxy_entry_form.html
+
+    On POST:
+        Parameters:
+            /galaxy_edit_form
+        Returns:
+            db commit.
+    """
+
+    galaxy = db.session.query(Galaxy).filter(Galaxy.id == id).first()
     classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-1]
     classlist = galaxy.classification.split(', ')
     for c in classlist:
@@ -1561,6 +1652,7 @@ def galaxy_edit_form(id):
                           lensing_flag=galaxy.lensing_flag, classification=classifications, notes=galaxy.notes)
     form.classification.data = classifications
     original_id = galaxy.id
+
     if form.validate_on_submit():
         if form.submit.data:
             changes = ""
@@ -1577,15 +1669,18 @@ def galaxy_edit_form(id):
                 else:
                     flash(element + " already exists")
             newclasslist = ' '.join([str(elem) + ", " for elem in classlist])[:-2]
-            if (galaxy.name != form.name.data):
+            if galaxy.name != form.name.data:
                 changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
-            if (galaxy.coordinate_system != form.coordinate_system.data):
-                changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system + ' New Coordinate System: ' + form.coordinate_system.data
-            if (galaxy.lensing_flag != form.lensing_flag.data):
-                changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag + ' New Lensing Flag: ' + form.lensing_flag.data
-            if (galaxy.classification != newclasslist):
-                changes = changes + 'Initial Classification: ' + galaxy.classification + ' New Classification: ' + newclasslist
-            if (galaxy.notes != form.notes.data):
+            if galaxy.coordinate_system != form.coordinate_system.data:
+                changes = changes + 'Initial Coordinate System: ' + galaxy.coordinate_system \
+                          + ' New Coordinate System: ' + form.coordinate_system.data
+            if galaxy.lensing_flag != form.lensing_flag.data:
+                changes = changes + 'Initial Lensing Flag: ' + galaxy.lensing_flag \
+                          + ' New Lensing Flag: ' + form.lensing_flag.data
+            if galaxy.classification != newclasslist:
+                changes = changes + 'Initial Classification: ' + galaxy.classification \
+                          + ' New Classification: ' + newclasslist
+            if galaxy.notes != form.notes.data:
                 try:
                     changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + form.notes.data
                 except:
@@ -1615,160 +1710,58 @@ def galaxy_edit_form(id):
     return render_template('galaxy_edit_form.html', title='Galaxy Edit Form', form=form)
 
 
-def update_redshift(session, galaxy_id):
-    '''
-    Update redshift value for a particular galaxy.
-
-    Returns: 
-    sum_upper -- returns -1 if redshift could not be calculated, or the sum of weighted redshifts otehrwise (type::float).
-
-    Parameters:
-    session -- (type::Session)
-    galaxy_id -- id of the galaxy, which redshift has to be updated.
-    '''
-
-    line_redshift = session.query(
-        Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative,
-        Line.observed_line_frequency_uncertainty_positive
-    ).outerjoin(Galaxy).filter(
-        Galaxy.id == galaxy_id
-    ).all()
-
-    sum_upper = sum_lower = 0
-    for l in line_redshift:
-
-        # Do not account for line entries that either do not have observed frequency value or its positive uncertainty 
-        if (l.observed_line_frequency_uncertainty_positive == None) or (l.observed_line_frequency == None):
-            continue
-        if l.observed_line_frequency_uncertainty_negative == None:
-            delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
-        else:
-            delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-
-        z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
-        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
-        sum_upper = sum_upper = + (z / delta_z)
-        sum_lower = sum_lower = + (1 / delta_z)
-    # This case passes -1 to change redshift error, which will signal that no change needed
-    if sum_lower == 0:
-        return -1
-
-    redshift_weighted = sum_upper / sum_lower
-    session.query(Galaxy).filter(
-        Galaxy.id == galaxy_id
-    ).update({"redshift": redshift_weighted})
-    session.commit()
-
-    return sum_upper
-
-
-def update_redshift_error(session, galaxy_id, sum_upper):
-    '''
-    Update redshift error value for a particular galaxy.
-
-    Returns: N/A
-
-    Parameters:
-    session -- (type::Session)
-    galaxy_id -- id of the galaxy, which redshift has to be updated.
-    sum_upper -- Sum of weighted redshifts returned by update_redshift. 
-    Could be -1 to indicate that the error calculation is unnecessary or (type::float) otherwise.
-    '''
-
-    if sum_upper != -1:
-
-        redshift_error_weighted = 0
-        line_redshift = session.query(
-            Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative,
-            Line.observed_line_frequency_uncertainty_positive
-        ).outerjoin(Galaxy).filter(
-            Galaxy.id == galaxy_id
-        ).all()
-        for l in line_redshift:
-            if (l.observed_line_frequency_uncertainty_positive == None) or (l.observed_line_frequency == None):
-                continue
-            if l.observed_line_frequency_uncertainty_negative == None:
-                delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
-            else:
-                delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
-
-            z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
-            delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
-            weight = (z / delta_z) / sum_upper
-            redshift_error_weighted = redshift_error_weighted + (weight * delta_z)
-        if redshift_error_weighted != 0:
-            session.query(Galaxy).filter(
-                Galaxy.id == galaxy_id
-            ).update({"redshift_error": redshift_error_weighted})
-            session.commit()
-
-
-def redshift_to_frequency(emitted_frequency, z, positive_uncertainty, negative_uncertainty):
-    '''
-    Converts redshift value to frequency.
-
-    Returns:
-    nu_obs -- Observed frequency (type::float).
-    positive_uncertainty -- Positive uncertainty of the nu_obs value (type::float) or None 
-
-    Parameters:
-    emitted_frequency -- emitted frequency value as per dictionary
-    z -- submitted redshift value
-    positive_uncertainty -- submitted positive uncertainty of the redshift value
-    negative_uncertainty -- submitted negative uncertainty of the redshift value
-
-    '''
-
-    if z == None:
-        return None, None
-    nu_obs = emitted_frequency / (z + 1)
-    if positive_uncertainty == None:
-        return nu_obs, None
-    if negative_uncertainty == None:
-        negative_uncertainty = positive_uncertainty
-    delta_z = positive_uncertainty + negative_uncertainty
-    delta_nu = delta_z * nu_obs / (z + 1)
-    return nu_obs, delta_nu / 2
-
-
 @bp.route("/line_entry_form", methods=['GET', 'POST'])
 @login_required
 def line_entry_form():
-    '''
-    Line entry form route
-    On access: Returns a form to submit a line entry.
-    On submit: If the values areunappropriate, an error is return. 
-    If the entry seems to exist already in the database, then no action taken. Otherwise, the entry is uploaded. 
-    '''
+    """
+    Line entry route
+
+    On GET:
+        Parameters:
+            /line_entry_form
+
+        Returns:
+            form (FlaskForm): AddLineForm
+            line_entry_form.html
+
+    On POST:
+        Parameters:
+            /galaxy_edit_form
+        Returns:
+            db commit.
+            redirect to main.main.
+    """
+
     name = ""
     form = AddLineForm()
     if form.galaxy_form.data:
         return redirect(url_for('main.galaxy_entry_form'))
     if form.validate_on_submit():
         if form.submit.data:
-            session = Session()
-            galaxy_id = session.query(Galaxy.id).filter(Galaxy.name == form.galaxy_name.data).scalar()
+            # Attempt to find the desired galaxy by name among the approved.
+            galaxy_id = db.session.query(Galaxy.id).filter(Galaxy.name == form.galaxy_name.data).scalar()
             try:
                 id = galaxy_id
-                name = session.query(Galaxy.name).filter(Galaxy.id == id).scalar()
+                name = db.session.query(Galaxy.name).filter(Galaxy.id == id).scalar()
             except:
                 id = None
             existed = id
             tempgalaxy_id = None
-
-            if galaxy_id == None:
-                galaxy_id = session.query(TempGalaxy.id).filter(TempGalaxy.name == form.galaxy_name.data).scalar()
+            # If the galaxy was not found among the approved, find among the not yet approved.
+            if galaxy_id is None:
+                galaxy_id = db.session.query(TempGalaxy.id).filter(TempGalaxy.name == form.galaxy_name.data).scalar()
                 id = galaxy_id
-                name = session.query(TempGalaxy.name).filter(TempGalaxy.id == id).scalar()
+                name = db.session.query(TempGalaxy.name).filter(TempGalaxy.id == id).scalar()
                 tempgalaxy_id = id
                 existed = None
-
-            if galaxy_id == None:
+            # If the galaxy was still not found, we assume the name was misspelled and we flash a message,
+            # otherwise we proceed with the submission.
+            if galaxy_id is None:
                 flash('Please enter the name exactly as proposed using Caps if necessary')
             else:
                 try:
                     dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-                    if dict_frequency == False:
+                    if not dict_frequency:
                         raise Exception(message)
                 except:
                     pass
@@ -1803,7 +1796,7 @@ def line_entry_form():
                             Line.species == form.species.data)).first()
 
                 # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
-                if (check_same_line == None) & (check_same_temp_line == None):
+                if (check_same_line is None) & (check_same_temp_line is None):
                     line = TempLine(galaxy_id=id,
                                     emitted_frequency=form.emitted_frequency.data,
                                     species=form.species.data,
@@ -1833,8 +1826,7 @@ def line_entry_form():
                                     declination=dec_to_float(form.declination.data))
                     db.session.add(line)
                     db.session.commit()
-                    templine = session.query(func.max(TempLine.id)).first()
-                    templine_id = int(templine[0])
+                    templine_id = db.session.query(func.max(TempLine.id)).first()[0]
                     post = Post(templine_id=templine_id,
                                 tempgalaxy_id=tempgalaxy_id,
                                 user_email=current_user.email,
@@ -1852,16 +1844,27 @@ def line_entry_form():
 @bp.route("/line_edit_form/<id>", methods=['GET', 'POST'])
 @login_required
 def line_edit_form(id):
-    '''
+    """
     Line edit route
-    On access: Prefills the form with the desired line to be edited.
-    On submit: Submits the edits. An error is raised if unappropriated values are entered. 
-    '''
 
-    session = Session()
-    line = session.query(Line).filter(Line.id == id).first()
+    On GET:
+        Parameters:
+            /line_edit_form
+            id (str): The id of the line under edit.
 
-    name = session.query(Galaxy.name).filter(Galaxy.id == line.galaxy_id).scalar()
+        Returns:
+            form (FlaskForm): EditLineForm
+
+    On POST:
+        Parameters:
+            /line_edit_form
+        Returns:
+            db commit.
+    """
+
+    line = db.session.query(Line).filter(Line.id == id).first()
+
+    name = db.session.query(Galaxy.name).filter(Galaxy.id == line.galaxy_id).scalar()
     form = EditLineForm(galaxy_name=name, emitted_frequency=line.emitted_frequency, species=line.species,
                         integrated_line_flux=line.integrated_line_flux,
                         integrated_line_flux_uncertainty_positive=line.integrated_line_flux_uncertainty_positive,
@@ -1878,10 +1881,9 @@ def line_edit_form(id):
         return redirect(url_for('main.galaxy_entry_form'))
     if form.validate_on_submit():
         if form.submit.data:
-            session = Session()
-            galaxy_id = session.query(Galaxy.id).filter(Galaxy.name == form.galaxy_name.data).scalar()
+            galaxy_id = db.session.query(Galaxy.id).filter(Galaxy.name == form.galaxy_name.data).scalar()
 
-            if galaxy_id == None:
+            if galaxy_id is None:
                 flash('Please enter the name exactly as proposed using Caps if necessary')
             else:
                 if form.freq_type.data == 'z':
@@ -1902,61 +1904,97 @@ def line_edit_form(id):
                 if line.species != form.species.data:
                     changes = changes + "Initial Species: " + str(line.species) + " New Species: " + form.species.data
                 if line.integrated_line_flux != float(form.integrated_line_flux.data):
-                    changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux + " New Integrated Line Flux: " + form.integrated_line_flux.data
+                    changes = changes + "Initial Integrated Line Flux: " + line.integrated_line_flux +\
+                              " New Integrated Line Flux: " + form.integrated_line_flux.data
                 if form.integrated_line_flux_uncertainty_positive.data:
                     if float(line.integrated_line_flux_uncertainty_positive) != float(
                             form.integrated_line_flux_uncertainty_positive.data):
-                        changes = changes + "Initial Integrated Line Flux Positive Uncertainty: " + line.integrated_line_flux_uncertainty_positive + " New Integrated Line Flux Positive Uncertainty: " + form.integrated_line_flux_uncertainty_positive.data
+                        changes = changes + "Initial Integrated Line Flux Positive Uncertainty: " +\
+                                  line.integrated_line_flux_uncertainty_positive +\
+                                  " New Integrated Line Flux Positive Uncertainty: " +\
+                                  form.integrated_line_flux_uncertainty_positive.data
                 if form.integrated_line_flux_uncertainty_negative.data:
                     if float(line.integrated_line_flux_uncertainty_negative) != float(
                             form.integrated_line_flux_uncertainty_negative.data):
-                        changes = changes + "Initial Integrated Line Flux Negative Uncertainty: " + line.integrated_line_flux_uncertainty_negative + " New Integrated Line Flux Negative Uncertainty: " + form.integrated_line_flux_uncertainty_negative.data
+                        changes = changes + "Initial Integrated Line Flux Negative Uncertainty: " +\
+                                  line.integrated_line_flux_uncertainty_negative +\
+                                  " New Integrated Line Flux Negative Uncertainty: " +\
+                                  form.integrated_line_flux_uncertainty_negative.data
                 if form.peak_line_flux.data:
                     if float(line.peak_line_flux) != float(form.peak_line_flux.data):
-                        changes = changes + "Initial Peak Line Flux: " + line.peak_line_flux + " New Peak Line Flux: " + form.peak_line_flux.data
+                        changes = changes + "Initial Peak Line Flux: " +\
+                                  line.peak_line_flux + " New Peak Line Flux: " +\
+                                  form.peak_line_flux.data
                 if form.peak_line_flux_uncertainty_positive.data:
                     if float(line.peak_line_flux_uncertainty_positive) != float(
                             form.peak_line_flux_uncertainty_positive.data):
-                        changes = changes + "Initial Peak Line Flux Positive Uncertainty: " + line.peak_line_flux_uncertainty_positive + " New Peak Line Flux Positive Uncertainty: " + form.peak_line_flux_uncertainty_positive.data
+                        changes = changes + "Initial Peak Line Flux Positive Uncertainty: " +\
+                                  line.peak_line_flux_uncertainty_positive +\
+                                  " New Peak Line Flux Positive Uncertainty: "\
+                                  + form.peak_line_flux_uncertainty_positive.data
                 if form.peak_line_flux_uncertainty_negative.data:
                     if float(line.peak_line_flux_uncertainty_negative) != float(
                             form.peak_line_flux_uncertainty_negative.data):
-                        changes = changes + "Initial Peak Line Flux Negative Uncertainty: " + line.peak_line_flux_uncertainty_negative + " New Peak Line Flux Negative Uncertainty: " + form.peak_line_flux_uncertainty_negative.data
+                        changes = changes + "Initial Peak Line Flux Negative Uncertainty: " +\
+                                  line.peak_line_flux_uncertainty_negative +\
+                                  " New Peak Line Flux Negative Uncertainty: " +\
+                                  form.peak_line_flux_uncertainty_negative.data
                 if form.line_width.data:
                     if float(line.line_width) != float(form.line_width.data):
-                        changes = changes + "Initial Line Width: " + line.line_width + " New Line Width: " + form.line_width.data
+                        changes = changes + "Initial Line Width: " + line.line_width + " New Line Width: " +\
+                                  form.line_width.data
                 if form.line_width_uncertainty_positive.data:
                     if float(line.line_width_uncertainty_positive) != float(form.line_width_uncertainty_positive.data):
-                        changes = changes + "Initial Line Width Positive Uncertainty: " + line.line_width_uncertainty_positive + " New Line Width Positive Uncertainty: " + form.line_width_uncertainty_positive.data
+                        changes = changes + "Initial Line Width Positive Uncertainty: " +\
+                                  line.line_width_uncertainty_positive +\
+                                  " New Line Width Positive Uncertainty: " +\
+                                  form.line_width_uncertainty_positive.data
                 if form.line_width_uncertainty_negative.data:
                     if float(line.line_width_uncertainty_negative) != float(form.line_width_uncertainty_negative.data):
-                        changes = changes + "Initial Line Width Negative Uncertainty: " + line.line_width_uncertainty_negative + " New Line Width Negative Uncertainty: " + form.line_width_uncertainty_negative.data
+                        changes = changes + "Initial Line Width Negative Uncertainty: " +\
+                                  line.line_width_uncertainty_negative +\
+                                  " New Line Width Negative Uncertainty: " +\
+                                  form.line_width_uncertainty_negative.data
                 if form.observed_line_frequency.data:
                     if float(line.observed_line_frequency) != float(form.observed_line_frequency.data):
-                        changes = changes + "Initial Observed Line Frequency: " + line.observed_line_frequency + " New Observed Line Frequency: " + form.observed_line_frequency.data
+                        changes = changes + "Initial Observed Line Frequency: " +\
+                                  line.observed_line_frequency +\
+                                  " New Observed Line Frequency: " +\
+                                  form.observed_line_frequency.data
                 if form.observed_line_frequency_uncertainty_positive.data:
                     if float(line.observed_line_frequency_uncertainty_positive) != float(
                             form.observed_line_frequency_uncertainty_positive.data):
-                        changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " + line.observed_line_frequency_uncertainty_positive + " New Observed Line Frequency Positive Uncertainty: " + form.observed_line_frequency_uncertainty_positive.data
+                        changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " +\
+                                  line.observed_line_frequency_uncertainty_positive +\
+                                  " New Observed Line Frequency Positive Uncertainty: " +\
+                                  form.observed_line_frequency_uncertainty_positive.data
                 if form.observed_line_frequency_uncertainty_negative.data:
                     if float(line.observed_line_frequency_uncertainty_negative) != float(
                             form.observed_line_frequency_uncertainty_negative.data):
-                        changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " + line.observed_line_frequency_uncertainty_negative + " New Observed Line Frequency Negative Uncertainty: " + form.observed_line_frequency_uncertainty_negative.data
+                        changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " +\
+                                  line.observed_line_frequency_uncertainty_negative +\
+                                  " New Observed Line Frequency Negative Uncertainty: " +\
+                                  form.observed_line_frequency_uncertainty_negative.data
                 if form.detection_type.data:
                     if line.detection_type != form.detection_type.data:
-                        changes = changes + "Initial Detection Type: " + line.detection_type + " New Detection Type: " + form.detection_type.data
+                        changes = changes + "Initial Detection Type: " + line.detection_type +\
+                                  " New Detection Type: " + form.detection_type.data
                 if form.observed_beam_major.data:
                     if float(line.observed_beam_major) != float(form.observed_beam_major.data):
-                        changes = changes + "Initial Observed Beam Major: " + line.observed_beam_major + " New Observed Beam Major: " + form.observed_beam_major.data
+                        changes = changes + "Initial Observed Beam Major: " + line.observed_beam_major +\
+                                  " New Observed Beam Major: " + form.observed_beam_major.data
                 if form.observed_beam_minor.data:
                     if float(line.observed_beam_minor) != float(form.observed_beam_minor.data):
-                        changes = changes + "Initial Observed Beam Minor: " + line.observed_beam_minor + " New Observed Beam Minor: " + form.observed_beam_minor.data
+                        changes = changes + "Initial Observed Beam Minor: " + line.observed_beam_minor +\
+                                  " New Observed Beam Minor: " + form.observed_beam_minor.data
                 if form.observed_beam_angle.data:
                     if float(line.observed_beam_angle) != float(form.observed_beam_angle.data):
-                        changes = changes + "Initial Observed Beam Angle: " + line.observed_beam_angle + " New Observed Beam Angle: " + form.observed_beam_angle.data
+                        changes = changes + "Initial Observed Beam Angle: " + line.observed_beam_angle +\
+                                  " New Observed Beam Angle: " + form.observed_beam_angle.data
                 if form.reference.data:
                     if line.reference != form.reference.data:
-                        changes = changes + "Initial Reference: " + line.reference + " New Reference: " + form.reference.data
+                        changes = changes + "Initial Reference: " + line.reference +\
+                                  " New Reference: " + form.reference.data
                 if form.notes.data:
                     if line.notes != form.notes.data:
                         changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
@@ -1983,8 +2021,7 @@ def line_edit_form(id):
                 db.session.commit()
 
                 # Add the corresponding post
-                editline = session.query(func.max(EditLine.id)).first()
-                editline_id = int(editline[0])
+                editline_id = db.session.query(func.max(EditLine.id)).first()[0]
                 post = Post(editline_id=editline_id, galaxy_id=galaxy_id, user_email=current_user.email,
                             time_submitted=datetime.utcnow())
                 db.session.add(post)
@@ -1996,10 +2033,10 @@ def line_edit_form(id):
 
 
 @bp.route('/galaxies')
-@login_required
 def galaxydic():
-    '''
-    '''
+    """
+    A helper route to jsonify the list of galaxies.
+    """
 
     session = Session()
     res1 = session.query(Galaxy)
@@ -2011,10 +2048,10 @@ def galaxydic():
 
 
 @bp.route('/approvedgalaxies')
-@login_required
 def galaxies():
-    '''
-    '''
+    """
+    A helper route to jsonify the list of approved galaxies.
+    """
 
     session = Session()
     res = session.query(Galaxy)
@@ -2023,7 +2060,6 @@ def galaxies():
 
 
 @bp.route('/process', methods=['POST'])
-@login_required
 def process():
     galaxy_name = request.form['galaxy_name']
     if galaxy_name:
@@ -2031,18 +2067,25 @@ def process():
     return jsonify({'error': 'missing data..'})
 
 
-@bp.route('/galaxy/<name>', methods=['GET', 'POST'])
+@bp.route('/galaxy/<name>', methods=['GET'])
 def galaxy(name):
-    '''
+    """
     Galaxy page route
-    On access: Displays data of a particular galaxy and its corresponding line entries.
-    '''
 
-    session = Session()
+    On GET:
+        Parameters:
+             name (str): name of the galaxy (unique) under investigation.
+
+        Returns:
+            galaxy.html
+            galaxy (Galaxy): A db model object under investigation.
+            lines (db.session.query): Lines that belong to the selected galaxy.
+    """
+
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
-    line = session.query(Line).filter_by(galaxy_id=galaxy.id).all()
+    lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
 
-    return render_template('galaxy.html', galaxy=galaxy, line=line)
+    return render_template('galaxy.html', galaxy=galaxy, lines=lines)
 
 
 @bp.route("/submit")
@@ -2054,10 +2097,17 @@ def submit():
 @bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
 @login_required
 def convert_to_CSV(table, identifier):
-    '''
+    """
     Converts a query to CSV route
-    ON access: Returns a .csv file with the data of a query. Query is determined by the argument <table>.
-    '''
+
+    On GET:
+        Parameters:
+            table (str): Indicator string that specifies the type of the table desired by the user.
+            identifier (str): the id of the galaxy if one.
+
+        Returns:
+            response (flask.make_response): the flask response.
+    """
 
     if table == "Galaxy":
 
@@ -2155,10 +2205,9 @@ def convert_to_CSV(table, identifier):
     elif table == "Galaxy Lines":
 
         # Galaxy with lines takes lines individual coordinates
-        session = Session()
         f = open('galaxy_lines.csv', 'w')
         out = csv.writer(f)
-        galaxy_lines = session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier,
+        galaxy_lines = db.session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier,
                                                                             Line.galaxy_id == identifier)
         out.writerow([
             COL_NAMES['name'],
@@ -2239,10 +2288,9 @@ def convert_to_CSV(table, identifier):
     elif table == "Everything":
 
         # Lines take individual coordinates
-        session = Session()
         f = open('galaxies_lines.csv', 'w')
         out = csv.writer(f)
-        data = session.query(Galaxy, Line).outerjoin(Line)
+        data = db.session.query(Galaxy, Line).outerjoin(Line)
         out.writerow([
             COL_NAMES['name'],
             COL_NAMES['right_ascension'],
@@ -2331,7 +2379,6 @@ def convert_to_CSV(table, identifier):
         response.mimetype = 'text/csv'
         return response
     elif table == "Empty":
-        session = Session()
         f = open('sample.csv', 'w')
         out = csv.writer(f)
         out.writerow(

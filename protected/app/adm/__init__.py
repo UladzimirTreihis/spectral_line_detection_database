@@ -957,14 +957,14 @@ class UserView(AdminView):
             db.session.add(user)
             db.session.commit()
 
-
+# Commented are original model views. Can be used for troubleshooting purposes if necessary during the development.
 admin.add_view(UserView(User, db.session))
-admin.add_view(AdminView(Role, db.session))
+#admin.add_view(AdminView(Role, db.session))
 admin.add_view(AdminView(Galaxy, db.session))
 admin.add_view(AdminView(Line, db.session))
-admin.add_view(PostsView(name='Posts', endpoint='posts'))
-admin.add_view(AdminView(Post, db.session))
-admin.add_view(TempGalaxyView(TempGalaxy, db.session, category="New Entries"))
-admin.add_view(TempLineView(TempLine, db.session, category="New Entries"))
-admin.add_view(EditGalaxyView(EditGalaxy, db.session, category="New Edits"))
-admin.add_view(EditLineView(EditLine, db.session, category="New Edits"))
+admin.add_view(PostsView(name='Submissions', endpoint='posts'))
+#admin.add_view(AdminView(Post, db.session))
+#admin.add_view(TempGalaxyView(TempGalaxy, db.session, category="New Entries"))
+#admin.add_view(TempLineView(TempLine, db.session, category="New Entries"))
+#admin.add_view(EditGalaxyView(EditGalaxy, db.session, category="New Edits"))
+#admin.add_view(EditLineView(EditLine, db.session, category="New Edits"))

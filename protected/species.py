@@ -1,4 +1,18 @@
 # families below
+
+species = [('CO', 'CO'), ('13CO', '13CO'), ('C17O', 'C17O'),
+           ('C18O', 'C18O'), ('CF', 'CF'), ('CF+', 'CF+'),
+           ('CCH', 'CCH'), ('CH+', 'CH+'), ('CH2_P1/2', 'CH2_P1/2'),
+           ('CH2_P3/2', 'CH2_P3/2'), ('CI(C-atom)', 'CI(C-atom)'),
+           ('CII', 'CII'), ('CN-', 'CN-'), ('CN', 'CN'), ('CS', 'CS'),
+           ('Ha', 'Ha'), ('H20', 'H20'), ('o-H20+', 'o-H20+'),
+           ('p-H20+', 'p-H20+'), ('HCN', 'HCN'), ('HNC', 'HNC'),
+           ('HCO+', 'HCO+'), ('HF', 'HF'), ('LiH', 'LiH'), ('N2H+', 'N2H+'),
+           ('NH3', 'NH3'), ('NII(N+-atom)', 'NII(N+-atom)'),
+           ('NO', 'NO'), ('NO+', 'NO+'), ('OI', 'OI'), ('OIII', 'OIII'),
+           ('OH+', 'OH+'), ('OH', 'OH'), ('PN', 'PN'),
+           ('SiC', 'SiC'), ('SiN', 'SiN'), ('SiO', 'SiO'), ('SO2', 'SO2')]
+
 CO_f = {
     115.27120180: "1",
     230.53800000: "2",
@@ -226,6 +240,7 @@ SiO_f = {
 SO2_f = {
 
 }
+
 
 CarbonMonoxide = {"CO": CO_f, "C17O": C17O_f, "C18O": C18O_f, "13CO": THIRTEEN_CO_f}
 THIRTEEN_CO = {"13CO": "13CO", "13COv=0": "13CO"}
