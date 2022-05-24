@@ -29,6 +29,8 @@
 "sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
                 crossorigin="anonymous">
     </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
 {% endblock %}
 
@@ -329,7 +331,6 @@
 <table class = "table" id = "Galaxy">
    <thead>
       <tr>
-         <th>ID</th>
          <th>Name</th>
          <th>Right Ascension</th>
          <th>Declination</th>
@@ -346,7 +347,6 @@
          {% set l = element[1] %}  
          {% set g = element[0] %}
          <tr>
-            <td>{{ g.id }}</td>
             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ g.right_ascension }}</td>
             <td>{{ g.declination }}</td>
@@ -366,25 +366,27 @@
    <thead>
       <tr>
          <th>Galaxy Name</th>
-         <th>J Upper</th>
-         <th>Integrated Line Flux</th>
-         <th>Integrated Line Flux Positive Uncertainty</th>
-         <th>Integrated Line Flux Negative Uncertainty</th>
-         <th>Peak Line Flux</th>
-         <th>Peak Line Flux Positive Uncertainty</th>
-         <th>Peak Line Flux Negative Uncertainty</th>
-         <th>Line Width</th>
-         <th>Line Width Positive Uncertainty</th>
-         <th>Line Width Negative Uncertainty</th>
-         <th>Observed Line Frequency</th>
-         <th>Observed Line Frequency Positive Uncertainty</th>
-         <th>Observed Line Frequency Negative Uncertainty</th>
-         <th>Detection Type</th>
-         <th>Observed Beam Major</th>
-         <th>Observed Beam Minor</th>
-         <th>Observed Beam Angle</th>
-         <th>Reference</th>
-         <th>Notes</th>
+         <th>\( Species \)</th>
+         <th>\( f_{rest} \) \( (GHz) \)</th>
+         <th>\( S \Delta v \) \((Jy \ km \ s^{-1}) \)</th>
+         <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+         <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+         <th>\( S_{max} \) \( (mJy) \)</th>
+         <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
+         <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+         <th>\( FWHM \) \( (kms^{-1}) \)</th>
+         <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
+         <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
+         <th>\( f_{obs} \) \( (GHz) \)</th>
+         <th>\( +\sigma_{f_{obs}} \) \( (GHz) \)</th>
+         <th>\( -\sigma_{f_{obs}} \) \( (GHz) \)</th>
+         <th>\( Telescope \) \( Type \)</th>
+         <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
+         <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
+         <th>\( Beam \ P.A. \) \( (*) \)</th>
+         <th>\( Reference \)</th>
+         <th>\( Notes \)</th>
+         <th style = "display: none">\( Text \) </th>
       </tr>
    </thead>
    
@@ -394,7 +396,8 @@
          {% set g = element[0] %}
          <tr>
             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-            <td>{{ l.j_upper }}</td>
+            <td>{{ l.species }}</td>
+            <td>{{ l.emitted_frequency }}</td>
             <td>{{ l.integrated_line_flux }}</td>
             <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
             <td>

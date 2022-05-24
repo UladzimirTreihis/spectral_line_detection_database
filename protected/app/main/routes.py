@@ -489,7 +489,7 @@ def update_right_ascension(galaxy_id):
     total = 0
     count = 0
     for line in lines:
-        total += line
+        total += line[0]
         count += 1
     if count != 0:
         right_ascension = total / count
@@ -513,7 +513,7 @@ def update_declination(galaxy_id):
     total = 0
     count = 0
     for line in lines:
-        total += line
+        total += line[0]
         count += 1
     if count != 0:
         declination = total / count
