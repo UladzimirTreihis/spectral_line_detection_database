@@ -869,11 +869,10 @@ def query_results():
             form_advanced.redshift_max.data = float('inf')
         if form_advanced.lensing_flag.data is None or form_advanced.lensing_flag.data == 'Either':
             form_advanced.lensing_flag.data = ''
-        if form_advanced.classification.data is None \
-                or form_advanced.classification.data == 'All' \
-                or form_advanced.classification.data == []:
-            form_advanced.classification.data = ''
-        if form_advanced.remove_classification.data is None:
+        if form_advanced.classification.data == []:
+            form_advanced.classification.data = ['All']
+        if form_advanced.remove_classification.data is None \
+                or form_advanced.remove_classification.data == []:
             form_advanced.remove_classification.data = ''
         if form_advanced.emitted_frequency_min.data is None:
             form_advanced.emitted_frequency_min.data = float('-inf')
@@ -914,20 +913,25 @@ def query_results():
 
         buffer = []
         index = 0
-        is_all = False
+        classification_is_all = False
 
         for c in form_advanced.classification.data:
             if c == "All":
-                is_all = True
+                classification_is_all = True
             else:
                 buffer.append(c)
                 index = index + 1
 
         for i in range(index, 12):
-            if is_all:
-                buffer.append("(")
+            if classification_is_all:
+                pass
             else:
-                buffer.append("asyunujnjnghfawek")
+                buffer.append("populating_list")
+
+        # quick workaround since sqlalchemy does not take two strings equal to each other
+        # otherwise a conflict in unlensed contains lensed.
+        galaxy_lensing_flag_repeated = Galaxy.lensing_flag + Galaxy.lensing_flag
+        form_lensing_flag_repeated = form_advanced.lensing_flag.data + form_advanced.lensing_flag.data
 
         # Query displaying galaxies based on the data from form_advanced
         if form_advanced.galaxySearch.data:
@@ -946,9 +950,7 @@ def query_results():
 
             else:
                 galaxies = db.session.query(Galaxy, Line).outerjoin(Line)
-            # quick workaround since sqlalchemy does not take two strings equal to each other
-            l_flag = Galaxy.lensing_flag + Galaxy.lensing_flag
-            l_data = form_advanced.lensing_flag.data + form_advanced.lensing_flag.data
+
             # Filters in respect to galaxy parameters
             galaxies = galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (
                 Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)),
@@ -958,54 +960,56 @@ def query_results():
                                                dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
                                                Galaxy.redshift.between(form_advanced.redshift_min.data,
                                                                        form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift is None)) & (
-                                               l_flag.contains(l_data) | (Galaxy.lensing_flag is None)))
-            galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
-                buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(
-                buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(
-                buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(
-                buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(
-                buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(buffer[11]) | (
-                                               Galaxy.classification is None))
+                                                       Galaxy.redshift == None)) & (
+                                               galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag is None)))
+            # Check for classification
+            if not classification_is_all:
+                galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
+                    buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(
+                    buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(
+                    buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(
+                    buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(
+                    buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(buffer[11]) | (
+                                                   Galaxy.classification == None))
 
             galaxies = galaxies.filter(~Galaxy.classification.contains(form_advanced.remove_classification.data))
 
-            galaxies = galaxies.filter((Line.id is None) | ((Line.emitted_frequency.between(
+            galaxies = galaxies.filter((Line.id == None) | ((Line.emitted_frequency.between(
                 form_advanced.emitted_frequency_min.data, form_advanced.emitted_frequency_max.data) | (
-                                                                     Line.emitted_frequency is None)) & ((
+                                                                     Line.emitted_frequency == None)) & ((
                                                                      Line.species.contains(
                                                                          form_advanced.species.data)) | (
-                                                                         Line.species is None)) & (
+                                                                         Line.species == None)) & (
                                                                     Line.integrated_line_flux.between(
                                                                         form_advanced.integrated_line_flux_min.data,
                                                                         form_advanced.integrated_line_flux_max.data) | (
-                                                                            Line.integrated_line_flux is None)) & (
+                                                                            Line.integrated_line_flux == None)) & (
                                                                     Line.peak_line_flux.between(
                                                                         form_advanced.peak_line_flux_min.data,
                                                                         form_advanced.peak_line_flux_max.data) | (
-                                                                            Line.peak_line_flux is None)) & (
+                                                                            Line.peak_line_flux == None)) & (
                                                                     Line.line_width.between(
                                                                         form_advanced.line_width_min.data,
                                                                         form_advanced.line_width_max.data) | (
-                                                                            Line.line_width is None)) & (
+                                                                            Line.line_width == None)) & (
                                                                     Line.observed_line_frequency.between(
                                                                         form_advanced.observed_line_frequency_min.data,
                                                                         form_advanced.observed_line_frequency_max.data) | (
-                                                                            Line.observed_line_frequency is None)) & (
+                                                                            Line.observed_line_frequency == None)) & (
                                                                     Line.observed_beam_major.between(
                                                                         form_advanced.observed_beam_major_min.data,
                                                                         form_advanced.observed_beam_major_max.data) | (
-                                                                            Line.observed_beam_major is None)) & (
+                                                                            Line.observed_beam_major == None)) & (
                                                                     Line.observed_beam_minor.between(
                                                                         form_advanced.observed_beam_minor_min.data,
                                                                         form_advanced.observed_beam_minor_max.data) | (
-                                                                            Line.observed_beam_minor is None)) & (
+                                                                            Line.observed_beam_minor == None)) & (
                                                                     Line.reference.contains(
                                                                         form_advanced.reference.data) | (
-                                                                            Line.reference is None)) & (
+                                                                            Line.reference == None)) & (
                                                                     Line.detection_type.contains(
                                                                         form_advanced.detection_type.data) | (
-                                                                            Line.detection_type is None))))
+                                                                            Line.detection_type == None))))
 
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
@@ -1035,11 +1039,18 @@ def query_results():
                                                dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
                                                Galaxy.redshift.between(form_advanced.redshift_min.data,
                                                                        form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift is None)) & (
-                                               Galaxy.lensing_flag.contains(form_advanced.lensing_flag.data) | (
-                                               Galaxy.lensing_flag is None)) & (
-                                               Galaxy.classification.contains(form_advanced.classification.data) | (
-                                               Galaxy.classification is None)))
+                                                       Galaxy.redshift is None)) &
+                                       (galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag is None)))
+
+            # Check for classification
+            if not classification_is_all:
+                galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
+                    buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(
+                    buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(
+                    buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(
+                    buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(
+                    buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(
+                    buffer[11]) | (Galaxy.classification == None))
 
             galaxies = galaxies.filter((Line.emitted_frequency.between(form_advanced.emitted_frequency_min.data,
                                                                        form_advanced.emitted_frequency_max.data) | (
@@ -1207,7 +1218,7 @@ def entry_file():
                             flash("Entry " + str(row_count) + ": Classification is Mandatory")
                         row_classification = ""
                         for key, value in classification_options.items():
-                            if key.upper() in entered_classification.upper():
+                            if key in entered_classification.upper():
                                 row_classification = row_classification + ", " + value
                         row_classification = row_classification[2:]
                         if row_classification == "":

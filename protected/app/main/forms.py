@@ -66,8 +66,8 @@ class AdvancedSearchForm(FlaskForm):
     lensing_flag = SelectField(u'Gravitational Lensing',
                                choices=[('Either', 'Either'), ('Lensed', 'Lensed'), ('Unlensed', 'Unlensed')],
                                validate_choice=False)
-    classification = SelectMultipleField(u'Include Classification', choices=[('All', 'All'), (
-    'LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
+    classification = SelectMultipleField(u'Include Classification', choices=[('All', 'All'),
+                                                                             ('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
                                                                              ('SMB (Submillimeter Galaxy)',
                                                                               'SMB (Submillimeter Galaxy)'), (
                                                                              'DSFG (Dusty Star-Forming Galaxy)',
@@ -87,8 +87,8 @@ class AdvancedSearchForm(FlaskForm):
                                                                              ('BZK (BZK-Selected Galaxy)',
                                                                               'BZK (BZK-Selected Galaxy)')],
                                          validate_choice=False)
-    remove_classification = SelectField(u'Exclude Classification', choices=[('None', 'None'), (
-    'LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
+    remove_classification = SelectField(u'Exclude Classification', choices=[('None', 'None'),
+                                                                            ('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
                                                                             ('SMB (Submillimeter Galaxy)',
                                                                              'SMB (Submillimeter Galaxy)'), (
                                                                             'DSFG (Dusty Star-Forming Galaxy)',
