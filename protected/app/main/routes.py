@@ -937,10 +937,10 @@ def query_results():
         if form_advanced.galaxySearch.data:
 
             # Additional filter if radius is specified
-            if (form_advanced.right_ascension_point.data is not None) and (
-                    form_advanced.declination_point.data is not None) and (
-                    (form_advanced.radius_d.data is not None) or (form_advanced.radius_m.data is not None) or (
-                    form_advanced.radius_s.data is not None)):
+            if (form_advanced.right_ascension_point.data != None) and (
+                    form_advanced.declination_point.data != None) and (
+                    (form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (
+                    form_advanced.radius_s.data != None)):
                 distance = math.radians(
                     to_zero(form_advanced.radius_d.data) + to_zero(form_advanced.radius_m.data) / 60 + to_zero(
                         form_advanced.radius_s.data) / 3600)
@@ -961,7 +961,7 @@ def query_results():
                                                Galaxy.redshift.between(form_advanced.redshift_min.data,
                                                                        form_advanced.redshift_max.data) | (
                                                        Galaxy.redshift == None)) & (
-                                               galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag is None)))
+                                               galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag == None)))
             # Check for classification
             if not classification_is_all:
                 galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
@@ -1017,15 +1017,15 @@ def query_results():
 
             # Query displaying lines based on the data from form_advanced
         elif form_advanced.lineSearch.data:
-            if (form_advanced.right_ascension_point.data is not None) and (
-                    form_advanced.declination_point.data is not None) and (
-                    (form_advanced.radius_d.data is not None) or (form_advanced.radius_m.data is not None) or (
-                    form_advanced.radius_s.data is not None)):
+            if (form_advanced.right_ascension_point.data != None) and (
+                    form_advanced.declination_point.data != None) and (
+                    (form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (
+                    form_advanced.radius_s.data != None)):
                 distance = math.radians(
                     to_zero(form_advanced.radius_d.data) + to_zero(form_advanced.radius_m.data) / 60 + to_zero(
                         form_advanced.radius_s.data) / 3600)
-                galaxies = session.query(Galaxy, Line).outerjoin(Galaxy)
-                galaxies = within_distance(session, galaxies, form_advanced.right_ascension_point.data,
+                galaxies = db.session.query(Galaxy, Line).outerjoin(Galaxy)
+                galaxies = within_distance(galaxies, form_advanced.right_ascension_point.data,
                                            form_advanced.declination_point.data, distance=distance)
 
             else:
@@ -1039,8 +1039,8 @@ def query_results():
                                                dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
                                                Galaxy.redshift.between(form_advanced.redshift_min.data,
                                                                        form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift is None)) &
-                                       (galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag is None)))
+                                                       Galaxy.redshift == None)) &
+                                       (galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag == None)))
 
             # Check for classification
             if not classification_is_all:
@@ -1052,33 +1052,35 @@ def query_results():
                     buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(
                     buffer[11]) | (Galaxy.classification == None))
 
+            galaxies = galaxies.filter(~Galaxy.classification.contains(form_advanced.remove_classification.data))
+
             galaxies = galaxies.filter((Line.emitted_frequency.between(form_advanced.emitted_frequency_min.data,
                                                                        form_advanced.emitted_frequency_max.data) | (
-                                                Line.emitted_frequency is None)) & (
+                                                Line.emitted_frequency == None)) & (
                                                (Line.species.contains(form_advanced.species.data)) | (
-                                               Line.species is None)) & (Line.integrated_line_flux.between(
+                                               Line.species == None)) & (Line.integrated_line_flux.between(
                 form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (
-                                                                                 Line.integrated_line_flux is None)) & (
+                                                                                 Line.integrated_line_flux == None)) & (
                                                Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data,
                                                                            form_advanced.peak_line_flux_max.data) | (
-                                                       Line.peak_line_flux is None)) & (
+                                                       Line.peak_line_flux == None)) & (
                                                Line.line_width.between(form_advanced.line_width_min.data,
                                                                        form_advanced.line_width_max.data) | (
-                                                       Line.line_width is None)) & (
+                                                       Line.line_width == None)) & (
                                                Line.observed_line_frequency.between(
                                                    form_advanced.observed_line_frequency_min.data,
                                                    form_advanced.observed_line_frequency_max.data) | (
-                                                       Line.observed_line_frequency is None)) & (
+                                                       Line.observed_line_frequency == None)) & (
                                                Line.observed_beam_major.between(
                                                    form_advanced.observed_beam_major_min.data,
                                                    form_advanced.observed_beam_major_max.data) | (
-                                                       Line.observed_beam_major is None)) & (
+                                                       Line.observed_beam_major == None)) & (
                                                Line.observed_beam_minor.between(
                                                    form_advanced.observed_beam_minor_min.data,
                                                    form_advanced.observed_beam_minor_max.data) | (
-                                                       Line.observed_beam_minor is None)) & (
+                                                       Line.observed_beam_minor == None)) & (
                                                Line.reference.contains(form_advanced.reference.data) | (
-                                               Line.reference is None)))
+                                               Line.reference == None)))
 
             galaxies = galaxies.order_by(Galaxy.name).all()
 
@@ -1140,10 +1142,10 @@ def entry_file():
         else:
             validated = True
             row_count = 0
-            keys = COL_NAMES.keys()
-            key_list = list(keys)
+            values = COL_NAMES.values()
+            value_list = list(values)
             missing_column = []
-            for k in key_list:
+            for k in value_list:
                 if k not in data[0]:
                     validated = False
                     missing_column.append(k)
@@ -2392,15 +2394,37 @@ def convert_to_CSV(table, identifier):
     elif table == "Empty":
         f = open('sample.csv', 'w')
         out = csv.writer(f)
-        out.writerow(
-            ['name', 'right_ascension', 'declination', 'coordinate_system', 'lensing_flag', 'classification', 'g_notes',
-             'emitted_frequency', 'species', 'integrated_line_flux', 'integrated_line_flux_uncertainty_positive',
-             'integrated_line_flux_uncertainty_negative', 'peak_line_flux', 'peak_line_flux_uncertainty_positive',
-             'peak_line_flux_uncertainty_negative', 'line_width', 'line_width_uncertainty_positive',
-             'line_width_uncertainty_negative', 'freq_type', 'observed_line_frequency',
-             'observed_line_frequency_uncertainty_positive', 'observed_line_frequency_uncertainty_negative',
-             'detection_type', 'observed_beam_major', 'observed_beam_minor', 'observed_beam_angle', 'reference',
-             'l_notes'])
+        out.writerow([
+            COL_NAMES['name'],
+            COL_NAMES['right_ascension'],
+            COL_NAMES['declination'],
+            COL_NAMES['coordinate_system'],
+            COL_NAMES['lensing_flag'],
+            COL_NAMES['classification'],
+            COL_NAMES['g_notes'],
+            COL_NAMES['right_ascension'],
+            COL_NAMES['declination'],
+            COL_NAMES['emitted_frequency'],
+            COL_NAMES['species'],
+            COL_NAMES['integrated_line_flux'],
+            COL_NAMES['integrated_line_flux_uncertainty_positive'],
+            COL_NAMES['integrated_line_flux_uncertainty_negative'],
+            COL_NAMES['peak_line_flux'],
+            COL_NAMES['peak_line_flux_uncertainty_positive'],
+            COL_NAMES['peak_line_flux_uncertainty_negative'],
+            COL_NAMES['line_width'],
+            COL_NAMES['line_width_uncertainty_positive'],
+            COL_NAMES['line_width_uncertainty_negative'],
+            COL_NAMES['observed_line_frequency'],
+            COL_NAMES['observed_line_frequency_uncertainty_positive'],
+            COL_NAMES['observed_line_frequency_uncertainty_negative'],
+            COL_NAMES['detection_type'],
+            COL_NAMES['observed_beam_major'],
+            COL_NAMES['observed_beam_minor'],
+            COL_NAMES['observed_beam_angle'],
+            COL_NAMES['reference'],
+            COL_NAMES['l_notes']
+        ])
         f.close()
         with open('./sample.csv', 'r') as file:
             sample_csv = file.read()

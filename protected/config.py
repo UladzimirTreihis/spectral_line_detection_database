@@ -79,41 +79,12 @@ class TestingConfig(Config):
     TESTING = True
 
 
-COL_NAMES_2 = {
-    'name':'Name of the galaxy',
-    'right_ascension' : 'Right ascension',
-    'declination':'Declination',
-    'coordinate_system':'Coordinate System',
-    'redshift':'Redshift of the galaxy',
-    'lensing_flag':'Lensing flag (l/u)',
-    'classification':'Classification',
-    'g_notes':'Notes',
-    'j_upper':'J_upper',
-    'integrated_line_flux':'Integrated line flux',
-    'integrated_line_flux_uncertainty_positive':'Integrated line flux positive uncertainty',
-    'integrated_line_flux_uncertainty_negative':'Integrated line flux negative uncertainty',
-    'peak_line_flux':'Peak line flux',
-    'peak_line_flux_uncertainty_positive':'Peak line flux positive uncertainty',
-    'peak_line_flux_uncertainty_negative':'Peak line flux negative uncertainty',
-    'line_width':'Line width',
-    'line_width_uncertainty_positive':'Line width positive uncertainty',
-    'line_width_uncertainty_negative':'Line width negative uncertainty',
-    'freq_type':'Frequency type (z/f)',
-    'observed_line_frequency':'Observed line frequency/redshift',
-    'observed_line_frequency_uncertainty_positive':'Observed line frequency/redshift positive uncertainty',
-    'observed_line_frequency_uncertainty_negative':'Observed line frequency/redshift negative uncertainty',
-    'detection_type':'Detection type (Single Dish/Interferometric)',
-    'observed_beam_major':'Observed Beam Major',
-    'observed_beam_minor':'Observed Beam Minor',
-    'observed_beam_angle':'Observed Beam Angle',
-    'reference':'Reference',
-    'l_notes':'Notes'
-}
 COL_NAMES = {
     'name':'name',
     'right_ascension' : 'right_ascension',
     'declination':'declination',
     'coordinate_system':'coordinate_system',
+    'redshift': 'Redshift of the galaxy',
     'lensing_flag':'lensing_flag',
     'classification':'classification',
     'g_notes':'g_notes',
