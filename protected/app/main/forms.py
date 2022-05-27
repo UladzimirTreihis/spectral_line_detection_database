@@ -276,7 +276,7 @@ class EditLineForm(FlaskForm):
                               render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
     emitted_frequency = FloatField('Emitted Frequency', validators=[DataRequired(), NumberRange(min=0)])
-    species = SelectField(u'Select Species', choices=[('CO', 'CO'), ('Other', 'Other')], validators=[DataRequired()])
+    species = SelectField(u'Select Species', choices=species, validators=[DataRequired()])
     integrated_line_flux = FloatField('Integrated Line Flux', validators=[DataRequired(), NumberRange(min=0)])
     integrated_line_flux_uncertainty_positive = FloatField('Integrated Line Flux Positive Uncertainty',
                                                            validators=[DataRequired(), NumberRange(min=0)])

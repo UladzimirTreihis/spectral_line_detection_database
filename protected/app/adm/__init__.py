@@ -603,6 +603,9 @@ def resolve(main_id, other_id, type, relationship):
 
         return redirect("/posts")
 
+    else:
+        return redirect(url_for('main.main'))
+
 
 # Do we need this??? Can we not pass it as a list to /posts from the front-end?
 @bp.route('/post_delete/<id>')
