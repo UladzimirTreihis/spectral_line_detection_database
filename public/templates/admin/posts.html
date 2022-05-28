@@ -67,22 +67,24 @@
             <b class="caret"></b>
         </a>
         <ul class="dropdown-menu">
+
+
             <li>
                 <button onclick="deleteFromIdList()" 
-                        title="Delete records"> Delete <a href="http://127.0.0.1:5000/posts/"></a>
+                        title="Delete records"> Delete <a id="link"></a>
                 </button>
             </li>
             <li>
                 <button onclick="approveFromIdList()" 
-                        title="Approve records"> Approve <a href="http://127.0.0.1:5000/posts/"></a>
+                        title="Approve records"> Approve <a id="link"></a>
                 </button>
-            </li>
-            <li>
-                <button onclick="checkFromIdList()" 
-                        title="Approve records"> Check <a href="http://127.0.0.1:5000/posts/"></a>
-                </button>
-            </li>
         </ul>
+
+        <script>
+            var current_url = document.URL;
+            document.getElementById("link").setAttribute("href",current_url);
+         </script>
+
     </li>
 </ul>
 

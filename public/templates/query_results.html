@@ -5,7 +5,33 @@
 {% endblock %}
 
 {% block script %}
+    <script src=
+"https://code.jquery.com/jquery-3.2.1.slim.min.js" 
+                integrity=
+"sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" 
+                crossorigin="anonymous">
+    </script>
+    <script src=
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+                integrity=
+"sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+                crossorigin="anonymous">
+    </script>
+    <script src=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+                integrity=
+"sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+                crossorigin="anonymous">
+    </script>
+    <script src=
+"https://code.jquery.com/jquery-3.5.1.js"
+                integrity=
+"sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
+                crossorigin="anonymous">
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -24,6 +50,7 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
       </p>
+       <p>Position search within a range:</p>
       <div style="display: flex;">
          <p>
             {{ form_advanced.right_ascension_min.label }}<br>
@@ -56,22 +83,25 @@
             {% endfor %}
          </p>
       </div>
-      <p>Alternatively, you can search within a radius</p>
+      <p>Position search within a radius:</p>
       <div style="display: flex;">
          <p>
-            {{ form_advanced.right_ascension_point.label }}<br>
+            Center {{ form_advanced.right_ascension_point.label }}<br>
             {{ form_advanced.right_ascension_point(size=20) }}<br>
             {% for error in form_advanced.right_ascension_point.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
          <p>
-            {{ form_advanced.declination_point.label }}<br>
+            Center {{ form_advanced.declination_point.label }}<br>
             {{ form_advanced.declination_point(size=20) }}<br>
             {% for error in form_advanced.declination_point.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
+      </div>
+      <p>Radius:</p>
+      <div style="display: flex;">
          <p>
             {{ form_advanced.radius_d.label }}<br>
             {{ form_advanced.radius_d(size=3) }}<br>
@@ -113,17 +143,41 @@
       </div>
       <p>
             {{ form_advanced.lensing_flag.label }}<br>
-            {{ form_advanced.lensing_flag(size=3) }}<br>
+            {{ form_advanced.lensing_flag }}<br>
             {% for error in form_advanced.lensing_flag.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
       </p>
+      <p>
+         {{ form_advanced.classification.label }}<br>
+         {{ form_advanced.classification }}<br>
+         {% for error in form_advanced.classification.errors %}
+         <span style="color: red;">[{{error}}]</span>
+         {% endfor %}
+
+   </p>
+   <p>
+      {{ form_advanced.remove_classification.label }}<br>
+      {{ form_advanced.remove_classification }}<br>
+      {% for error in form_advanced.classification.errors %}
+      <span style="color: red;">[{{error}}]</span>
+      {% endfor %}
+
+</p>
+      <br>
       <br>
       </div>
       <div class = "entry">
-      <p>Here you can additionality sort galaxies that have at least one line that falls under the specified Line parameters</p>
+      <p>Here you can additionally sort galaxies that have at least one line that falls under the specified Line parameters</p>
       <div style="display: flex;">
+         <p>
+            {{ form_advanced.species.label }}<br>
+            {{ form_advanced.species }}<br>
+            {% for error in form_advanced.species.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
          <p>
             {{ form_advanced.emitted_frequency_min.label }}<br>
             {{ form_advanced.emitted_frequency_min(size=20) }}<br>
@@ -138,10 +192,19 @@
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
+      </div>
+      <div style="display: flex;">
          <p>
-            {{ form_advanced.species.label }}<br>
-            {{ form_advanced.species(size=3) }}<br>
-            {% for error in form_advanced.species.errors %}
+            {{ form_advanced.observed_line_frequency_min.label }}<br>
+            {{ form_advanced.observed_line_frequency_min(size=20) }}<br>
+            {% for error in form_advanced.observed_line_frequency_min.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+         </p>
+         <p>
+            {{ form_advanced.observed_line_frequency_max.label }}<br>
+            {{ form_advanced.observed_line_frequency_max(size=20) }}<br>
+            {% for error in form_advanced.observed_line_frequency_max.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
@@ -194,25 +257,10 @@
             {% endfor %}
          </p>
       </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.observed_line_frequency_min.label }}<br>
-            {{ form_advanced.observed_line_frequency_min(size=20) }}<br>
-            {% for error in form_advanced.observed_line_frequency_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.observed_line_frequency_max.label }}<br>
-            {{ form_advanced.observed_line_frequency_max(size=20) }}<br>
-            {% for error in form_advanced.observed_line_frequency_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
+
       <p>
          {{ form_advanced.detection_type.label }}<br>
-         {{ form_advanced.detection_type(size=3) }}<br>
+         {{ form_advanced.detection_type }}<br>
          {% for error in form_advanced.detection_type.errors %}
          <span style="color: red;">[{{ error }}]</span>
          {% endfor %}
@@ -283,7 +331,6 @@
 <table class = "table" id = "Galaxy">
    <thead>
       <tr>
-         <th>ID</th>
          <th>Name</th>
          <th>Right Ascension</th>
          <th>Declination</th>
@@ -300,7 +347,6 @@
          {% set l = element[1] %}  
          {% set g = element[0] %}
          <tr>
-            <td>{{ g.id }}</td>
             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ g.right_ascension }}</td>
             <td>{{ g.declination }}</td>
@@ -308,38 +354,39 @@
             <td>{{ g.redshift }}</td>
             <td>{{ g.lensing_flag }}</td>
             <td>{{ g.classification }}</td>
-            <td>{{ g.notes }}</td>
-         </tr>
+            <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
+            <td class = "notes" style = "display:none"> {{g.notes}} </td>          </tr>
       {% endfor %}
    </tbody>
 </table>
 
 {% endif %}
 {% if form_advanced.lineSearch.data %}
-<p>IT WAS A LINE SEARCH</p>
 <table class = "table" id = "Line">
    <thead>
       <tr>
          <th>Galaxy Name</th>
-         <th>J Upper</th>
-         <th>Integrated Line Flux</th>
-         <th>Integrated Line Flux Positive Uncertainty</th>
-         <th>Integrated Line Flux Negative Uncertainty</th>
-         <th>Peak Line Flux</th>
-         <th>Peak Line Flux Positive Uncertainty</th>
-         <th>Peak Line Flux Negative Uncertainty</th>
-         <th>Line Width</th>
-         <th>Line Width Positive Uncertainty</th>
-         <th>Line Width Negative Uncertainty</th>
-         <th>Observed Line Frequency</th>
-         <th>Observed Line Frequency Positive Uncertainty</th>
-         <th>Observed Line Frequency Negative Uncertainty</th>
-         <th>Detection Type</th>
-         <th>Observed Beam Major</th>
-         <th>Observed Beam Minor</th>
-         <th>Observed Beam Angle</th>
-         <th>Reference</th>
-         <th>Notes</th>
+         <th>\( Species \)</th>
+         <th>\( f_{rest} \) \( (GHz) \)</th>
+         <th>\( S \Delta v \) \((Jy \ km \ s^{-1}) \)</th>
+         <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+         <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+         <th>\( S_{max} \) \( (mJy) \)</th>
+         <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
+         <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+         <th>\( FWHM \) \( (kms^{-1}) \)</th>
+         <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
+         <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
+         <th>\( f_{obs} \) \( (GHz) \)</th>
+         <th>\( +\sigma_{f_{obs}} \) \( (GHz) \)</th>
+         <th>\( -\sigma_{f_{obs}} \) \( (GHz) \)</th>
+         <th>\( Telescope \) \( Type \)</th>
+         <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
+         <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
+         <th>\( Beam \ P.A. \) \( (*) \)</th>
+         <th>\( Reference \)</th>
+         <th>\( Notes \)</th>
+         <th style = "display: none">\( Text \) </th>
       </tr>
    </thead>
    
@@ -349,7 +396,8 @@
          {% set g = element[0] %}
          <tr>
             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-            <td>{{ l.j_upper }}</td>
+            <td>{{ l.species }}</td>
+            <td>{{ l.emitted_frequency }}</td>
             <td>{{ l.integrated_line_flux }}</td>
             <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
             <td>
@@ -391,10 +439,54 @@
             <td>{{ l.observed_beam_minor }}</td>
             <td>{{ l.observed_beam_angle }}</td>
             <td>{{ l.reference }}</td>
-            <td>{{ l.notes }}</td>
+            <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
+            <td class = "notes" style = "display:none"> {{l.notes}} </td> 
          </tr>
       {% endfor %}
    </tbody>
 </table> 
 {% endif %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+    <script>
+        $(function () {
+            $(".gfgselect").click(function () {
+                var notes = $(this).parents("tr").find(".notes").text();
+                var p = "";
+                p += "<p> " + notes + "</p>";
+                $("#divGFG").empty();
+                $("#divGFG").append(p);
+            });
+        });
+    </script>
+    <div class="modal fade" 
+         id="gfgmodal"
+         tabindex="-1"
+         role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title"
+                        id="gfgmodallabel">
+                      Notes</h2>
+                    <button type="button" 
+                            class="close"
+                            data-dismiss="modal" 
+                            aria-label="Close">
+                        <span aria-hidden="true">
+                          ×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="GFGclass" 
+                         id="divGFG"></div>
+                    <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-secondary" 
+                                data-dismiss="modal">
+                          Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

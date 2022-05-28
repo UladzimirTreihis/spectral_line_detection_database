@@ -4,10 +4,10 @@ from .data import *
 
 __all__ = [
     'db',
-    #'Galaxy',
-    #'TempGalaxy',
-    #'Line',
-    #'TempLine',
+    'Galaxy',
+    'TempGalaxy',
+    'Line',
+    'TempLine',
     'User',
     'Role',
     'UserRoles',

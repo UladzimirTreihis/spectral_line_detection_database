@@ -21,7 +21,16 @@ __pycache__
 
 # Installer logs
 pip-log.txt
+record.log
 
-
+#PyCharm
+.idea
+.flaskenv
 .venv
 app.db
+
+#Config
+#config.json
+
+#Logs
+record.log

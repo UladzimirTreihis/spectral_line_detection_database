@@ -47,8 +47,24 @@
         </p>
         <p>
             {{ form.classification.label }}<br>
-            {{ form.classification }}<br>
+            {{ form.classification (size = 100)}} <br>
             {% for error in form.classification.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.remove_classification.label }}<br>
+            {{ form.remove_classification}} <br>
+            {% for error in form.remove_classification.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+
+        </p>
+        <p>
+            {{ form.add_classification.label }}<br>
+            {{ form.add_classification}} <br>
+            {% for error in form.add_classification.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
@@ -61,7 +77,7 @@
             {% endfor %}
         </p>
         <p>{{ form.submit() }}</p>
-        <p> If you want to add a line to this galaxy, you must first click Submit to add the galaxy to the database. Then click the Add a New Line to this Galaxy button. </p>
+        <p> If you want to add a line to this galaxy, you must first click "Submit" to add the galaxy to the database. Then click the Add a New Line to this Galaxy button. </p>
         <p>{{ form.new_line() }}
     </form>
 {% endblock %}
