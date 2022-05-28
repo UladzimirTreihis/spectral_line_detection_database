@@ -717,6 +717,22 @@ def home():
     return render_template("/home.html")
 
 
+@bp.route("/contact_us", methods=['GET'])
+def contact_us():
+    """
+    Contact us page route.
+
+    On GET:
+        Parameters:
+            /contact_us
+
+        Returns:
+            contact_us.html
+    """
+
+    return render_template("/contact_us.html")
+
+
 @bp.route('/user/<username>', methods=['GET'])
 @login_required
 def user(username):
