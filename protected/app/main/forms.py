@@ -6,6 +6,22 @@ from config import dec_reg_exp, ra_reg_exp
 from app.models import User
 from species import species
 
+classification_choices = [('LBG', 'LBG (Lyman Break Galaxy)'),
+                          ('MS', 'MS (Main Sequence Galaxy)'),
+                          ('SMG', 'SMG (Submillimeter Galaxy)'),
+                          ('DSFG', 'DSFG (Dusty Star-Forming Galaxy)'),
+                          ('SB', 'SB (Starburst)'),
+                          ('AGN', 'AGN (Active Galactic Nucleus)'),
+                          ('QSO', 'QSO (Optically Bright AGN)'),
+                          ('Quasar', 'Quasar (Optical and Radio Bright AGN)'),
+                          ('RQ-AGN', 'RQ-AGN (Radio-Quiet AGN)'),
+                          ('RL-AGN', 'RL-AGN (Radio-Loud AGN)'),
+                          ('RG', 'RG (Radio Galaxy)'),
+                          ('BzK', 'BzK (BzK-selected Galaxy)')]
+
+classification_choices_w_none = [('None', 'None')] + classification_choices
+classification_choices_w_all = [('All', 'All')] + classification_choices
+
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -66,47 +82,11 @@ class AdvancedSearchForm(FlaskForm):
     lensing_flag = SelectField(u'Gravitational Lensing',
                                choices=[('Either', 'Either'), ('Lensed', 'Lensed'), ('Unlensed', 'Unlensed')],
                                validate_choice=False)
-    classification = SelectMultipleField(u'Include Classification', choices=[('All', 'All'),
-                                                                             ('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
-                                                                             ('SMB (Submillimeter Galaxy)',
-                                                                              'SMB (Submillimeter Galaxy)'), (
-                                                                             'DSFG (Dusty Star-Forming Galaxy)',
-                                                                             'DSFG (Dusty Star-Forming Galaxy)'),
-                                                                             ('SB (Starburst)', 'SB (Starburst)'), (
-                                                                             'AGN (Contains a Known Active Galactic Nucleus)',
-                                                                             'AGN (Contains a Known Active Galactic Nucleus)'),
-                                                                             ('QSO (Optically Bright AGN)',
-                                                                              'QSO (Optically Bright AGN)'), (
-                                                                             'Quasar (Optical and Radio Bright AGN)',
-                                                                             'Quasar (Optical and Radio Bright AGN)'), (
-                                                                             'RQ-AGN (Radio-Quiet AGN)',
-                                                                             'RQ-AGN (Radio-Quiet AGN)'), (
-                                                                             'RL-AGN (Radio-Loud AGN)',
-                                                                             'RL-AGN (Radio-Loud AGN)'),
-                                                                             ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'),
-                                                                             ('BZK (BZK-Selected Galaxy)',
-                                                                              'BZK (BZK-Selected Galaxy)')],
+    classification = SelectMultipleField(u'Include Classification',
+                                         choices=classification_choices_w_all,
                                          validate_choice=False)
-    remove_classification = SelectField(u'Exclude Classification', choices=[('None', 'None'),
-                                                                            ('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'), ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
-                                                                            ('SMB (Submillimeter Galaxy)',
-                                                                             'SMB (Submillimeter Galaxy)'), (
-                                                                            'DSFG (Dusty Star-Forming Galaxy)',
-                                                                            'DSFG (Dusty Star-Forming Galaxy)'),
-                                                                            ('SB (Starburst)', 'SB (Starburst)'), (
-                                                                            'AGN (Contains a Known Active Galactic Nucleus)',
-                                                                            'AGN (Contains a Known Active Galactic Nucleus)'),
-                                                                            ('QSO (Optically Bright AGN)',
-                                                                             'QSO (Optically Bright AGN)'), (
-                                                                            'Quasar (Optical and Radio Bright AGN)',
-                                                                            'Quasar (Optical and Radio Bright AGN)'), (
-                                                                            'RQ-AGN (Radio-Quiet AGN)',
-                                                                            'RQ-AGN (Radio-Quiet AGN)'), (
-                                                                            'RL-AGN (Radio-Loud AGN)',
-                                                                            'RL-AGN (Radio-Loud AGN)'),
-                                                                            ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'),
-                                                                            ('BZK (BZK-Selected Galaxy)',
-                                                                             'BZK (BZK-Selected Galaxy)')],
+    remove_classification = SelectField(u'Exclude Classification',
+                                        choices=classification_choices_w_none,
                                         validate_choice=False)
 
     # Line data
@@ -115,8 +95,10 @@ class AdvancedSearchForm(FlaskForm):
     emitted_frequency_max = FloatField('Emitted Frequency (GHz) max:', validators=[Optional(), NumberRange(min=0)])
     species = SelectField(u'Select Species', choices=species,
                           validate_choice=False)
-    integrated_line_flux_min = FloatField('Integrated Line Flux (Jy*km/s) min:', validators=[Optional(), NumberRange(min=0)])
-    integrated_line_flux_max = FloatField('Integrated Line Flux (Jy*km/s) max:', validators=[Optional(), NumberRange(min=0)])
+    integrated_line_flux_min = FloatField('Integrated Line Flux (Jy*km/s) min:',
+                                          validators=[Optional(), NumberRange(min=0)])
+    integrated_line_flux_max = FloatField('Integrated Line Flux (Jy*km/s) max:',
+                                          validators=[Optional(), NumberRange(min=0)])
     peak_line_flux_min = FloatField('Peak Line Flux (mJy) min:', validators=[Optional(), NumberRange(min=0)])
     peak_line_flux_max = FloatField('Peak Line Flux (mJy) max:', validators=[Optional(), NumberRange(min=0)])
     line_width_min = FloatField('Line FWHM (km/s) min:', validators=[Optional(), NumberRange(min=0)])
@@ -130,10 +112,14 @@ class AdvancedSearchForm(FlaskForm):
     detection_type = SelectField(u'Telescope Type',
                                  choices=[('Either', 'Either'), ('Single Dish', 'Single Dish'),
                                           ('Interferometric', 'Interferometric')], validate_choice=False)
-    observed_beam_major_min = FloatField('Beam Major Axis FWHM (arcsec) min:', validators=[Optional(), NumberRange(min=0)])
-    observed_beam_major_max = FloatField('Beam Major Axis FWHM (arcsec) max:', validators=[Optional(), NumberRange(min=0)])
-    observed_beam_minor_min = FloatField('Beam Minor Axis FWHM (arcsec) min:', validators=[Optional(), NumberRange(min=0)])
-    observed_beam_minor_max = FloatField('Beam Minor Axis FWHM (arcsec) max:', validators=[Optional(), NumberRange(min=0)])
+    observed_beam_major_min = FloatField('Beam Major Axis FWHM (arcsec) min:',
+                                         validators=[Optional(), NumberRange(min=0)])
+    observed_beam_major_max = FloatField('Beam Major Axis FWHM (arcsec) max:',
+                                         validators=[Optional(), NumberRange(min=0)])
+    observed_beam_minor_min = FloatField('Beam Minor Axis FWHM (arcsec) min:',
+                                         validators=[Optional(), NumberRange(min=0)])
+    observed_beam_minor_max = FloatField('Beam Minor Axis FWHM (arcsec) max:',
+                                         validators=[Optional(), NumberRange(min=0)])
 
     reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Optional()])
 
@@ -156,20 +142,7 @@ class AddGalaxyForm(FlaskForm):
                                choices=[('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')],
                                validators=[DataRequired()])
     classification = SelectMultipleField(u'Classification (Press shift to select all that apply)',
-                                         choices=[('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'),
-                                                  ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
-                                                  ('SMG (Submillimeter Galaxy)', 'SMG (Submillimeter Galaxy)'), (
-                                                  'DSFG (Dusty Star-Forming Galaxy)',
-                                                  'DSFG (Dusty Star-Forming Galaxy)'),
-                                                  ('SB (Starburst)', 'SB (Starburst)'),
-                                                  ('AGN (Active Galactic Nucleus)', 'AGN (Active Galactic Nucleus)'),
-                                                  ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), (
-                                                  'Quasar (Optical and Radio Bright AGN)',
-                                                  'Quasar (Optical and Radio Bright AGN)'),
-                                                  ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'),
-                                                  ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'),
-                                                  ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'),
-                                                  ('BzK (BzK-selected Galaxy)', 'BzK (BzK-selected Galaxy)')])
+                                         choices=classification_choices)
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')
     new_line = SubmitField('Add A New Line to this Galaxy')
@@ -186,36 +159,9 @@ class EditGalaxyForm(FlaskForm):
                                validators=[DataRequired()])
     classification = StringField('Current Classification', validators=[DataRequired()])
     remove_classification = SelectMultipleField(u'Remove Classification (Press shift to select all that apply)',
-                                                choices=[('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'),
-                                                         ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
-                                                         ('SMG (Submillimeter Galaxy)', 'SMG (Submillimeter Galaxy)'), (
-                                                         'DSFG (Dusty Star-Forming Galaxy)',
-                                                         'DSFG (Dusty Star-Forming Galaxy)'),
-                                                         ('SB (Starburst)', 'SB (Starburst)'), (
-                                                         'AGN (Active Galactic Nucleus)',
-                                                         'AGN (Active Galactic Nucleus)'),
-                                                         ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), (
-                                                         'Quasar (Optical and Radio Bright AGN)',
-                                                         'Quasar (Optical and Radio Bright AGN)'),
-                                                         ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'),
-                                                         ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'),
-                                                         ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'),
-                                                         ('BzK (BzK-selected Galaxy)', 'BzK (BzK-selected Galaxy)')])
+                                                choices=classification_choices)
     add_classification = SelectMultipleField(u'Add Classification (Press shift to select all that apply)',
-                                             choices=[('LBG (Lyman Break Galaxy)', 'LBG (Lyman Break Galaxy)'),
-                                                      ('MS (Main Sequence Galaxy)', 'MS (Main Sequence Galaxy)'),
-                                                      ('SMG (Submillimeter Galaxy)', 'SMG (Submillimeter Galaxy)'), (
-                                                      'DSFG (Dusty Star-Forming Galaxy)',
-                                                      'DSFG (Dusty Star-Forming Galaxy)'),
-                                                      ('SB (Starburst)', 'SB (Starburst)'), (
-                                                      'AGN (Active Galactic Nucleus)', 'AGN (Active Galactic Nucleus)'),
-                                                      ('QSO (Optically Bright AGN)', 'QSO (Optically Bright AGN)'), (
-                                                      'Quasar (Optical and Radio Bright AGN)',
-                                                      'Quasar (Optical and Radio Bright AGN)'),
-                                                      ('RQ-AGN (Radio-Quiet AGN)', 'RQ-AGN (Radio-Quiet AGN)'),
-                                                      ('RL-AGN (Radio-Loud AGN)', 'RL-AGN (Radio-Loud AGN)'),
-                                                      ('RG (Radio Galaxy)', 'RG (Radio Galaxy)'),
-                                                      ('BzK (BzK-selected Galaxy)', 'BzK (BzK-selected Galaxy)')])
+                                             choices=classification_choices)
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')
     new_line = SubmitField('Add Line to this Galaxy')
@@ -235,7 +181,8 @@ class AddLineForm(FlaskForm):
     species = SelectField(u'Select Species', choices=species, validators=[DataRequired()])
     right_ascension = StringField('Right Ascension', validators=[DataRequired()])
     declination = StringField('Declination', validators=[DataRequired()])
-    integrated_line_flux = FloatField('Integrated Line Flux (in Jy*km/s)', validators=[DataRequired(), NumberRange(min=0)])
+    integrated_line_flux = FloatField('Integrated Line Flux (in Jy*km/s)',
+                                      validators=[DataRequired(), NumberRange(min=0)])
     integrated_line_flux_uncertainty_positive = FloatField('Integrated Line Flux Uncertainty (in Jy*km/s)',
                                                            validators=[DataRequired(), NumberRange(min=0)])
     integrated_line_flux_uncertainty_negative = FloatField('Integrated Line Flux Negative Uncertainty',
@@ -250,7 +197,8 @@ class AddLineForm(FlaskForm):
                                                  validators=[Optional(), NumberRange(min=0)])
     line_width_uncertainty_negative = FloatField('Line FWHM Negative Uncertainty',
                                                  validators=[Optional(), NumberRange(min=0)])
-    freq_type = SelectField(u'Enter line center as redshift (z) or observed frequency (f in units of GHz)', choices=[('z', 'z'), ('f', 'f')],
+    freq_type = SelectField(u'Enter line center as redshift (z) or observed frequency (f in units of GHz)',
+                            choices=[('z', 'z'), ('f', 'f')],
                             validators=[DataRequired()])
     observed_line_frequency = FloatField('Observed Frequency/Redshift', validators=[Optional(), NumberRange(min=0)])
     observed_line_frequency_uncertainty_positive = FloatField('Observed Frequency/Redshift Uncertainty (same units)',

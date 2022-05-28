@@ -36,7 +36,12 @@ from app.main.forms import (
 )
 import csv
 from sqlalchemy import func
-from config import COL_NAMES, ra_reg_exp, dec_reg_exp
+from config import (
+    COL_NAMES,
+    COL_NAMES_WO_REDSHIFT,
+    ra_reg_exp,
+    dec_reg_exp
+)
 from species import *
 from io import TextIOWrapper
 from flask_security import (
@@ -1146,7 +1151,7 @@ def entry_file():
         else:
             validated = True
             row_count = 0
-            values = COL_NAMES.values()
+            values = COL_NAMES_WO_REDSHIFT.values()
             value_list = list(values)
             missing_column = []
             for k in value_list:
@@ -1225,9 +1230,8 @@ def entry_file():
                         row_classification = ""
                         for key, value in classification_options.items():
                             if key in entered_classification.upper():
-                                row_classification = row_classification + ", " + value
-                        row_classification = row_classification[2:]
-                        if row_classification == "":
+                                row_classification = row_classification + "," + key
+                        if row_classification == ",":
                             validated = False
                             flash("Entry " + str(row_count) + ": Please enter Correction Classifications")
                         if row_right_ascension == "":
@@ -1351,7 +1355,7 @@ def entry_file():
                 row_classification = ""
                 for key, value in classification_options.items():
                     if key in entered_classification:
-                        row_classification = row_classification + ", " + value
+                        row_classification = row_classification + ", " + key
                 row_classification = row_classification[2:]
                 row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
                 row_species = row[COL_NAMES['species']].strip()
@@ -1594,8 +1598,10 @@ def galaxy_entry_form():
                 return render_template('galaxy_entry_form.html', title='Galaxy Entry Form', form=form,
                                        galaxies=galaxies, same_temp_exists=same_temp_exists,
                                        another_exists=another_exists)
+
             # Otherwise, if the galaxy was not found in db, submit.
-            classifications = ' '.join([elem + ", " for elem in form.classification.data])[:-2]
+            # Parse the list with full classification names into a simple string like "QSO,AGN"
+            classifications = ''.join([re.sub(r' [(][^)]*[)]', '', elem) + "," for elem in form.classification.data])[:-1]
             galaxy = TempGalaxy(name=form.name.data, right_ascension=ra, declination=dec,
                                 coordinate_system=form.coordinate_system.data, classification=classifications,
                                 lensing_flag=form.lensing_flag.data, notes=form.notes.data,
@@ -1661,10 +1667,10 @@ def galaxy_edit_form(id):
     """
 
     galaxy = db.session.query(Galaxy).filter(Galaxy.id == id).first()
-    classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-1]
-    classlist = galaxy.classification.split(', ')
-    for c in classlist:
-        c = c[1:]
+    #classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-1]
+    classifications = galaxy.classification
+    classification_list = galaxy.classification.split(',')
+
     form = EditGalaxyForm(name=galaxy.name, coordinate_system=galaxy.coordinate_system,
                           lensing_flag=galaxy.lensing_flag, classification=classifications, notes=galaxy.notes)
     form.classification.data = classifications
@@ -1676,16 +1682,16 @@ def galaxy_edit_form(id):
             removeclass = form.remove_classification.data
             addclass = form.add_classification.data
             for element in removeclass:
-                if element in classlist:
-                    classlist.remove(element)
+                if element in classification_list:
+                    classification_list.remove(element)
                 else:
                     flash(element + " was not in the existing list")
             for element in addclass:
-                if element not in classlist:
-                    classlist.append(element)
+                if element not in classification_list:
+                    classification_list.append(element)
                 else:
                     flash(element + " already exists")
-            newclasslist = ' '.join([str(elem) + ", " for elem in classlist])[:-2]
+            newclasslist = ''.join([str(elem) + "," for elem in classification_list])[:-1]
             if galaxy.name != form.name.data:
                 changes = changes + 'Initial Name: ' + galaxy.name + ' New Name: ' + form.name.data
             if galaxy.coordinate_system != form.coordinate_system.data:
@@ -1706,17 +1712,16 @@ def galaxy_edit_form(id):
                     elif form.notes.data == None:
                         changes = changes + 'Initial Notes: ' + galaxy.notes + 'New Notes: ' + "None"
 
-            galaxy = EditGalaxy(name=form.name.data, right_ascension=galaxy.right_ascension,
+            editgalaxy = EditGalaxy(name=form.name.data, right_ascension=galaxy.right_ascension,
                                 declination=galaxy.declination, coordinate_system=form.coordinate_system.data,
                                 classification=newclasslist, lensing_flag=form.lensing_flag.data, notes=form.notes.data,
                                 user_submitted=current_user.username, user_email=current_user.email, is_edited=changes,
                                 original_id=original_id)
-            db.session.add(galaxy)
+            db.session.add(editgalaxy)
             db.session.commit()
 
             # Adding the corresponding post
-            editgalaxy = session.query(func.max(EditGalaxy.id)).first()
-            editgalaxy_id = int(editgalaxy[0])
+            editgalaxy_id = int(db.session.query(func.max(EditGalaxy.id)).first()[0])
             post = Post(editgalaxy_id=editgalaxy_id, user_email=current_user.email, time_submitted=datetime.utcnow())
             db.session.add(post)
             db.session.commit()

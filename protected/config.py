@@ -111,5 +111,14 @@ COL_NAMES = {
     'l_notes':'l_notes'
 }
 
+
+def remove_key(d, key):
+    r = dict(d)
+    del r[key]
+    return r
+
+
+COL_NAMES_WO_REDSHIFT = remove_key(COL_NAMES, 'redshift')
+
 dec_reg_exp = '((([+]+)|([-]+))[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|((([+]+)|([-]+))[0-9.]+[.]*[0-9]*)'
 ra_reg_exp = '([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+[.]*[0-9]*)'
