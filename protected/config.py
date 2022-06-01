@@ -68,6 +68,7 @@ class ProductionConfig(Config):
     MAIL_PASSWORD = config_file.get('MAIL_PASSWORD')
     SECURITY_PASSWORD_SALT = config_file.get('SECURITY_PASSWORD_SALT')
     SECURITY_PASSWORD_HASH = config_file.get('SECURITY_PASSWORD_HASH')
+    ADMIN_PASSWORD = config_file.get('ADMIN_PASSWORD')
 
 
 

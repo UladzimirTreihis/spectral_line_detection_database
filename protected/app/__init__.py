@@ -108,39 +108,38 @@ def initialize_extensions(app):
     # Flask-Security
     security.init_app(app, user_datastore, confirm_register_form=ExtendedConfirmRegisterForm)
 
+
 def create_tables_and_mock_users(app):
     # Create all database tables
     with app.app_context():
         db.create_all()
 
         from .models import User, Role
-        # Flask-Mail
-        # mail.send_message('New test message from Ulad',
-        #          sender="line.database.test@gmail.com",
-        #          recipients=['line.database.test@gmail.com'],
-        #          body="The app has been initiated")
 
+        # Uncomment in production or if you have set up a valid gmail in config.json
+        #mail.send_message('New test message from Ulad',
+         #                 sender="line.database.test@gmail.com",
+         #                 recipients=['line.database.test@gmail.com'],
+         #                 body="The app has been initiated")
 
-        # Create 'member@example.com' user with no roles
-        if not User.query.filter(User.email == 'member@example.com').first():
+        if not User.query.all():
+            # Create 'member@example.com' user with no roles
             user = user_datastore.create_user(email='member@example.com', password=hash_password('member'),
                                               username='member', confirmed_at=datetime.now())
 
             db.session.add(user)
             db.session.commit()
 
-        # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
-        if not User.query.filter(User.email == 'admin@example.com').first():
+            # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
             admin_role = user_datastore.create_role(name='admin')
-            user = user_datastore.create_user(email='admin@example.com', password=hash_password('admin'),
+            user = user_datastore.create_user(email='admin@example.com',
+                                              password=hash_password(ProductionConfig.ADMIN_PASSWORD),
                                               username='admin', confirmed_at=datetime.now())
             user_datastore.add_role_to_user(user, admin_role)
             db.session.add(admin_role)
             db.session.add(user)
             db.session.commit()
 
-            # user.roles.append(Role(name='Admin'))
-            # user.roles.append(Role(name='Agent'))
 
 def register_blueprints(app):
     # BluePrints

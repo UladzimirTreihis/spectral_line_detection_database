@@ -4,5 +4,6 @@
 	"MAIL_USERNAME": "line.database.test@gmail.com",
 	"MAIL_PASSWORD": "yale-nus",
 	"SECURITY_PASSWORD_SALT": "dgdfsgdsfghf5hf6",
-	"SECURITY_PASSWORD_HASH": "sha512_crypt"
+	"SECURITY_PASSWORD_HASH": "sha512_crypt",
+	"ADMIN_PASSWORD": "admin_ync2022"
 }
