@@ -1636,10 +1636,11 @@ def galaxy_entry_form():
             dec = dec_to_float(form.declination.data)
             ra = ra_to_float(form.right_ascension.data)
 
+            classifications = ''.join([re.sub(r' [(][^)]*[)]', '', elem) + "," for elem in form.classification.data])[:-1]
             galaxy = TempGalaxy(name=form.name.data, right_ascension=ra, declination=dec,
-                                coordinate_system=form.coordinate_system.data, classification=form.classification.data,
+                                coordinate_system=form.coordinate_system.data, classification=classifications,
                                 lensing_flag=form.lensing_flag.data, notes=form.notes.data,
-                                user_submitted=current_user.username, user_email=current_user.email,
+                                user_submitted=current_user.username, user_email=current_user.email, is_similar=None,
                                 time_submitted=datetime.utcnow())
             db.session.add(galaxy)
             db.session.commit()

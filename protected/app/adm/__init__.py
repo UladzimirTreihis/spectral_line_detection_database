@@ -85,7 +85,7 @@ def approve_tempgalaxy(id):
 def approve_templine(id):
     templine = TempLine.query.filter(TempLine.id == id).first()
 
-    if templine.from_existed_id is None:
+    if templine.from_existed_id == None:
 
         flash('You have not yet approved the galaxy to which the line belongs to')
     else:
@@ -532,13 +532,13 @@ def resolve(main_id, other_id, type, relationship):
                 approve_tempgalaxy(main_id)
 
                 # Reassign temporary lines to the newly approved galaxy.
-                from_existed_id = session.query(func.max(Galaxy.id)).first()[0]
-                lines = session.query(Line).filter(Line.galaxy_id == other_id).all()
+                from_existed_id = db.session.query(func.max(Galaxy.id)).first()[0]
+                lines = db.session.query(Line).filter(Line.galaxy_id == other_id).all()
                 for line in lines:
                     line.galaxy_id = from_existed_id
 
                 # Delete old approved galaxy
-                old_galaxy = session.query(Galaxy).filter_by(id=other_id).first()
+                old_galaxy = Galaxy.query.filter_by(id=other_id).first()
                 db.session.delete(old_galaxy)
                 db.session.commit()
 
@@ -569,11 +569,11 @@ def resolve(main_id, other_id, type, relationship):
                 # 1
                 approve_tempgalaxy(other_id)
 
-                galaxy_1_id = session.query(func.max(Galaxy.id)).first()[0]
+                galaxy_1_id = db.session.query(func.max(Galaxy.id)).first()[0]
                 # 2
                 approve_tempgalaxy(main_id)
 
-                galaxy_2_id = session.query(func.max(Galaxy.id)).first()[0]
+                galaxy_2_id = db.session.query(func.max(Galaxy.id)).first()[0]
 
                 # Remember similarity
                 db.session.query(Galaxy).filter(Galaxy.id == galaxy_1_id).update({Galaxy.is_similar: galaxy_2_id})
@@ -590,8 +590,8 @@ def resolve(main_id, other_id, type, relationship):
                 approve_tempgalaxy(main_id)
 
                 # Reassign temporary lines to the newly approved galaxy.
-                from_existed_id = session.query(func.max(Galaxy.id)).first()[0]
-                lines = session.query(TempLine).filter(TempLine.galaxy_id == other_id).all()
+                from_existed_id = db.session.query(func.max(Galaxy.id)).first()[0]
+                lines = db.session.query(TempLine).filter(TempLine.galaxy_id == other_id).all()
                 for line in lines:
                     line.from_existed_id = from_existed_id
 
@@ -802,6 +802,6 @@ admin.add_view(AdminView(Line, db.session))
 admin.add_view(PostsView(name='Submissions', endpoint='posts'))
 # admin.add_view(AdminView(Post, db.session))
 # admin.add_view(TempGalaxyView(TempGalaxy, db.session, category="New Entries"))
-# admin.add_view(TempLineView(TempLine, db.session, category="New Entries"))
+admin.add_view(TempLineView(TempLine, db.session, category="New Entries"))
 # admin.add_view(EditGalaxyView(EditGalaxy, db.session, category="New Edits"))
 # admin.add_view(EditLineView(EditLine, db.session, category="New Edits"))
