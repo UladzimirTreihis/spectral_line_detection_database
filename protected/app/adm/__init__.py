@@ -29,7 +29,8 @@ from app.models import (
     Role,
     Post,
     EditGalaxy,
-    EditLine
+    EditLine,
+    Freq
 )
 from app import (
     db,
@@ -50,6 +51,9 @@ from wtforms.validators import Regexp, ValidationError
 from config import dec_reg_exp, ra_reg_exp, template_dir
 import json
 from datetime import datetime
+import csv
+from io import TextIOWrapper
+from app.main.forms import UploadFileForm
 
 bp = Blueprint('adm', __name__, template_folder=template_dir + '/admin')
 
@@ -614,7 +618,7 @@ def post_delete(id):
     '''
     Deletes the submission (unapproved) from the entire db.
     Used by admin/posts.
-    
+
     '''
     session = Session()
     post = Post.query.filter_by(id=id).first()
@@ -645,7 +649,7 @@ def post_approve(id):
     '''
     Approves the submission.
     Used by admin/posts.
-    
+
     '''
     session = Session()
     post = Post.query.filter_by(id=id).first()
@@ -794,6 +798,38 @@ class UserView(AdminView):
             db.session.commit()
 
 
+
+class FreqView(AdminBaseView):
+    @expose('/', methods=['GET', 'POST'])
+    def frequencies(self):
+        """
+
+        """
+
+        form = UploadFileForm()
+        if request.method == 'POST':
+            csvfile = request.files['file']
+            csv_file = TextIOWrapper(csvfile, encoding='utf-8-sig', errors='ignore')
+            reader = csv.DictReader(x.replace('\0', '') for x in csv_file)
+            data = [row for row in reader]
+
+            for row in data:
+                chemical_name = row['chemical_name'].strip()
+                species = row['species'].strip()
+                frequency = float(row['frequency'].strip())
+                qn = row['qn'].strip()
+
+                freq = Freq(chemical_name=chemical_name,
+                            species=species,
+                            frequency=frequency,
+                            qn=qn)
+                db.session.add(freq)
+                db.session.commit()
+
+        return self.render("/admin/frequencies.html", form=form)
+
+
+
 # Commented are original model views. Can be used for troubleshooting purposes if necessary during the development.
 admin.add_view(UserView(User, db.session))
 # admin.add_view(AdminView(Role, db.session))
@@ -805,3 +841,5 @@ admin.add_view(TempGalaxyView(TempGalaxy, db.session, category="New Entries"))
 admin.add_view(TempLineView(TempLine, db.session, category="New Entries"))
 # admin.add_view(EditGalaxyView(EditGalaxy, db.session, category="New Edits"))
 # admin.add_view(EditLineView(EditLine, db.session, category="New Edits"))
+admin.add_view(FreqView(name='Frequencies', endpoint='frequencies'))
+admin.add_view(AdminView(Freq, db.session))

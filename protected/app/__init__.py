@@ -133,7 +133,7 @@ def create_tables_and_mock_users(app):
             # Create 'admin@example.com' user with 'Admin' and 'Agent' roles
             admin_role = user_datastore.create_role(name='admin')
             user = user_datastore.create_user(email='admin@example.com',
-                                              password=hash_password(ProductionConfig.ADMIN_PASSWORD),
+                                              password=hash_password('admin'),
                                               username='admin', confirmed_at=datetime.now())
             user_datastore.add_role_to_user(user, admin_role)
             db.session.add(admin_role)

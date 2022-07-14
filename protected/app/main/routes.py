@@ -34,6 +34,7 @@ from app.main.forms import (
     UploadFileForm,
     DynamicSearchForm
 )
+from app.main.frequences import test_frequency2
 import csv
 from sqlalchemy import func
 from config import (
@@ -276,7 +277,7 @@ def test_frequency_for_family(family, species_name_input, input_frequency_str):
 
                 # Check if there are any values of similar species in the range
                 for key, value in species_dict.items():
-                    if key > (range_1) and (key < range_2):
+                    if (key > range_1) and (key < range_2):
                         message_1 = "Species ({}) has a transition ({}) at a rest frequency of ({}) GHz. ".format(
                             species_name, value, key)
                         message = message + message_1
@@ -1265,13 +1266,20 @@ def entry_file():
                         if row_emitted_frequency == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
+                       # try:
+                         #   dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+                         #   if not dict_frequency:
+                          #      flash("Entry " + str(row_count) + message)
+                          #      validated = False
+                        #except:
+                           # pass
                         try:
-                            dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+                            dict_frequency, message = test_frequency2(row_species, row_emitted_frequency)
                             if not dict_frequency:
                                 flash("Entry " + str(row_count) + message)
                                 validated = False
                         except:
-                            pass
+                            raise "Failed"
                         if row_species == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Please specify species")

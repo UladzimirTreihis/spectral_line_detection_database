@@ -1,0 +1,15 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+
+    <form action="" method="post" novalidate enctype="multipart/form-data">
+      <p>
+            {{ form.file.label }}<br>
+            {{ form.file(size=3) }}<br>
+            {% for error in form.file.errors %}
+            <span style="color: red;">[{{error}}]</span>
+            {% endfor %}
+        </p>
+      <p>{{ form.submit() }}</p>
+    </form>
+
+{% endblock %}
