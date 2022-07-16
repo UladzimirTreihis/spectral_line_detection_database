@@ -54,6 +54,8 @@ from datetime import datetime
 import csv
 from io import TextIOWrapper
 from app.main.forms import UploadFileForm
+from species import SpeciesNames
+from exceptions import SpeciesUnknownError
 
 bp = Blueprint('adm', __name__, template_folder=template_dir + '/admin')
 
@@ -815,7 +817,10 @@ class FreqView(AdminBaseView):
 
             for row in data:
                 chemical_name = row['chemical_name'].strip()
-                species = row['species'].strip()
+                try:
+                    species = SpeciesNames[row['species'].strip()]
+                except:
+                    raise SpeciesUnknownError(row['species'].strip())
                 frequency = float(row['frequency'].strip())
                 qn = row['qn'].strip()
 

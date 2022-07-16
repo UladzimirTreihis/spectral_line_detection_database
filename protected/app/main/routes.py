@@ -1279,7 +1279,7 @@ def entry_file():
                                 flash("Entry " + str(row_count) + message)
                                 validated = False
                         except:
-                            raise "Failed"
+                            pass
                         if row_species == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Please specify species")

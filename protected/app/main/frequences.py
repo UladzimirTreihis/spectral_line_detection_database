@@ -24,10 +24,14 @@ def test_frequency2(species_name_input, input_frequency_str):
     nearest_frequency = 0
     message = ''
     frequency_input = float(input_frequency_str)
+    message_not_found = ' Specified species are not in our database, please check the spelling.'
+    message_other_found = "Your specified frequency is not precise enough. " \
+                          "We also found species ({}) has a transition ({}) at a rest frequency of ({}) GHz. " \
+                          "Make sure you have entered correct species name and/or more precise frequency."
 
     same_species = db.session.query(Freq).filter(Freq.species == species_name_input).all()
     if not same_species:
-        message = message + 'Specified species are not in our database, please check the spelling.'
+        message = message + message_not_found
     else:
         species = species_name_input
         delta = frequency_input
@@ -56,11 +60,17 @@ def test_frequency2(species_name_input, input_frequency_str):
         chemical_name = same_species[0].chemical_name
         same_chemical_name = db.session.query(Freq).filter(Freq.chemical_name == chemical_name)
         for entry in same_chemical_name:
-            if entry.sprecies == species:
-                continue
-            if (entry.frequency > range_1) and (entry.frequency < range_2):
+            if entry.species == species:
+                if entry.frequency == nearest_frequency:
+                    continue
+                elif (entry.frequency > range_1) and (entry.frequency < range_2):
+                    message = message + \
+                              message_other_found.format(
+                                  entry.species, entry.qn, entry.frequency)
+
+            elif (entry.frequency > range_1) and (entry.frequency < range_2):
                 message = message + \
-                          "Species ({}) has a transition ({}) at a rest frequency of ({}) GHz. ".format(
+                          message_other_found.format(
                               entry.species, entry.qn, entry.frequency)
 
         if message:
