@@ -310,8 +310,7 @@ SpeciesNames = {
     "SiO": "SiO",
     "SiOv=0": "SiO",
     "SO2": "SO2",
-    "SO2v=0": "SO2",
-    "CH2&Pi3/2": "CH2&Pi3/2"
+    "SO2v=0": "SO2"
 }
 
 

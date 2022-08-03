@@ -838,11 +838,11 @@ def main():
     for i in range(galaxies_count):
         list_of_lines_per_species.append([])
         id = galaxies[i].id
-        species = db.session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
+        species = db.session.query(Line.species).filter(Line.galaxy_id == id).distinct()
         if species is not None:
             for s in species:
-                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
-                list_of_lines_per_species[i].append((s, lines_count))
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s[0])).count()
+                list_of_lines_per_species[i].append((s[0], lines_count))
 
     lines = db.session.query(Line.galaxy_id, Line.species).distinct().all()
 
