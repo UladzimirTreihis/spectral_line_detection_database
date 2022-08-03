@@ -34,6 +34,7 @@ from app.main.forms import (
     UploadFileForm,
     DynamicSearchForm
 )
+from app.main.frequences import test_frequency2
 import csv
 from sqlalchemy import func
 from config import (
@@ -276,7 +277,7 @@ def test_frequency_for_family(family, species_name_input, input_frequency_str):
 
                 # Check if there are any values of similar species in the range
                 for key, value in species_dict.items():
-                    if key > (range_1) and (key < range_2):
+                    if (key > range_1) and (key < range_2):
                         message_1 = "Species ({}) has a transition ({}) at a rest frequency of ({}) GHz. ".format(
                             species_name, value, key)
                         message = message + message_1
@@ -837,11 +838,11 @@ def main():
     for i in range(galaxies_count):
         list_of_lines_per_species.append([])
         id = galaxies[i].id
-        species = db.session.query(Line.species).filter(Line.galaxy_id == id).distinct().first()
+        species = db.session.query(Line.species).filter(Line.galaxy_id == id).distinct()
         if species is not None:
             for s in species:
-                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s)).count()
-                list_of_lines_per_species[i].append((s, lines_count))
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s[0])).count()
+                list_of_lines_per_species[i].append((s[0], lines_count))
 
     lines = db.session.query(Line.galaxy_id, Line.species).distinct().all()
 
@@ -1265,8 +1266,15 @@ def entry_file():
                         if row_emitted_frequency == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
+                       # try:
+                         #   dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+                         #   if not dict_frequency:
+                          #      flash("Entry " + str(row_count) + message)
+                          #      validated = False
+                        #except:
+                           # pass
                         try:
-                            dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+                            dict_frequency, message = test_frequency2(row_species, row_emitted_frequency)
                             if not dict_frequency:
                                 flash("Entry " + str(row_count) + message)
                                 validated = False
