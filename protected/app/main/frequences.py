@@ -20,7 +20,7 @@ def check_decimal(entry):
         return True
 
 
-def test_frequency2(species_name_input, input_frequency_str):
+def test_frequency(species_name_input, input_frequency_str):
     nearest_frequency = 0
     message = ''
     frequency_input = float(input_frequency_str)

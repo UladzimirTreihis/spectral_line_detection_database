@@ -47,6 +47,7 @@
             <th>Average Dec.</th>
             <th>Coordinate System</th>
             <th>Average Redshift</th>
+            <th>Redshift Error</th>
             <th>Lensed?</th>
             <th>Classification</th>
             <th>Notes</th>
@@ -61,9 +62,10 @@
                 <td name="decCoordinates" id="{{ galaxy.declination }}"  style="width: 5%;"></td>
                 <td style="width: 10%;">{{ galaxy.coordinate_system }}</td>
                 <td style="width: 5%;">{{ galaxy.redshift }}</td>
+                <td style="width: 5%;">{{ galaxy.redshift_error }}</td>
                 <td style="width: 5%;">{{ galaxy.lensing_flag }}</td>
                 <td style="width: 5%;">{{ galaxy.classification }}</td>
-                <td style="width: 55%;">{{ galaxy.notes }}</td>
+                <td style="width: 50%;">{{ galaxy.notes }}</td>
             </tr>
         </tbody>
     </table>
@@ -87,8 +89,8 @@
                     <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
                     <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
                     <th>\( S_{max} \) \( (mJy) \)</th>
-                    <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
-                    <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+                    <th>\( +\sigma_{S_{max}} \) \( (mJy) \)</th>
+                    <th>\( -\sigma_{S_{max}} \) \( (mJy) \)</th>
                     <th>\( FWHM \) \( (kms^{-1}) \)</th>
                     <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
                     <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
@@ -120,9 +122,9 @@
                     <td>{{ line.line_width }}</td>
                     <td>{{ line.line_width_uncertainty_positive }}</td>
                     <td>{{ line.line_width_uncertainty_negative }}</td>
-                    <td>{{ line.observed_line_frequency }}</td>
-                    <td>{{ line.observed_line_frequency_uncertainty_positive }}</td>
-                    <td>{{ line.observed_line_frequency_uncertainty_negative }}</td>
+                    <td>{{ line.observed_line_redshift }}</td>
+                    <td>{{ line.observed_line_redshift_uncertainty_positive }}</td>
+                    <td>{{ line.observed_line_redshift_uncertainty_negative }}</td>
                     <td>{{ line.detection_type }}</td>
                     <td>{{ line.observed_beam_major }}</td>
                     <td>{{ line.observed_beam_minor }}</td>

@@ -107,9 +107,9 @@ def approve_templine(id):
                  line_width=templine.line_width,
                  line_width_uncertainty_positive=templine.line_width_uncertainty_positive,
                  line_width_uncertainty_negative=templine.line_width_uncertainty_negative,
-                 observed_line_frequency=templine.observed_line_frequency,
-                 observed_line_frequency_uncertainty_positive=templine.observed_line_frequency_uncertainty_positive,
-                 observed_line_frequency_uncertainty_negative=templine.observed_line_frequency_uncertainty_negative,
+                 observed_line_redshift=templine.observed_line_redshift,
+                 observed_line_redshift_uncertainty_positive=templine.observed_line_redshift_uncertainty_positive,
+                 observed_line_redshift_uncertainty_negative=templine.observed_line_redshift_uncertainty_negative,
                  detection_type=templine.detection_type,
                  observed_beam_major=templine.observed_beam_major,
                  observed_beam_minor=templine.observed_beam_minor,
@@ -182,9 +182,9 @@ def approve_editline(id):
               "line_width": editline.line_width,
               "line_width_uncertainty_positive": editline.line_width_uncertainty_positive,
               "line_width_uncertainty_negative": editline.line_width_uncertainty_negative,
-              "observed_line_frequency": editline.observed_line_frequency,
-              "observed_line_frequency_uncertainty_positive": editline.observed_line_frequency_uncertainty_positive,
-              "observed_line_frequency_uncertainty_negative": editline.observed_line_frequency_uncertainty_negative,
+              "observed_line_redshift": editline.observed_line_redshift,
+              "observed_line_redshift_uncertainty_positive": editline.observed_line_redshift_uncertainty_positive,
+              "observed_line_redshift_uncertainty_negative": editline.observed_line_redshift_uncertainty_negative,
               "detection_type": editline.detection_type, "observed_beam_major": editline.observed_beam_major,
               "observed_beam_minor": editline.observed_beam_minor, "observed_beam_angle": editline.observed_beam_angle,
               "reference": editline.reference, "notes": editline.notes, "species": editline.species,
@@ -669,9 +669,9 @@ def post_approve(id):
                              TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux,
                              TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative,
                              TempLine.line_width, TempLine.line_width_uncertainty_positive,
-                             TempLine.line_width_uncertainty_negative, TempLine.observed_line_frequency,
-                             TempLine.observed_line_frequency_uncertainty_positive,
-                             TempLine.observed_line_frequency_uncertainty_negative, TempLine.detection_type,
+                             TempLine.line_width_uncertainty_negative, TempLine.observed_line_redshift,
+                             TempLine.observed_line_redshift_uncertainty_positive,
+                             TempLine.observed_line_redshift_uncertainty_negative, TempLine.detection_type,
                              TempLine.observed_beam_major, TempLine.observed_beam_minor, TempLine.observed_beam_angle,
                              TempLine.reference, TempLine.notes, TempLine.from_existed_id, TempLine.user_submitted,
                              TempLine.user_email, TempLine.time_submitted, TempLine.species).filter(
@@ -687,8 +687,8 @@ def post_approve(id):
                  peak_line_flux=line[5], peak_line_flux_uncertainty_positive=line[6],
                  peak_line_flux_uncertainty_negative=line[7], line_width=line[8],
                  line_width_uncertainty_positive=line[9], line_width_uncertainty_negative=line[10],
-                 observed_line_frequency=line[11], observed_line_frequency_uncertainty_positive=line[12],
-                 observed_line_frequency_uncertainty_negative=line[13], detection_type=line[14],
+                 observed_line_redshift=line[11], observed_line_redshift_uncertainty_positive=line[12],
+                 observed_line_redshift_uncertainty_negative=line[13], detection_type=line[14],
                  observed_beam_major=line[15], observed_beam_minor=line[16], observed_beam_angle=line[17],
                  reference=line[18], notes=line[19], user_submitted=line[21], user_email=line[22], species=line[24])
         db.session.add(l)
@@ -743,9 +743,9 @@ def post_approve(id):
                                 EditLine.peak_line_flux_uncertainty_positive,
                                 EditLine.peak_line_flux_uncertainty_negative,
                                 EditLine.line_width, EditLine.line_width_uncertainty_positive,
-                                EditLine.line_width_uncertainty_negative, EditLine.observed_line_frequency,
-                                EditLine.observed_line_frequency_uncertainty_positive,
-                                EditLine.observed_line_frequency_uncertainty_negative, EditLine.detection_type,
+                                EditLine.line_width_uncertainty_negative, EditLine.observed_line_redshift,
+                                EditLine.observed_line_redshift_uncertainty_positive,
+                                EditLine.observed_line_redshift_uncertainty_negative, EditLine.detection_type,
                                 EditLine.observed_beam_major, EditLine.observed_beam_minor,
                                 EditLine.observed_beam_angle,
                                 EditLine.reference, EditLine.notes, EditLine.species).filter(
@@ -761,9 +761,9 @@ def post_approve(id):
                   "integrated_line_flux_uncertainty_negative": line[5], "peak_line_flux": line[6],
                   "peak_line_flux_uncertainty_positive": line[7], "peak_line_flux_uncertainty_negative": line[8],
                   "line_width": line[9], "line_width_uncertainty_positive": line[10],
-                  "line_width_uncertainty_negative": line[11], "observed_line_frequency": line[12],
-                  "observed_line_frequency_uncertainty_positive": line[13],
-                  "observed_line_frequency_uncertainty_negative": line[14], "detection_type": line[15],
+                  "line_width_uncertainty_negative": line[11], "observed_line_redshift": line[12],
+                  "observed_line_redshift_uncertainty_positive": line[13],
+                  "observed_line_redshift_uncertainty_negative": line[14], "detection_type": line[15],
                   "observed_beam_major": line[16], "observed_beam_minor": line[17], "observed_beam_angle": line[18],
                   "reference": line[19], "notes": line[20], "species": line[21]})
 
@@ -810,6 +810,14 @@ class FreqView(AdminBaseView):
 
         form = UploadFileForm()
         if request.method == 'POST':
+            if request.form.get("deleteFreqTable"):
+                frequencies = db.session.query(Freq)
+                if frequencies.first() != None:
+                    try:
+                        num_rows_deleted = db.session.query(Freq).delete()
+                        db.session.commit()
+                    except:
+                        db.session.rollback()
             csvfile = request.files['file']
             csv_file = TextIOWrapper(csvfile, encoding='utf-8-sig', errors='ignore')
             reader = csv.DictReader(x.replace('\0', '') for x in csv_file)
