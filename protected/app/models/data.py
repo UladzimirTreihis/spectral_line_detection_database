@@ -69,6 +69,7 @@ class Galaxy(BaseMixin, db.Model):
     approved_user_email = db.Column(db.String(128))
     approved_username = db.Column(db.String(128))
     approved_time = db.Column(db.DateTime, default=datetime.utcnow)
+    lines_per_species = db.Column(db.String(128))
 
     def as_dict(self):
         return {'name': self.name}

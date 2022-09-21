@@ -229,7 +229,7 @@ def update_redshift_error(galaxy_id, sum_upper):
 
     Parameters:
         galaxy_id (int): id of the galaxy, which redshift has to be updated.
-        sum_upper (int | float) Sum of weighted redshifts returned by update_redshift.
+        sum_upper (float) Sum of weighted redshifts returned by update_redshift.
 
     Returns:
     """
@@ -389,7 +389,7 @@ def main():
         galaxy = Galaxy.query.filter_by(name=name).first_or_404()
         lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
 
-        return render_template('galaxy.html', galaxy=galaxy, lines=lines)
+        return redirect(url_for("main.galaxy", name=galaxy.name))
 
     galaxies = db.session.query(Galaxy).all()
     galaxies_count = db.session.query(Galaxy.id).count()
@@ -407,6 +407,33 @@ def main():
             for s in species:
                 lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s[0])).count()
                 list_of_lines_per_species[i].append((s[0], lines_count))
+
+
+    # rounding redshift and uncertainties.
+    for galaxy in galaxies:
+        galaxy.redshift = round_redshift(
+            galaxy.redshift,
+            galaxy.redshift_error,
+            galaxy.redshift_error,
+            True,
+            False,
+            False)
+        galaxy.redshift_error = round_redshift(
+            galaxy.redshift,
+            galaxy.redshift_error,
+            galaxy.redshift_error,
+            True,
+            True,
+            False)
+
+        species = db.session.query(Line.species).filter(Line.galaxy_id == galaxy.id).distinct()
+        if species is not None:
+            for s in species:
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == galaxy.id) & (Line.species == s[0])).count()
+                if galaxy.lines_per_species:
+                    galaxy.lines_per_species = galaxy.lines_per_species + "{}: {}\n".format(s[0], lines_count)
+                else:
+                    galaxy.lines_per_species = "{}: {}\n".format(s[0], lines_count)
 
     lines = db.session.query(Line.galaxy_id, Line.species).distinct().all()
 
@@ -812,7 +839,7 @@ def entry_file():
                         for key, value in classification_options.items():
                             if key in entered_classification.upper():
                                 row_classification = row_classification + "," + key
-                        if row_classification == ",":
+                        if row_classification == "," or row_classification == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Please enter Correction Classifications")
                         if row_right_ascension == "":
@@ -1365,13 +1392,13 @@ def line_entry_form():
                 flash('Please enter the name exactly as proposed using Caps if necessary')
             else:
                 try:
-                    dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
+                    dict_frequency, message = test_frequency(form.species.data, form.emitted_frequency.data)
                     if not dict_frequency:
                         raise Exception(message)
                 except:
                     pass
 
-                dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
+                dict_frequency, message = test_frequency(form.species.data, form.emitted_frequency.data)
 
                 if form.freq_type.data == 'f':
                     frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
@@ -1683,46 +1710,45 @@ def galaxy(name):
 
         Returns:
             galaxy.html
-            galaxy (Galaxy): A db model object under investigation.
-            lines (db.session.query): Lines that belong to the selected galaxy.
+            galaxy (Galaxy): A db model object under investigation (rounded redshifts + uncertainties).
+            lines (db.session.query): Lines that belong to the selected galaxy (rounded redshifts + uncertainties).
     """
-    conn = engine.connect()
-    session = Session(bind=conn)
 
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+
+    # see round_redshift in helpers.py to see how rounding is performed.
+    galaxy.redshift = round_redshift(galaxy.redshift, galaxy.redshift_error, galaxy.redshift_error, True, False, False)
+    galaxy.redshift_error = round_redshift(galaxy.redshift, galaxy.redshift_error, galaxy.redshift_error, True, True, False)
+
     lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
-    lines_ids_list = [line.id for line in lines]
 
+    for line in lines:
+        line.observed_line_redshift = round_redshift(
+            line.observed_line_redshift,
+            line.observed_line_redshift_uncertainty_positive,
+            line.observed_line_redshift_uncertainty_negative,
+            True,
+            False,
+            False
+        )
+        line.observed_line_redshift_uncertainty_positive = round_redshift(
+            line.observed_line_redshift,
+            line.observed_line_redshift_uncertainty_positive,
+            line.observed_line_redshift_uncertainty_negative,
+            True,
+            True,
+            False
+        )
+        line.observed_line_redshift_uncertainty_negative = round_redshift(
+            line.observed_line_redshift,
+            line.observed_line_redshift_uncertainty_positive,
+            line.observed_line_redshift_uncertainty_negative,
+            True,
+            False,
+            True
+        )
 
-    redshifts_list = session.query(func.round_redshift(
-        Line.observed_line_redshift,
-        Line.observed_line_redshift_uncertainty_positive,
-        Line.observed_line_redshift_uncertainty_negative,
-        True,
-        False,
-        False)
-    ).filter_by(galaxy_id=galaxy.id).all()
-    redshifts = dict(zip(lines_ids_list, [redshift[0] for redshift in redshifts_list]))
-    positive_uncertainties_list = session.query(func.round_redshift(
-        Line.observed_line_redshift,
-        Line.observed_line_redshift_uncertainty_positive,
-        Line.observed_line_redshift_uncertainty_negative,
-        True,
-        True,
-        False)
-    ).filter_by(galaxy_id=galaxy.id).all()
-    positive_uncertainties = dict(zip(lines_ids_list, [uncert[0] for uncert in positive_uncertainties_list]))
-    negative_uncertainties_list = session.query(func.round_redshift(
-        Line.observed_line_redshift,
-        Line.observed_line_redshift_uncertainty_positive,
-        Line.observed_line_redshift_uncertainty_negative,
-        True,
-        False,
-        True)
-    ).filter_by(galaxy_id=galaxy.id).all()
-    negative_uncertainties = dict(zip(lines_ids_list, [uncert[0] for uncert in negative_uncertainties_list]))
-
-    return render_template('galaxy.html', galaxy=galaxy, lines=lines, redshifts=redshifts, positive_uncertainties=positive_uncertainties, negative_uncertainties=negative_uncertainties)
+    return render_template('galaxy.html', galaxy=galaxy, lines=lines)
 
 
 @bp.route("/submit")

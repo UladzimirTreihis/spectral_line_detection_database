@@ -65,22 +65,14 @@
 
             {% for galaxy, galaxy_count in galaxies|zip(count_list) %}
 
-               <tr>
-                  <td><a href="{{ url_for('main.galaxy', name=galaxy.name) }}">{{ galaxy.name }}</a></td>
-                  <td name="raCoordinates" id="{{ galaxy.right_ascension }}">{{ galaxy.right_ascension }}</td>
-                  <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
-                  {% set id = galaxy.id %}
-                  <td>
-                     <ul id="menu">
-                     {% for species in list_of_lines_per_species[galaxy_count] %}
-                        <li>{{species}}</li>
-                         <br>
-                     {% endfor %}
-                     </ul>
-                  </td>
-                  <td>{{ galaxy.redshift }}</td>
-                  <td>{{ galaxy.classification }}</td>
-               </tr>
+                <tr>
+                    <td><a href="{{ url_for('main.galaxy', name=galaxy.name) }}">{{ galaxy.name }}</a></td>
+                    <td name="raCoordinates" id="{{ galaxy.right_ascension }}">{{ galaxy.right_ascension }}</td>
+                    <td name="decCoordinates" id="{{ galaxy.declination }}">{{ galaxy.declination }}</td>
+                    <td><span style="white-space: pre-line">{{ galaxy.lines_per_species }}</span></td>
+                    <td>{{ galaxy.redshift }}</td>
+                    <td>{{ galaxy.classification }}</td>
+                </tr>
                
             {% endfor %}
          </tbody>
