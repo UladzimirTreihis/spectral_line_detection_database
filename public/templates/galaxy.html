@@ -109,6 +109,7 @@
             
             <tbody>
                 {% for line in lines %}
+
                 <tr>
                     <td><a href="{{ url_for ('main.line_edit_form', id = line.id) }}"  style="width: 5%;"> Update</a></td>
                     <td>{{ line.species }}</td>
@@ -122,9 +123,9 @@
                     <td>{{ line.line_width }}</td>
                     <td>{{ line.line_width_uncertainty_positive }}</td>
                     <td>{{ line.line_width_uncertainty_negative }}</td>
-                    <td>{{ line.observed_line_redshift }}</td>
-                    <td>{{ line.observed_line_redshift_uncertainty_positive }}</td>
-                    <td>{{ line.observed_line_redshift_uncertainty_negative }}</td>
+                    <td>{{ redshifts[line.id] }}</td>
+                    <td>{{ positive_uncertainties[line.id] }}</td>
+                    <td>{{ negative_uncertainties[line.id] }}</td>
                     <td>{{ line.detection_type }}</td>
                     <td>{{ line.observed_beam_major }}</td>
                     <td>{{ line.observed_beam_minor }}</td>

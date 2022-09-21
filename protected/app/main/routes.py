@@ -52,122 +52,26 @@ from flask_security import (
 )
 import math
 from app.main import bp
+from app.helpers import (
+    to_none,
+    to_zero,
+    to_m_inf,
+    to_p_inf,
+    to_empty,
+    check_decimal,
+    round_to_nsf,
+    round_to_uncertainty,
+    round_redshift,
+    ra_to_float,
+    dec_to_float,
+    redshift_to_frequency,
+    frequency_to_redshift
+)
 import re
 from datetime import datetime
 
 
 #### HELPER FUNCTIONS ####
-
-
-def to_empty(entry):
-    """
-    Converts None values to empty strings.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = ''
-    else:
-        entry = entry
-    return entry
-
-
-def to_none(entry):
-    """
-    Converts empty strings to None.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry == '':
-        entry = None
-    else:
-        entry = float(entry)
-    return entry
-
-
-def to_m_inf(entry):
-    """
-    Converts empty strings or None values to -inf.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = float('-inf')
-    elif entry == '':
-        entry = '-inf'
-    else:
-        entry = entry
-    return entry
-
-
-def to_p_inf(entry):
-    """
-    Converts empty strings or None values to inf.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = float('inf')
-    elif entry == '':
-        entry = 'inf'
-    else:
-        entry = entry
-    return entry
-
-
-def to_zero(entry):
-    """
-    Converts None values to 0.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = 0
-    else:
-        entry = entry
-    return entry
-
-
-def check_decimal(entry):
-    """
-    Checks whether given string has a representation of a value with decimals.
-
-    Parameters:
-        entry (str): A string to be checked.
-
-    Returns:
-        (bool): Indicator of a decimal number.
-    """
-
-    if re.findall(r'[0-9]\.[0-9]', entry) == []:
-        return False
-    else:
-        return True
 
 
 def within_distance(query, form_ra, form_dec, distance=0, based_on_beam_angle=False, temporary=False):
@@ -272,61 +176,6 @@ def update_declination(galaxy_id):
         ).update({"declination": declination})
 
 
-def ra_to_float(coordinates):
-    """
-    Given right ascension value as either a string representing a float number or a string of the 00h00m00s format,
-    return the corresponding float value.
-
-    Parameters:
-        coordinates (str | float | int): A string representing a float or 00h00m00s format right ascension.
-
-    Returns:
-        coordinates (float): Float value of right ascension.
-    """
-
-    if isinstance(coordinates, float) or isinstance(coordinates, int):
-        coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
-        h = float(coordinates[0:2])
-        m = float(coordinates[3:5])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
-        return h * 15 + m / 4 + s / 240
-    else:
-        return float(coordinates)
-
-
-def dec_to_float(coordinates):
-    """
-    Given right declination value as either a string representing a float number or a string of the +/-00d00m00s format,
-    return the corresponding float value.
-
-    Parameters:
-        coordinates (str | float | int): A string representing a float or +/-00d00m00s format declination.
-
-    Returns:
-        coordinates (float): Float value of declination.
-    """
-
-    if isinstance(coordinates, float) or isinstance(coordinates, int):
-        coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
-        d = float(coordinates[1:3])
-        m = float(coordinates[4:6])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
-        if coordinates[0] == "-":
-            return (-1) * (d + m / 60 + s / 3600)
-        else:
-            return d + m / 60 + s / 3600
-    elif coordinates == '-inf' or coordinates == 'inf':
-        return float(coordinates)
-    else:
-        if coordinates[0] == '+':
-            dec = coordinates.replace("+", "")
-        else:
-            dec = coordinates
-        return float(dec)
-
-
 def update_redshift(galaxy_id):
     """
     Update redshift value for a particular galaxy.
@@ -413,117 +262,6 @@ def update_redshift_error(galaxy_id, sum_upper):
                 Galaxy.id == galaxy_id
             ).update({"redshift_error": redshift_error_weighted})
             db.session.commit()
-
-
-def round_to_nsf(number, nsf=2):
-    """
-    Rounds the number to the provided number of significant figures.
-    """
-
-    integer_part = math.floor(number)
-    if integer_part > 0:
-        integer_part_len = len(str(integer_part))
-        return round(number, nsf-integer_part_len)
-    else:
-        st = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-        index = next((i for i, ch in enumerate(str(number)) if ch in st), None)
-        return round(number, index)
-
-
-def round_to_uncertainty(number, pos_uncertainty, neg_uncertainty):
-    """
-    Among two uncertainties finds one with more precision and
-    rounds the value of variable number accordingly.
-    """
-
-    if len(str(pos_uncertainty)) != len(str(neg_uncertainty)):
-        uncertainty = pos_uncertainty if len(str(pos_uncertainty)) > len(str(neg_uncertainty)) else neg_uncertainty
-        uncertainty_str = str(uncertainty)
-    else:
-        uncertainty_str = str(pos_uncertainty)
-    if check_decimal(uncertainty_str):
-        decimals = uncertainty_str[uncertainty_str.find('.') + 1:]
-        precision = len(decimals)
-    else:
-        precision = len(uncertainty_str)
-        for c in uncertainty_str:
-            if c != '0':
-                precision -= 1
-            else:
-                pass
-
-    return round(number, precision)
-
-
-def redshift_to_frequency(emitted_frequency, z, positive_uncertainty, negative_uncertainty):
-    """
-    Converts redshift value to frequency.
-
-    Parameters:
-        emitted_frequency (float): Emitted frequency value as per dictionary.
-        z (float): Submitted redshift value.
-        positive_uncertainty (float): Submitted positive uncertainty of the redshift value.
-        negative_uncertainty (float): Submitted negative uncertainty of the redshift value.
-
-    Returns:
-        f (float): Observed frequency.
-        f_uncertainty_positive (float | NoneType): Positive uncertainty of the f value or None
-        f_uncertainty_negative (float | NoneType): Negative uncertainty of the f value or None
-    """
-
-    if z is None:
-        return None, None, None
-    f = emitted_frequency / (z + 1)
-    if (positive_uncertainty is None) or (negative_uncertainty is None):
-        if (positive_uncertainty is None) and (negative_uncertainty is None):
-            return f, None, None
-        elif negative_uncertainty is None:
-            negative_uncertainty = positive_uncertainty
-        else:
-            positive_uncertainty = negative_uncertainty
-
-    delta_z = positive_uncertainty + negative_uncertainty
-    delta_f = delta_z * f / (z + 1)
-    f_uncertainty_positive = positive_uncertainty / delta_z * delta_f
-    f_uncertainty_negative = negative_uncertainty / delta_z * delta_f
-
-    return f, f_uncertainty_positive, f_uncertainty_negative
-
-
-def frequency_to_redshift(emitted_frequency, f, positive_uncertainty, negative_uncertainty):
-    """
-    Converts redshift value to frequency.
-
-    Parameters:
-        emitted_frequency (float): Emitted frequency value as per dictionary.
-        f (float): Submitted observed frequency value.
-        positive_uncertainty (float): Submitted positive uncertainty of the observed frequency value.
-        negative_uncertainty (float): Submitted negative uncertainty of the observed frequency value.
-
-    Returns:
-        z (float): Redshift.
-        z_uncertainty_positive (float | NoneType): Positive uncertainty of the z value or None
-        z_uncertainty_negative (float | NoneType): Negative uncertainty of the z value or None
-    """
-
-    if f is None:
-        return None, None, None
-    z = emitted_frequency / f - 1
-    if (positive_uncertainty is None) or (negative_uncertainty is None):
-        if (positive_uncertainty is None) and (negative_uncertainty is None):
-            return z, None, None
-        elif negative_uncertainty is None:
-            negative_uncertainty = positive_uncertainty
-        else:
-            positive_uncertainty = negative_uncertainty
-
-    delta_f = positive_uncertainty + negative_uncertainty
-    delta_z = delta_f * (z + 1) / f
-    z_uncertainty_positive = positive_uncertainty / delta_f * delta_z
-    z_uncertainty_negative = negative_uncertainty / delta_f * delta_z
-    return z, z_uncertainty_positive, z_uncertainty_negative
-
-    return z, z_uncertainty_positive, z_uncertainty_negative
 
 
 @bp.route("/", methods=['GET'])
@@ -1513,7 +1251,6 @@ def galaxy_edit_form(id):
     """
 
     galaxy = db.session.query(Galaxy).filter(Galaxy.id == id).first()
-    #classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-1]
     classifications = galaxy.classification
     classification_list = galaxy.classification.split(',')
 
@@ -1635,12 +1372,12 @@ def line_entry_form():
                     pass
 
                 dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-                if form.freq_type.data == 'z':
-                    frequency, positive_uncertainty = redshift_to_frequency(dict_frequency,
+
+                if form.freq_type.data == 'f':
+                    frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
                                                                             form.observed_line_redshift.data,
                                                                             form.observed_line_redshift_uncertainty_positive.data,
                                                                             form.observed_line_redshift_uncertainty_negative.data)
-                    negative_uncertainty = None
                 else:
                     frequency = form.observed_line_redshift.data
                     positive_uncertainty = form.observed_line_redshift_uncertainty_positive.data
@@ -1949,17 +1686,92 @@ def galaxy(name):
             galaxy (Galaxy): A db model object under investigation.
             lines (db.session.query): Lines that belong to the selected galaxy.
     """
+    conn = engine.connect()
+    session = Session(bind=conn)
 
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
     lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
+    lines_ids_list = [line.id for line in lines]
 
-    return render_template('galaxy.html', galaxy=galaxy, lines=lines)
+
+    redshifts_list = session.query(func.round_redshift(
+        Line.observed_line_redshift,
+        Line.observed_line_redshift_uncertainty_positive,
+        Line.observed_line_redshift_uncertainty_negative,
+        True,
+        False,
+        False)
+    ).filter_by(galaxy_id=galaxy.id).all()
+    redshifts = dict(zip(lines_ids_list, [redshift[0] for redshift in redshifts_list]))
+    positive_uncertainties_list = session.query(func.round_redshift(
+        Line.observed_line_redshift,
+        Line.observed_line_redshift_uncertainty_positive,
+        Line.observed_line_redshift_uncertainty_negative,
+        True,
+        True,
+        False)
+    ).filter_by(galaxy_id=galaxy.id).all()
+    positive_uncertainties = dict(zip(lines_ids_list, [uncert[0] for uncert in positive_uncertainties_list]))
+    negative_uncertainties_list = session.query(func.round_redshift(
+        Line.observed_line_redshift,
+        Line.observed_line_redshift_uncertainty_positive,
+        Line.observed_line_redshift_uncertainty_negative,
+        True,
+        False,
+        True)
+    ).filter_by(galaxy_id=galaxy.id).all()
+    negative_uncertainties = dict(zip(lines_ids_list, [uncert[0] for uncert in negative_uncertainties_list]))
+
+    return render_template('galaxy.html', galaxy=galaxy, lines=lines, redshifts=redshifts, positive_uncertainties=positive_uncertainties, negative_uncertainties=negative_uncertainties)
 
 
 @bp.route("/submit")
 @login_required
 def submit():
     return render_template("submit.html")
+
+
+@bp.route("/test")
+@login_required
+def test():
+    conn = engine.connect()
+    session = Session(bind=conn)
+    redshifts = session.query(func.round_redshift(
+        Line.observed_line_redshift,
+        Line.observed_line_redshift_uncertainty_positive,
+        Line.observed_line_redshift_uncertainty_negative,
+        True,
+        False,
+        False)
+    ).all()
+    lines_ids = session.query(Line.id).all()
+    lines_ids_list = [lines_id[0] for lines_id in lines_ids]
+    as_dict = dict(zip(lines_ids_list, [redshift[0] for redshift in redshifts]))
+
+
+    #redshifts2 = db.session.query(Line).query(Line.observed_line_redshift).all()
+    positive_uncertainties = session.query(func.round_redshift(
+        Line.observed_line_redshift,
+        Line.observed_line_redshift_uncertainty_positive,
+        Line.observed_line_redshift_uncertainty_negative,
+        True,
+        True,
+        False)
+    ).all()
+    negative_uncertainties = session.query(func.round_redshift(
+        Line.observed_line_redshift,
+        Line.observed_line_redshift_uncertainty_positive,
+        Line.observed_line_redshift_uncertainty_negative,
+        True,
+        False,
+        True)
+    ).all()
+
+    #lines = session.query(Line).filter_by(galaxy_id=galaxy.id).all()
+
+    #q = session.query(redshifts.subquery(), positive_uncertainties.subquery())
+    #logins_count, questions_count = q.first()
+    return "{}\n{}\n{}".format(negative_uncertainties, as_dict, positive_uncertainties)
 
 
 @bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
