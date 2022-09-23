@@ -206,7 +206,7 @@ class AddLineForm(FlaskForm):
     observed_line_redshift_uncertainty_negative = FloatField('Observed Frequency/Redshift Negative Uncertainty',
                                                               validators=[Optional(), NumberRange(min=0)])
     detection_type = SelectField(u'Telescope Type used for Observation',
-                                 choices=[('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')],
+                                 choices=[('SD', 'Single Dish'), ('IF', 'Interferometric')],
                                  validators=[Optional()])
     observed_beam_major = FloatField('Beam Major Axrs FWHM (in arcsec) (strongly recommended) ',
                                      validators=[Optional(), NumberRange(min=0)])
@@ -248,7 +248,7 @@ class EditLineForm(FlaskForm):
     observed_line_redshift_uncertainty_negative = FloatField('Observable Line Frequency Negative Uncertainty',
                                                               validators=[Optional(), NumberRange(min=0)])
     detection_type = SelectField(u'Telescope Type used for Detection',
-                                 choices=[('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')],
+                                 choices=[('SD', 'Single Dish'), ('IF', 'Interferometric')],
                                  validators=[Optional()])
     observed_beam_major = FloatField('Observed Beam Major (FwHM in arcsec) (strongly recommended) ',
                                      validators=[Optional(), NumberRange(min=0)])

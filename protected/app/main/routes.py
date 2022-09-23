@@ -1058,8 +1058,7 @@ def entry_file():
                 dict_frequency, message = test_frequency(row_species, row_emitted_frequency)
 
                 # Since v-1.12 we convert observed frequency to redshift and store as redshift.
-                # See previous versions for frequency implementation.
-                # Note, previous versions' implementation was erroneous.
+
                 if row_freq_type == "f":
                     frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
                                                                             to_none(row_observed_line_redshift),
@@ -1394,8 +1393,9 @@ def line_entry_form():
                 try:
                     dict_frequency, message = test_frequency(form.species.data, form.emitted_frequency.data)
                     if not dict_frequency:
-                        raise Exception(message)
+                        flash(message)
                 except:
+                    #define exception here
                     pass
 
                 dict_frequency, message = test_frequency(form.species.data, form.emitted_frequency.data)
@@ -1518,12 +1518,14 @@ def line_edit_form(id):
             if galaxy_id is None:
                 flash('Please enter the name exactly as proposed using Caps if necessary')
             else:
-                if form.freq_type.data == 'z':
-                    frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data,
+                dict_frequency, message = test_frequency(str(form.species.data), str(form.emitted_frequency.data))
+                if not dict_frequency:
+                    flash(message)
+                if form.freq_type.data == 'f':
+                    frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
                                                                             form.observed_line_redshift.data,
                                                                             form.observed_line_redshift_uncertainty_positive.data,
                                                                             form.observed_line_redshift_uncertainty_negative.data)
-                    negative_uncertainty = None
                 else:
                     frequency = form.observed_line_redshift.data
                     positive_uncertainty = form.observed_line_redshift_uncertainty_positive.data
