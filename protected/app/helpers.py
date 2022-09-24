@@ -168,22 +168,22 @@ def dec_to_float(coordinates):
         return float(dec)
 
 
-def round_to_nsf(number, nsf=2):
+def round_to_nsf(value, nsf=2):
     """
     Rounds the number to the provided number of significant figures.
     """
 
-    integer_part = math.floor(number)
+    integer_part = math.floor(value)
     if integer_part > 0:
         integer_part_len = len(str(integer_part))
-        return round(number, nsf-integer_part_len)
+        return round(value, nsf-integer_part_len)
     else:
         st = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-        index = next((i for i, ch in enumerate(str(number)) if ch in st), None)
-        return round(number, index)
+        index = next((i for i, ch in enumerate(str(value)) if ch in st), None)
+        return round(value, index)
 
 
-def round_to_uncertainty(number, pos_uncertainty, neg_uncertainty):
+def round_to_uncertainty(value, pos_uncertainty, neg_uncertainty):
     """
     Among two uncertainties finds one with more precision and
     rounds the value of variable number accordingly.
@@ -205,58 +205,48 @@ def round_to_uncertainty(number, pos_uncertainty, neg_uncertainty):
             else:
                 pass
 
-    return round(number, precision)
+    return round(value, precision)
 
 
+def round_redshift(value, positive_uncertainty, negative_uncertainty, redshift=True, download=False):
+    """
+    Given either redshift (default behaviour) or frequency and the corresponding uncertainties,
+    the function round up the values according to the specified rule:
+    a) If no uncertainties are available, round to a fixed precision depending on whether the data is
+    to be viewed or downloaded.
+    b) If uncertainties are available, round uncertainties to 2 significant values,
+    and round the redshift/frequency according to uncertainty with most precision.
 
-def round_redshift(
-        number,
-        positive_uncertainty,
-        negative_uncertainty,
-        redshift=True,
-        return_pos_uncert=False,
-        return_neg_uncert=False):
+    Parameters:
+        value (float): redshift or observed frequency value.
+        positive_uncertainty (float): corresponding positive uncertainty.
+        negative_uncertainty (float): corresponding negative uncertainty.
+        redshift (bool): Default:True. True if the value is redshift, False if frequency.
+        download (bool): Default:False. True if the values are to be downloaded, False if to be displayed.
 
-    if number is None:
-        return None
+    Returns:
+        (rounded_value, positive_uncertainty, negative_uncertainty) ((float, float, float)): Rounded up values.
+    """
 
-    if (positive_uncertainty is None) or (negative_uncertainty is None):
-        if (positive_uncertainty is None) and (negative_uncertainty is None):
-            # round to 4 decimals for redshift and 6 for frequency
-            if return_pos_uncert or return_neg_uncert:
-                return None
-            if redshift:
-                return round_to_nsf(number, 4)
-            else:
-                return round_to_nsf(number, 6)
-        elif negative_uncertainty is None:
-            negative_uncertainty = positive_uncertainty
-        else:
-            positive_uncertainty = negative_uncertainty
-    # now we have both uncertainties, so round to uncertainty.
-    # but first round uncertainty to 2 sf.
-    positive_uncertainty = round_to_nsf(positive_uncertainty, 2)
-    negative_uncertainty = round_to_nsf(negative_uncertainty, 2)
-    if return_pos_uncert:
-        return positive_uncertainty
-    if return_neg_uncert:
-        return negative_uncertainty
-    final = round_to_uncertainty(number, positive_uncertainty, negative_uncertainty)
-
-    return final
-
-def round_redshift2(number, positive_uncertainty, negative_uncertainty, redshift=True):
-
-    if number is None:
+    if value is None:
         return None, None, None
 
     if (positive_uncertainty is None) or (negative_uncertainty is None):
         if (positive_uncertainty is None) and (negative_uncertainty is None):
-            # round to 4 decimals for redshift and 6 for frequency
-            if redshift:
-                return round_to_nsf(number, 4), None, None
+
+            if not download:
+                # round to 4 decimals for redshift and 6 for frequency.
+                if redshift:
+                    return round_to_nsf(value, 4), None, None
+                else:
+                    return round_to_nsf(value, 6), None, None
             else:
-                return round_to_nsf(number, 6), None, None
+                # when downloading, precision higher by 2.
+                if redshift:
+                    return round_to_nsf(value, 6), None, None
+                else:
+                    return round_to_nsf(value, 8), None, None
+        # if one of the uncertainties is None, we assume symmetry.
         elif negative_uncertainty is None:
             negative_uncertainty = positive_uncertainty
         else:
@@ -265,7 +255,8 @@ def round_redshift2(number, positive_uncertainty, negative_uncertainty, redshift
     # but first round uncertainty to 2 sf.
     positive_uncertainty = round_to_nsf(positive_uncertainty, 2)
     negative_uncertainty = round_to_nsf(negative_uncertainty, 2)
-    return round_to_uncertainty(number, positive_uncertainty, negative_uncertainty)
+    rounded_value = round_to_uncertainty(value, positive_uncertainty, negative_uncertainty)
+    return rounded_value, positive_uncertainty, negative_uncertainty
 
 
 def redshift_to_frequency(emitted_frequency, z, positive_uncertainty, negative_uncertainty):

@@ -83,6 +83,8 @@ COL_NAMES = {
     'name':'name',
     'right_ascension' : 'right_ascension',
     'declination':'declination',
+    'right_ascension_weighted_average': 'right_ascension_weighted_average',
+    'declination_weighted_average': 'declination_weighted_average',
     'coordinate_system':'coordinate_system',
     'redshift': 'Redshift of the galaxy',
     'lensing_flag':'lensing_flag',

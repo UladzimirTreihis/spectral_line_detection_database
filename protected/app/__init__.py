@@ -60,10 +60,6 @@ security = Security()
 class ExtendedConfirmRegisterForm(ConfirmRegisterForm):
     username = StringField('Username', [Required()])
 
-def multiply_difference(a, b, c):
-    if (a == None) or (b == None) or (c == None):
-        return None
-    return (a-b) * (a-c)
 
 # Flask-Admin
 class RestrictedAdminIndexView(AdminIndexView):
@@ -80,8 +76,6 @@ def create_math_functions_on_connect(dbapi_connection, connection_record):
     dbapi_connection.create_function('cos', 1, math.cos)
     dbapi_connection.create_function('acos', 1, math.acos)
     dbapi_connection.create_function('radians', 1, math.radians)
-    dbapi_connection.create_function('round_redshift', 6, round_redshift)
-    dbapi_connection.create_function('multiply_difference', 3, multiply_difference)
 
 
 logging.basicConfig(filename='record.log', level=logging.DEBUG,

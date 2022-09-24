@@ -814,7 +814,6 @@ class FreqView(AdminBaseView):
                 frequencies = db.session.query(Freq)
                 if frequencies.first() != None:
                     try:
-                        num_rows_deleted = db.session.query(Freq).delete()
                         db.session.commit()
                     except:
                         db.session.rollback()

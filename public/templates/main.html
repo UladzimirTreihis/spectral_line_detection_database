@@ -44,8 +44,33 @@
 
 <br> 
 <br>
-<a href="{{ url_for ('main.convert_to_CSV', table = "Galaxy", identifier = "None", symmetrical = "False") }}" class="btn btn-info" role="button">Download All Galaxies as CSV</a>
-<a href="{{ url_for ('main.convert_to_CSV', table = "Everything", identifier = "None", symmetrical = "False") }}" class="btn btn-info" role="button">Download All Galaxies and Lines as CSV</a>
+
+<form action="" method="get" novalidate enctype="multipart/form-data">
+    <input type="checkbox" id="convertToFrequency" name="convertToFrequency">
+    <label for="convertToFrequency" class="checkbox" style="padding-left: 10px">
+        Check if you want the redshift converted to MHz.
+    </label>
+</form>
+<script type="text/javascript">
+    function validate() {
+      // Get the checkbox
+      var checkBox = document.getElementById('convertToFrequency');
+      // Get the output text
+      var linkDownloadGalaxies = document.getElementById('downloadGalaxies');
+      var linkDownloadEverything = document.getElementById('downloadEverything');
+
+      // If the checkbox is checked, display the output text
+      if (checkBox.checked == true){
+        linkDownloadGalaxies.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy", identifier = "None", to_frequency = "1") }}";
+        linkDownloadEverything.href = "{{ url_for ('main.convert_to_CSV', table = "Everything", identifier = "None", to_frequency = "1") }}";
+      } else {
+        linkDownloadGalaxies.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy", identifier = "None", to_frequency = "0") }}";
+        linkDownloadEverything.href = "{{ url_for ('main.convert_to_CSV', table = "Everything", identifier = "None", to_frequency = "0") }}";
+      }
+    }
+</script>
+<a id="downloadGalaxies" href="" class="btn btn-info" role="button" onclick="validate()">Download All Galaxies as CSV</a>
+<a id="downloadEverything" href="" class="btn btn-info" role="button" onclick="validate()">Download All Galaxies and Lines as CSV</a>
 <br>
 <br>
 <h2> Database sorted by galaxy name </h2>

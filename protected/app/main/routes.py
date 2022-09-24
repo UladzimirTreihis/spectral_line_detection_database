@@ -387,7 +387,6 @@ def main():
     if form.submit.data:
         name = form.galaxy_name.data
         galaxy = Galaxy.query.filter_by(name=name).first_or_404()
-        lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
 
         return redirect(url_for("main.galaxy", name=galaxy.name))
 
@@ -411,18 +410,10 @@ def main():
 
     # rounding redshift and uncertainties.
     for galaxy in galaxies:
-        galaxy.redshift = round_redshift(
+        galaxy.redshift, galaxy.redshift_error, _ = round_redshift(
             galaxy.redshift,
             galaxy.redshift_error,
             galaxy.redshift_error,
-            True,
-            False,
-            False)
-        galaxy.redshift_error = round_redshift(
-            galaxy.redshift,
-            galaxy.redshift_error,
-            galaxy.redshift_error,
-            True,
             True,
             False)
 
@@ -747,7 +738,7 @@ def entry_file():
         reader = csv.DictReader(x.replace('\0', '') for x in csv_file)
         data = [row for row in reader]
         classification_options = {"LBG": "LBG (Lyman Break Galaxy)", "MS": "MS (Main Sequence Galaxy)",
-                                  "SMB": "SMB (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)",
+                                  "SMG": "SMG (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)",
                                   "SB": "SB (Starburst)", "AGN": "AGN (Contains a Known Active Galactic Nucleus)",
                                   "QSO": "QSO (Optically Bright AGN)",
                                   "Quasar": "Quasar (Optical and Radio Bright AGN)",
@@ -1719,36 +1710,26 @@ def galaxy(name):
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
 
     # see round_redshift in helpers.py to see how rounding is performed.
-    galaxy.redshift = round_redshift(galaxy.redshift, galaxy.redshift_error, galaxy.redshift_error, True, False, False)
-    galaxy.redshift_error = round_redshift(galaxy.redshift, galaxy.redshift_error, galaxy.redshift_error, True, True, False)
+    galaxy.redshift, galaxy.redshift_error, _ = round_redshift(
+        galaxy.redshift,
+        galaxy.redshift_error,
+        galaxy.redshift_error,
+        True,
+        False
+    )
 
     lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
 
     for line in lines:
-        line.observed_line_redshift = round_redshift(
+        line.observed_line_redshift,\
+         line.observed_line_redshift_uncertainty_positive,\
+         line.observed_line_redshift_uncertainty_negative = round_redshift(
             line.observed_line_redshift,
             line.observed_line_redshift_uncertainty_positive,
             line.observed_line_redshift_uncertainty_negative,
-            True,
-            False,
-            False
-        )
-        line.observed_line_redshift_uncertainty_positive = round_redshift(
-            line.observed_line_redshift,
-            line.observed_line_redshift_uncertainty_positive,
-            line.observed_line_redshift_uncertainty_negative,
-            True,
             True,
             False
-        )
-        line.observed_line_redshift_uncertainty_negative = round_redshift(
-            line.observed_line_redshift,
-            line.observed_line_redshift_uncertainty_positive,
-            line.observed_line_redshift_uncertainty_negative,
-            True,
-            False,
-            True
-        )
+         )
 
     return render_template('galaxy.html', galaxy=galaxy, lines=lines)
 
@@ -1802,9 +1783,9 @@ def test():
     return "{}\n{}\n{}".format(negative_uncertainties, as_dict, positive_uncertainties)
 
 
-@bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
+@bp.route("/convert_to_CSV/<table>/<identifier>/<to_frequency>", methods=['GET', 'POST'])
 @login_required
-def convert_to_CSV(table, identifier):
+def convert_to_CSV(table, identifier, to_frequency=0):
     """
     Converts a query to CSV route
 
@@ -1816,225 +1797,144 @@ def convert_to_CSV(table, identifier):
         Returns:
             response (flask.make_response): the flask response.
     """
+    if int(to_frequency):
+        return "in development"
+    if request.method == 'GET':
+        if table == "Galaxy":
 
-    if table == "Galaxy":
-
-        # Galaxy takes averaged coordinates
-        f = open('galaxy.csv', 'w')
-        out = csv.writer(f)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['redshift'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes']
-        ])
-
-        for item in Galaxy.query.all():
+            # Galaxy takes averaged coordinates
+            f = open('galaxy.csv', 'w')
+            out = csv.writer(f)
             out.writerow([
-                item.name,
-                item.right_ascension,
-                item.declination,
-                item.coordinate_system,
-                item.redshift,
-                item.lensing_flag,
-                item.classification,
-                item.notes
+                COL_NAMES['name'],
+                COL_NAMES['right_ascension_weighted_average'],
+                COL_NAMES['declination_weighted_average'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['redshift'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes']
             ])
-        f.close()
-        with open('./galaxy.csv', 'r') as file:
-            galaxy_csv = file.read()
-        response = make_response(galaxy_csv)
-        cd = 'attachment; filename=galaxy.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
 
-    elif table == "Line":
+            for item in Galaxy.query.all():
+                out.writerow([
+                    item.name,
+                    item.right_ascension,
+                    item.declination,
+                    item.coordinate_system,
+                    item.redshift,
+                    item.lensing_flag,
+                    item.classification,
+                    item.notes
+                ])
+            f.close()
+            with open('./galaxy.csv', 'r') as file:
+                galaxy_csv = file.read()
+            response = make_response(galaxy_csv)
+            cd = 'attachment; filename=galaxy.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
 
-        # Line takes individual coordinates
-        f = open('line.csv', 'w')
-        out = csv.writer(f)
-        out.writerow([
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_redshift'],
-            COL_NAMES['observed_line_redshift_uncertainty_positive'],
-            COL_NAMES['observed_line_redshift_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        for item in Line.query.all():
+        elif table == "Line":
+
+            # Line takes individual coordinates
+            f = open('line.csv', 'w')
+            out = csv.writer(f)
             out.writerow([
-                item.integrated_line_flux,
-                item.integrated_line_flux_uncertainty_positive,
-                item.integrated_line_flux_uncertainty_negative,
-                item.peak_line_flux,
-                item.peak_line_flux_uncertainty_positive,
-                item.peak_line_flux_uncertainty_negative,
-                item.line_width,
-                item.line_width_uncertainty_positive,
-                item.line_width_uncertainty_negative,
-                item.observed_line_redshift,
-                item.observed_line_redshift_uncertainty_positive,
-                item.observed_line_redshift_uncertainty_negative,
-                item.detection_type,
-                item.observed_beam_major,
-                item.observed_beam_minor,
-                item.observed_beam_angle,
-                item.reference,
-                item.notes
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                COL_NAMES['observed_line_redshift'],
+                COL_NAMES['observed_line_redshift_uncertainty_positive'],
+                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
             ])
-        f.close()
-        with open('./line.csv', 'r') as file:
-            line_csv = file.read()
-        response = make_response(line_csv)
-        cd = 'attachment; filename=line.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
+            for item in Line.query.all():
+                out.writerow([
+                    item.integrated_line_flux,
+                    item.integrated_line_flux_uncertainty_positive,
+                    item.integrated_line_flux_uncertainty_negative,
+                    item.peak_line_flux,
+                    item.peak_line_flux_uncertainty_positive,
+                    item.peak_line_flux_uncertainty_negative,
+                    item.line_width,
+                    item.line_width_uncertainty_positive,
+                    item.line_width_uncertainty_negative,
+                    item.observed_line_redshift,
+                    item.observed_line_redshift_uncertainty_positive,
+                    item.observed_line_redshift_uncertainty_negative,
+                    item.detection_type,
+                    item.observed_beam_major,
+                    item.observed_beam_minor,
+                    item.observed_beam_angle,
+                    item.reference,
+                    item.notes
+                ])
+            f.close()
+            with open('./line.csv', 'r') as file:
+                line_csv = file.read()
+            response = make_response(line_csv)
+            cd = 'attachment; filename=line.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
 
-    elif table == "Galaxy Lines":
+        elif table == "Galaxy Lines":
 
-        # Galaxy with lines takes lines individual coordinates
-        f = open('galaxy_lines.csv', 'w')
-        out = csv.writer(f)
-        galaxy_lines = db.session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier,
-                                                                            Line.galaxy_id == identifier)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['redshift'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['emitted_frequency'],
-            COL_NAMES['species'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_redshift'],
-            COL_NAMES['observed_line_redshift_uncertainty_positive'],
-            COL_NAMES['observed_line_redshift_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        for item in galaxy_lines:
-            l = item[1]
-            g = item[0]
+            # Galaxy with lines takes lines individual coordinates
+            f = open('galaxy_lines.csv', 'w')
+            out = csv.writer(f)
+            galaxy_lines = db.session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier,
+                                                                                Line.galaxy_id == identifier)
             out.writerow([
-                g.name,
-                g.right_ascension,
-                g.declination,
-                g.coordinate_system,
-                g.redshift,
-                g.lensing_flag,
-                g.classification,
-                g.notes,
-                l.right_ascension,
-                l.declination,
-                l.emitted_frequency,
-                l.species,
-                l.integrated_line_flux,
-                l.integrated_line_flux_uncertainty_positive,
-                l.integrated_line_flux_uncertainty_negative,
-                l.peak_line_flux,
-                l.peak_line_flux_uncertainty_positive,
-                l.peak_line_flux_uncertainty_negative,
-                l.line_width,
-                l.line_width_uncertainty_positive,
-                l.line_width_uncertainty_negative,
-                l.observed_line_redshift,
-                l.observed_line_redshift_uncertainty_positive,
-                l.observed_line_redshift_uncertainty_negative,
-                l.detection_type,
-                l.observed_beam_major,
-                l.observed_beam_minor,
-                l.observed_beam_angle,
-                l.reference,
-                l.notes
+                COL_NAMES['name'],
+                COL_NAMES['right_ascension_weighted_average'],
+                COL_NAMES['declination_weighted_average'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['redshift'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes'],
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['emitted_frequency'],
+                COL_NAMES['species'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                COL_NAMES['observed_line_redshift'],
+                COL_NAMES['observed_line_redshift_uncertainty_positive'],
+                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
             ])
-        f.close()
-        with open('./galaxy_lines.csv', 'r') as file:
-            galaxy_lines_csv = file.read()
-        response = make_response(galaxy_lines_csv)
-        cd = 'attachment; filename=galaxy_lines.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
-
-    elif table == "Everything":
-
-        # Lines take individual coordinates
-        f = open('galaxies_lines.csv', 'w')
-        out = csv.writer(f)
-        data = db.session.query(Galaxy, Line).outerjoin(Line)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['redshift'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['emitted_frequency'],
-            COL_NAMES['species'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_redshift'],
-            COL_NAMES['observed_line_redshift_uncertainty_positive'],
-            COL_NAMES['observed_line_redshift_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        for item in data:
-            l = item[1]
-            g = item[0]
-            if l is not None:
+            for item in galaxy_lines:
+                l = item[1]
+                g = item[0]
                 out.writerow([
                     g.name,
                     g.right_ascension,
@@ -2067,64 +1967,145 @@ def convert_to_CSV(table, identifier):
                     l.reference,
                     l.notes
                 ])
-            else:
-                out.writerow([
-                    g.name,
-                    g.right_ascension,
-                    g.declination,
-                    g.coordinate_system,
-                    g.redshift,
-                    g.lensing_flag,
-                    g.classification,
-                    g.notes
-                ])
-        f.close()
-        with open('./galaxies_lines.csv', 'r') as file:
-            galaxies_lines_csv = file.read()
-        response = make_response(galaxies_lines_csv)
-        cd = 'attachment; filename=galaxies_lines.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
-    elif table == "Empty":
-        f = open('sample.csv', 'w')
-        out = csv.writer(f)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['emitted_frequency'],
-            COL_NAMES['species'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_redshift'],
-            COL_NAMES['observed_line_redshift_uncertainty_positive'],
-            COL_NAMES['observed_line_redshift_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        f.close()
-        with open('./sample.csv', 'r') as file:
-            sample_csv = file.read()
-        response = make_response(sample_csv)
-        cd = 'attachment; filename=sample.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
+            f.close()
+            with open('./galaxy_lines.csv', 'r') as file:
+                galaxy_lines_csv = file.read()
+            response = make_response(galaxy_lines_csv)
+            cd = 'attachment; filename=galaxy_lines.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
+
+        elif table == "Everything":
+
+            # Lines take individual coordinates
+            f = open('galaxies_lines.csv', 'w')
+            out = csv.writer(f)
+            data = db.session.query(Galaxy, Line).outerjoin(Line)
+            out.writerow([
+                COL_NAMES['name'],
+                COL_NAMES['right_ascension_weighted_average'],
+                COL_NAMES['declination_weighted_average'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['redshift'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes'],
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['emitted_frequency'],
+                COL_NAMES['species'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                COL_NAMES['observed_line_redshift'],
+                COL_NAMES['observed_line_redshift_uncertainty_positive'],
+                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
+            ])
+            for item in data:
+                l = item[1]
+                g = item[0]
+                if l is not None:
+                    out.writerow([
+                        g.name,
+                        g.right_ascension,
+                        g.declination,
+                        g.coordinate_system,
+                        g.redshift,
+                        g.lensing_flag,
+                        g.classification,
+                        g.notes,
+                        l.right_ascension,
+                        l.declination,
+                        l.emitted_frequency,
+                        l.species,
+                        l.integrated_line_flux,
+                        l.integrated_line_flux_uncertainty_positive,
+                        l.integrated_line_flux_uncertainty_negative,
+                        l.peak_line_flux,
+                        l.peak_line_flux_uncertainty_positive,
+                        l.peak_line_flux_uncertainty_negative,
+                        l.line_width,
+                        l.line_width_uncertainty_positive,
+                        l.line_width_uncertainty_negative,
+                        l.observed_line_redshift,
+                        l.observed_line_redshift_uncertainty_positive,
+                        l.observed_line_redshift_uncertainty_negative,
+                        l.detection_type,
+                        l.observed_beam_major,
+                        l.observed_beam_minor,
+                        l.observed_beam_angle,
+                        l.reference,
+                        l.notes
+                    ])
+                else:
+                    out.writerow([
+                        g.name,
+                        g.right_ascension,
+                        g.declination,
+                        g.coordinate_system,
+                        g.redshift,
+                        g.lensing_flag,
+                        g.classification,
+                        g.notes
+                    ])
+            f.close()
+            with open('./galaxies_lines.csv', 'r') as file:
+                galaxies_lines_csv = file.read()
+            response = make_response(galaxies_lines_csv)
+            cd = 'attachment; filename=galaxies_lines.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
+        elif table == "Empty":
+            f = open('sample.csv', 'w')
+            out = csv.writer(f)
+            out.writerow([
+                COL_NAMES['name'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes'],
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['emitted_frequency'],
+                COL_NAMES['species'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                COL_NAMES['observed_line_redshift'],
+                COL_NAMES['observed_line_redshift_uncertainty_positive'],
+                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
+            ])
+            f.close()
+            with open('./sample.csv', 'r') as file:
+                sample_csv = file.read()
+            response = make_response(sample_csv)
+            cd = 'attachment; filename=sample.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
