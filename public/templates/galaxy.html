@@ -76,7 +76,31 @@
     <p>
         To see individual lines' individual positions, please download. 
     </p>
-    <a href="{{ url_for ('main.convert_to_CSV', table = 'Galaxy Lines', identifier = galaxy.id, symmetrical = 'False') }}" class="btn btn-info" role="button">Download line entries for this galaxy</a>
+    <form action="" method="get" novalidate enctype="multipart/form-data">
+        <input type="checkbox" id="convertToFrequency" name="convertToFrequency">
+        <label for="convertToFrequency" class="checkbox" style="padding-left: 10px">
+            Check if you want the redshift converted to MHz.
+        </label>
+    </form>
+    <script type="text/javascript">
+        function validate() {
+          // Get the checkbox
+          var checkBox = document.getElementById('convertToFrequency');
+          // Get the output text
+          var linkDownloadLines = document.getElementById('downloadLines');
+          var linkDownloadEverything = document.getElementById('downloadEverything');
+
+          // If the checkbox is checked, display the output text
+          if (checkBox.checked == true){
+            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, to_frequency = "1") }}";
+          } else {
+            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, to_frequency = "0") }}";
+          }
+        }
+    </script>
+
+    <br>
+    <a id="downloadLines" href="" class="btn btn-info" role="button" onclick="validate()">Download line entries for this galaxy</a>
 
     <div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
         <table class = "table table-hover" id = "Line" style="width: 100%">

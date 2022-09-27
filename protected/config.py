@@ -114,13 +114,19 @@ COL_NAMES = {
 }
 
 
-def remove_key(d, key):
+def remove_key(d, *keys):
     r = dict(d)
-    del r[key]
+    for key in keys:
+        del r[key]
     return r
 
 
-COL_NAMES_WO_REDSHIFT = remove_key(COL_NAMES, 'redshift')
+COL_NAMES_FOR_SUBMISSION = remove_key(
+    COL_NAMES,
+    'redshift',
+    'right_ascension_weighted_average',
+    'declination_weighted_average'
+)
 
 dec_reg_exp = '((([+]+)|([-]+))[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|((([+]+)|([-]+))[0-9.]+[.]*[0-9]*)'
 ra_reg_exp = '([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+[.]*[0-9]*)'

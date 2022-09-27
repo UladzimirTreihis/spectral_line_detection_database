@@ -39,7 +39,7 @@ import csv
 from sqlalchemy import func
 from config import (
     COL_NAMES,
-    COL_NAMES_WO_REDSHIFT,
+    COL_NAMES_FOR_SUBMISSION,
     ra_reg_exp,
     dec_reg_exp
 )
@@ -750,7 +750,7 @@ def entry_file():
         else:
             validated = True
             row_count = 0
-            values = COL_NAMES_WO_REDSHIFT.values()
+            values = COL_NAMES_FOR_SUBMISSION.values()
             value_list = list(values)
             missing_column = []
             for k in value_list:
@@ -1743,44 +1743,7 @@ def submit():
 @bp.route("/test")
 @login_required
 def test():
-    conn = engine.connect()
-    session = Session(bind=conn)
-    redshifts = session.query(func.round_redshift(
-        Line.observed_line_redshift,
-        Line.observed_line_redshift_uncertainty_positive,
-        Line.observed_line_redshift_uncertainty_negative,
-        True,
-        False,
-        False)
-    ).all()
-    lines_ids = session.query(Line.id).all()
-    lines_ids_list = [lines_id[0] for lines_id in lines_ids]
-    as_dict = dict(zip(lines_ids_list, [redshift[0] for redshift in redshifts]))
-
-
-    #redshifts2 = db.session.query(Line).query(Line.observed_line_redshift).all()
-    positive_uncertainties = session.query(func.round_redshift(
-        Line.observed_line_redshift,
-        Line.observed_line_redshift_uncertainty_positive,
-        Line.observed_line_redshift_uncertainty_negative,
-        True,
-        True,
-        False)
-    ).all()
-    negative_uncertainties = session.query(func.round_redshift(
-        Line.observed_line_redshift,
-        Line.observed_line_redshift_uncertainty_positive,
-        Line.observed_line_redshift_uncertainty_negative,
-        True,
-        False,
-        True)
-    ).all()
-
-    #lines = session.query(Line).filter_by(galaxy_id=galaxy.id).all()
-
-    #q = session.query(redshifts.subquery(), positive_uncertainties.subquery())
-    #logins_count, questions_count = q.first()
-    return "{}\n{}\n{}".format(negative_uncertainties, as_dict, positive_uncertainties)
+    return "test"
 
 
 @bp.route("/convert_to_CSV/<table>/<identifier>/<to_frequency>", methods=['GET', 'POST'])
@@ -1878,6 +1841,15 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                         item.observed_line_redshift,
                         item.observed_line_redshift_uncertainty_positive,
                         item.observed_line_redshift_uncertainty_negative)
+                # round_redshift
+                item.observed_line_redshift,\
+                 item.observed_line_redshift_uncertainty_positive,\
+                 item.observed_line_redshift_uncertainty_negative = round_redshift(
+                    item.observed_line_redshift,
+                    item.observed_line_redshift_uncertainty_positive,
+                    item.observed_line_redshift_uncertainty_negative,
+                    not to_frequency,
+                    True)
                 # write out
                 out.writerow([
                     item.integrated_line_flux,
@@ -1959,6 +1931,15 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                         l.observed_line_redshift,
                         l.observed_line_redshift_uncertainty_positive,
                         l.observed_line_redshift_uncertainty_negative)
+                # round_redshift
+                l.observed_line_redshift,\
+                 l.observed_line_redshift_uncertainty_positive,\
+                 l.observed_line_redshift_uncertainty_negative = round_redshift(
+                    l.observed_line_redshift,
+                    l.observed_line_redshift_uncertainty_positive,
+                    l.observed_line_redshift_uncertainty_negative,
+                    not to_frequency,
+                    True)
                 # write out
                 out.writerow([
                     g.name,
@@ -2052,6 +2033,15 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                             l.observed_line_redshift,
                             l.observed_line_redshift_uncertainty_positive,
                             l.observed_line_redshift_uncertainty_negative)
+                    # round_redshift
+                    l.observed_line_redshift, \
+                    l.observed_line_redshift_uncertainty_positive, \
+                    l.observed_line_redshift_uncertainty_negative = round_redshift(
+                        l.observed_line_redshift,
+                        l.observed_line_redshift_uncertainty_positive,
+                        l.observed_line_redshift_uncertainty_negative,
+                        not to_frequency,
+                        True)
                     # write out
                     out.writerow([
                         g.name,

@@ -180,7 +180,7 @@ def round_to_nsf(value, nsf=2):
     else:
         st = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
         index = next((i for i, ch in enumerate(str(value)) if ch in st), None)
-        return round(value, index)
+        return round(value, index-2+nsf)
 
 
 def round_to_uncertainty(value, pos_uncertainty, neg_uncertainty):
@@ -237,15 +237,15 @@ def round_redshift(value, positive_uncertainty, negative_uncertainty, redshift=T
             if not download:
                 # round to 4 decimals for redshift and 6 for frequency.
                 if redshift:
-                    return round_to_nsf(value, 4), None, None
+                    return round(value, 4), None, None
                 else:
-                    return round_to_nsf(value, 6), None, None
+                    return round(value, 6), None, None
             else:
                 # when downloading, precision higher by 2.
                 if redshift:
-                    return round_to_nsf(value, 6), None, None
+                    return round(value, 6), None, None
                 else:
-                    return round_to_nsf(value, 8), None, None
+                    return round(value, 8), None, None
         # if one of the uncertainties is None, we assume symmetry.
         elif negative_uncertainty is None:
             negative_uncertainty = positive_uncertainty
