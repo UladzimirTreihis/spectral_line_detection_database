@@ -1785,7 +1785,7 @@ def test():
 
 @bp.route("/convert_to_CSV/<table>/<identifier>/<to_frequency>", methods=['GET', 'POST'])
 @login_required
-def convert_to_CSV(table, identifier, to_frequency=0):
+def convert_to_CSV(table, identifier, to_frequency="0"):
     """
     Converts a query to CSV route
 
@@ -1793,13 +1793,18 @@ def convert_to_CSV(table, identifier, to_frequency=0):
         Parameters:
             table (str): Indicator string that specifies the type of the table desired by the user.
             identifier (str): the id of the galaxy if one.
+            to_frequency (str): "0" - return data as redshift (default), "1" - convert to frequency.
 
         Returns:
             response (flask.make_response): the flask response.
     """
-    if int(to_frequency):
-        return "in development"
+
     if request.method == 'GET':
+        # convert to_frequency to a boolean
+        if int(to_frequency):
+            to_frequency = True
+        else:
+            to_frequency = False
         if table == "Galaxy":
 
             # Galaxy takes averaged coordinates
@@ -1864,6 +1869,16 @@ def convert_to_CSV(table, identifier, to_frequency=0):
                 COL_NAMES['l_notes']
             ])
             for item in Line.query.all():
+                # convert to frequency on request
+                if to_frequency:
+                    item.observed_line_redshift,\
+                     item.observed_line_redshift_uncertainty_positive,\
+                     item.observed_line_redshift_uncertainty_negative = redshift_to_frequency(
+                        item.emitted_frequency,
+                        item.observed_line_redshift,
+                        item.observed_line_redshift_uncertainty_positive,
+                        item.observed_line_redshift_uncertainty_negative)
+                # write out
                 out.writerow([
                     item.integrated_line_flux,
                     item.integrated_line_flux_uncertainty_positive,
@@ -1935,6 +1950,16 @@ def convert_to_CSV(table, identifier, to_frequency=0):
             for item in galaxy_lines:
                 l = item[1]
                 g = item[0]
+                # convert to frequency on request
+                if to_frequency:
+                    l.observed_line_redshift,\
+                     l.observed_line_redshift_uncertainty_positive,\
+                     l.observed_line_redshift_uncertainty_negative = redshift_to_frequency(
+                        l.emitted_frequency,
+                        l.observed_line_redshift,
+                        l.observed_line_redshift_uncertainty_positive,
+                        l.observed_line_redshift_uncertainty_negative)
+                # write out
                 out.writerow([
                     g.name,
                     g.right_ascension,
@@ -2018,6 +2043,16 @@ def convert_to_CSV(table, identifier, to_frequency=0):
                 l = item[1]
                 g = item[0]
                 if l is not None:
+                    # convert to frequency on request
+                    if to_frequency:
+                        l.observed_line_redshift, \
+                        l.observed_line_redshift_uncertainty_positive, \
+                        l.observed_line_redshift_uncertainty_negative = redshift_to_frequency(
+                            l.emitted_frequency,
+                            l.observed_line_redshift,
+                            l.observed_line_redshift_uncertainty_positive,
+                            l.observed_line_redshift_uncertainty_negative)
+                    # write out
                     out.writerow([
                         g.name,
                         g.right_ascension,
