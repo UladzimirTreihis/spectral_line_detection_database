@@ -168,6 +168,20 @@ def dec_to_float(coordinates):
         return float(dec)
 
 
+def scientific_notation_to_full_string(value):
+    """
+    Given a float, check whether it is in scientific notation and converts to a full length string.
+    For example 8e-05 -> 0.00008
+    """
+    str_value = str(value)
+    if '-' in str_value:
+        significant_part, power = str_value[:str_value.find('-') - 1], int(str_value[str_value.find('-') + 1:])
+        result = '0.' + '0' * (power-1) + significant_part.replace('.', '')
+    else:
+        result = str_value
+    return result
+
+
 def round_to_nsf(value, nsf=2):
     """
     Rounds the number to the provided number of significant figures.
@@ -178,9 +192,10 @@ def round_to_nsf(value, nsf=2):
         integer_part_len = len(str(integer_part))
         return round(value, nsf-integer_part_len)
     else:
+        str_value = scientific_notation_to_full_string(value)
         st = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
-        index = next((i for i, ch in enumerate(str(value)) if ch in st), None)
-        return round(value, index-2+nsf)
+        index = next((i for i, ch in enumerate(str_value) if ch in st), None) - 2
+        return round(value, index+nsf)
 
 
 def round_to_uncertainty(value, pos_uncertainty, neg_uncertainty):
@@ -188,12 +203,14 @@ def round_to_uncertainty(value, pos_uncertainty, neg_uncertainty):
     Among two uncertainties finds one with more precision and
     rounds the value of variable number accordingly.
     """
+    pos_uncertainty_str = scientific_notation_to_full_string(pos_uncertainty)
+    neg_uncertainty_str = scientific_notation_to_full_string(neg_uncertainty)
 
-    if len(str(pos_uncertainty)) != len(str(neg_uncertainty)):
-        uncertainty = pos_uncertainty if len(str(pos_uncertainty)) > len(str(neg_uncertainty)) else neg_uncertainty
-        uncertainty_str = str(uncertainty)
+    if len(pos_uncertainty_str) != len(neg_uncertainty_str):
+        uncertainty = pos_uncertainty if len(pos_uncertainty_str) > len(neg_uncertainty_str) else neg_uncertainty
+        uncertainty_str = scientific_notation_to_full_string(uncertainty)
     else:
-        uncertainty_str = str(pos_uncertainty)
+        uncertainty_str = scientific_notation_to_full_string(pos_uncertainty)
     if check_decimal(uncertainty_str):
         decimals = uncertainty_str[uncertainty_str.find('.') + 1:]
         precision = len(decimals)

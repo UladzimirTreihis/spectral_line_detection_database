@@ -195,16 +195,16 @@
       </div>
       <div style="display: flex;">
          <p>
-            {{ form_advanced.observed_line_frequency_min.label }}<br>
-            {{ form_advanced.observed_line_frequency_min(size=20) }}<br>
-            {% for error in form_advanced.observed_line_frequency_min.errors %}
+            {{ form_advanced.observed_line_redshift_min.label }}<br>
+            {{ form_advanced.observed_line_redshift_min(size=20) }}<br>
+            {% for error in form_advanced.observed_line_redshift_min.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
          <p>
-            {{ form_advanced.observed_line_frequency_max.label }}<br>
-            {{ form_advanced.observed_line_frequency_max(size=20) }}<br>
-            {% for error in form_advanced.observed_line_frequency_max.errors %}
+            {{ form_advanced.observed_line_redshift_max.label }}<br>
+            {{ form_advanced.observed_line_redshift_max(size=20) }}<br>
+            {% for error in form_advanced.observed_line_redshift_max.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
          </p>
@@ -377,9 +377,9 @@
          <th>\( FWHM \) \( (kms^{-1}) \)</th>
          <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
          <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-         <th>\( f_{obs} \) \( (GHz) \)</th>
-         <th>\( +\sigma_{f_{obs}} \) \( (GHz) \)</th>
-         <th>\( -\sigma_{f_{obs}} \) \( (GHz) \)</th>
+         <th>\( z \) </th>
+         <th>\( +\sigma_{z} \) </th>
+         <th>\( -\sigma_{z} \) </th>
          <th>\( Telescope \) \( Type \)</th>
          <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
          <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
@@ -425,13 +425,13 @@
                   {{ l.line_width_uncertainty_negative }}
                {% endif %}
             </td>
-            <td>{{ l.observed_line_frequency }}</td>
-            <td>{{ l.observed_line_frequency_uncertainty_positive }}</td>
+            <td>{{ l.observed_line_redshift }}</td>
+            <td>{{ l.observed_line_redshift_uncertainty_positive }}</td>
             <td>
-               {% if l.observed_line_frequency_uncertainty_negative == None %}
-                  {{ l.observed_line_frequency_uncertainty_positive }}
+               {% if l.observed_line_redshift_uncertainty_negative == None %}
+                  {{ l.observed_line_redshift_uncertainty_positive }}
                {% else %}
-                  {{ l.observed_line_frequency_uncertainty_negative }}
+                  {{ l.observed_line_redshift_uncertainty_negative }}
                {% endif %}
             </td>                
             <td>{{ l.detection_type }}</td>

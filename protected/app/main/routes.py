@@ -618,12 +618,10 @@ def query_results():
                                                                     Line.detection_type.contains(
                                                                         form_advanced.detection_type.data) | (
                                                                             Line.detection_type == None))))
-
+            # final query to be returned (if galaxy search)
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
-            return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
-
-            # Query displaying lines based on the data from form_advanced
+        # Query displaying lines based on the data from form_advanced
         elif form_advanced.lineSearch.data:
             if (form_advanced.right_ascension_point.data != None) and (
                     form_advanced.declination_point.data != None) and (
@@ -689,15 +687,25 @@ def query_results():
                                                        Line.observed_beam_minor == None)) & (
                                                Line.reference.contains(form_advanced.reference.data) | (
                                                Line.reference == None)))
-
+            # final query to be returned (if line search)
             galaxies = galaxies.order_by(Galaxy.name).all()
-
-            return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
 
         # Is not called
         else:
+            # final query to be returned (if general search)
             galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(
                 Galaxy.name).all()
+
+        # round values before we return query
+        for object in galaxies:
+            line = object[1]
+            line.observed_line_redshift,\
+             line.observed_line_redshift_uncertainty_positive,\
+             line.observed_line_redshift_uncertainty_negative = round_redshift(
+                line.observed_line_redshift,
+                line.observed_line_redshift_uncertainty_positive,
+                line.observed_line_redshift_uncertainty_negative
+            )
         return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
 
     # Get method
