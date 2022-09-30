@@ -17,3 +17,5 @@ venv/
 ENV/
 .idea
 
+# csvs
+.csv
