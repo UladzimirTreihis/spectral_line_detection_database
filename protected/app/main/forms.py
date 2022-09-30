@@ -104,9 +104,9 @@ class AdvancedSearchForm(FlaskForm):
     line_width_min = FloatField('Line FWHM (km/s) min:', validators=[Optional(), NumberRange(min=0)])
     line_width_max = FloatField('Line FWHM (km/s) max:', validators=[Optional(), NumberRange(min=0)])
 
-    observed_line_redshift_min = FloatField('Observed Line Frequency (GHz) min:',
+    observed_line_redshift_min = FloatField('Observed Line Redshift min:',
                                              validators=[Optional(), NumberRange(min=0)])
-    observed_line_redshift_max = FloatField('Observed Line Frequency (GHz) max:',
+    observed_line_redshift_max = FloatField('Observed Line Redshift max:',
                                              validators=[Optional(), NumberRange(min=0)])
 
     detection_type = SelectField(u'Telescope Type',

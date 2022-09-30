@@ -753,7 +753,7 @@ def post_approve(id):
 
         original_line_id = line[1]
         galaxy_id = line[0]
-
+        return "test original {} "
         db.session.query(Line).filter(
             Line.id == original_line_id
         ).update({"emitted_frequency": line[2], "integrated_line_flux": line[3],
