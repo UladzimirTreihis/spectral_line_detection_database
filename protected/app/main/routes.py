@@ -34,12 +34,12 @@ from app.main.forms import (
     UploadFileForm,
     DynamicSearchForm
 )
-from app.main.frequences import test_frequency2
+from app.main.frequences import test_frequency
 import csv
 from sqlalchemy import func
 from config import (
     COL_NAMES,
-    COL_NAMES_WO_REDSHIFT,
+    COL_NAMES_FOR_SUBMISSION,
     ra_reg_exp,
     dec_reg_exp
 )
@@ -47,127 +47,26 @@ from species import *
 from io import TextIOWrapper
 from flask_security import (
     current_user,
-    login_required,
-    roles_required
+    login_required
 )
 import math
 from app.main import bp
+from app.helpers import (
+    to_none,
+    to_zero,
+    to_m_inf,
+    to_p_inf,
+    round_redshift,
+    ra_to_float,
+    dec_to_float,
+    redshift_to_frequency,
+    frequency_to_redshift
+)
 import re
 from datetime import datetime
 
 
 #### HELPER FUNCTIONS ####
-
-
-def to_empty(entry):
-    """
-    Converts None values to empty strings.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = ''
-    else:
-        entry = entry
-    return entry
-
-
-def to_none(entry):
-    """
-    Converts empty strings to None.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry == '':
-        entry = None
-    else:
-        entry = float(entry)
-    return entry
-
-
-def to_m_inf(entry):
-    """
-    Converts empty strings or None values to -inf.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = float('-inf')
-    elif entry == '':
-        entry = '-inf'
-    else:
-        entry = entry
-    return entry
-
-
-def to_p_inf(entry):
-    """
-    Converts empty strings or None values to inf.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = float('inf')
-    elif entry == '':
-        entry = 'inf'
-    else:
-        entry = entry
-    return entry
-
-
-def to_zero(entry):
-    """
-    Converts None values to 0.
-
-    Parameters:
-        entry (): Any type entry.
-
-    Returns:
-        entry (): Converted value.
-    """
-
-    if entry is None:
-        entry = 0
-    else:
-        entry = entry
-    return entry
-
-
-def check_decimal(entry):
-    """
-    Checks whether given string has is a representation of a value with decimals.
-
-    Parameters:
-        entry (str): A string to be checked.
-
-    Returns:
-        (bool): Indicator of a decimal number.
-    """
-
-    if re.findall(r'[0-9]\.[0-9]', entry) == []:
-        return False
-    else:
-        return True
 
 
 def within_distance(query, form_ra, form_dec, distance=0, based_on_beam_angle=False, temporary=False):
@@ -224,262 +123,6 @@ def within_distance(query, form_ra, form_dec, distance=0, based_on_beam_angle=Fa
         return galaxies
 
 
-def test_frequency_for_family(family, species_name_input, input_frequency_str):
-    """
-    Given frequency, family, and species type, returns the corresponding unique frequency from our dictionary if found,
-    or False with the corresponding error message if result is not unique. Used to standardize frequences.
-
-    Parameters:
-        family (dict): Dictionary of dictionaries of species types and their corresponding quantum numbers.
-        input_frequency_str (str): Frequency input submitted by user.
-        species_name_input (str): Species type of the corresponding line entry submitted by user.
-
-    Returns:
-        dict_frequency (dict | bool): The corresponding unique frequency from our dictionary if found, False otherwise.
-        message (str): Error message if several possible corresponding values are found in our dictionary.
-    """
-
-    nearest_frequency = 0
-    message = ''
-    input_frequency = float(input_frequency_str)
-
-    # Iterates over family members not specified by the user
-    for species_name, species_dict in family.items():
-
-        if species_name != species_name_input:
-
-            if input_frequency in species_dict:
-                message = message + \
-                          "We found the exact same rest frequency for ({}) species. " \
-                          "Did you mean ({}) instead of ({})? ".format(
-                              species_name, species_name, species_name_input)
-            else:
-                delta = input_frequency
-                for key, value in species_dict.items():
-                    if abs(key - input_frequency) < delta:
-                        delta = abs(key - input_frequency)
-                        nearest_frequency = key
-
-                if check_decimal(input_frequency_str):
-                    decimals = input_frequency_str[input_frequency_str.find('.') + 1:]
-                    precision = len(decimals)
-                    range_1 = input_frequency - 0.1 ** precision
-                    range_2 = input_frequency + 0.1 ** precision
-                else:
-                    precision = len(input_frequency_str)
-                    for c in input_frequency_str:
-                        if c != '0':
-                            precision -= 1
-                        else:
-                            pass
-                    range_1 = input_frequency - 10 ** precision
-                    range_2 = input_frequency + 10 ** precision
-
-                # Check if there are any values of similar species in the range
-                for key, value in species_dict.items():
-                    if (key > range_1) and (key < range_2):
-                        message_1 = "Species ({}) has a transition ({}) at a rest frequency of ({}) GHz. ".format(
-                            species_name, value, key)
-                        message = message + message_1
-
-        else:
-            pass
-
-    # Finds the specified by user species
-    # and returns the frequency from dictionary if no previous errors returned.
-    for species_name, species_dict in family.items():
-
-        if species_name == species_name_input:
-
-            if input_frequency in species_dict:
-                dict_frequency = input_frequency
-            else:
-                delta = input_frequency
-                for key, value in species_dict.items():
-                    if abs(key - input_frequency) < delta:
-                        delta = abs(key - input_frequency)
-                        nearest_frequency = key
-
-                if check_decimal(input_frequency_str):
-                    decimals = input_frequency_str[input_frequency_str.find('.') + 1:]
-                    precision = len(decimals)
-                    range_1 = input_frequency - 0.1 ** precision
-                    range_2 = input_frequency + 0.1 ** precision
-                else:
-                    precision = len(input_frequency_str)
-                    for c in input_frequency_str:
-                        if c != '0':
-                            precision -= 1
-                        else:
-                            pass
-                    range_1 = input_frequency - 10 ** precision
-                    range_2 = input_frequency + 10 ** precision
-
-                # Check if there are more than one value in the range
-                count_values_in_range = 0
-                for key, value in species_dict.items():
-                    if range_1 < key < range_2:
-                        count_values_in_range += 1
-                        if (count_values_in_range > 1) or (message != ''):
-                            message_1 = "Species ({}) has a transition ({}) at a rest frequency of ({}) GHz. ".format(
-                                species_name, value, key)
-                            message = message + message_1
-
-                dict_frequency = nearest_frequency
-
-        else:
-            pass
-
-    if message == '':
-        return dict_frequency, message
-
-    else:
-        message = ": Multiple possible lines identified within the submitted frequency precision. " \
-                  "Please double check the species name and/or add additional digits of precision to the frequency, " \
-                  "then resubmit. Possible matches: \n" + message
-
-        return False, message
-
-
-def test_frequency(input_frequency_str, species_name_input):
-    """
-    Given frequency and species type, determines the family and returns the dictionary stored corresponding frequency.
-
-    Parameters:
-        input_frequency_str (str): Frequency input submitted by user.
-        species_name_input (str): Species type of the corresponding line entry submitted by user.
-
-    Returns:
-        dict_frequency (dict | bool) The corresponding frequency from our dictionary if found, False otherwise.
-        message (str): Error message if several possible corresponding values are found in our dictionary.
-    """
-
-    family = False
-
-    if species_name_input in CO:
-        family = CarbonMonoxide
-        species_type = CO[species_name_input]
-    elif species_name_input in THIRTEEN_CO:
-        family = CarbonMonoxide
-        species_type = THIRTEEN_CO[species_name_input]
-    elif species_name_input in C17O:
-        family = CarbonMonoxide
-        species_type = C17O[species_name_input]
-    elif species_name_input in C18O:
-        family = CarbonMonoxide
-        species_type = C18O[species_name_input]
-    elif species_name_input in CF:
-        family = Fluoromethylidyne_Fluoromethyliumylidene
-        species_type = CF[species_name_input]
-    elif species_name_input in CF_PLUS:
-        family = Fluoromethylidyne_Fluoromethyliumylidene
-        species_type = CF_PLUS[species_name_input]
-    elif species_name_input in CCH:
-        family = Ethynyl_Methylidynium_Mathylidyne
-        species_type = CCH[species_name_input]
-    elif species_name_input in CH_PLUS:
-        family = Ethynyl_Methylidynium_Mathylidyne
-        species_type = CH_PLUS[species_name_input]
-    elif species_name_input in CH2_P1_SLASH_2:
-        family = Ethynyl_Methylidynium_Mathylidyne
-        species_type = CH2_P1_SLASH_2[species_name_input]
-    elif species_name_input in CH2_P3_SLASH_2:
-        family = Ethynyl_Methylidynium_Mathylidyne
-        species_type = CH2_P3_SLASH_2[species_name_input]
-    elif species_name_input in CI_BRACKET_C_HYPHEN_atom_BRACKET:
-        family = AtomicCarbon_IonisedCarbon
-        species_type = CI_BRACKET_C_HYPHEN_atom_BRACKET[species_name_input]
-    elif species_name_input in CII:
-        family = AtomicCarbon_IonisedCarbon
-        species_type = CII[species_name_input]
-    elif species_name_input in CN_MINUS:
-        family = CyanideAnion_CyanideRadical
-        species_type = CN_MINUS[species_name_input]
-    elif species_name_input in CN:
-        family = CyanideAnion_CyanideRadical
-        species_type = CN[species_name_input]
-    elif species_name_input in CS:
-        family = CarbonMonosulfide
-        species_type = CS[species_name_input]
-    elif species_name_input in Ha:
-        family = HydrogenRecombinationLine
-        species_type = Ha[species_name_input]
-    elif species_name_input in H2O:
-        family = Water_orthoOxidaniumyl_paraOxidaniumyl
-        species_type = H2O[species_name_input]
-    elif species_name_input in o_HYPHEN_H2O_PLUS:
-        family = Water_orthoOxidaniumyl_paraOxidaniumyl
-        species_type = o_HYPHEN_H2O_PLUS[species_name_input]
-    elif species_name_input in p_HYPHEN_H2O_PLUS:
-        family = Water_orthoOxidaniumyl_paraOxidaniumyl
-        species_type = p_HYPHEN_H2O_PLUS[species_name_input]
-    elif species_name_input in HCN:
-        family = HydrogenCyanide_HydrogenIsocyanide
-        species_type = HCN[species_name_input]
-    elif species_name_input in HNC:
-        family = HydrogenCyanide_HydrogenIsocyanide
-        species_type = HNC[species_name_input]
-    elif species_name_input in HCO_PLUS:
-        family = Formylium
-        species_type = HCO_PLUS[species_name_input]
-    elif species_name_input in HF:
-        family = HydrogenFluoride
-        species_type = HF[species_name_input]
-    elif species_name_input in LiH:
-        family = LithiumHydride
-        species_type = LiH[species_name_input]
-    elif species_name_input in N2H_PLUS:
-        family = Diazenylium
-        species_type = N2H_PLUS[species_name_input]
-    elif species_name_input in NH3:
-        family = Ammonia
-        species_type = NH3[species_name_input]
-    elif species_name_input in NII_BRACKET_N_PLUS_HYPHEN_atom_BRACKET:
-        family = AtomicNitrogen
-        species_type = NII_BRACKET_N_PLUS_HYPHEN_atom_BRACKET[species_name_input]
-    elif species_name_input in NO:
-        family = NitricOxide_NitricOxideIon
-        species_type = NO[species_name_input]
-    elif species_name_input in NO_PLUS:
-        family = NitricOxide_NitricOxideIon
-        species_type = NO_PLUS[species_name_input]
-    elif species_name_input in OI:
-        family = Oxygen_IonisedOxygen
-        species_type = OI[species_name_input]
-    elif species_name_input in OIII:
-        family = Oxygen_IonisedOxygen
-        species_type = OIII[species_name_input]
-    elif species_name_input in OH_PLUS:
-        family = Hydroxyl
-        species_type = OH_PLUS[species_name_input]
-    elif species_name_input in OH:
-        family = Hydroxyl
-        species_type = OH[species_name_input]
-    elif species_name_input in PN:
-        family = PhosphorousNitride
-        species_type = PN[species_name_input]
-    elif species_name_input in SiC:
-        family = SiliconMonocarbide
-        species_type = SiC[species_name_input]
-    elif species_name_input in SiN:
-        family = SiliconMononitride
-        species_type = SiN[species_name_input]
-    elif species_name_input in SiO:
-        family = SiliconMonoxide
-        species_type = SiO[species_name_input]
-    elif species_name_input in SO2:
-        family = SulfurDioxide
-        species_type = SO2[species_name_input]
-
-    if not family:
-        dict_frequency = False
-        message = " Species name could not be identified."
-    else:
-        dict_frequency, message = test_frequency_for_family(family, species_type, input_frequency_str)
-
-    return dict_frequency, message
-
-
 def update_right_ascension(galaxy_id):
     """
     Updates (recalculates) average right ascension of a galaxy given right ascension of the detections.
@@ -528,61 +171,6 @@ def update_declination(galaxy_id):
         ).update({"declination": declination})
 
 
-def ra_to_float(coordinates):
-    """
-    Given right ascension value as either a string representing a float number or a string of the 00h00m00s format,
-    return the corresponding float value.
-
-    Parameters:
-        coordinates (str | float | int): A string representing a float or 00h00m00s format right ascension.
-
-    Returns:
-        coordinates (float): Float value of right ascension.
-    """
-
-    if isinstance(coordinates, float) or isinstance(coordinates, int):
-        coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
-        h = float(coordinates[0:2])
-        m = float(coordinates[3:5])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
-        return h * 15 + m / 4 + s / 240
-    else:
-        return float(coordinates)
-
-
-def dec_to_float(coordinates):
-    """
-    Given right declination value as either a string representing a float number or a string of the +/-00d00m00s format,
-    return the corresponding float value.
-
-    Parameters:
-        coordinates (str | float | int): A string representing a float or +/-00d00m00s format declination.
-
-    Returns:
-        coordinates (float): Float value of declination.
-    """
-
-    if isinstance(coordinates, float) or isinstance(coordinates, int):
-        coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
-        d = float(coordinates[1:3])
-        m = float(coordinates[4:6])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
-        if coordinates[0] == "-":
-            return (-1) * (d + m / 60 + s / 3600)
-        else:
-            return d + m / 60 + s / 3600
-    elif coordinates == '-inf' or coordinates == 'inf':
-        return float(coordinates)
-    else:
-        if coordinates[0] == '+':
-            dec = coordinates.replace("+", "")
-        else:
-            dec = coordinates
-        return float(dec)
-
-
 def update_redshift(galaxy_id):
     """
     Update redshift value for a particular galaxy.
@@ -595,29 +183,28 @@ def update_redshift(galaxy_id):
     """
 
     line_redshift = db.session.query(
-        Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative,
-        Line.observed_line_frequency_uncertainty_positive
+        Line.emitted_frequency, Line.observed_line_redshift, Line.observed_line_redshift_uncertainty_negative,
+        Line.observed_line_redshift_uncertainty_positive
     ).outerjoin(Galaxy).filter(
         Galaxy.id == galaxy_id
     ).all()
 
     sum_upper = sum_lower = 0
     for l in line_redshift:
-
         # Do not account for line entries that either do not have observed frequency value or its positive uncertainty
-        if (l.observed_line_frequency_uncertainty_positive is None) or (l.observed_line_frequency is None):
+        if (l.observed_line_redshift_uncertainty_positive is None) or (l.observed_line_redshift is None):
             continue
-        if l.observed_line_frequency == 0:
+        if l.observed_line_redshift == 0:
             continue
-        if l.observed_line_frequency_uncertainty_negative is None:
-            delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+        if l.observed_line_redshift_uncertainty_negative is None:
+            delta_z = 2 * l.observed_line_redshift_uncertainty_positive
         else:
-            delta_nu = l.observed_line_frequency_uncertainty_positive + l.observed_line_frequency_uncertainty_negative
+            delta_z = l.observed_line_redshift_uncertainty_positive + l.observed_line_redshift_uncertainty_negative
 
-        z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
-        delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
-        sum_upper = sum_upper = + (z / delta_z)
-        sum_lower = sum_lower = + (1 / delta_z)
+        z = l.observed_line_redshift
+
+        sum_upper = sum_upper + (z / delta_z)
+        sum_lower = sum_lower + (1 / delta_z)
     # This case passes -1 to change redshift error, which will signal that no change needed
     if sum_lower == 0:
         return -1
@@ -637,7 +224,7 @@ def update_redshift_error(galaxy_id, sum_upper):
 
     Parameters:
         galaxy_id (int): id of the galaxy, which redshift has to be updated.
-        sum_upper (int | float) Sum of weighted redshifts returned by update_redshift.
+        sum_upper (float) Sum of weighted redshifts returned by update_redshift.
 
     Returns:
     """
@@ -646,24 +233,23 @@ def update_redshift_error(galaxy_id, sum_upper):
 
         redshift_error_weighted = 0
         line_redshift = db.session.query(
-            Line.emitted_frequency, Line.observed_line_frequency, Line.observed_line_frequency_uncertainty_negative,
-            Line.observed_line_frequency_uncertainty_positive
+            Line.emitted_frequency, Line.observed_line_redshift, Line.observed_line_redshift_uncertainty_negative,
+            Line.observed_line_redshift_uncertainty_positive
         ).outerjoin(Galaxy).filter(
             Galaxy.id == galaxy_id
         ).all()
         for l in line_redshift:
-            if (l.observed_line_frequency_uncertainty_positive is None) or (l.observed_line_frequency is None):
+            if (l.observed_line_redshift_uncertainty_positive is None) or (l.observed_line_redshift is None):
                 continue
-            if l.observed_line_frequency == 0:
+            if l.observed_line_redshift == 0:
                 continue
-            if l.observed_line_frequency_uncertainty_negative is None:
-                delta_nu = 2 * l.observed_line_frequency_uncertainty_positive
+            if l.observed_line_redshift_uncertainty_negative is None:
+                delta_z = 2 * l.observed_line_redshift_uncertainty_positive
             else:
-                delta_nu = l.observed_line_frequency_uncertainty_positive + \
-                           l.observed_line_frequency_uncertainty_negative
+                delta_z = l.observed_line_redshift_uncertainty_positive + \
+                           l.observed_line_redshift_uncertainty_negative
 
-            z = (l.emitted_frequency - l.observed_line_frequency) / l.observed_line_frequency
-            delta_z = ((1 + z) * delta_nu) / l.observed_line_frequency
+            z = l.observed_line_redshift
             weight = (z / delta_z) / sum_upper
             redshift_error_weighted = redshift_error_weighted + (weight * delta_z)
         if redshift_error_weighted != 0:
@@ -671,33 +257,6 @@ def update_redshift_error(galaxy_id, sum_upper):
                 Galaxy.id == galaxy_id
             ).update({"redshift_error": redshift_error_weighted})
             db.session.commit()
-
-
-def redshift_to_frequency(emitted_frequency, z, positive_uncertainty, negative_uncertainty):
-    """
-    Converts redshift value to frequency.
-
-    Parameters:
-        emitted_frequency (float): Emitted frequency value as per dictionary.
-        z (float): Submitted redshift value.
-        positive_uncertainty (float): Submitted positive uncertainty of the redshift value.
-        negative_uncertainty (float): Submitted negative uncertainty of the redshift value.
-
-    Returns:
-        nu_obs (float): Observed frequency.
-        positive_uncertainty (float | NoneType): Positive uncertainty of the nu_obs value or None
-    """
-
-    if z is None:
-        return None, None
-    nu_obs = emitted_frequency / (z + 1)
-    if positive_uncertainty is None:
-        return nu_obs, None
-    if negative_uncertainty is None:
-        negative_uncertainty = positive_uncertainty
-    delta_z = positive_uncertainty + negative_uncertainty
-    delta_nu = delta_z * nu_obs / (z + 1)
-    return nu_obs, delta_nu / 2
 
 
 @bp.route("/", methods=['GET'])
@@ -823,9 +382,8 @@ def main():
     if form.submit.data:
         name = form.galaxy_name.data
         galaxy = Galaxy.query.filter_by(name=name).first_or_404()
-        lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
 
-        return render_template('galaxy.html', galaxy=galaxy, lines=lines)
+        return redirect(url_for("main.galaxy", name=galaxy.name))
 
     galaxies = db.session.query(Galaxy).all()
     galaxies_count = db.session.query(Galaxy.id).count()
@@ -843,6 +401,25 @@ def main():
             for s in species:
                 lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s[0])).count()
                 list_of_lines_per_species[i].append((s[0], lines_count))
+
+
+    # rounding redshift and uncertainties.
+    for galaxy in galaxies:
+        galaxy.redshift, galaxy.redshift_error, _ = round_redshift(
+            galaxy.redshift,
+            galaxy.redshift_error,
+            galaxy.redshift_error,
+            True,
+            False)
+
+        species = db.session.query(Line.species).filter(Line.galaxy_id == galaxy.id).distinct()
+        if species is not None:
+            for s in species:
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == galaxy.id) & (Line.species == s[0])).count()
+                if galaxy.lines_per_species:
+                    galaxy.lines_per_species = galaxy.lines_per_species + "{}: {}\n".format(s[0], lines_count)
+                else:
+                    galaxy.lines_per_species = "{}: {}\n".format(s[0], lines_count)
 
     lines = db.session.query(Line.galaxy_id, Line.species).distinct().all()
 
@@ -920,10 +497,10 @@ def query_results():
             form_advanced.line_width_min.data = float('-inf')
         if form_advanced.line_width_max.data is None:
             form_advanced.line_width_max.data = float('inf')
-        if form_advanced.observed_line_frequency_min.data is None:
-            form_advanced.observed_line_frequency_min.data = float('-inf')
-        if form_advanced.observed_line_frequency_max.data is None:
-            form_advanced.observed_line_frequency_max.data = float('inf')
+        if form_advanced.observed_line_redshift_min.data is None:
+            form_advanced.observed_line_redshift_min.data = float('-inf')
+        if form_advanced.observed_line_redshift_max.data is None:
+            form_advanced.observed_line_redshift_max.data = float('inf')
         if form_advanced.detection_type.data is None or form_advanced.detection_type.data == 'Either':
             form_advanced.detection_type.data = ''
         if form_advanced.observed_beam_major_min.data is None:
@@ -1018,10 +595,10 @@ def query_results():
                                                                         form_advanced.line_width_min.data,
                                                                         form_advanced.line_width_max.data) | (
                                                                             Line.line_width == None)) & (
-                                                                    Line.observed_line_frequency.between(
-                                                                        form_advanced.observed_line_frequency_min.data,
-                                                                        form_advanced.observed_line_frequency_max.data) | (
-                                                                            Line.observed_line_frequency == None)) & (
+                                                                    Line.observed_line_redshift.between(
+                                                                        form_advanced.observed_line_redshift_min.data,
+                                                                        form_advanced.observed_line_redshift_max.data) | (
+                                                                            Line.observed_line_redshift == None)) & (
                                                                     Line.observed_beam_major.between(
                                                                         form_advanced.observed_beam_major_min.data,
                                                                         form_advanced.observed_beam_major_max.data) | (
@@ -1036,12 +613,10 @@ def query_results():
                                                                     Line.detection_type.contains(
                                                                         form_advanced.detection_type.data) | (
                                                                             Line.detection_type == None))))
-
+            # final query to be returned (if galaxy search)
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
-            return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
-
-            # Query displaying lines based on the data from form_advanced
+        # Query displaying lines based on the data from form_advanced
         elif form_advanced.lineSearch.data:
             if (form_advanced.right_ascension_point.data != None) and (
                     form_advanced.declination_point.data != None) and (
@@ -1093,10 +668,10 @@ def query_results():
                                                Line.line_width.between(form_advanced.line_width_min.data,
                                                                        form_advanced.line_width_max.data) | (
                                                        Line.line_width == None)) & (
-                                               Line.observed_line_frequency.between(
-                                                   form_advanced.observed_line_frequency_min.data,
-                                                   form_advanced.observed_line_frequency_max.data) | (
-                                                       Line.observed_line_frequency == None)) & (
+                                               Line.observed_line_redshift.between(
+                                                   form_advanced.observed_line_redshift_min.data,
+                                                   form_advanced.observed_line_redshift_max.data) | (
+                                                       Line.observed_line_redshift == None)) & (
                                                Line.observed_beam_major.between(
                                                    form_advanced.observed_beam_major_min.data,
                                                    form_advanced.observed_beam_major_max.data) | (
@@ -1107,15 +682,25 @@ def query_results():
                                                        Line.observed_beam_minor == None)) & (
                                                Line.reference.contains(form_advanced.reference.data) | (
                                                Line.reference == None)))
-
+            # final query to be returned (if line search)
             galaxies = galaxies.order_by(Galaxy.name).all()
-
-            return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
 
         # Is not called
         else:
+            # final query to be returned (if general search)
             galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(
                 Galaxy.name).all()
+
+        # round values before we return query
+        for object in galaxies:
+            line = object[1]
+            line.observed_line_redshift,\
+             line.observed_line_redshift_uncertainty_positive,\
+             line.observed_line_redshift_uncertainty_negative = round_redshift(
+                line.observed_line_redshift,
+                line.observed_line_redshift_uncertainty_positive,
+                line.observed_line_redshift_uncertainty_negative
+            )
         return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
 
     # Get method
@@ -1156,7 +741,7 @@ def entry_file():
         reader = csv.DictReader(x.replace('\0', '') for x in csv_file)
         data = [row for row in reader]
         classification_options = {"LBG": "LBG (Lyman Break Galaxy)", "MS": "MS (Main Sequence Galaxy)",
-                                  "SMB": "SMB (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)",
+                                  "SMG": "SMG (Submillimeter Galaxy)", "DSFG": "DSFG (Dusty Star-Forming Galaxy)",
                                   "SB": "SB (Starburst)", "AGN": "AGN (Contains a Known Active Galactic Nucleus)",
                                   "QSO": "QSO (Optically Bright AGN)",
                                   "Quasar": "Quasar (Optical and Radio Bright AGN)",
@@ -1168,7 +753,7 @@ def entry_file():
         else:
             validated = True
             row_count = 0
-            values = COL_NAMES_WO_REDSHIFT.values()
+            values = COL_NAMES_FOR_SUBMISSION.values()
             value_list = list(values)
             missing_column = []
             for k in value_list:
@@ -1215,11 +800,11 @@ def entry_file():
                         row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
                         row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
                         row_freq_type = row[COL_NAMES['freq_type']].strip()
-                        row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
-                        row_observed_line_frequency_uncertainty_positive = row[
-                            COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
-                        row_observed_line_frequency_uncertainty_negative = row[
-                            COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
+                        row_observed_line_redshift = row[COL_NAMES['observed_line_redshift']].strip()
+                        row_observed_line_redshift_uncertainty_positive = row[
+                            COL_NAMES['observed_line_redshift_uncertainty_positive']].strip()
+                        row_observed_line_redshift_uncertainty_negative = row[
+                            COL_NAMES['observed_line_redshift_uncertainty_negative']].strip()
                         row_detection_type = row[COL_NAMES['detection_type']].strip()
                         row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
                         row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
@@ -1248,7 +833,7 @@ def entry_file():
                         for key, value in classification_options.items():
                             if key in entered_classification.upper():
                                 row_classification = row_classification + "," + key
-                        if row_classification == ",":
+                        if row_classification == "," or row_classification == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Please enter Correction Classifications")
                         if row_right_ascension == "":
@@ -1266,15 +851,9 @@ def entry_file():
                         if row_emitted_frequency == "":
                             validated = False
                             flash("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
-                       # try:
-                         #   dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
-                         #   if not dict_frequency:
-                          #      flash("Entry " + str(row_count) + message)
-                          #      validated = False
-                        #except:
-                           # pass
+
                         try:
-                            dict_frequency, message = test_frequency2(row_species, row_emitted_frequency)
+                            dict_frequency, message = test_frequency(row_species, row_emitted_frequency)
                             if not dict_frequency:
                                 flash("Entry " + str(row_count) + message)
                                 validated = False
@@ -1346,17 +925,17 @@ def entry_file():
                             validated = False
                             flash("Entry " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(
                                 row_freq_type))
-                        if row_observed_line_frequency_uncertainty_positive != "":
+                        if row_observed_line_redshift_uncertainty_positive != "":
                             try:
-                                if float(row_observed_line_frequency_uncertainty_positive) < 0:
+                                if float(row_observed_line_redshift_uncertainty_positive) < 0:
                                     validated = False
                                     flash("Entry " + str(
                                         row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
                             except:
                                 pass
-                        if row_observed_line_frequency_uncertainty_negative != "":
+                        if row_observed_line_redshift_uncertainty_negative != "":
                             try:
-                                if float(row_observed_line_frequency_uncertainty_negative) < 0:
+                                if float(row_observed_line_redshift_uncertainty_negative) < 0:
                                     validated = False
                                     flash("Entry " + str(
                                         row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
@@ -1401,13 +980,13 @@ def entry_file():
                 if row_line_width_uncertainty_negative == "":
                     row_line_width_uncertainty_negative = row_line_width_uncertainty_positive
                 row_freq_type = row[COL_NAMES['freq_type']].strip()
-                row_observed_line_frequency = row[COL_NAMES['observed_line_frequency']].strip()
-                row_observed_line_frequency_uncertainty_positive = row[
-                    COL_NAMES['observed_line_frequency_uncertainty_positive']].strip()
-                row_observed_line_frequency_uncertainty_negative = row[
-                    COL_NAMES['observed_line_frequency_uncertainty_negative']].strip()
-                if row_observed_line_frequency_uncertainty_negative == "":
-                    row_observed_line_frequency_uncertainty_negative = row_observed_line_frequency_uncertainty_positive
+                row_observed_line_redshift = row[COL_NAMES['observed_line_redshift']].strip()
+                row_observed_line_redshift_uncertainty_positive = row[
+                    COL_NAMES['observed_line_redshift_uncertainty_positive']].strip()
+                row_observed_line_redshift_uncertainty_negative = row[
+                    COL_NAMES['observed_line_redshift_uncertainty_negative']].strip()
+                if row_observed_line_redshift_uncertainty_negative == "":
+                    row_observed_line_redshift_uncertainty_negative = row_observed_line_redshift_uncertainty_positive
                 row_detection_type = row[COL_NAMES['detection_type']].strip()
                 row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
                 row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
@@ -1470,25 +1049,25 @@ def entry_file():
                     id = similar_galaxy[0].id
                     from_existed = id
 
-                dict_frequency, message = test_frequency(row_emitted_frequency, row_species)
+                dict_frequency, message = test_frequency(row_species, row_emitted_frequency)
 
-                # If observed frequency submitted as redshift, convert to frequency.
-                if row_freq_type == "z":
-                    frequency, positive_uncertainty = redshift_to_frequency(dict_frequency,
-                                                                            to_none(row_observed_line_frequency),
+                # Since v-1.12 we convert observed frequency to redshift and store as redshift.
+
+                if row_freq_type == "f":
+                    frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
+                                                                            to_none(row_observed_line_redshift),
+                                                                            to_none(row_observed_line_redshift_uncertainty_positive),
                                                                             to_none(
-                                                                                row_line_width_uncertainty_positive),
-                                                                            to_none(
-                                                                                row_line_width_uncertainty_negative))
-                    negative_uncertainty = None
+                                                                               row_observed_line_redshift_uncertainty_negative))
+
                 else:
-                    frequency = to_none(row_observed_line_frequency)
-                    positive_uncertainty = to_none(row_line_width_uncertainty_positive)
-                    negative_uncertainty = to_none(row_line_width_uncertainty_negative)
+                    frequency = to_none(row_observed_line_redshift)
+                    positive_uncertainty = to_none(row_observed_line_redshift_uncertainty_positive)
+                    negative_uncertainty = to_none(row_observed_line_redshift_uncertainty_negative)
 
                 # Check whether this line entry has been previously uploaded and/or approved
                 check_same_temp_line = db.session.query(TempLine.id).filter(
-                    (TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (
+                    (TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_redshift == frequency) & (
                             TempLine.galaxy_name == row_name) & (TempLine.species == row_species) & (
                             TempLine.integrated_line_flux == to_none(row_integrated_line_flux)) & (
                             TempLine.integrated_line_flux_uncertainty_positive == to_none(
@@ -1498,7 +1077,7 @@ def entry_file():
 
                 check_same_line = db.session.query(Line.id).filter(
                     (Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (
-                            Line.observed_line_frequency == frequency) & (
+                            Line.observed_line_redshift == frequency) & (
                             Line.integrated_line_flux == to_none(row_integrated_line_flux)) & (
                             Line.integrated_line_flux_uncertainty_positive == to_none(
                             row_integrated_line_flux_uncertainty_positive)) & (Line.species == row_species)).first()
@@ -1523,9 +1102,9 @@ def entry_file():
                                     line_width=to_none(row_line_width),
                                     line_width_uncertainty_positive=to_none(row_line_width_uncertainty_positive),
                                     line_width_uncertainty_negative=to_none(row_line_width_uncertainty_negative),
-                                    observed_line_frequency=frequency,
-                                    observed_line_frequency_uncertainty_positive=positive_uncertainty,
-                                    observed_line_frequency_uncertainty_negative=negative_uncertainty,
+                                    observed_line_redshift=frequency,
+                                    observed_line_redshift_uncertainty_positive=positive_uncertainty,
+                                    observed_line_redshift_uncertainty_negative=negative_uncertainty,
                                     detection_type=row_detection_type,
                                     observed_beam_major=to_none(row_observed_beam_major),
                                     observed_beam_minor=to_none(row_observed_beam_minor),
@@ -1692,7 +1271,6 @@ def galaxy_edit_form(id):
     """
 
     galaxy = db.session.query(Galaxy).filter(Galaxy.id == id).first()
-    #classifications = ' '.join([str(elem) + "," for elem in galaxy.classification.split(', ')])[:-1]
     classifications = galaxy.classification
     classification_list = galaxy.classification.split(',')
 
@@ -1807,27 +1385,28 @@ def line_entry_form():
                 flash('Please enter the name exactly as proposed using Caps if necessary')
             else:
                 try:
-                    dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
+                    dict_frequency, message = test_frequency(form.species.data, form.emitted_frequency.data)
                     if not dict_frequency:
-                        raise Exception(message)
+                        flash(message)
                 except:
+                    #define exception here
                     pass
 
-                dict_frequency, message = test_frequency(form.emitted_frequency.data, form.species.data)
-                if form.freq_type.data == 'z':
-                    frequency, positive_uncertainty = redshift_to_frequency(dict_frequency,
-                                                                            form.observed_line_frequency.data,
-                                                                            form.observed_line_frequency_uncertainty_positive.data,
-                                                                            form.observed_line_frequency_uncertainty_negative.data)
-                    negative_uncertainty = None
+                dict_frequency, message = test_frequency(form.species.data, form.emitted_frequency.data)
+
+                if form.freq_type.data == 'f':
+                    frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
+                                                                            form.observed_line_redshift.data,
+                                                                            form.observed_line_redshift_uncertainty_positive.data,
+                                                                            form.observed_line_redshift_uncertainty_negative.data)
                 else:
-                    frequency = form.observed_line_frequency.data
-                    positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
-                    negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
+                    frequency = form.observed_line_redshift.data
+                    positive_uncertainty = form.observed_line_redshift_uncertainty_positive.data
+                    negative_uncertainty = form.observed_line_redshift_uncertainty_negative.data
 
                 # Check whether this line entry has been previously uploaded and/or approved
                 check_same_temp_line = db.session.query(TempLine.id).filter(
-                    (TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_frequency == frequency) & (
+                    (TempLine.emitted_frequency == dict_frequency) & (TempLine.observed_line_redshift == frequency) & (
                             TempLine.galaxy_name == form.galaxy_name.data) & (
                             TempLine.species == form.species.data) & (
                             TempLine.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (
@@ -1836,7 +1415,7 @@ def line_entry_form():
 
                 check_same_line = db.session.query(Line.id).filter(
                     (Line.galaxy_id == galaxy_id) & (Line.emitted_frequency == dict_frequency) & (
-                            Line.observed_line_frequency == frequency) & (
+                            Line.observed_line_redshift == frequency) & (
                             Line.integrated_line_flux == to_none(form.integrated_line_flux.data)) & (
                             Line.integrated_line_flux_uncertainty_positive == to_none(
                         form.integrated_line_flux_uncertainty_positive.data)) & (
@@ -1856,9 +1435,9 @@ def line_entry_form():
                                     line_width=form.line_width.data,
                                     line_width_uncertainty_positive=form.line_width_uncertainty_positive.data,
                                     line_width_uncertainty_negative=form.line_width_uncertainty_negative.data,
-                                    observed_line_frequency=frequency,
-                                    observed_line_frequency_uncertainty_positive=positive_uncertainty,
-                                    observed_line_frequency_uncertainty_negative=negative_uncertainty,
+                                    observed_line_redshift=frequency,
+                                    observed_line_redshift_uncertainty_positive=positive_uncertainty,
+                                    observed_line_redshift_uncertainty_negative=negative_uncertainty,
                                     detection_type=form.detection_type.data,
                                     observed_beam_major=form.observed_beam_major.data,
                                     observed_beam_minor=form.observed_beam_minor.data,
@@ -1919,8 +1498,8 @@ def line_edit_form(id):
                         peak_line_flux_uncertainty_positive=line.peak_line_flux_uncertainty_positive,
                         line_width=line.line_width,
                         line_width_uncertainty_positive=line.line_width_uncertainty_positive,
-                        observed_line_frequency=line.observed_line_frequency,
-                        observed_line_frequency_uncertainty_positive=line.observed_line_frequency_uncertainty_positive,
+                        observed_line_redshift=line.observed_line_redshift,
+                        observed_line_redshift_uncertainty_positive=line.observed_line_redshift_uncertainty_positive,
                         detection_type=line.detection_type, observed_beam_major=line.observed_beam_major,
                         observed_beam_minor=line.observed_beam_minor, observed_beam_angle=line.observed_beam_angle,
                         reference=line.reference, notes=line.notes)
@@ -1933,16 +1512,18 @@ def line_edit_form(id):
             if galaxy_id is None:
                 flash('Please enter the name exactly as proposed using Caps if necessary')
             else:
-                if form.freq_type.data == 'z':
-                    frequency, positive_uncertainty = redshift_to_frequency(form.emitted_frequency.data,
-                                                                            form.observed_line_frequency.data,
-                                                                            form.observed_line_frequency_uncertainty_positive.data,
-                                                                            form.observed_line_frequency_uncertainty_negative.data)
-                    negative_uncertainty = None
+                dict_frequency, message = test_frequency(str(form.species.data), str(form.emitted_frequency.data))
+                if not dict_frequency:
+                    flash(message)
+                if form.freq_type.data == 'f':
+                    frequency, positive_uncertainty, negative_uncertainty = frequency_to_redshift(dict_frequency,
+                                                                            form.observed_line_redshift.data,
+                                                                            form.observed_line_redshift_uncertainty_positive.data,
+                                                                            form.observed_line_redshift_uncertainty_negative.data)
                 else:
-                    frequency = form.observed_line_frequency.data
-                    positive_uncertainty = form.observed_line_frequency_uncertainty_positive.data
-                    negative_uncertainty = form.observed_line_frequency_uncertainty_negative.data
+                    frequency = form.observed_line_redshift.data
+                    positive_uncertainty = form.observed_line_redshift_uncertainty_positive.data
+                    negative_uncertainty = form.observed_line_redshift_uncertainty_negative.data
 
                 changes = ""
                 if line.emitted_frequency != float(form.emitted_frequency.data):
@@ -2002,26 +1583,26 @@ def line_edit_form(id):
                                   str(line.line_width_uncertainty_negative) +\
                                   " New Line Width Negative Uncertainty: " +\
                                   str(form.line_width_uncertainty_negative.data)
-                if form.observed_line_frequency.data:
-                    if float(line.observed_line_frequency) != float(form.observed_line_frequency.data):
+                if form.observed_line_redshift.data:
+                    if float(line.observed_line_redshift) != float(form.observed_line_redshift.data):
                         changes = changes + "Initial Observed Line Frequency: " +\
-                                  str(line.observed_line_frequency) +\
+                                  str(line.observed_line_redshift) +\
                                   " New Observed Line Frequency: " +\
-                                  str(form.observed_line_frequency.data)
-                if form.observed_line_frequency_uncertainty_positive.data:
-                    if float(line.observed_line_frequency_uncertainty_positive) != float(
-                            form.observed_line_frequency_uncertainty_positive.data):
+                                  str(form.observed_line_redshift.data)
+                if form.observed_line_redshift_uncertainty_positive.data:
+                    if float(line.observed_line_redshift_uncertainty_positive) != float(
+                            form.observed_line_redshift_uncertainty_positive.data):
                         changes = changes + "Initial Observed Line Frequency Positive Uncertainty: " +\
-                                  str(line.observed_line_frequency_uncertainty_positive) +\
+                                  str(line.observed_line_redshift_uncertainty_positive) +\
                                   " New Observed Line Frequency Positive Uncertainty: " +\
-                                  str(form.observed_line_frequency_uncertainty_positive.data)
-                if form.observed_line_frequency_uncertainty_negative.data:
-                    if float(line.observed_line_frequency_uncertainty_negative) != float(
-                            form.observed_line_frequency_uncertainty_negative.data):
+                                  str(form.observed_line_redshift_uncertainty_positive.data)
+                if form.observed_line_redshift_uncertainty_negative.data:
+                    if float(line.observed_line_redshift_uncertainty_negative) != float(
+                            form.observed_line_redshift_uncertainty_negative.data):
                         changes = changes + "Initial Observed Line Frequency Negative Uncertainty: " +\
-                                  str(line.observed_line_frequency_uncertainty_negative) +\
+                                  str(line.observed_line_redshift_uncertainty_negative) +\
                                   " New Observed Line Frequency Negative Uncertainty: " +\
-                                  str(form.observed_line_frequency_uncertainty_negative.data)
+                                  str(form.observed_line_redshift_uncertainty_negative.data)
                 if form.detection_type.data:
                     if line.detection_type != form.detection_type.data:
                         changes = changes + "Initial Detection Type: " + str(line.detection_type) +\
@@ -2045,7 +1626,8 @@ def line_edit_form(id):
                 if form.notes.data:
                     if line.notes != form.notes.data:
                         changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
-                line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data,
+                line = EditLine(galaxy_id=galaxy_id, original_line_id=line.id,
+                                emitted_frequency=form.emitted_frequency.data,
                                 species=form.species.data, integrated_line_flux=form.integrated_line_flux.data,
                                 integrated_line_flux_uncertainty_positive=form.integrated_line_flux_uncertainty_positive.data,
                                 integrated_line_flux_uncertainty_negative=form.integrated_line_flux_uncertainty_negative.data,
@@ -2055,9 +1637,9 @@ def line_edit_form(id):
                                 line_width=form.line_width.data,
                                 line_width_uncertainty_positive=form.line_width_uncertainty_positive.data,
                                 line_width_uncertainty_negative=form.line_width_uncertainty_negative.data,
-                                observed_line_frequency=frequency,
-                                observed_line_frequency_uncertainty_positive=positive_uncertainty,
-                                observed_line_frequency_uncertainty_negative=negative_uncertainty,
+                                observed_line_redshift=frequency,
+                                observed_line_redshift_uncertainty_positive=positive_uncertainty,
+                                observed_line_redshift_uncertainty_negative=negative_uncertainty,
                                 detection_type=form.detection_type.data,
                                 observed_beam_major=form.observed_beam_major.data,
                                 observed_beam_minor=form.observed_beam_minor.data,
@@ -2125,12 +1707,33 @@ def galaxy(name):
 
         Returns:
             galaxy.html
-            galaxy (Galaxy): A db model object under investigation.
-            lines (db.session.query): Lines that belong to the selected galaxy.
+            galaxy (Galaxy): A db model object under investigation (rounded redshifts + uncertainties).
+            lines (db.session.query): Lines that belong to the selected galaxy (rounded redshifts + uncertainties).
     """
 
     galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+
+    # see round_redshift in helpers.py to see how rounding is performed.
+    galaxy.redshift, galaxy.redshift_error, _ = round_redshift(
+        galaxy.redshift,
+        galaxy.redshift_error,
+        galaxy.redshift_error,
+        True,
+        False
+    )
+
     lines = db.session.query(Line).filter_by(galaxy_id=galaxy.id).all()
+
+    for line in lines:
+        line.observed_line_redshift,\
+         line.observed_line_redshift_uncertainty_positive,\
+         line.observed_line_redshift_uncertainty_negative = round_redshift(
+            line.observed_line_redshift,
+            line.observed_line_redshift_uncertainty_positive,
+            line.observed_line_redshift_uncertainty_negative,
+            True,
+            False
+         )
 
     return render_template('galaxy.html', galaxy=galaxy, lines=lines)
 
@@ -2141,9 +1744,15 @@ def submit():
     return render_template("submit.html")
 
 
-@bp.route("/convert_to_CSV/<table>/<identifier>", methods=['GET', 'POST'])
+@bp.route("/test")
 @login_required
-def convert_to_CSV(table, identifier):
+def test():
+    return "test"
+
+
+@bp.route("/convert_to_CSV/<table>/<identifier>/<to_frequency>", methods=['GET', 'POST'])
+@login_required
+def convert_to_CSV(table, identifier, to_frequency="0"):
     """
     Converts a query to CSV route
 
@@ -2151,229 +1760,199 @@ def convert_to_CSV(table, identifier):
         Parameters:
             table (str): Indicator string that specifies the type of the table desired by the user.
             identifier (str): the id of the galaxy if one.
+            to_frequency (str): "0" - return data as redshift (default), "1" - convert to frequency.
 
         Returns:
             response (flask.make_response): the flask response.
     """
 
-    if table == "Galaxy":
+    if request.method == 'GET':
+        # convert to_frequency to a boolean
+        if int(to_frequency):
+            to_frequency = True
+            # rename columns accordingly
+            observed_line_f_or_z = COL_NAMES['observed_line_frequency']
+            observed_line_f_or_z_uncertainty_positive = COL_NAMES['observed_line_frequency_uncertainty_positive']
+            observed_line_f_or_z_uncertainty_negative = COL_NAMES['observed_line_frequency_uncertainty_negative']
+        else:
+            to_frequency = False
+            # rename columns accordingly
+            observed_line_f_or_z = COL_NAMES['observed_line_redshift']
+            observed_line_f_or_z_uncertainty_positive = COL_NAMES['observed_line_redshift_uncertainty_positive']
+            observed_line_f_or_z_uncertainty_negative = COL_NAMES['observed_line_redshift_uncertainty_negative']
+        if table == "Galaxy":
 
-        # Galaxy takes averaged coordinates
-        f = open('galaxy.csv', 'w')
-        out = csv.writer(f)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['redshift'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes']
-        ])
-
-        for item in Galaxy.query.all():
+            # Galaxy takes averaged coordinates
+            f = open('galaxy.csv', 'w')
+            out = csv.writer(f)
             out.writerow([
-                item.name,
-                item.right_ascension,
-                item.declination,
-                item.coordinate_system,
-                item.redshift,
-                item.lensing_flag,
-                item.classification,
-                item.notes
+                COL_NAMES['name'],
+                COL_NAMES['right_ascension_weighted_average'],
+                COL_NAMES['declination_weighted_average'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['redshift'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes']
             ])
-        f.close()
-        with open('./galaxy.csv', 'r') as file:
-            galaxy_csv = file.read()
-        response = make_response(galaxy_csv)
-        cd = 'attachment; filename=galaxy.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
 
-    elif table == "Line":
+            for item in Galaxy.query.all():
+                out.writerow([
+                    item.name,
+                    item.right_ascension,
+                    item.declination,
+                    item.coordinate_system,
+                    item.redshift,
+                    item.lensing_flag,
+                    item.classification,
+                    item.notes
+                ])
+            f.close()
+            with open('./galaxy.csv', 'r') as file:
+                galaxy_csv = file.read()
+            response = make_response(galaxy_csv)
+            cd = 'attachment; filename=galaxy.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
 
-        # Line takes individual coordinates
-        f = open('line.csv', 'w')
-        out = csv.writer(f)
-        out.writerow([
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_frequency'],
-            COL_NAMES['observed_line_frequency_uncertainty_positive'],
-            COL_NAMES['observed_line_frequency_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        for item in Line.query.all():
+        elif table == "Line":
+
+            # Line takes individual coordinates
+            f = open('line.csv', 'w')
+            out = csv.writer(f)
             out.writerow([
-                item.integrated_line_flux,
-                item.integrated_line_flux_uncertainty_positive,
-                item.integrated_line_flux_uncertainty_negative,
-                item.peak_line_flux,
-                item.peak_line_flux_uncertainty_positive,
-                item.peak_line_flux_uncertainty_negative,
-                item.line_width,
-                item.line_width_uncertainty_positive,
-                item.line_width_uncertainty_negative,
-                item.observed_line_frequency,
-                item.observed_line_frequency_uncertainty_positive,
-                item.observed_line_frequency_uncertainty_negative,
-                item.detection_type,
-                item.observed_beam_major,
-                item.observed_beam_minor,
-                item.observed_beam_angle,
-                item.reference,
-                item.notes
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                observed_line_f_or_z,
+                observed_line_f_or_z_uncertainty_positive,
+                observed_line_f_or_z_uncertainty_negative,
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
             ])
-        f.close()
-        with open('./line.csv', 'r') as file:
-            line_csv = file.read()
-        response = make_response(line_csv)
-        cd = 'attachment; filename=line.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
+            for item in Line.query.all():
+                # convert to frequency on request
+                if to_frequency:
+                    item.observed_line_redshift,\
+                     item.observed_line_redshift_uncertainty_positive,\
+                     item.observed_line_redshift_uncertainty_negative = redshift_to_frequency(
+                        item.emitted_frequency,
+                        item.observed_line_redshift,
+                        item.observed_line_redshift_uncertainty_positive,
+                        item.observed_line_redshift_uncertainty_negative)
+                # round_redshift
+                item.observed_line_redshift,\
+                 item.observed_line_redshift_uncertainty_positive,\
+                 item.observed_line_redshift_uncertainty_negative = round_redshift(
+                    item.observed_line_redshift,
+                    item.observed_line_redshift_uncertainty_positive,
+                    item.observed_line_redshift_uncertainty_negative,
+                    not to_frequency,
+                    True)
+                # write out
+                out.writerow([
+                    item.integrated_line_flux,
+                    item.integrated_line_flux_uncertainty_positive,
+                    item.integrated_line_flux_uncertainty_negative,
+                    item.peak_line_flux,
+                    item.peak_line_flux_uncertainty_positive,
+                    item.peak_line_flux_uncertainty_negative,
+                    item.line_width,
+                    item.line_width_uncertainty_positive,
+                    item.line_width_uncertainty_negative,
+                    item.observed_line_redshift,
+                    item.observed_line_redshift_uncertainty_positive,
+                    item.observed_line_redshift_uncertainty_negative,
+                    item.detection_type,
+                    item.observed_beam_major,
+                    item.observed_beam_minor,
+                    item.observed_beam_angle,
+                    item.reference,
+                    item.notes
+                ])
+            f.close()
+            with open('./line.csv', 'r') as file:
+                line_csv = file.read()
+            response = make_response(line_csv)
+            cd = 'attachment; filename=line.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
 
-    elif table == "Galaxy Lines":
+        elif table == "Galaxy Lines":
 
-        # Galaxy with lines takes lines individual coordinates
-        f = open('galaxy_lines.csv', 'w')
-        out = csv.writer(f)
-        galaxy_lines = db.session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier,
-                                                                            Line.galaxy_id == identifier)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['redshift'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['emitted_frequency'],
-            COL_NAMES['species'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_frequency'],
-            COL_NAMES['observed_line_frequency_uncertainty_positive'],
-            COL_NAMES['observed_line_frequency_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        for item in galaxy_lines:
-            l = item[1]
-            g = item[0]
+            # Galaxy with lines takes lines individual coordinates
+            f = open('galaxy_lines.csv', 'w')
+            out = csv.writer(f)
+            galaxy_lines = db.session.query(Galaxy, Line).outerjoin(Galaxy).filter(Galaxy.id == identifier,
+                                                                                Line.galaxy_id == identifier)
             out.writerow([
-                g.name,
-                g.right_ascension,
-                g.declination,
-                g.coordinate_system,
-                g.redshift,
-                g.lensing_flag,
-                g.classification,
-                g.notes,
-                l.right_ascension,
-                l.declination,
-                l.emitted_frequency,
-                l.species,
-                l.integrated_line_flux,
-                l.integrated_line_flux_uncertainty_positive,
-                l.integrated_line_flux_uncertainty_negative,
-                l.peak_line_flux,
-                l.peak_line_flux_uncertainty_positive,
-                l.peak_line_flux_uncertainty_negative,
-                l.line_width,
-                l.line_width_uncertainty_positive,
-                l.line_width_uncertainty_negative,
-                l.observed_line_frequency,
-                l.observed_line_frequency_uncertainty_positive,
-                l.observed_line_frequency_uncertainty_negative,
-                l.detection_type,
-                l.observed_beam_major,
-                l.observed_beam_minor,
-                l.observed_beam_angle,
-                l.reference,
-                l.notes
+                COL_NAMES['name'],
+                COL_NAMES['right_ascension_weighted_average'],
+                COL_NAMES['declination_weighted_average'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['redshift'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes'],
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['emitted_frequency'],
+                COL_NAMES['species'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                observed_line_f_or_z,
+                observed_line_f_or_z_uncertainty_positive,
+                observed_line_f_or_z_uncertainty_negative,
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
             ])
-        f.close()
-        with open('./galaxy_lines.csv', 'r') as file:
-            galaxy_lines_csv = file.read()
-        response = make_response(galaxy_lines_csv)
-        cd = 'attachment; filename=galaxy_lines.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
-
-    elif table == "Everything":
-
-        # Lines take individual coordinates
-        f = open('galaxies_lines.csv', 'w')
-        out = csv.writer(f)
-        data = db.session.query(Galaxy, Line).outerjoin(Line)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['redshift'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['emitted_frequency'],
-            COL_NAMES['species'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_frequency'],
-            COL_NAMES['observed_line_frequency_uncertainty_positive'],
-            COL_NAMES['observed_line_frequency_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        for item in data:
-            l = item[1]
-            g = item[0]
-            if l is not None:
+            for item in galaxy_lines:
+                l = item[1]
+                g = item[0]
+                # convert to frequency on request
+                if to_frequency:
+                    l.observed_line_redshift,\
+                     l.observed_line_redshift_uncertainty_positive,\
+                     l.observed_line_redshift_uncertainty_negative = redshift_to_frequency(
+                        l.emitted_frequency,
+                        l.observed_line_redshift,
+                        l.observed_line_redshift_uncertainty_positive,
+                        l.observed_line_redshift_uncertainty_negative)
+                # round_redshift
+                l.observed_line_redshift,\
+                 l.observed_line_redshift_uncertainty_positive,\
+                 l.observed_line_redshift_uncertainty_negative = round_redshift(
+                    l.observed_line_redshift,
+                    l.observed_line_redshift_uncertainty_positive,
+                    l.observed_line_redshift_uncertainty_negative,
+                    not to_frequency,
+                    True)
+                # write out
                 out.writerow([
                     g.name,
                     g.right_ascension,
@@ -2396,9 +1975,9 @@ def convert_to_CSV(table, identifier):
                     l.line_width,
                     l.line_width_uncertainty_positive,
                     l.line_width_uncertainty_negative,
-                    l.observed_line_frequency,
-                    l.observed_line_frequency_uncertainty_positive,
-                    l.observed_line_frequency_uncertainty_negative,
+                    l.observed_line_redshift,
+                    l.observed_line_redshift_uncertainty_positive,
+                    l.observed_line_redshift_uncertainty_negative,
                     l.detection_type,
                     l.observed_beam_major,
                     l.observed_beam_minor,
@@ -2406,64 +1985,164 @@ def convert_to_CSV(table, identifier):
                     l.reference,
                     l.notes
                 ])
-            else:
-                out.writerow([
-                    g.name,
-                    g.right_ascension,
-                    g.declination,
-                    g.coordinate_system,
-                    g.redshift,
-                    g.lensing_flag,
-                    g.classification,
-                    g.notes
-                ])
-        f.close()
-        with open('./galaxies_lines.csv', 'r') as file:
-            galaxies_lines_csv = file.read()
-        response = make_response(galaxies_lines_csv)
-        cd = 'attachment; filename=galaxies_lines.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
-    elif table == "Empty":
-        f = open('sample.csv', 'w')
-        out = csv.writer(f)
-        out.writerow([
-            COL_NAMES['name'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['coordinate_system'],
-            COL_NAMES['lensing_flag'],
-            COL_NAMES['classification'],
-            COL_NAMES['g_notes'],
-            COL_NAMES['right_ascension'],
-            COL_NAMES['declination'],
-            COL_NAMES['emitted_frequency'],
-            COL_NAMES['species'],
-            COL_NAMES['integrated_line_flux'],
-            COL_NAMES['integrated_line_flux_uncertainty_positive'],
-            COL_NAMES['integrated_line_flux_uncertainty_negative'],
-            COL_NAMES['peak_line_flux'],
-            COL_NAMES['peak_line_flux_uncertainty_positive'],
-            COL_NAMES['peak_line_flux_uncertainty_negative'],
-            COL_NAMES['line_width'],
-            COL_NAMES['line_width_uncertainty_positive'],
-            COL_NAMES['line_width_uncertainty_negative'],
-            COL_NAMES['observed_line_frequency'],
-            COL_NAMES['observed_line_frequency_uncertainty_positive'],
-            COL_NAMES['observed_line_frequency_uncertainty_negative'],
-            COL_NAMES['detection_type'],
-            COL_NAMES['observed_beam_major'],
-            COL_NAMES['observed_beam_minor'],
-            COL_NAMES['observed_beam_angle'],
-            COL_NAMES['reference'],
-            COL_NAMES['l_notes']
-        ])
-        f.close()
-        with open('./sample.csv', 'r') as file:
-            sample_csv = file.read()
-        response = make_response(sample_csv)
-        cd = 'attachment; filename=sample.csv'
-        response.headers['Content-Disposition'] = cd
-        response.mimetype = 'text/csv'
-        return response
+            f.close()
+            with open('./galaxy_lines.csv', 'r') as file:
+                galaxy_lines_csv = file.read()
+            response = make_response(galaxy_lines_csv)
+            cd = 'attachment; filename=galaxy_lines.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
+
+        elif table == "Everything":
+
+            # Lines take individual coordinates
+            f = open('galaxies_lines.csv', 'w')
+            out = csv.writer(f)
+            data = db.session.query(Galaxy, Line).outerjoin(Line)
+            out.writerow([
+                COL_NAMES['name'],
+                COL_NAMES['right_ascension_weighted_average'],
+                COL_NAMES['declination_weighted_average'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['redshift'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes'],
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['emitted_frequency'],
+                COL_NAMES['species'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                observed_line_f_or_z,
+                observed_line_f_or_z_uncertainty_positive,
+                observed_line_f_or_z_uncertainty_negative,
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
+            ])
+            for item in data:
+                l = item[1]
+                g = item[0]
+                if l is not None:
+                    # convert to frequency on request
+                    if to_frequency:
+                        l.observed_line_redshift, \
+                        l.observed_line_redshift_uncertainty_positive, \
+                        l.observed_line_redshift_uncertainty_negative = redshift_to_frequency(
+                            l.emitted_frequency,
+                            l.observed_line_redshift,
+                            l.observed_line_redshift_uncertainty_positive,
+                            l.observed_line_redshift_uncertainty_negative)
+                    # round_redshift
+                    l.observed_line_redshift, \
+                    l.observed_line_redshift_uncertainty_positive, \
+                    l.observed_line_redshift_uncertainty_negative = round_redshift(
+                        l.observed_line_redshift,
+                        l.observed_line_redshift_uncertainty_positive,
+                        l.observed_line_redshift_uncertainty_negative,
+                        not to_frequency,
+                        True)
+                    # write out
+                    out.writerow([
+                        g.name,
+                        g.right_ascension,
+                        g.declination,
+                        g.coordinate_system,
+                        g.redshift,
+                        g.lensing_flag,
+                        g.classification,
+                        g.notes,
+                        l.right_ascension,
+                        l.declination,
+                        l.emitted_frequency,
+                        l.species,
+                        l.integrated_line_flux,
+                        l.integrated_line_flux_uncertainty_positive,
+                        l.integrated_line_flux_uncertainty_negative,
+                        l.peak_line_flux,
+                        l.peak_line_flux_uncertainty_positive,
+                        l.peak_line_flux_uncertainty_negative,
+                        l.line_width,
+                        l.line_width_uncertainty_positive,
+                        l.line_width_uncertainty_negative,
+                        l.observed_line_redshift,
+                        l.observed_line_redshift_uncertainty_positive,
+                        l.observed_line_redshift_uncertainty_negative,
+                        l.detection_type,
+                        l.observed_beam_major,
+                        l.observed_beam_minor,
+                        l.observed_beam_angle,
+                        l.reference,
+                        l.notes
+                    ])
+                else:
+                    out.writerow([
+                        g.name,
+                        g.right_ascension,
+                        g.declination,
+                        g.coordinate_system,
+                        g.redshift,
+                        g.lensing_flag,
+                        g.classification,
+                        g.notes
+                    ])
+            f.close()
+            with open('./galaxies_lines.csv', 'r') as file:
+                galaxies_lines_csv = file.read()
+            response = make_response(galaxies_lines_csv)
+            cd = 'attachment; filename=galaxies_lines.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response
+        elif table == "Empty":
+            f = open('sample.csv', 'w')
+            out = csv.writer(f)
+            out.writerow([
+                COL_NAMES['name'],
+                COL_NAMES['coordinate_system'],
+                COL_NAMES['lensing_flag'],
+                COL_NAMES['classification'],
+                COL_NAMES['g_notes'],
+                COL_NAMES['right_ascension'],
+                COL_NAMES['declination'],
+                COL_NAMES['emitted_frequency'],
+                COL_NAMES['species'],
+                COL_NAMES['integrated_line_flux'],
+                COL_NAMES['integrated_line_flux_uncertainty_positive'],
+                COL_NAMES['integrated_line_flux_uncertainty_negative'],
+                COL_NAMES['peak_line_flux'],
+                COL_NAMES['peak_line_flux_uncertainty_positive'],
+                COL_NAMES['peak_line_flux_uncertainty_negative'],
+                COL_NAMES['line_width'],
+                COL_NAMES['line_width_uncertainty_positive'],
+                COL_NAMES['line_width_uncertainty_negative'],
+                COL_NAMES['observed_line_redshift'],
+                COL_NAMES['observed_line_redshift_uncertainty_positive'],
+                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                COL_NAMES['detection_type'],
+                COL_NAMES['observed_beam_major'],
+                COL_NAMES['observed_beam_minor'],
+                COL_NAMES['observed_beam_angle'],
+                COL_NAMES['reference'],
+                COL_NAMES['l_notes']
+            ])
+            f.close()
+            with open('./sample.csv', 'r') as file:
+                sample_csv = file.read()
+            response = make_response(sample_csv)
+            cd = 'attachment; filename=sample.csv'
+            response.headers['Content-Disposition'] = cd
+            response.mimetype = 'text/csv'
+            return response

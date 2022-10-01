@@ -11,4 +11,6 @@ __all__ = [
     'TempLine',
     'User',
     'Role',
+    'Post',
+    ''
 ]

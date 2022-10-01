@@ -104,9 +104,9 @@ class AdvancedSearchForm(FlaskForm):
     line_width_min = FloatField('Line FWHM (km/s) min:', validators=[Optional(), NumberRange(min=0)])
     line_width_max = FloatField('Line FWHM (km/s) max:', validators=[Optional(), NumberRange(min=0)])
 
-    observed_line_frequency_min = FloatField('Observed Line Frequency (GHz) min:',
+    observed_line_redshift_min = FloatField('Observed Line Redshift min:',
                                              validators=[Optional(), NumberRange(min=0)])
-    observed_line_frequency_max = FloatField('Observed Line Frequency (GHz) max:',
+    observed_line_redshift_max = FloatField('Observed Line Redshift max:',
                                              validators=[Optional(), NumberRange(min=0)])
 
     detection_type = SelectField(u'Telescope Type',
@@ -200,13 +200,13 @@ class AddLineForm(FlaskForm):
     freq_type = SelectField(u'Enter line center as redshift (z) or observed frequency (f in units of GHz)',
                             choices=[('z', 'z'), ('f', 'f')],
                             validators=[DataRequired()])
-    observed_line_frequency = FloatField('Observed Frequency/Redshift', validators=[Optional(), NumberRange(min=0)])
-    observed_line_frequency_uncertainty_positive = FloatField('Observed Frequency/Redshift Uncertainty (same units)',
+    observed_line_redshift = FloatField('Observed Frequency/Redshift', validators=[Optional(), NumberRange(min=0)])
+    observed_line_redshift_uncertainty_positive = FloatField('Observed Frequency/Redshift Uncertainty (same units)',
                                                               validators=[Optional(), NumberRange(min=0)])
-    observed_line_frequency_uncertainty_negative = FloatField('Observed Frequency/Redshift Negative Uncertainty',
+    observed_line_redshift_uncertainty_negative = FloatField('Observed Frequency/Redshift Negative Uncertainty',
                                                               validators=[Optional(), NumberRange(min=0)])
     detection_type = SelectField(u'Telescope Type used for Observation',
-                                 choices=[('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')],
+                                 choices=[('SD', 'Single Dish'), ('IF', 'Interferometric')],
                                  validators=[Optional()])
     observed_beam_major = FloatField('Beam Major Axrs FWHM (in arcsec) (strongly recommended) ',
                                      validators=[Optional(), NumberRange(min=0)])
@@ -242,13 +242,13 @@ class EditLineForm(FlaskForm):
                                                  validators=[Optional(), NumberRange(min=0)])
     freq_type = SelectField(u'Enter as redshift (z) or observed frequency (f)', choices=[('z', 'z'), ('f', 'f')],
                             validators=[DataRequired()])
-    observed_line_frequency = FloatField('Observable Line Frequency', validators=[Optional(), NumberRange(min=0)])
-    observed_line_frequency_uncertainty_positive = FloatField('Observable Line Frequency Positive Uncertainty',
+    observed_line_redshift = FloatField('Observable Line Frequency', validators=[Optional(), NumberRange(min=0)])
+    observed_line_redshift_uncertainty_positive = FloatField('Observable Line Frequency Positive Uncertainty',
                                                               validators=[Optional(), NumberRange(min=0)])
-    observed_line_frequency_uncertainty_negative = FloatField('Observable Line Frequency Negative Uncertainty',
+    observed_line_redshift_uncertainty_negative = FloatField('Observable Line Frequency Negative Uncertainty',
                                                               validators=[Optional(), NumberRange(min=0)])
     detection_type = SelectField(u'Telescope Type used for Detection',
-                                 choices=[('Single Dish', 'Single Dish'), ('Interferometric', 'Interferometric')],
+                                 choices=[('SD', 'Single Dish'), ('IF', 'Interferometric')],
                                  validators=[Optional()])
     observed_beam_major = FloatField('Observed Beam Major (FwHM in arcsec) (strongly recommended) ',
                                      validators=[Optional(), NumberRange(min=0)])

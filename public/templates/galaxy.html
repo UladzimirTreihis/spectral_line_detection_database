@@ -47,6 +47,7 @@
             <th>Average Dec.</th>
             <th>Coordinate System</th>
             <th>Average Redshift</th>
+            <th>Redshift Error</th>
             <th>Lensed?</th>
             <th>Classification</th>
             <th>Notes</th>
@@ -61,9 +62,10 @@
                 <td name="decCoordinates" id="{{ galaxy.declination }}"  style="width: 5%;"></td>
                 <td style="width: 10%;">{{ galaxy.coordinate_system }}</td>
                 <td style="width: 5%;">{{ galaxy.redshift }}</td>
+                <td style="width: 5%;">{{ galaxy.redshift_error }}</td>
                 <td style="width: 5%;">{{ galaxy.lensing_flag }}</td>
                 <td style="width: 5%;">{{ galaxy.classification }}</td>
-                <td style="width: 55%;">{{ galaxy.notes }}</td>
+                <td style="width: 50%;">{{ galaxy.notes }}</td>
             </tr>
         </tbody>
     </table>
@@ -74,7 +76,31 @@
     <p>
         To see individual lines' individual positions, please download. 
     </p>
-    <a href="{{ url_for ('main.convert_to_CSV', table = 'Galaxy Lines', identifier = galaxy.id, symmetrical = 'False') }}" class="btn btn-info" role="button">Download line entries for this galaxy</a>
+    <form action="" method="get" novalidate enctype="multipart/form-data">
+        <input type="checkbox" id="convertToFrequency" name="convertToFrequency">
+        <label for="convertToFrequency" class="checkbox" style="padding-left: 10px">
+            Check if you want the redshift converted to MHz.
+        </label>
+    </form>
+    <script type="text/javascript">
+        function validate() {
+          // Get the checkbox
+          var checkBox = document.getElementById('convertToFrequency');
+          // Get the output text
+          var linkDownloadLines = document.getElementById('downloadLines');
+          var linkDownloadEverything = document.getElementById('downloadEverything');
+
+          // If the checkbox is checked, display the output text
+          if (checkBox.checked == true){
+            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, to_frequency = "1") }}";
+          } else {
+            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, to_frequency = "0") }}";
+          }
+        }
+    </script>
+
+    <br>
+    <a id="downloadLines" href="" class="btn btn-info" role="button" onclick="validate()">Download line entries for this galaxy</a>
 
     <div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
         <table class = "table table-hover" id = "Line" style="width: 100%">
@@ -87,14 +113,14 @@
                     <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
                     <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
                     <th>\( S_{max} \) \( (mJy) \)</th>
-                    <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
-                    <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+                    <th>\( +\sigma_{S_{max}} \) \( (mJy) \)</th>
+                    <th>\( -\sigma_{S_{max}} \) \( (mJy) \)</th>
                     <th>\( FWHM \) \( (kms^{-1}) \)</th>
                     <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
                     <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-                    <th>\( f_{obs} \) \( (GHz) \)</th>
-                    <th>\( +\sigma_{f_{obs}} \) \( (GHz) \)</th>
-                    <th>\( -\sigma_{f_{obs}} \) \( (GHz) \)</th>
+                    <th>\( z \) \( (GHz) \)</th>
+                    <th>\( +\sigma_{z} \) \( (GHz) \)</th>
+                    <th>\( -\sigma_{z} \) \( (GHz) \)</th>
                     <th>\( Telescope \) \( Type \)</th>
                     <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
                     <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
@@ -107,6 +133,7 @@
             
             <tbody>
                 {% for line in lines %}
+
                 <tr>
                     <td><a href="{{ url_for ('main.line_edit_form', id = line.id) }}"  style="width: 5%;"> Update</a></td>
                     <td>{{ line.species }}</td>
@@ -120,9 +147,9 @@
                     <td>{{ line.line_width }}</td>
                     <td>{{ line.line_width_uncertainty_positive }}</td>
                     <td>{{ line.line_width_uncertainty_negative }}</td>
-                    <td>{{ line.observed_line_frequency }}</td>
-                    <td>{{ line.observed_line_frequency_uncertainty_positive }}</td>
-                    <td>{{ line.observed_line_frequency_uncertainty_negative }}</td>
+                    <td>{{ line.observed_line_redshift }}</td>
+                    <td>{{ line.observed_line_redshift_uncertainty_positive }}</td>
+                    <td>{{ line.observed_line_redshift_uncertainty_negative }}</td>
                     <td>{{ line.detection_type }}</td>
                     <td>{{ line.observed_beam_major }}</td>
                     <td>{{ line.observed_beam_minor }}</td>

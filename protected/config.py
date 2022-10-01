@@ -81,44 +81,58 @@ class TestingConfig(Config):
 
 COL_NAMES = {
     'name':'name',
-    'right_ascension' : 'right_ascension',
-    'declination':'declination',
-    'coordinate_system':'coordinate_system',
+    'right_ascension': 'right_ascension',
+    'declination': 'declination',
+    'right_ascension_weighted_average': 'right_ascension_weighted_average',
+    'declination_weighted_average': 'declination_weighted_average',
+    'coordinate_system': 'coordinate_system',
     'redshift': 'Redshift of the galaxy',
-    'lensing_flag':'lensing_flag',
-    'classification':'classification',
-    'g_notes':'g_notes',
-    'emitted_frequency':'emitted_frequency',
-    'species':'species',
-    'integrated_line_flux':'integrated_line_flux',
-    'integrated_line_flux_uncertainty_positive':'integrated_line_flux_uncertainty_positive',
-    'integrated_line_flux_uncertainty_negative':'integrated_line_flux_uncertainty_negative',
-    'peak_line_flux':'peak_line_flux',
-    'peak_line_flux_uncertainty_positive':'peak_line_flux_uncertainty_positive',
-    'peak_line_flux_uncertainty_negative':'peak_line_flux_uncertainty_negative',
-    'line_width':'line_width',
-    'line_width_uncertainty_positive':'line_width_uncertainty_positive',
-    'line_width_uncertainty_negative':'line_width_uncertainty_negative',
-    'freq_type':'freq_type',
-    'observed_line_frequency':'observed_line_frequency',
-    'observed_line_frequency_uncertainty_positive':'observed_line_frequency_uncertainty_positive',
-    'observed_line_frequency_uncertainty_negative':'observed_line_frequency_uncertainty_negative',
-    'detection_type':'detection_type',
-    'observed_beam_major':'observed_beam_major',
-    'observed_beam_minor':'observed_beam_minor',
-    'observed_beam_angle':'observed_beam_angle',
-    'reference':'reference',
-    'l_notes':'l_notes'
+    'lensing_flag': 'lensing_flag',
+    'classification': 'classification',
+    'g_notes': 'g_notes',
+    'emitted_frequency': 'emitted_frequency',
+    'species': 'species',
+    'integrated_line_flux': 'integrated_line_flux',
+    'integrated_line_flux_uncertainty_positive': 'integrated_line_flux_uncertainty_positive',
+    'integrated_line_flux_uncertainty_negative': 'integrated_line_flux_uncertainty_negative',
+    'peak_line_flux': 'peak_line_flux',
+    'peak_line_flux_uncertainty_positive': 'peak_line_flux_uncertainty_positive',
+    'peak_line_flux_uncertainty_negative': 'peak_line_flux_uncertainty_negative',
+    'line_width': 'line_width',
+    'line_width_uncertainty_positive': 'line_width_uncertainty_positive',
+    'line_width_uncertainty_negative': 'line_width_uncertainty_negative',
+    'freq_type': 'freq_type',
+    'observed_line_redshift': 'observed_line_redshift',
+    'observed_line_redshift_uncertainty_positive': 'observed_line_redshift_uncertainty_positive',
+    'observed_line_redshift_uncertainty_negative': 'observed_line_redshift_uncertainty_negative',
+    'observed_line_frequency': 'observed_line_redshift',
+    'observed_line_frequency_uncertainty_positive': 'observed_line_redshift_uncertainty_positive',
+    'observed_line_frequency_uncertainty_negative': 'observed_line_redshift_uncertainty_negative',
+    'detection_type': 'detection_type',
+    'observed_beam_major': 'observed_beam_major',
+    'observed_beam_minor': 'observed_beam_minor',
+    'observed_beam_angle': 'observed_beam_angle',
+    'reference': 'reference',
+    'l_notes': 'l_notes'
 }
 
 
-def remove_key(d, key):
+def remove_key(d, *keys):
     r = dict(d)
-    del r[key]
+    for key in keys:
+        del r[key]
     return r
 
 
-COL_NAMES_WO_REDSHIFT = remove_key(COL_NAMES, 'redshift')
+COL_NAMES_FOR_SUBMISSION = remove_key(
+    COL_NAMES,
+    'redshift',
+    'right_ascension_weighted_average',
+    'declination_weighted_average',
+    'observed_line_redshift',
+    'observed_line_frequency_uncertainty_positive',
+    'observed_line_redshift_uncertainty_negative'
+)
 
 dec_reg_exp = '((([+]+)|([-]+))[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|((([+]+)|([-]+))[0-9.]+[.]*[0-9]*)'
 ra_reg_exp = '([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+[.]*[0-9]*)'

@@ -126,25 +126,25 @@
 
         </p>
         <p>
-            {{ form.observed_line_frequency.label }}<br>
-            {{ form.observed_line_frequency(size=32) }}<br>
-            {% for error in form.observed_line_frequency.errors %}
+            {{ form.observed_line_redshift.label }}<br>
+            {{ form.observed_line_redshift(size=32) }}<br>
+            {% for error in form.observed_line_redshift.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
         </p>
         <p>
-            {{ form.observed_line_frequency_uncertainty_positive.label }}<br>
-            {{ form.observed_line_frequency_uncertainty_positive(size=32) }}<br>
-            {% for error in form.observed_line_frequency_uncertainty_positive.errors %}
+            {{ form.observed_line_redshift_uncertainty_positive.label }}<br>
+            {{ form.observed_line_redshift_uncertainty_positive(size=32) }}<br>
+            {% for error in form.observed_line_redshift_uncertainty_positive.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
         </p>
         <p id="uncertainty" style="display:none">
-            {{ form.observed_line_frequency_uncertainty_negative.label }}<br>
-            {{ form.observed_line_frequency_uncertainty_negative(size=32) }}<br>
-            {% for error in form.observed_line_frequency_uncertainty_negative.errors %}
+            {{ form.observed_line_redshift_uncertainty_negative.label }}<br>
+            {{ form.observed_line_redshift_uncertainty_negative(size=32) }}<br>
+            {% for error in form.observed_line_redshift_uncertainty_negative.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
