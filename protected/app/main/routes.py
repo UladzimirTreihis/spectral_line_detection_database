@@ -47,8 +47,7 @@ from species import *
 from io import TextIOWrapper
 from flask_security import (
     current_user,
-    login_required,
-    roles_required
+    login_required
 )
 import math
 from app.main import bp
@@ -57,10 +56,6 @@ from app.helpers import (
     to_zero,
     to_m_inf,
     to_p_inf,
-    to_empty,
-    check_decimal,
-    round_to_nsf,
-    round_to_uncertainty,
     round_redshift,
     ra_to_float,
     dec_to_float,
@@ -1631,7 +1626,8 @@ def line_edit_form(id):
                 if form.notes.data:
                     if line.notes != form.notes.data:
                         changes = changes + "Initial Notes: " + line.notes + " New Notes: " + form.notes.data
-                line = EditLine(galaxy_id=galaxy_id, emitted_frequency=form.emitted_frequency.data,
+                line = EditLine(galaxy_id=galaxy_id, original_line_id=line.id,
+                                emitted_frequency=form.emitted_frequency.data,
                                 species=form.species.data, integrated_line_flux=form.integrated_line_flux.data,
                                 integrated_line_flux_uncertainty_positive=form.integrated_line_flux_uncertainty_positive.data,
                                 integrated_line_flux_uncertainty_negative=form.integrated_line_flux_uncertainty_negative.data,
