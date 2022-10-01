@@ -1774,8 +1774,16 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
         # convert to_frequency to a boolean
         if int(to_frequency):
             to_frequency = True
+            # rename columns accordingly
+            observed_line_f_or_z = COL_NAMES['observed_line_frequency']
+            observed_line_f_or_z_uncertainty_positive = COL_NAMES['observed_line_frequency_uncertainty_positive']
+            observed_line_f_or_z_uncertainty_negative = COL_NAMES['observed_line_frequency_uncertainty_negative']
         else:
             to_frequency = False
+            # rename columns accordingly
+            observed_line_f_or_z = COL_NAMES['observed_line_redshift']
+            observed_line_f_or_z_uncertainty_positive = COL_NAMES['observed_line_redshift_uncertainty_positive']
+            observed_line_f_or_z_uncertainty_negative = COL_NAMES['observed_line_redshift_uncertainty_negative']
         if table == "Galaxy":
 
             # Galaxy takes averaged coordinates
@@ -1829,9 +1837,9 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                 COL_NAMES['line_width'],
                 COL_NAMES['line_width_uncertainty_positive'],
                 COL_NAMES['line_width_uncertainty_negative'],
-                COL_NAMES['observed_line_redshift'],
-                COL_NAMES['observed_line_redshift_uncertainty_positive'],
-                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                observed_line_f_or_z,
+                observed_line_f_or_z_uncertainty_positive,
+                observed_line_f_or_z_uncertainty_negative,
                 COL_NAMES['detection_type'],
                 COL_NAMES['observed_beam_major'],
                 COL_NAMES['observed_beam_minor'],
@@ -1917,9 +1925,9 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                 COL_NAMES['line_width'],
                 COL_NAMES['line_width_uncertainty_positive'],
                 COL_NAMES['line_width_uncertainty_negative'],
-                COL_NAMES['observed_line_redshift'],
-                COL_NAMES['observed_line_redshift_uncertainty_positive'],
-                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                observed_line_f_or_z,
+                observed_line_f_or_z_uncertainty_positive,
+                observed_line_f_or_z_uncertainty_negative,
                 COL_NAMES['detection_type'],
                 COL_NAMES['observed_beam_major'],
                 COL_NAMES['observed_beam_minor'],
@@ -2018,9 +2026,9 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                 COL_NAMES['line_width'],
                 COL_NAMES['line_width_uncertainty_positive'],
                 COL_NAMES['line_width_uncertainty_negative'],
-                COL_NAMES['observed_line_redshift'],
-                COL_NAMES['observed_line_redshift_uncertainty_positive'],
-                COL_NAMES['observed_line_redshift_uncertainty_negative'],
+                observed_line_f_or_z,
+                observed_line_f_or_z_uncertainty_positive,
+                observed_line_f_or_z_uncertainty_negative,
                 COL_NAMES['detection_type'],
                 COL_NAMES['observed_beam_major'],
                 COL_NAMES['observed_beam_minor'],
