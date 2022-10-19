@@ -17,7 +17,7 @@ classification_choices = [('LBG', 'LBG (Lyman Break Galaxy)'),
                           ('RQ-AGN', 'RQ-AGN (Radio-Quiet AGN)'),
                           ('RL-AGN', 'RL-AGN (Radio-Loud AGN)'),
                           ('RG', 'RG (Radio Galaxy)'),
-                          ('BzK', 'BzK (BzK-selected Galaxy)')
+                          ('BzK', 'BzK (BzK-selected Galaxy)'),
                           ('ERO', 'ERO (Extremely Red Object)')]
 
 classification_choices_w_none = [('None', 'None')] + classification_choices
