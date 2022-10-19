@@ -746,7 +746,8 @@ def entry_file():
                                   "QSO": "QSO (Optically Bright AGN)",
                                   "Quasar": "Quasar (Optical and Radio Bright AGN)",
                                   "RQ-AGN": "RQ-AGN (Radio-Quiet AGN)", "RL-AGN": "RL-AGN (Radio-Loud AGN)",
-                                  "RG": "RG (Radio Galaxy)", "BZK": "BZK (BZK-Selected Galaxy)"}
+                                  "RG": "RG (Radio Galaxy)", "BZK": "BZK (BZK-Selected Galaxy)",
+                                  "ERO": "ERO (Extremely Red Object)"}
 
         if not data:
             flash("CSV File is empty. ")
@@ -831,7 +832,7 @@ def entry_file():
                             flash("Entry " + str(row_count) + ": Classification is Mandatory")
                         row_classification = ""
                         for key, value in classification_options.items():
-                            if key in entered_classification.upper():
+                            if key in entered_classification.upper() or key in entered_classification:
                                 row_classification = row_classification + "," + key
                         if row_classification == "," or row_classification == "":
                             validated = False
@@ -869,11 +870,7 @@ def entry_file():
                             validated = False
                             flash(
                                 "Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
-                        if row_integrated_line_flux_uncertainty_negative == "":
-                            validated = False
-                            flash(
-                                "Entry " + str(row_count) + ": Integrated Line Flux Negative Uncertainty is Mandatory")
-                        if row_integrated_line_flux_uncertainty_positive != "":
+                        else:
                             try:
                                 if float(row_integrated_line_flux_uncertainty_positive) < 0:
                                     validated = False
@@ -881,7 +878,10 @@ def entry_file():
                                         row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
                             except:
                                 pass
-                        if row_integrated_line_flux_uncertainty_negative != "":
+                        if row_integrated_line_flux_uncertainty_negative == "":
+                            if row_integrated_line_flux_uncertainty_positive != "":
+                                row_integrated_line_flux_uncertainty_negative = row_integrated_line_flux_uncertainty_positive
+                        else:
                             try:
                                 if float(row_integrated_line_flux_uncertainty_negative) < 0:
                                     validated = False
@@ -889,6 +889,7 @@ def entry_file():
                                         row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
                             except:
                                 pass
+
                         if row_peak_line_flux_uncertainty_positive != "":
                             try:
                                 if float(row_peak_line_flux_uncertainty_positive) < 0:
@@ -1421,7 +1422,18 @@ def line_entry_form():
                         form.integrated_line_flux_uncertainty_positive.data)) & (
                             Line.species == form.species.data)).first()
 
-                # If this galaxy entry has not been previously uploaded and/or approved, then upload. 
+                # If this galaxy entry has not been previously uploaded and/or approved, then upload.
+                # But first complete negative uncertainties if None.
+                if form.integrated_line_flux_uncertainty_negative == "" \
+                        and form.integrated_line_flux_uncertainty_positive != "":
+                    form.integrated_line_flux_uncertainty_negative = form.integrated_line_flux_uncertainty_positive
+                if form.peak_line_flux_uncertainty_negative == "" \
+                        and form.peak_line_flux_uncertainty_positive != "":
+                    form.peak_line_flux_uncertainty_negative = form.peak_line_flux_uncertainty_positive
+                if form.line_width_uncertainty_negative == "" and form.line_width_uncertainty_positive != "":
+                    form.line_width_uncertainty_negative = form.line_width_uncertainty_positive
+
+                # Create TempLine object.
                 if (check_same_line is None) & (check_same_temp_line is None):
                     line = TempLine(galaxy_id=id,
                                     emitted_frequency=form.emitted_frequency.data,
@@ -2128,6 +2140,7 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
                 COL_NAMES['line_width'],
                 COL_NAMES['line_width_uncertainty_positive'],
                 COL_NAMES['line_width_uncertainty_negative'],
+                COL_NAMES['freq_type'],
                 COL_NAMES['observed_line_redshift'],
                 COL_NAMES['observed_line_redshift_uncertainty_positive'],
                 COL_NAMES['observed_line_redshift_uncertainty_negative'],

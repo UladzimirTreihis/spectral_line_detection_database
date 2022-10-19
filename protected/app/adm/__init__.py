@@ -453,7 +453,7 @@ class PostsView(AdminBaseView):
                                'investigated_dec': '', 'investigated_lines_approved': '',
                                'investigated_lines_waiting_approval': '', 'relationship': ''}
 
-            if similar_galaxy is not None:
+            if similar_galaxy != None:
 
                 count_of_similar_galaxies += 1
                 similar_id = str(similar_galaxy[0].id)
@@ -484,34 +484,35 @@ class PostsView(AdminBaseView):
                 dict_of_similar = dict(zip(dict_of_similar, list_of_values))
                 dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
 
-            if (similar_tempgalaxy is not None) & (similar_tempgalaxy.id != tempgalaxy.id):
+            if similar_tempgalaxy != None:
+                if similar_tempgalaxy.id != tempgalaxy.id:
 
-                count_of_similar_galaxies += 1
-                similar_id = str(similar_tempgalaxy.id)
-                similar_name = str(similar_tempgalaxy.name)
-                similar_ra = str(similar_tempgalaxy.right_ascension)
-                similar_dec = str(similar_tempgalaxy.declination)
-                investigated_id = str(tempgalaxy.id)
-                investigated_name = str(tempgalaxy.name)
-                investigated_ra = str(tempgalaxy.right_ascension)
-                investigated_dec = str(tempgalaxy.declination)
-                # Lines count
-                similar_lines_waiting_approval_count = 0
-                similar_lines_approved_count = 0
-                investigated_lines_waiting_approval_count = 0
-                investigated_lines_approved_count = 0
+                    count_of_similar_galaxies += 1
+                    similar_id = str(similar_tempgalaxy.id)
+                    similar_name = str(similar_tempgalaxy.name)
+                    similar_ra = str(similar_tempgalaxy.right_ascension)
+                    similar_dec = str(similar_tempgalaxy.declination)
+                    investigated_id = str(tempgalaxy.id)
+                    investigated_name = str(tempgalaxy.name)
+                    investigated_ra = str(tempgalaxy.right_ascension)
+                    investigated_dec = str(tempgalaxy.declination)
+                    # Lines count
+                    similar_lines_waiting_approval_count = 0
+                    similar_lines_approved_count = 0
+                    investigated_lines_waiting_approval_count = 0
+                    investigated_lines_approved_count = 0
 
-                investigated_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(
-                    TempLine.galaxy_id == id).scalar()
-                similar_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(
-                    TempLine.galaxy_id == int(similar_id)).scalar()
+                    investigated_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(
+                        TempLine.galaxy_id == id).scalar()
+                    similar_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(
+                        TempLine.galaxy_id == int(similar_id)).scalar()
 
-                list_of_values = [similar_id, similar_name, similar_ra, similar_dec, similar_lines_approved_count,
-                                  similar_lines_waiting_approval_count, investigated_id, investigated_name,
-                                  investigated_ra, investigated_dec, investigated_lines_approved_count,
-                                  investigated_lines_waiting_approval_count, 'temp_temp']
-                dict_of_similar = dict(zip(dict_of_similar, list_of_values))
-                dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
+                    list_of_values = [similar_id, similar_name, similar_ra, similar_dec, similar_lines_approved_count,
+                                      similar_lines_waiting_approval_count, investigated_id, investigated_name,
+                                      investigated_ra, investigated_dec, investigated_lines_approved_count,
+                                      investigated_lines_waiting_approval_count, 'temp_temp']
+                    dict_of_similar = dict(zip(dict_of_similar, list_of_values))
+                    dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
 
         posts_query = session.query(Post, TempGalaxy, TempLine, EditGalaxy, EditLine).select_from(Post).outerjoin(
             TempGalaxy, TempGalaxy.id == Post.tempgalaxy_id).outerjoin(TempLine,
