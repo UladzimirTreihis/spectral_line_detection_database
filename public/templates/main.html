@@ -4,7 +4,6 @@
     Main 
 {% endblock %}
 {% block script %}
-    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
 {% endblock %}
 {% block style %}
@@ -24,12 +23,8 @@
 <a href="{{ url_for('main.query_results') }}" class="btn btn-info" role="button">Advanced Search</a>
 <a href="{{ url_for('main.contribute') }}" class="btn btn-info" role="button">Contribute Data</a>
 
-
 <br>
 <br>
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <form class="form-inline" action="" method="post" novalidate> 
    <h3> Search for a Galaxy within the Database </h3>
