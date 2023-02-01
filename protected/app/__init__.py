@@ -84,7 +84,7 @@ logging.basicConfig(filename='record.log', level=logging.DEBUG,
 
 #### Application Factory Function ####
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class=ProductionConfig):
     template_dir = '../../public/templates'
     app = Flask(__name__, template_folder=template_dir)
     app.config.from_object(config_class)
@@ -92,7 +92,7 @@ def create_app(config_class=DevelopmentConfig):
     initialize_extensions(app)
     create_tables_and_mock_users(app)
     register_blueprints(app)
-    #configure_logs_for_production(app)
+    configure_logs_for_production(app)
 
     return app
 

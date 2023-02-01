@@ -13,23 +13,15 @@ class Config(object):
     TESTING = False
     #the dir is still /app but database is supposed to be outside with other config files?
     SQLALCHEMY_DATABASE_URI = config_file.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///' + os.path.join(basedir, '../tmp/app.db')
-    #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', '').replace(
-     #   'postgres://', 'postgresql://') or \
-      #  'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = config_file.get('SECRET_KEY') or 'you-will-never-guess'
-    
-    # For Postgresql
+    SECRET_KEY = config_file.get('SECRET_KEY')
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT') 
-    # Flask-Mail SMTP server settings
-    #MAIL_SERVER = 'smtp.gmail.com'
-    #MAIL_PORT = 465
     MAIL_SERVER = os.environ.get('MAIL_SERVER') or 'smtp.gmail.com'
     MAIL_PORT = os.environ.get('MAIL_PORT') or 465
     MAIL_USE_SSL = os.environ.get('MAIL_USE_SSL') or True
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS') or False
     MAIL_USERNAME = config_file.get('MAIL_USERNAME') or 'line.database.test@gmail.com'
-    MAIL_PASSWORD = config_file.get('MAIL_PASSWORD') or 'enrjbkfrbkzxboxk'
+    MAIL_PASSWORD = config_file.get('MAIL_PASSWORD') or 'fake_password'
     MAIL_DEFAULT_SENDER = MAIL_USERNAME
     MAIL_MAX_EMAILS = os.environ.get('MAIL_MAX_EMAILS') or None
     MAIL_SUPPRESS_SEND = os.environ.get('MAIL_SUPPRESS_SEND') or False
@@ -50,14 +42,6 @@ class Config(object):
     SECURITY_SENDREGISTER_EMAIL = os.environ.get('SECURITY_SENDREGISTER_EMAIL') or False
     SECURITY_CONFIRMABLE = os.environ.get('SECURITY_CONFIRMABLE') or True
     SECURITY_EMAIL_SENDER = os.environ.get('SECURITY_EMAIL_SENDER') or 'email@example.com'
-    #SECURITY_REGISTER_URL = '/admin/create_account'
-#app.config['SECURITY_LOGIN_URL'] = '/admin/login'
-#app.config['SECURITY_POST_LOGIN_VIEW'] = '/admin'
-#SECURITY_LOGOUT_URL = '/logout'
-#SECURITY_POST_LOGOUT_VIEW = '/home'
-#app.config['SECURITY_RESET_URL'] = '/admin/reset'
-#app.config['SECURITY_CHANGE_URL'] = '/admin/change'
-#app.config['SECURITY_USER_IDENTITY_ATTRIBUTES'] = ['email', 'username']
 
     ADMINS = ['line.database.test@gmail.com']
 

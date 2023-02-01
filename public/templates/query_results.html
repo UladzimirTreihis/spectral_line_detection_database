@@ -36,297 +36,269 @@
 
 {% block content %}
 
-<hr>
 <h1> Advanced Search </h1>
-<br>
 
-<form action= {{url_for('main.query_results')}} method='POST' id='galaxyForm'>
-   {{form_advanced.hidden_tag() }}
-   <div class = "entry">
-      <p>
-            {{ form_advanced.name.label }}<br>
-            {{ form_advanced.name(size=32) }}<br>
-            {% for error in form_advanced.name.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-      </p>
-       <p>Position search within a range:</p>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.right_ascension_min.label }}<br>
-            {{ form_advanced.right_ascension_min(size=20) }}<br>
-            {% for error in form_advanced.right_ascension_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.right_ascension_max.label }}<br>
-            {{ form_advanced.right_ascension_max(size=20) }}<br>
-            {% for error in form_advanced.right_ascension_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.declination_min.label }}<br>
-            {{ form_advanced.declination_min(size=20) }}<br>
-            {% for error in form_advanced.declination_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.declination_max.label }}<br>
-            {{ form_advanced.declination_max(size=20) }}<br>
-            {% for error in form_advanced.declination_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <p>Position search within a radius:</p>
-      <div style="display: flex;">
-         <p>
-            Center {{ form_advanced.right_ascension_point.label }}<br>
-            {{ form_advanced.right_ascension_point(size=20) }}<br>
-            {% for error in form_advanced.right_ascension_point.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            Center {{ form_advanced.declination_point.label }}<br>
-            {{ form_advanced.declination_point(size=20) }}<br>
-            {% for error in form_advanced.declination_point.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <p>Radius:</p>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.radius_d.label }}<br>
-            {{ form_advanced.radius_d(size=3) }}<br>
-            {% for error in form_advanced.radius_d.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.radius_m.label }}<br>
-            {{ form_advanced.radius_m(size=3) }}<br>
-            {% for error in form_advanced.radius_m.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.radius_s.label }}<br>
-            {{ form_advanced.radius_s(size=4) }}<br>
-            {% for error in form_advanced.radius_s.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.redshift_min.label }}<br>
-            {{ form_advanced.redshift_min(size=20) }}<br>
-            {% for error in form_advanced.redshift_min.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
+<form action= "{{url_for('main.query_results')}}" method='POST' id='galaxyForm' class="row g-3">
+   {{form.hidden_tag() }}
+      <div class="col-md-6" style="padding: 50px;">
+         <h2>Galaxy data</h2>
+         <div class="row g-3">
+            <div class="col-md-12">
+               {{ form.name.label(class="form-label") }}
+               {{ form.name(size=32, class="form-control") }}
+               {% for error in form.name.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <h5>Position search within a range:</h5>
+            <div class="col-md-6">
+               {{ form.right_ascension_min.label(class="form-label") }}
+               {{ form.right_ascension_min(class="form-control") }}
+               {% for error in form.right_ascension_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.right_ascension_max.label(class="form-label") }}
+               {{ form.right_ascension_max(class="form-control") }}
+               {% for error in form.right_ascension_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.declination_min.label(class="form-label") }}
+               {{ form.declination_min(class="form-control") }}
+               {% for error in form.declination_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.declination_max.label(class="form-label") }}
+               {{ form.declination_max(class="form-control") }}
+               {% for error in form.declination_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <h5>Position search within a radius:</h5>
+            <div class="col-md-6">
+               Center {{ form.right_ascension_point.label(class="form-label") }}
+               {{ form.right_ascension_point(class="form-control") }}
+               {% for error in form.right_ascension_point.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               Center {{ form.declination_point.label(class="form-label") }}
+               {{ form.declination_point(class="form-control") }}
+               {% for error in form.declination_point.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <h5>Radius:</h5>
+            <div class="col-md-4">
+               {{ form.radius_d.label(class="form-label") }}
+               {{ form.radius_d(class="form-control") }}
+               {% for error in form.radius_d.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-4">
+               {{ form.radius_m.label(class="form-label") }}
+               {{ form.radius_m(class="form-control") }}
+               {% for error in form.radius_m.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-4">
+               {{ form.radius_s.label(class="form-label") }}
+               {{ form.radius_s(class="form-control") }}
+               {% for error in form.radius_s.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.redshift_min.label(class="form-label") }}
+               {{ form.redshift_min(class="form-control") }}
+               {% for error in form.redshift_min.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
 
-         </p>
-         <p>
-            {{ form_advanced.redshift_max.label }}<br>
-            {{ form_advanced.redshift_max(size=20) }}<br>
-            {% for error in form_advanced.redshift_max.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <p>
-            {{ form_advanced.lensing_flag.label }}<br>
-            {{ form_advanced.lensing_flag }}<br>
-            {% for error in form_advanced.lensing_flag.errors %}
-            <span style="color: red;">[{{error}}]</span>
-            {% endfor %}
-
-      </p>
-      <p>
-         {{ form_advanced.classification.label }}<br>
-         {{ form_advanced.classification }}<br>
-         {% for error in form_advanced.classification.errors %}
-         <span style="color: red;">[{{error}}]</span>
-         {% endfor %}
-
-   </p>
-   <p>
-      {{ form_advanced.remove_classification.label }}<br>
-      {{ form_advanced.remove_classification }}<br>
-      {% for error in form_advanced.classification.errors %}
-      <span style="color: red;">[{{error}}]</span>
-      {% endfor %}
-
-</p>
-      <br>
-      <br>
-      </div>
-      <div class = "entry">
-      <p>Here you can additionally sort galaxies that have at least one line that falls under the specified Line parameters</p>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.species.label }}<br>
-            {{ form_advanced.species }}<br>
-            {% for error in form_advanced.species.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.emitted_frequency_min.label }}<br>
-            {{ form_advanced.emitted_frequency_min(size=20) }}<br>
-            {% for error in form_advanced.emitted_frequency_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.emitted_frequency_max.label }}<br>
-            {{ form_advanced.emitted_frequency_max(size=20) }}<br>
-            {% for error in form_advanced.emitted_frequency_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.observed_line_redshift_min.label }}<br>
-            {{ form_advanced.observed_line_redshift_min(size=20) }}<br>
-            {% for error in form_advanced.observed_line_redshift_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.observed_line_redshift_max.label }}<br>
-            {{ form_advanced.observed_line_redshift_max(size=20) }}<br>
-            {% for error in form_advanced.observed_line_redshift_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.integrated_line_flux_min.label }}<br>
-            {{ form_advanced.integrated_line_flux_min(size=20) }}<br>
-            {% for error in form_advanced.integrated_line_flux_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.integrated_line_flux_max.label }}<br>
-            {{ form_advanced.integrated_line_flux_max(size=20) }}<br>
-            {% for error in form_advanced.integrated_line_flux_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.peak_line_flux_min.label }}<br>
-            {{ form_advanced.peak_line_flux_min(size=20) }}<br>
-            {% for error in form_advanced.peak_line_flux_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.peak_line_flux_max.label }}<br>
-            {{ form_advanced.peak_line_flux_max(size=20) }}<br>
-            {% for error in form_advanced.peak_line_flux_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-      </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.line_width_min.label }}<br>
-            {{ form_advanced.line_width_min(size=20) }}<br>
-            {% for error in form_advanced.line_width_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.line_width_max.label }}<br>
-            {{ form_advanced.line_width_max(size=20) }}<br>
-            {% for error in form_advanced.line_width_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
+            </div>
+            <div class="col-md-6">
+               {{ form.redshift_max.label(class="form-label") }}
+               {{ form.redshift_max(class="form-control") }}
+               {% for error in form.redshift_max.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-12">
+               {{ form.lensing_flag.label(class="form-label") }}
+               {{ form.lensing_flag(class="form-select") }}
+               {% for error in form.lensing_flag.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.classification.label(class="form-label") }}
+               {{ form.classification(class="form-select") }}
+               {% for error in form.classification.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.remove_classification.label(class="form-label") }}
+               {{ form.remove_classification(class="form-select") }}
+               {% for error in form.classification.errors %}
+               <span style="color: red;">[{{error}}]</span>
+               {% endfor %}
+            </div>
+         </div>
       </div>
 
-      <p>
-         {{ form_advanced.detection_type.label }}<br>
-         {{ form_advanced.detection_type }}<br>
-         {% for error in form_advanced.detection_type.errors %}
-         <span style="color: red;">[{{ error }}]</span>
-         {% endfor %}
-      </p>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.observed_beam_major_min.label }}<br>
-            {{ form_advanced.observed_beam_major_min(size=20) }}<br>
-            {% for error in form_advanced.observed_beam_major_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.observed_beam_major_max.label }}<br>
-            {{ form_advanced.observed_beam_major_max(size=20) }}<br>
-            {% for error in form_advanced.observed_beam_major_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
+      <div class="col-md-6" style="padding: 50px;">
+         <h2>Line data</h2>
+         <div class="row g-3">
+            <p>Here you can additionally sort galaxies that have at least one line that falls under the specified Line parameters</p>
+            <div class="col-md-6">
+               {{ form.species.label(class="form-label") }}
+               {{ form.species(class="form-select") }}
+               {% for error in form.species.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.detection_type.label(class="form-label") }}
+               {{ form.detection_type(class="form-select") }}
+               {% for error in form.detection_type.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.emitted_frequency_min.label(class="form-label") }}
+               {{ form.emitted_frequency_min(class="form-control") }}
+               {% for error in form.emitted_frequency_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.emitted_frequency_max.label(class="form-label") }}
+               {{ form.emitted_frequency_max(class="form-control") }}
+               {% for error in form.emitted_frequency_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.observed_line_redshift_min.label(class="form-label") }}
+               {{ form.observed_line_redshift_min(class="form-control") }}
+               {% for error in form.observed_line_redshift_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.observed_line_redshift_max.label(class="form-label") }}
+               {{ form.observed_line_redshift_max(class="form-control") }}
+               {% for error in form.observed_line_redshift_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.integrated_line_flux_min.label(class="form-label") }}
+               {{ form.integrated_line_flux_min(class="form-control") }}
+               {% for error in form.integrated_line_flux_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.integrated_line_flux_max.label(class="form-label") }}
+               {{ form.integrated_line_flux_max(class="form-control") }}
+               {% for error in form.integrated_line_flux_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.peak_line_flux_min.label(class="form-label") }}
+               {{ form.peak_line_flux_min(class="form-control") }}
+               {% for error in form.peak_line_flux_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.peak_line_flux_max.label(class="form-label") }}
+               {{ form.peak_line_flux_max(class="form-control") }}
+               {% for error in form.peak_line_flux_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.line_width_min.label(class="form-label") }}
+               {{ form.line_width_min(class="form-control") }}
+               {% for error in form.line_width_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.line_width_max.label(class="form-label") }}
+               {{ form.line_width_max(class="form-control") }}
+               {% for error in form.line_width_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.observed_beam_major_min.label(class="form-label") }}
+               {{ form.observed_beam_major_min(class="form-control") }}
+               {% for error in form.observed_beam_major_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.observed_beam_major_max.label(class="form-label") }}
+               {{ form.observed_beam_major_max(class="form-control") }}
+               {% for error in form.observed_beam_major_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.observed_beam_minor_min.label(class="form-label") }}
+               {{ form.observed_beam_minor_min(class="form-control") }}
+               {% for error in form.observed_beam_minor_min.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-6">
+               {{ form.observed_beam_minor_max.label(class="form-label") }}
+               {{ form.observed_beam_minor_max(class="form-control") }}
+               {% for error in form.observed_beam_minor_max.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+            <div class="col-md-12">
+               {{ form.reference.label(class="form-label") }}
+               {{ form.reference(class="form-control") }}
+               {% for error in form.reference.errors %}
+               <span style="color: red;">[{{ error }}]</span>
+               {% endfor %}
+            </div>
+         </div>
       </div>
-      <div style="display: flex;">
-         <p>
-            {{ form_advanced.observed_beam_minor_min.label }}<br>
-            {{ form_advanced.observed_beam_minor_min(size=20) }}<br>
-            {% for error in form_advanced.observed_beam_minor_min.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
-         <p>
-            {{ form_advanced.observed_beam_minor_max.label }}<br>
-            {{ form_advanced.observed_beam_minor_max(size=20) }}<br>
-            {% for error in form_advanced.observed_beam_minor_max.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-         </p>
+
+      <div class="row g-3">
+         <div class="col-md-6" style="padding: 10px 50px;">
+            <div class="d-grid gap-2"> 
+               {{ form.galaxySearch(class="btn btn-info") }}
+            </div>
+         </div>
+
+         <div class="col-md-6" style="padding: 10px 50px;">
+            <div class="d-grid gap-2"> 
+               {{ form.lineSearch(class="btn btn-info") }}
+            </div>
+         </div>
       </div>
-      <p>
-         {{ form_advanced.reference.label }}<br>
-         {{ form_advanced.reference(size=32) }}<br>
-         {% for error in form_advanced.reference.errors %}
-         <span style="color: red;">[{{ error }}]</span>
-         {% endfor %}
-      </p>
-      </div>
-      <div class = "buttons">
-      <button type="button"> 
-         {{ form_advanced.galaxySearch() }}
-      </button>
-      <button type="button"> 
-         {{ form_advanced.lineSearch() }}
-      </button>
-      </div>
-      <style>
-      .entry {
-            width: 50%;
-            float: left;
-      }
-      .buttons {
-         text-align: center;
-      }
-      </style>
 </form>
    
 
 
-{% if form_advanced.galaxySearch.data %}
+{% if form.galaxySearch.data %}
 <!--Supposed to desplay the results. In the development stage-->
 <table class = "table" id = "Galaxy">
    <thead>
@@ -350,7 +322,7 @@
             <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
             <td>{{ g.right_ascension }}</td>
             <td>{{ g.declination }}</td>
-            <td>{{ g.coordinate_system }}</td>
+            <td>{{ g.coordinateform_system }}</td>
             <td>{{ g.redshift }}</td>
             <td>{{ g.lensing_flag }}</td>
             <td>{{ g.classification }}</td>
@@ -361,90 +333,92 @@
 </table>
 
 {% endif %}
-{% if form_advanced.lineSearch.data %}
-<table class = "table" id = "Line">
-   <thead>
-      <tr>
-         <th>Galaxy Name</th>
-         <th>\( Species \)</th>
-         <th>\( f_{rest} \) \( (GHz) \)</th>
-         <th>\( S \Delta v \) \((Jy \ km \ s^{-1}) \)</th>
-         <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-         <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-         <th>\( S_{max} \) \( (mJy) \)</th>
-         <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
-         <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
-         <th>\( FWHM \) \( (kms^{-1}) \)</th>
-         <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-         <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-         <th>\( z \) </th>
-         <th>\( +\sigma_{z} \) </th>
-         <th>\( -\sigma_{z} \) </th>
-         <th>\( Telescope \) \( Type \)</th>
-         <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
-         <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
-         <th>\( Beam \ P.A. \) \( (*) \)</th>
-         <th>\( Reference \)</th>
-         <th>\( Notes \)</th>
-         <th style = "display: none">\( Text \) </th>
-      </tr>
-   </thead>
-   
-   <tbody>
-      {% for element in galaxies %}
-         {% set l = element[1] %}  
-         {% set g = element[0] %}
+{% if form.lineSearch.data %}
+<div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
+   <table class = "table" id = "Line">
+      <thead>
          <tr>
-            <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-            <td>{{ l.species }}</td>
-            <td>{{ l.emitted_frequency }}</td>
-            <td>{{ l.integrated_line_flux }}</td>
-            <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-            <td>
-               {% if l.integrated_line_flux_uncertainty_negative == None %}
-                  {{ l.integrated_line_flux_uncertainty_positive }}
-               {% else %}
-                  {{ l.integrated_line_flux_uncertainty_negative }}
-               {% endif %}
-            </td>
-            <td>{{ l.peak_line_flux }}</td>
-            <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-            <td>
-               {% if l.peak_line_flux_uncertainty_negative == None %}
-                  {{ l.peak_line_flux_uncertainty_positive }}
-               {% else %}
-                  {{ l.peak_line_flux_uncertainty_negative }}
-               {% endif %}
-            </td>
-            <td>{{ l.line_width }}</td>
-            <td>{{ l.line_width_uncertainty_positive }}</td>
-            <td>
-               {% if l.line_width_uncertainty_negative == None %}
-                  {{ l.line_width_uncertainty_positive }}
-               {% else %}
-                  {{ l.line_width_uncertainty_negative }}
-               {% endif %}
-            </td>
-            <td>{{ l.observed_line_redshift }}</td>
-            <td>{{ l.observed_line_redshift_uncertainty_positive }}</td>
-            <td>
-               {% if l.observed_line_redshift_uncertainty_negative == None %}
-                  {{ l.observed_line_redshift_uncertainty_positive }}
-               {% else %}
-                  {{ l.observed_line_redshift_uncertainty_negative }}
-               {% endif %}
-            </td>                
-            <td>{{ l.detection_type }}</td>
-            <td>{{ l.observed_beam_major }}</td>
-            <td>{{ l.observed_beam_minor }}</td>
-            <td>{{ l.observed_beam_angle }}</td>
-            <td>{{ l.reference }}</td>
-            <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
-            <td class = "notes" style = "display:none"> {{l.notes}} </td> 
+            <th>Galaxy Name</th>
+            <th>\( Species \)</th>
+            <th>\( f_{rest} \) \( (GHz) \)</th>
+            <th>\( S \Delta v \) \((Jy \ km \ s^{-1}) \)</th>
+            <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+            <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
+            <th>\( S_{max} \) \( (mJy) \)</th>
+            <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
+            <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
+            <th>\( FWHM \) \( (kms^{-1}) \)</th>
+            <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
+            <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
+            <th>\( z \) </th>
+            <th>\( +\sigma_{z} \) </th>
+            <th>\( -\sigma_{z} \) </th>
+            <th>\( Telescope \) \( Type \)</th>
+            <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
+            <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
+            <th>\( Beam \ P.A. \) \( (*) \)</th>
+            <th>\( Reference \)</th>
+            <th>\( Notes \)</th>
+            <th style = "display: none">\( Text \) </th>
          </tr>
-      {% endfor %}
-   </tbody>
-</table> 
+      </thead>
+      
+      <tbody>
+         {% for element in galaxies %}
+            {% set l = element[1] %}  
+            {% set g = element[0] %}
+            <tr>
+               <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
+               <td>{{ l.species }}</td>
+               <td>{{ l.emitted_frequency }}</td>
+               <td>{{ l.integrated_line_flux }}</td>
+               <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
+               <td>
+                  {% if l.integrated_line_flux_uncertainty_negative == None %}
+                     {{ l.integrated_line_flux_uncertainty_positive }}
+                  {% else %}
+                     {{ l.integrated_line_flux_uncertainty_negative }}
+                  {% endif %}
+               </td>
+               <td>{{ l.peak_line_flux }}</td>
+               <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
+               <td>
+                  {% if l.peak_line_flux_uncertainty_negative == None %}
+                     {{ l.peak_line_flux_uncertainty_positive }}
+                  {% else %}
+                     {{ l.peak_line_flux_uncertainty_negative }}
+                  {% endif %}
+               </td>
+               <td>{{ l.line_width }}</td>
+               <td>{{ l.line_width_uncertainty_positive }}</td>
+               <td>
+                  {% if l.line_width_uncertainty_negative == None %}
+                     {{ l.line_width_uncertainty_positive }}
+                  {% else %}
+                     {{ l.line_width_uncertainty_negative }}
+                  {% endif %}
+               </td>
+               <td>{{ l.observed_line_redshift }}</td>
+               <td>{{ l.observed_line_redshift_uncertainty_positive }}</td>
+               <td>
+                  {% if l.observed_line_redshift_uncertainty_negative == None %}
+                     {{ l.observed_line_redshift_uncertainty_positive }}
+                  {% else %}
+                     {{ l.observed_line_redshift_uncertainty_negative }}
+                  {% endif %}
+               </td>                
+               <td>{{ l.detection_type }}</td>
+               <td>{{ l.observed_beam_major }}</td>
+               <td>{{ l.observed_beam_minor }}</td>
+               <td>{{ l.observed_beam_angle }}</td>
+               <td>{{ l.reference }}</td>
+               <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
+               <td class = "notes" style = "display:none"> {{l.notes}} </td> 
+            </tr>
+         {% endfor %}
+      </tbody>
+   </table> 
+</div>
 {% endif %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
     <script>

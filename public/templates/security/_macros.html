@@ -1,6 +1,6 @@
 {% macro render_field_with_errors(field) %}
-  <p>
-    {{ field.label }} {{ field(**kwargs)|safe }}
+  <div>
+    {{ field.label(class="form-label") }} {{ field(**kwargs)|safe }}
     {% if field.errors %}
       <ul>
       {% for error in field.errors %}
@@ -8,9 +8,9 @@
       {% endfor %}
       </ul>
     {% endif %}
-  </p>
+    </div>
 {% endmacro %}
 
 {% macro render_field(field) %}
-  <p>{{ field(**kwargs)|safe }}</p>
+  <div class="d-grid gap-2">{{ field(**kwargs)|safe }}</div>
 {% endmacro %}

@@ -5,216 +5,204 @@
 {% endblock %}
 {% block script %}
 
-<script type="text/javascript" src="{{ url_for('static', filename='js/functions.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/showUncertainties.js') }}"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 {% endblock %}
 
-{% block content %}
+{% block page_content %}
     <h1>Line Entry Form</h1>
+    <br>
     
-    <form class="form-inline" action="" method="post" novalidate>
+    <form class="form-inline row g-3" action="" method="post" novalidate>
         <br>
-        <label class="container" style="padding-left: 0px">My uncertainties for values are not symmetric
-            <input type="checkbox" id="myCheck" onclick="showUncertainties()">
-            <span class="checkmark"></span>
-        </label>
-        <br>
+        <div style="display: inline-flex;">
+            <input type="checkbox" name="myCheck" id="myCheck" onclick="showUncertainties()" style="margin-right: 5px; margin-bottom: 5px;">
+            <label class="container" style="padding-left: 0px" for="myCheck"> Check this if your uncertainties for values are not symmetric</label>
+        </div>
+        
         <br>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.galaxy_name.label }}<br>
-            {{ form.galaxy_name(size=32) }}<br>
+        <div class="col-md-12">
+            {{ form.galaxy_name.label(class="form-label") }}
+            {{ form.galaxy_name(size=32, class="form-control") }}
             {% for error in form.galaxy_name.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
+        </div>
+        <p> 
+            If the galaxy you're looking for does not exist, go to the <a href="{{ url_for('main.galaxy_entry_form') }}">Add a New Galaxy</a> Page.
         </p>
-        <p> If the galaxy you're looking for does not exist, go to the Add a New Galaxy Page. </p>
-        <p>{{ form.galaxy_form() }}</p>
-        <p>
-            {{ form.reference.label }}<br>
-            {{ form.reference(size=32) }}<br>
+        <br>
+        <div class="col-md-12">
+            {{ form.reference.label(class="form-label") }}
+            {{ form.reference(size=32, class="form-control") }}
             {% for error in form.reference.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.emitted_frequency.label }}<br>
-            {{ form.emitted_frequency(size=32) }}<br>
+        </div>
+        <div class="col-md-12">
+            {{ form.emitted_frequency.label(class="form-label") }}
+            {{ form.emitted_frequency(size=32, class="form-control") }}
             {% for error in form.emitted_frequency.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.species.label }}<br>
-            {{ form.species }}<br>
+        </div>
+        <div>
+            {{ form.species.label(class="form-label") }}
+            {{ form.species(class="form-select") }}
             {% for error in form.species.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.integrated_line_flux.label }}<br>
-            {{ form.integrated_line_flux(size=32) }}<br>
+        </div>
+        <div name="value" class="col-md-6">
+            {{ form.integrated_line_flux.label(class="form-label") }}
+            {{ form.integrated_line_flux(size=32, class="form-control") }}
             {% for error in form.integrated_line_flux.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.integrated_line_flux_uncertainty_positive.label }}<br>
-            {{ form.integrated_line_flux_uncertainty_positive(size=32) }}<br>
+        </div>
+        <div name="positive" class="col-md-6">
+            {{ form.integrated_line_flux_uncertainty_positive.label(class="form-label") }}
+            {{ form.integrated_line_flux_uncertainty_positive(size=32, class="form-control") }}
             {% for error in form.integrated_line_flux_uncertainty_positive.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-        </p>
-        <p id="uncertainty1" style="display:none">
-            {{ form.integrated_line_flux_uncertainty_negative.label }}<br>
-            {{ form.integrated_line_flux_uncertainty_negative(size=32) }}<br>
+        </div>
+        <div name="negative" class="col-md-4" style="display:none">
+            {{ form.integrated_line_flux_uncertainty_negative.label(class="form-label") }}
+            {{ form.integrated_line_flux_uncertainty_negative(size=32, class="form-control") }}
             {% for error in form.integrated_line_flux_uncertainty_negative.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.peak_line_flux.label }}<br>
-            {{ form.peak_line_flux(size=32) }}<br>
+        </div>
+        <div name="value" class="col-md-6">
+            {{ form.peak_line_flux.label(class="form-label") }}
+            {{ form.peak_line_flux(size=32, class="form-control") }}
             {% for error in form.peak_line_flux.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-        </p>
-        <p>
-            {{ form.peak_line_flux_uncertainty_positive.label }}<br>
-            {{ form.peak_line_flux_uncertainty_positive(size=32) }}<br>
+        </div>
+        <div name="positive" class="col-md-6">
+            {{ form.peak_line_flux_uncertainty_positive.label(class="form-label") }}
+            {{ form.peak_line_flux_uncertainty_positive(size=32, class="form-control") }}
             {% for error in form.peak_line_flux_uncertainty_positive.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-        </p>
-        <p id="uncertainty2" style="display:none">
-            {{ form.peak_line_flux_uncertainty_negative.label }}<br>
-            {{ form.peak_line_flux_uncertainty_negative(size=32) }}<br>
+        </div>
+        <div name="negative" class="col-md-4" style="display:none">
+            {{ form.peak_line_flux_uncertainty_negative.label(class="form-label") }}
+            {{ form.peak_line_flux_uncertainty_negative(size=32, class="form-control") }}
             {% for error in form.peak_line_flux_uncertainty_negative.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.line_width.label }}<br>
-            {{ form.line_width(size=32) }}<br>
+        </div>
+        <div name="value" class="col-md-6">
+            {{ form.line_width.label(class="form-label") }}
+            {{ form.line_width(size=32, class="form-control") }}
             {% for error in form.line_width.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-        </p>
-        <p>
-            {{ form.line_width_uncertainty_positive.label }}<br>
-            {{ form.line_width_uncertainty_positive(size=32) }}<br>
+        </div>
+        <div name="positive" class="col-md-6">
+            {{ form.line_width_uncertainty_positive.label(class="form-label") }}
+            {{ form.line_width_uncertainty_positive(size=32, class="form-control") }}
             {% for error in form.line_width_uncertainty_positive.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
 
-        </p>
-        <p id="uncertainty3" style="display:none">
-            {{ form.line_width_uncertainty_negative.label }}<br>
-            {{ form.line_width_uncertainty_negative(size=32) }}<br>
+        </div>
+        <div name="negative" class="col-md-4" style="display:none">
+            {{ form.line_width_uncertainty_negative.label(class="form-label") }}
+            {{ form.line_width_uncertainty_negative(size=32, class="form-control") }}
             {% for error in form.line_width_uncertainty_negative.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.freq_type.label }}<br>
-            {{ form.freq_type }}<br>
+        </div>
+        <div>
+            {{ form.freq_type.label(class="form-label") }}
+            {{ form.freq_type(class="form-select") }}
             {% for error in form.freq_type.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.observed_line_redshift.label }}<br>
-            {{ form.observed_line_redshift(size=32) }}<br>
+        </div>
+        <div name="value" class="col-md-6">
+            {{ form.observed_line_redshift.label(class="form-label") }}
+            {{ form.observed_line_redshift(size=32, class="form-control") }}
             {% for error in form.observed_line_redshift.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.observed_line_redshift_uncertainty_positive.label }}<br>
-            {{ form.observed_line_redshift_uncertainty_positive(size=32) }}<br>
+        </div>
+        <div name="positive" class="col-md-6">
+            {{ form.observed_line_redshift_uncertainty_positive.label(class="form-label") }}
+            {{ form.observed_line_redshift_uncertainty_positive(size=32, class="form-control") }}
             {% for error in form.observed_line_redshift_uncertainty_positive.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p id="uncertainty4" style="display:none">
-            {{ form.observed_line_redshift_uncertainty_negative.label }}<br>
-            {{ form.observed_line_redshift_uncertainty_negative(size=32) }}<br>
+        </div>
+        <div name="negative" class="col-md-4" style="display:none">
+            {{ form.observed_line_redshift_uncertainty_negative.label(class="form-label") }}
+            {{ form.observed_line_redshift_uncertainty_negative(size=32, class="form-control") }}
             {% for error in form.observed_line_redshift_uncertainty_negative.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.detection_type.label }}<br>
-            {{ form.detection_type}}<br>
+        </div>
+        <div>
+            {{ form.detection_type.label(class="form-label") }}
+            {{ form.detection_type(class="form-select")}}
             {% for error in form.detection_type.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.observed_beam_major.label }}<br>
-            {{ form.observed_beam_major(size=32) }}<br>
+        </div>
+        <div class="col-md-6">
+            {{ form.observed_beam_major.label(class="form-label") }}
+            {{ form.observed_beam_major(size=32, class="form-control") }}
             {% for error in form.observed_beam_major.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.observed_beam_minor.label }}<br>
-            {{ form.observed_beam_minor(size=32) }}<br>
+        </div>
+        <div class="col-md-6">
+            {{ form.observed_beam_minor.label(class="form-label") }}
+            {{ form.observed_beam_minor(size=32, class="form-control") }}
             {% for error in form.observed_beam_minor.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>
-            {{ form.observed_beam_angle.label }}<br>
-            {{ form.observed_beam_angle(size=32) }}<br>
+        </div>
+        <div>
+            {{ form.observed_beam_angle.label(class="form-label") }}
+            {{ form.observed_beam_angle(size=32, class="form-control") }}
             {% for error in form.observed_beam_angle.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>Line Emission Centroid Position </p>
+        </div>
+        <h4>Line Emission Centroid Position</h4>
         <p>Accepted formats: decimal degrees or sexagessimal (09h32m16.35s, -1d20'13.567")</p>
-        <p>
-            {{ form.right_ascension.label }}<br>
-            {{ form.right_ascension(size=32) }}<br>
+        <div class="col-md-6">
+            {{ form.right_ascension.label(class="form-label") }}
+            {{ form.right_ascension(size=32, class="form-control") }}
             {% for error in form.right_ascension.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-        <p>
-            {{ form.declination.label }}<br>
-            {{ form.declination(size=32) }}<br>
+        </div>
+        <div class="col-md-6">
+            {{ form.declination.label(class="form-label") }}
+            {{ form.declination(size=32, class="form-control") }}
             {% for error in form.declination.errors %}
             <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </p>
-
-        <p>
-            {{ form.notes.label }}<br>
-            {{ form.notes(size=32) }}<br>
+        </div>
+        <div>
+            {{ form.notes.label(class="form-label") }}
+            {{ form.notes(size=32, class="form-control") }}
             {% for error in form.notes.errors %}
             <span style="color: red;">[{{error}}]</span>
             {% endfor %}
-
-        </p>
-        <p>{{ form.submit() }}</p>
+        </div>
+        <div class="d-grid gap-2">{{ form.submit(class="btn btn-info mb-3") }}</div>
     </form>
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/searchall.js') }}"></script>
