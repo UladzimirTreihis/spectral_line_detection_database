@@ -25,7 +25,6 @@ function checkAll(myCheckbox){
 // Find all input elements.
 var inputs = document.getElementsByTagName("input");
 var checked = [];
-var list = [1, 2];
 
 // Cycle our input elements list and find the checkboxes 
 // that are checked.

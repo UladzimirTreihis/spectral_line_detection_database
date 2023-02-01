@@ -27,17 +27,9 @@ class Config(object):
     MAIL_SUPPRESS_SEND = os.environ.get('MAIL_SUPPRESS_SEND') or False
     MAIL_ASCII_ATTACHEMENTS = os.environ.get('MAIL_ASCII_ATTACHEMENTS') or False
 
-    # Flask-User settings
-    #USER_APP_NAME = "Flask-User Basic App"      # Shown in and email templates and page footers
-    #USER_ENABLE_EMAIL = True        # Enable email authentication
-    #USER_ENABLE_USERNAME = False    # Disable username authentication
-    #USER_EMAIL_SENDER_NAME = USER_APP_NAME
-    #USER_EMAIL_SENDER_EMAIL = "noreply@example.com"
-
     #FLASK-SECURITY
     SECURITY_PASSWORD_SALT = config_file.get('SECURITY_PASSWORD_SALT') or 'dgdfsgdsfghf5hf6'
     SECURITY_PASSWORD_HASH = config_file.get('SECURITY_PASSWORD_HASH') or 'sha512_crypt'
-    #SECURITY_LOGIN_USER_TEMPLATE = 'templates'
     SECURITY_REGISTERABLE = os.environ.get('SECURITY_REGISTERABLE') or True
     SECURITY_SENDREGISTER_EMAIL = os.environ.get('SECURITY_SENDREGISTER_EMAIL') or False
     SECURITY_CONFIRMABLE = os.environ.get('SECURITY_CONFIRMABLE') or True
@@ -52,7 +44,6 @@ class ProductionConfig(Config):
     MAIL_PASSWORD = config_file.get('MAIL_PASSWORD')
     SECURITY_PASSWORD_SALT = config_file.get('SECURITY_PASSWORD_SALT')
     SECURITY_PASSWORD_HASH = config_file.get('SECURITY_PASSWORD_HASH')
-
 
 
 class DevelopmentConfig(Config):
@@ -117,6 +108,7 @@ COL_NAMES_FOR_SUBMISSION = remove_key(
     'observed_line_frequency_uncertainty_positive',
     'observed_line_redshift_uncertainty_negative'
 )
+
 
 dec_reg_exp = '((([+]+)|([-]+))[0-9][0-9]d[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|((([+]+)|([-]+))[0-9.]+[.]*[0-9]*)'
 ra_reg_exp = '([0-2][0-9]h[0-5][0-9]m[0-5][0-9][.]*[0-9]*s)|([0-9.]+[.]*[0-9]*)'

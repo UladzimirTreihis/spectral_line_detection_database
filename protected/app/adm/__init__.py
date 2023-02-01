@@ -1,12 +1,9 @@
 from flask import (
     Blueprint,
-    session,
     url_for,
     redirect,
     flash,
     request,
-    jsonify,
-    render_template
 )
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import (
@@ -34,7 +31,6 @@ from app.models import (
 )
 from app import (
     db,
-    Session,
     admin,
     user_datastore
 )
@@ -273,8 +269,6 @@ class TempGalaxyView(ModelView):
 
 class EditGalaxyView(ModelView):
 
-    # edit_template = 'admin/model/temp_galaxy_edit.html'
-    # list_template = 'admin/model/temp_galaxy_list.html'
     @action('approve', 'Approve')
     def action_approve(self, ids):
         for id in ids:
@@ -423,7 +417,6 @@ class PostsView(AdminBaseView):
                             return "one of the posts has an id ({}) compatability issue, " \
                                    "it doesn't seem to belong to any group".format(id)
 
-        session = Session()
         count_of_similar_galaxies = 0
         dict_of_dict_of_similar = {}
         list_of_tempgalaxy_ids = []
@@ -502,9 +495,9 @@ class PostsView(AdminBaseView):
                     investigated_lines_waiting_approval_count = 0
                     investigated_lines_approved_count = 0
 
-                    investigated_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(
+                    investigated_lines_waiting_approval_count = db.session.query(func.count(TempLine.id)).filter(
                         TempLine.galaxy_id == id).scalar()
-                    similar_lines_waiting_approval_count = session.query(func.count(TempLine.id)).filter(
+                    similar_lines_waiting_approval_count = db.session.query(func.count(TempLine.id)).filter(
                         TempLine.galaxy_id == int(similar_id)).scalar()
 
                     list_of_values = [similar_id, similar_name, similar_ra, similar_dec, similar_lines_approved_count,
@@ -514,7 +507,7 @@ class PostsView(AdminBaseView):
                     dict_of_similar = dict(zip(dict_of_similar, list_of_values))
                     dict_of_dict_of_similar[count_of_similar_galaxies] = dict_of_similar
 
-        posts_query = session.query(Post, TempGalaxy, TempLine, EditGalaxy, EditLine).select_from(Post).outerjoin(
+        posts_query = db.session.query(Post, TempGalaxy, TempLine, EditGalaxy, EditLine).select_from(Post).outerjoin(
             TempGalaxy, TempGalaxy.id == Post.tempgalaxy_id).outerjoin(TempLine,
                                                                        TempLine.id == Post.templine_id).outerjoin(
             EditGalaxy, EditGalaxy.id == Post.editgalaxy_id).outerjoin(EditLine, EditLine.id == Post.editline_id).all()
@@ -530,7 +523,6 @@ def resolve(main_id, other_id, type, relationship):
     if current_user.has_role('admin'):
         main_id = int(main_id)
         other_id = int(other_id)
-        session = Session()
 
         if relationship == 'approved_temp':
             if type == "similar_to_investigated":
@@ -562,7 +554,7 @@ def resolve(main_id, other_id, type, relationship):
                 # Approve temporary first
                 approve_tempgalaxy(other_id)
                 # Remember similarity
-                from_existed_id = session.query(func.max(Galaxy.id)).first()[0]
+                from_existed_id = db.session.query(func.max(Galaxy.id)).first()[0]
                 galaxy_2_id = from_existed_id
                 galaxy_1_id = main_id
                 db.session.query(Galaxy).filter(Galaxy.id == galaxy_1_id).update({Galaxy.is_similar: galaxy_2_id})
@@ -623,12 +615,12 @@ def post_delete(id):
     Used by admin/posts.
 
     '''
-    session = Session()
+
     post = Post.query.filter_by(id=id).first()
-    templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
-    tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
-    editgalaxy_id = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
-    editline_id = session.query(Post.editline_id).filter_by(id=id).scalar()
+    templine_id = db.session.query(Post.templine_id).filter_by(id=id).scalar()
+    tempgalaxy_id = db.session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+    editgalaxy_id = db.session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
+    editline_id = db.session.query(Post.editline_id).filter_by(id=id).scalar()
     if templine_id != None:
         templine = TempLine.query.filter_by(id=templine_id).first()
         db.session.delete(templine)
@@ -654,18 +646,17 @@ def post_approve(id):
     Used by admin/posts.
 
     '''
-    session = Session()
     post = Post.query.filter_by(id=id).first()
-    templine_id = session.query(Post.templine_id).filter_by(id=id).scalar()
-    tempgalaxy_id = session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
-    editgalaxy_id = session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
-    editline_id = session.query(Post.editline_id).filter_by(id=id).scalar()
+    templine_id = db.session.query(Post.templine_id).filter_by(id=id).scalar()
+    tempgalaxy_id = db.session.query(Post.tempgalaxy_id).filter_by(id=id).scalar()
+    editgalaxy_id = db.session.query(Post.editgalaxy_id).filter_by(id=id).scalar()
+    editline_id = db.session.query(Post.editline_id).filter_by(id=id).scalar()
 
     if templine_id is not None:
 
         templine = TempLine.query.filter_by(id=templine_id).first()
 
-        line = session.query(TempLine.galaxy_id, TempLine.emitted_frequency, TempLine.integrated_line_flux,
+        line = db.session.query(TempLine.galaxy_id, TempLine.emitted_frequency, TempLine.integrated_line_flux,
                              TempLine.integrated_line_flux_uncertainty_positive,
                              TempLine.integrated_line_flux_uncertainty_negative, TempLine.peak_line_flux,
                              TempLine.peak_line_flux_uncertainty_positive, TempLine.peak_line_flux_uncertainty_negative,
@@ -711,7 +702,7 @@ def post_approve(id):
                    lensing_flag=galaxy[4], classification=galaxy[5], notes=galaxy[6])
         db.session.add(g)
         db.session.commit()
-        existed = session.query(func.max(Galaxy.id)).first()[0]
+        existed = db.session.query(func.max(Galaxy.id)).first()[0]
         db.session.query(TempLine).filter(TempLine.galaxy_id == tempgalaxy_id).update(
             {TempLine.from_existed_id: existed})
         db.session.delete(tempgalaxy)

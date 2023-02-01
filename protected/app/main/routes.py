@@ -299,6 +299,16 @@ def species_filter(galaxies, include):
 
 
 def line_filter(galaxies, form):
+    """
+    Filters out the query based on the form values for line parameters.
+
+    Parameters:
+        galaxies (db.session.query): the query object to filter.
+        include (form): For object with data accesible on request.
+    Returns:
+        galaxies (db.session.query): refined query.
+    """
+
     galaxies = galaxies.filter(
         (Line.id == None) 
         | 
@@ -361,6 +371,15 @@ def line_filter(galaxies, form):
 
 
 def galaxy_filter(galaxies, form):
+    """
+    Filters out the query based on the form values for galaxy parameters.
+
+    Parameters:
+        galaxies (db.session.query): the query object to filter.
+        include (form): For object with data accesible on request.
+    Returns:
+        galaxies (db.session.query): refined query.
+    """
 
     if form.lensing_flag.data == '':
         lensing_flag = ['Lensed', 'Unlensed']
