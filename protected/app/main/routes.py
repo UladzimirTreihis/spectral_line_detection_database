@@ -259,6 +259,168 @@ def update_redshift_error(galaxy_id, sum_upper):
             db.session.commit()
 
 
+def classification_filter(galaxies, include, exclude):
+    """
+    Filters out the query based on the lists of classifications
+    to include and exclude from the search.
+
+    Parameters:
+        galaxies (db.session.query): the query object to filter.
+        include (list[str]): list of the classifications to include in the search.
+        exclude (list[str]): list of the classifications to exclude in the search.
+    Returns:
+        galaxies (db.session.query): refined query.
+    """
+
+    if "All" not in include:
+        galaxies = galaxies.filter(Galaxy.classification.in_(include) | (Galaxy.classification == None))
+
+    if "None" not in exclude:
+        galaxies = galaxies.filter(~Galaxy.classification.in_(exclude)) 
+        
+    return galaxies
+
+
+def species_filter(galaxies, include):
+    """
+    Filters out the query based on the lists of species to include from the search.
+
+    Parameters:
+        galaxies (db.session.query): the query object to filter.
+        include (list[str]): list of the species to include in the search.
+    Returns:
+        galaxies (db.session.query): refined query.
+    """
+
+    if "All" not in include:
+        galaxies = galaxies.filter((Line.species.in_(include) | (Line.species == None)) 
+                                    | (Line.id == None))
+    return galaxies
+
+
+def line_filter(galaxies, form):
+    """
+    Filters out the query based on the form values for line parameters.
+
+    Parameters:
+        galaxies (db.session.query): the query object to filter.
+        include (form): For object with data accesible on request.
+    Returns:
+        galaxies (db.session.query): refined query.
+    """
+
+    galaxies = galaxies.filter(
+        (Line.id == None) 
+        | 
+        (
+            (Line.emitted_frequency.between(
+                form.emitted_frequency_min.data,
+                form.emitted_frequency_max.data) 
+                | (Line.emitted_frequency == None)
+            ) 
+            & 
+            (Line.integrated_line_flux.between(
+                form.integrated_line_flux_min.data,
+                form.integrated_line_flux_max.data) 
+                | (Line.integrated_line_flux == None)
+            ) 
+            & 
+            (Line.peak_line_flux.between(
+                        form.peak_line_flux_min.data,
+                        form.peak_line_flux_max.data)
+                | (Line.peak_line_flux == None)
+            ) 
+            & 
+            (Line.line_width.between(
+                        form.line_width_min.data,
+                        form.line_width_max.data) 
+                | (Line.line_width == None)
+            ) 
+            & 
+            (Line.observed_line_redshift.between(
+                        form.observed_line_redshift_min.data,
+                        form.observed_line_redshift_max.data) 
+                | (Line.observed_line_redshift == None)
+            ) 
+            & 
+            (Line.observed_beam_major.between(
+                        form.observed_beam_major_min.data,
+                        form.observed_beam_major_max.data) 
+                | (Line.observed_beam_major == None)
+            ) 
+            & 
+            (Line.observed_beam_minor.between(
+                        form.observed_beam_minor_min.data,
+                        form.observed_beam_minor_max.data) 
+                | (Line.observed_beam_minor == None)
+            ) 
+            & 
+            (Line.reference.contains(
+                        form.reference.data) 
+                | (Line.reference == None)
+            ) 
+            & 
+            (Line.detection_type.contains(
+                        form.detection_type.data) 
+                | (Line.detection_type == None)
+            )
+        )
+        )
+
+    return galaxies
+
+
+def galaxy_filter(galaxies, form):
+    """
+    Filters out the query based on the form values for galaxy parameters.
+
+    Parameters:
+        galaxies (db.session.query): the query object to filter.
+        include (form): For object with data accesible on request.
+    Returns:
+        galaxies (db.session.query): refined query.
+    """
+
+    if form.lensing_flag.data == '':
+        lensing_flag = ['Lensed', 'Unlensed']
+    else:
+        lensing_flag = [form.lensing_flag.data]
+    
+    galaxies = galaxies.filter(
+        Galaxy.name.contains(form.name.data) 
+        & 
+        (Galaxy.right_ascension.between(
+            ra_to_float(to_m_inf(form.right_ascension_min.data)),
+            ra_to_float(to_p_inf(form.right_ascension_max.data))
+            )
+        ) 
+        & 
+        (Galaxy.declination.between(
+            dec_to_float(to_m_inf(form.declination_min.data)),
+            dec_to_float(to_p_inf(form.declination_max.data))
+            )
+        ) 
+        & 
+        (Galaxy.redshift.between(
+            form.redshift_min.data,
+            form.redshift_max.data
+            ) 
+            | 
+            (Galaxy.redshift == None)
+        ) 
+        & 
+        (Galaxy.lensing_flag.in_(
+            lensing_flag
+            ) 
+            | 
+            (Galaxy.lensing_flag == None)
+        )
+        )
+    
+    return galaxies
+
+
+
 @bp.route("/", methods=['GET'])
 @bp.route("/home", methods=['GET'])
 def home():
@@ -446,269 +608,168 @@ def contribute():
 # Add line search given Line coordinates?
 @bp.route("/query_results", methods=['GET', 'POST'])
 def query_results():
-    '''
-    Search data route
+    """
+    Advanced query route to filter the serched lines / galaxies.
 
-    On access: Returns form_advanced to receive search parameters from User.
-    On Search Line: Returns all line entries that fall under the given parameters
-    On Search Galaxy: Returns all galaxies that (1) fall under the given parameters and (2) have at least one line entry that falls under the given parameters. 
-    
-    '''
-    form = SearchForm()
-    form_advanced = AdvancedSearchForm()
+    On GET:
+        Parameters:
+            /query_results
+
+        Returns:
+            query_results.html (): Renders page with the form.
+
+    On POST:
+        Parameters:
+            /query_results
+            form
+
+        Returns:
+            query_results.html (): Renders page with the prefilled form.
+            galaxies (Galaxy): The filtered out query object. 
+    """
+
+    form = AdvancedSearchForm()
     conn = engine.connect()
     session = Session(bind=conn)
 
     # Post method
-    if form_advanced.validate_on_submit():
+    if form.validate_on_submit():
 
         # Converts None entries to appropriate float and string entries 
 
-        if form_advanced.name.data is None:
-            form_advanced.name.data = ''
-        if form_advanced.redshift_min.data is None:
-            form_advanced.redshift_min.data = float('-inf')
-        if form_advanced.redshift_max.data is None:
-            form_advanced.redshift_max.data = float('inf')
-        if form_advanced.lensing_flag.data is None or form_advanced.lensing_flag.data == 'Either':
-            form_advanced.lensing_flag.data = ''
-        if form_advanced.classification.data == []:
-            form_advanced.classification.data = ['All']
-        if form_advanced.remove_classification.data is None \
-                or form_advanced.remove_classification.data == []:
-            form_advanced.remove_classification.data = ''
-        if form_advanced.emitted_frequency_min.data is None:
-            form_advanced.emitted_frequency_min.data = float('-inf')
-        if form_advanced.emitted_frequency_max.data is None:
-            form_advanced.emitted_frequency_max.data = float('inf')
+        if form.name.data is None:
+            form.name.data = ''
+        if form.redshift_min.data is None:
+            form.redshift_min.data = float('-inf')
+        if form.redshift_max.data is None:
+            form.redshift_max.data = float('inf')
+        if form.lensing_flag.data is None or form.lensing_flag.data == 'Either':
+            form.lensing_flag.data = ''
+        if form.classification.data == []:
+            form.classification.data = ['All']
+        if form.remove_classification.data == []:
+            form.remove_classification.data = ['None']
+        if form.emitted_frequency_min.data is None:
+            form.emitted_frequency_min.data = float('-inf')
+        if form.emitted_frequency_max.data is None:
+            form.emitted_frequency_max.data = float('inf')
 
-        if form_advanced.species.data is None or form_advanced.species.data == 'Any':
-            form_advanced.species.data = ''
+        if form.species.data == []:
+            form.species.data = ['All']
 
-        if form_advanced.integrated_line_flux_min.data is None:
-            form_advanced.integrated_line_flux_min.data = float('-inf')
-        if form_advanced.integrated_line_flux_max.data is None:
-            form_advanced.integrated_line_flux_max.data = float('inf')
-        if form_advanced.peak_line_flux_min.data is None:
-            form_advanced.peak_line_flux_min.data = float('-inf')
-        if form_advanced.peak_line_flux_max.data is None:
-            form_advanced.peak_line_flux_max.data = float('inf')
-        if form_advanced.line_width_min.data is None:
-            form_advanced.line_width_min.data = float('-inf')
-        if form_advanced.line_width_max.data is None:
-            form_advanced.line_width_max.data = float('inf')
-        if form_advanced.observed_line_redshift_min.data is None:
-            form_advanced.observed_line_redshift_min.data = float('-inf')
-        if form_advanced.observed_line_redshift_max.data is None:
-            form_advanced.observed_line_redshift_max.data = float('inf')
-        if form_advanced.detection_type.data is None or form_advanced.detection_type.data == 'Either':
-            form_advanced.detection_type.data = ''
-        if form_advanced.observed_beam_major_min.data is None:
-            form_advanced.observed_beam_major_min.data = float('-inf')
-        if form_advanced.observed_beam_major_max.data is None:
-            form_advanced.observed_beam_major_max.data = float('inf')
-        if form_advanced.observed_beam_minor_min.data is None:
-            form_advanced.observed_beam_minor_min.data = float('-inf')
-        if form_advanced.observed_beam_minor_max.data is None:
-            form_advanced.observed_beam_minor_max.data = float('inf')
-        if form_advanced.reference.data is None:
-            form_advanced.reference.data = ''
+        if form.integrated_line_flux_min.data is None:
+            form.integrated_line_flux_min.data = float('-inf')
+        if form.integrated_line_flux_max.data is None:
+            form.integrated_line_flux_max.data = float('inf')
+        if form.peak_line_flux_min.data is None:
+            form.peak_line_flux_min.data = float('-inf')
+        if form.peak_line_flux_max.data is None:
+            form.peak_line_flux_max.data = float('inf')
+        if form.line_width_min.data is None:
+            form.line_width_min.data = float('-inf')
+        if form.line_width_max.data is None:
+            form.line_width_max.data = float('inf')
+        if form.observed_line_redshift_min.data is None:
+            form.observed_line_redshift_min.data = float('-inf')
+        if form.observed_line_redshift_max.data is None:
+            form.observed_line_redshift_max.data = float('inf')
+        if form.detection_type.data is None or form.detection_type.data == 'Either':
+            form.detection_type.data = ''
+        if form.observed_beam_major_min.data is None:
+            form.observed_beam_major_min.data = float('-inf')
+        if form.observed_beam_major_max.data is None:
+            form.observed_beam_major_max.data = float('inf')
+        if form.observed_beam_minor_min.data is None:
+            form.observed_beam_minor_min.data = float('-inf')
+        if form.observed_beam_minor_max.data is None:
+            form.observed_beam_minor_max.data = float('inf')
+        if form.reference.data is None:
+            form.reference.data = ''
 
-        buffer = []
-        index = 0
-        classification_is_all = False
-
-        for c in form_advanced.classification.data:
-            if c == "All":
-                classification_is_all = True
-            else:
-                buffer.append(c)
-                index = index + 1
-
-        for i in range(index, 12):
-            if classification_is_all:
-                pass
-            else:
-                buffer.append("populating_list")
-
-        # quick workaround since sqlalchemy does not take two strings equal to each other
-        # otherwise a conflict in unlensed contains lensed.
-        galaxy_lensing_flag_repeated = Galaxy.lensing_flag + Galaxy.lensing_flag
-        form_lensing_flag_repeated = form_advanced.lensing_flag.data + form_advanced.lensing_flag.data
-
-        # Query displaying galaxies based on the data from form_advanced
-        if form_advanced.galaxySearch.data:
+        # Query displaying galaxies based on the data from form
+        if form.galaxySearch.data:
 
             # Additional filter if radius is specified
-            if (form_advanced.right_ascension_point.data != None) and (
-                    form_advanced.declination_point.data != None) and (
-                    (form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (
-                    form_advanced.radius_s.data != None)):
+            if (form.right_ascension_point.data != None) and (
+                    form.declination_point.data != None) and (
+                    (form.radius_d.data != None) or (form.radius_m.data != None) or (
+                    form.radius_s.data != None)):
                 distance = math.radians(
-                    to_zero(form_advanced.radius_d.data) + to_zero(form_advanced.radius_m.data) / 60 + to_zero(
-                        form_advanced.radius_s.data) / 3600)
+                    to_zero(form.radius_d.data) + to_zero(form.radius_m.data) / 60 + to_zero(
+                        form.radius_s.data) / 3600)
                 galaxies = db.session.query(Galaxy, Line).outerjoin(Line)
-                galaxies = within_distance(galaxies, form_advanced.right_ascension_point.data,
-                                           form_advanced.declination_point.data, distance=distance)
+                galaxies = within_distance(galaxies, form.right_ascension_point.data,
+                                           form.declination_point.data, distance=distance)
 
             else:
                 galaxies = db.session.query(Galaxy, Line).outerjoin(Line)
 
             # Filters in respect to galaxy parameters
-            galaxies = galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (
-                Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)),
-                                               ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (
-                                           Galaxy.declination.between(
-                                               dec_to_float(to_m_inf(form_advanced.declination_min.data)),
-                                               dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
-                                               Galaxy.redshift.between(form_advanced.redshift_min.data,
-                                                                       form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift == None)) & (
-                                               galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag == None)))
+            galaxies = galaxy_filter(galaxies, form)
+
             # Check for classification
-            if not classification_is_all:
-                galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
-                    buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(
-                    buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(
-                    buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(
-                    buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(
-                    buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(buffer[11]) | (
-                                                   Galaxy.classification == None))
+            galaxies = classification_filter(galaxies, form.classification.data, form.remove_classification.data)
 
-            galaxies = galaxies.filter(~Galaxy.classification.contains(form_advanced.remove_classification.data))
+            # Species filter
+            galaxies = species_filter(galaxies, form.species.data)
 
-            galaxies = galaxies.filter((Line.id == None) | ((Line.emitted_frequency.between(
-                form_advanced.emitted_frequency_min.data, form_advanced.emitted_frequency_max.data) | (
-                                                                     Line.emitted_frequency == None)) & ((
-                                                                     Line.species.contains(
-                                                                         form_advanced.species.data)) | (
-                                                                         Line.species == None)) & (
-                                                                    Line.integrated_line_flux.between(
-                                                                        form_advanced.integrated_line_flux_min.data,
-                                                                        form_advanced.integrated_line_flux_max.data) | (
-                                                                            Line.integrated_line_flux == None)) & (
-                                                                    Line.peak_line_flux.between(
-                                                                        form_advanced.peak_line_flux_min.data,
-                                                                        form_advanced.peak_line_flux_max.data) | (
-                                                                            Line.peak_line_flux == None)) & (
-                                                                    Line.line_width.between(
-                                                                        form_advanced.line_width_min.data,
-                                                                        form_advanced.line_width_max.data) | (
-                                                                            Line.line_width == None)) & (
-                                                                    Line.observed_line_redshift.between(
-                                                                        form_advanced.observed_line_redshift_min.data,
-                                                                        form_advanced.observed_line_redshift_max.data) | (
-                                                                            Line.observed_line_redshift == None)) & (
-                                                                    Line.observed_beam_major.between(
-                                                                        form_advanced.observed_beam_major_min.data,
-                                                                        form_advanced.observed_beam_major_max.data) | (
-                                                                            Line.observed_beam_major == None)) & (
-                                                                    Line.observed_beam_minor.between(
-                                                                        form_advanced.observed_beam_minor_min.data,
-                                                                        form_advanced.observed_beam_minor_max.data) | (
-                                                                            Line.observed_beam_minor == None)) & (
-                                                                    Line.reference.contains(
-                                                                        form_advanced.reference.data) | (
-                                                                            Line.reference == None)) & (
-                                                                    Line.detection_type.contains(
-                                                                        form_advanced.detection_type.data) | (
-                                                                            Line.detection_type == None))))
+            # Line parameters filter
+            galaxies = line_filter(galaxies, form)
+
             # final query to be returned (if galaxy search)
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
-        # Query displaying lines based on the data from form_advanced
-        elif form_advanced.lineSearch.data:
-            if (form_advanced.right_ascension_point.data != None) and (
-                    form_advanced.declination_point.data != None) and (
-                    (form_advanced.radius_d.data != None) or (form_advanced.radius_m.data != None) or (
-                    form_advanced.radius_s.data != None)):
+        # Query displaying lines based on the data from form
+        if form.lineSearch.data:
+            if (form.right_ascension_point.data != None) and (
+                    form.declination_point.data != None) and (
+                    (form.radius_d.data != None) or (form.radius_m.data != None) or (
+                    form.radius_s.data != None)):
                 distance = math.radians(
-                    to_zero(form_advanced.radius_d.data) + to_zero(form_advanced.radius_m.data) / 60 + to_zero(
-                        form_advanced.radius_s.data) / 3600)
+                    to_zero(form.radius_d.data) + to_zero(form.radius_m.data) / 60 + to_zero(
+                        form.radius_s.data) / 3600)
                 galaxies = db.session.query(Galaxy, Line).outerjoin(Galaxy)
-                galaxies = within_distance(galaxies, form_advanced.right_ascension_point.data,
-                                           form_advanced.declination_point.data, distance=distance)
+                galaxies = within_distance(galaxies, form.right_ascension_point.data,
+                                           form.declination_point.data, distance=distance)
 
             else:
                 galaxies = session.query(Galaxy, Line).outerjoin(Galaxy)
 
-            galaxies = galaxies.filter(Galaxy.name.contains(form_advanced.name.data) & (
-                Galaxy.right_ascension.between(ra_to_float(to_m_inf(form_advanced.right_ascension_min.data)),
-                                               ra_to_float(to_p_inf(form_advanced.right_ascension_max.data)))) & (
-                                           Galaxy.declination.between(
-                                               dec_to_float(to_m_inf(form_advanced.declination_min.data)),
-                                               dec_to_float(to_p_inf(form_advanced.declination_max.data)))) & (
-                                               Galaxy.redshift.between(form_advanced.redshift_min.data,
-                                                                       form_advanced.redshift_max.data) | (
-                                                       Galaxy.redshift == None)) &
-                                       (galaxy_lensing_flag_repeated.contains(form_lensing_flag_repeated) | (Galaxy.lensing_flag == None)))
+            # Galaxy filter
+            galaxies = galaxy_filter(galaxies, form)
 
             # Check for classification
-            if not classification_is_all:
-                galaxies = galaxies.filter(Galaxy.classification.contains(buffer[0]) | Galaxy.classification.contains(
-                    buffer[1]) | Galaxy.classification.contains(buffer[2]) | Galaxy.classification.contains(
-                    buffer[3]) | Galaxy.classification.contains(buffer[4]) | Galaxy.classification.contains(
-                    buffer[5]) | Galaxy.classification.contains(buffer[6]) | Galaxy.classification.contains(
-                    buffer[7]) | Galaxy.classification.contains(buffer[8]) | Galaxy.classification.contains(
-                    buffer[9]) | Galaxy.classification.contains(buffer[10]) | Galaxy.classification.contains(
-                    buffer[11]) | (Galaxy.classification == None))
+            galaxies = classification_filter(galaxies, form.classification.data, form.remove_classification.data)
+            
+            # Species filter
+            galaxies = species_filter(galaxies, form.species.data)
+            
+            # Filter based on line data
 
-            galaxies = galaxies.filter(~Galaxy.classification.contains(form_advanced.remove_classification.data))
+            galaxies = line_filter(galaxies, form)
 
-            galaxies = galaxies.filter((Line.emitted_frequency.between(form_advanced.emitted_frequency_min.data,
-                                                                       form_advanced.emitted_frequency_max.data) | (
-                                                Line.emitted_frequency == None)) & (
-                                               (Line.species.contains(form_advanced.species.data)) | (
-                                               Line.species == None)) & (Line.integrated_line_flux.between(
-                form_advanced.integrated_line_flux_min.data, form_advanced.integrated_line_flux_max.data) | (
-                                                                                 Line.integrated_line_flux == None)) & (
-                                               Line.peak_line_flux.between(form_advanced.peak_line_flux_min.data,
-                                                                           form_advanced.peak_line_flux_max.data) | (
-                                                       Line.peak_line_flux == None)) & (
-                                               Line.line_width.between(form_advanced.line_width_min.data,
-                                                                       form_advanced.line_width_max.data) | (
-                                                       Line.line_width == None)) & (
-                                               Line.observed_line_redshift.between(
-                                                   form_advanced.observed_line_redshift_min.data,
-                                                   form_advanced.observed_line_redshift_max.data) | (
-                                                       Line.observed_line_redshift == None)) & (
-                                               Line.observed_beam_major.between(
-                                                   form_advanced.observed_beam_major_min.data,
-                                                   form_advanced.observed_beam_major_max.data) | (
-                                                       Line.observed_beam_major == None)) & (
-                                               Line.observed_beam_minor.between(
-                                                   form_advanced.observed_beam_minor_min.data,
-                                                   form_advanced.observed_beam_minor_max.data) | (
-                                                       Line.observed_beam_minor == None)) & (
-                                               Line.reference.contains(form_advanced.reference.data) | (
-                                               Line.reference == None)))
             # final query to be returned (if line search)
             galaxies = galaxies.order_by(Galaxy.name).all()
+            
+            # round values before we return query
+            for object in galaxies:
+                line = object[1]
+                line.observed_line_redshift,\
+                line.observed_line_redshift_uncertainty_positive,\
+                line.observed_line_redshift_uncertainty_negative = round_redshift(
+                    line.observed_line_redshift,
+                    line.observed_line_redshift_uncertainty_positive,
+                    line.observed_line_redshift_uncertainty_negative
+                )
 
-        # Is not called
-        else:
-            # final query to be returned (if general search)
-            galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(
-                Galaxy.name).all()
-
-        # round values before we return query
-        for object in galaxies:
-            line = object[1]
-            line.observed_line_redshift,\
-             line.observed_line_redshift_uncertainty_positive,\
-             line.observed_line_redshift_uncertainty_negative = round_redshift(
-                line.observed_line_redshift,
-                line.observed_line_redshift_uncertainty_positive,
-                line.observed_line_redshift_uncertainty_negative
-            )
-        return render_template("/query_results.html", galaxies=galaxies, form=form, form_advanced=form_advanced)
+        return render_template("/query_results.html", galaxies=galaxies, form=form)
 
     # Get method
     else:
-        galaxies = session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(
+        galaxies = db.session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(
             Galaxy.name).all()
 
-    return render_template("/query_results.html", form=form, form_advanced=form_advanced, galaxies=galaxies)
+    return render_template("/query_results.html", form=form, galaxies=galaxies)
 
 
 @bp.route("/entry_file", methods=['GET', 'POST'])

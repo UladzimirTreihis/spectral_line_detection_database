@@ -28,7 +28,7 @@
 "sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" 
                 crossorigin="anonymous">
     </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/popupNotes.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -82,25 +82,31 @@
             Check if you want the redshift converted to MHz.
         </label>
     </form>
-    <script type="text/javascript">
-        function validate() {
-          // Get the checkbox
-          var checkBox = document.getElementById('convertToFrequency');
-          // Get the output text
-          var linkDownloadLines = document.getElementById('downloadLines');
-          var linkDownloadEverything = document.getElementById('downloadEverything');
-
-          // If the checkbox is checked, display the output text
-          if (checkBox.checked == true){
-            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, to_frequency = "1") }}";
-          } else {
-            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = "Galaxy Lines", identifier = galaxy.id, to_frequency = "0") }}";
-          }
-        }
-    </script>
 
     <br>
-    <a id="downloadLines" href="" class="btn btn-info" role="button" onclick="validate()">Download line entries for this galaxy</a>
+
+
+    <a id="downloadLines" href="" class="btn btn-info" role="button" onclick="validateConvertToFrequency()">
+        Download line entries for this galaxy
+    </a>
+
+    <script type="text/javascript">
+        // This script imported from a file will not be rendered by jinja properly.
+        function validateConvertToFrequency() {
+            // Get the checkbox
+            var checkBox = document.getElementById('convertToFrequency');
+            // Get the output text
+            var linkDownloadLines = document.getElementById('downloadLines');
+            var linkDownloadEverything = document.getElementById('downloadEverything');
+
+            // If the checkbox is checked, display the output text
+            if (checkBox.checked == true){
+            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = 'Galaxy Lines', identifier = galaxy.id, to_frequency = '1') }}";
+            } else {
+            linkDownloadLines.href = "{{ url_for ('main.convert_to_CSV', table = 'Galaxy Lines', identifier = galaxy.id, to_frequency = '0') }}";
+            }
+        }
+    </script>
 
     <div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
         <table class = "table table-hover" id = "Line" style="width: 100%">
@@ -162,18 +168,7 @@
             </tbody>
         </table>
     </div>   
-    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
-    <script>
-        $(function () {
-            $(".gfgselect").click(function () {
-                var notes = $(this).parents("tr").find(".notes").text();
-                var p = "";
-                p += "<p> " + notes + "</p>";
-                $("#divGFG").empty();
-                $("#divGFG").append(p);
-            });
-        });
-    </script>
+
     <div class="modal fade" 
          id="gfgmodal"
          tabindex="-1"
@@ -205,4 +200,7 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
+
 {% endblock %}

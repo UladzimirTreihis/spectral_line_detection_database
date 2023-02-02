@@ -6,6 +6,8 @@ from config import dec_reg_exp, ra_reg_exp
 from app.models import User
 from species import species
 
+species.insert(0, ('All', 'All'))
+
 classification_choices = [('LBG', 'LBG (Lyman Break Galaxy)'),
                           ('MS', 'MS (Main Sequence Galaxy)'),
                           ('SMG', 'SMG (Submillimeter Galaxy)'),
@@ -59,6 +61,7 @@ class SearchForm(FlaskForm):
 
 
 class AdvancedSearchForm(FlaskForm):
+
     name = StringField('Galaxy Name', validators=[Optional()])
     right_ascension_min = StringField('Right Ascension min:', validators=[
         Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional()])
@@ -86,7 +89,7 @@ class AdvancedSearchForm(FlaskForm):
     classification = SelectMultipleField(u'Include Classification',
                                          choices=classification_choices_w_all,
                                          validate_choice=False)
-    remove_classification = SelectField(u'Exclude Classification',
+    remove_classification = SelectMultipleField(u'Exclude Classification',
                                         choices=classification_choices_w_none,
                                         validate_choice=False)
 
@@ -94,7 +97,7 @@ class AdvancedSearchForm(FlaskForm):
 
     emitted_frequency_min = FloatField('Emitted Frequency (GHz) min:', validators=[Optional(), NumberRange(min=0)])
     emitted_frequency_max = FloatField('Emitted Frequency (GHz) max:', validators=[Optional(), NumberRange(min=0)])
-    species = SelectField(u'Select Species', choices=species,
+    species = SelectMultipleField(u'Select Species', choices=species,
                           validate_choice=False)
     integrated_line_flux_min = FloatField('Integrated Line Flux (Jy*km/s) min:',
                                           validators=[Optional(), NumberRange(min=0)])
@@ -142,7 +145,7 @@ class AddGalaxyForm(FlaskForm):
     lensing_flag = SelectField(u'Is it gravitationally lensed?',
                                choices=[('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')],
                                validators=[DataRequired()])
-    classification = SelectMultipleField(u'Classification (Press shift to select all that apply)',
+    classification = SelectMultipleField(u'Classification (Press ctrl/cmd to select all that apply)',
                                          choices=classification_choices)
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')
@@ -159,9 +162,9 @@ class EditGalaxyForm(FlaskForm):
                                choices=[('Lensed', 'Lensed'), ('Unlensed', 'Unlensed'), ('Unknown', 'Unknown')],
                                validators=[DataRequired()])
     classification = StringField('Current Classification', validators=[DataRequired()])
-    remove_classification = SelectMultipleField(u'Remove Classification (Press shift to select all that apply)',
+    remove_classification = SelectMultipleField(u'Remove Classification (Press ctrl/cmd to select all that apply)',
                                                 choices=classification_choices)
-    add_classification = SelectMultipleField(u'Add Classification (Press shift to select all that apply)',
+    add_classification = SelectMultipleField(u'Add Classification (Press ctrl/cmd to select all that apply)',
                                              choices=classification_choices)
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')

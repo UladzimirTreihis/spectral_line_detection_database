@@ -4,39 +4,42 @@
     Edit User {{ user.username }} 
 {% endblock %}
 
-{% block content %}
-    <h1>Edit Profile</h1>
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <p>
-            {{ form.username.label }}<br>
-            {{ form.username(size=32) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.university.label }}<br>
-            {{ form.university(size=32) }}<br>
-            {% for error in form.university.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.website.label }}<br>
-            {{ form.website(size=32) }}<br>
-            {% for error in form.website.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.about_me.label }}<br>
-            {{ form.about_me(cols=50, rows=4) }}<br>
-            {% for error in form.username.errors %}
-            <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
-    </form>
+{% block page_content %}
+
+<h1>Edit Profile</h1>
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    <div class="">
+        {{ form.username.label(class="form-label") }}<br>
+        {{ form.username(size=32, class="form-control") }}<br>
+        {% for error in form.username.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="">
+        {{ form.university.label(class="form-label") }}<br>
+        {{ form.university(size=32, class="form-control") }}<br>
+        {% for error in form.university.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="">
+        {{ form.website.label(class="form-label") }}<br>
+        {{ form.website(size=32, class="form-control") }}<br>
+        {% for error in form.website.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="">
+        {{ form.about_me.label(class="form-label") }}<br>
+        {{ form.about_me(cols=32, rows=4, class="form-control") }}<br>
+        {% for error in form.username.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </div>
+    <div class="d-grid gap-2">
+        {{ form.submit (class="btn btn-info mb-3") }}
+    </div>
+</form>
 
 {% endblock %}

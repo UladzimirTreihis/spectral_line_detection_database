@@ -1,4 +1,3 @@
-from re import template
 from flask import (
     Flask,
     request,
@@ -33,9 +32,7 @@ from flask_admin import (
     Admin,
     AdminIndexView
 )
-from flask_admin.contrib.sqla import ModelView
 from .models import db, User, Role
-from app.helpers import round_to_uncertainty, round_to_nsf, round_redshift
 from datetime import datetime
 from flask_security.forms import (
     ConfirmRegisterForm,
@@ -84,7 +81,7 @@ logging.basicConfig(filename='record.log', level=logging.DEBUG,
 
 #### Application Factory Function ####
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class=ProductionConfig):
     template_dir = '../../public/templates'
     app = Flask(__name__, template_folder=template_dir)
     app.config.from_object(config_class)
@@ -92,7 +89,7 @@ def create_app(config_class=DevelopmentConfig):
     initialize_extensions(app)
     create_tables_and_mock_users(app)
     register_blueprints(app)
-    #configure_logs_for_production(app)
+    configure_logs_for_production(app)
 
     return app
 
@@ -146,12 +143,11 @@ def register_blueprints(app):
     # BluePrints
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)
-    from app.auth import bp as auth_bp
-    app.register_blueprint(auth_bp, url_prefix='/auth')
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
     from app.adm import bp as adm_bp
     app.register_blueprint(adm_bp)
+
 
 def configure_logs_for_production(app):
     if not app.debug:

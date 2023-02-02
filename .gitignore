@@ -27,7 +27,12 @@ record.log
 .idea
 .flaskenv
 .venv
+
+# Data
 app.db
+
+# Tests
+.pytest_cache
 
 #Config
 #config.json
