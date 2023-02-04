@@ -1,7 +1,7 @@
-### CO_database_project
+# CO_database_project
 available at https://linedb.nfshost.com/
 
-# User / Admin Manual.
+### User / Admin Manual.
 
 I. Getting started.
     1. Creating an account.
@@ -22,7 +22,7 @@ IV. Approving data (for Admins).
 
 
 
-# Developer Manual.
+### Developer Manual.
 
 The app is based on the FLASK framework using SQLAlchemy for managing database commands and SQLite3 database. The app is employing several Blueprints, which is a good practice for such a project. All functions and routes are explained using Docstrings. Contact us if you want to discuss the deployment.
 
@@ -47,7 +47,7 @@ FAQ:
 
 
 
-# Areas to consider for further development and bug fixing:
+### Areas to consider for further development and bug fixing:
 
 1. Advanced search
     a) The download results option.
