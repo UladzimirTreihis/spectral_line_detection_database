@@ -837,172 +837,172 @@ def entry_file():
                         flash("Entry " + str(row_count) + ' was an empty row')
 
                     # Assign and strip string values for each row
-                    if validated:
-                        row_name = row[COL_NAMES['name']].strip()
-                        row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
-                        row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
-                        entered_classification = row[COL_NAMES['classification']].strip()
-                        row_right_ascension = row[COL_NAMES['right_ascension']].strip()
-                        row_declination = row[COL_NAMES['declination']].strip()
-                        row_g_notes = row[COL_NAMES['g_notes']].strip()
+                    # if validated:
+                    row_name = row[COL_NAMES['name']].strip()
+                    row_coordinate_system = row[COL_NAMES['coordinate_system']].strip()
+                    row_lensing_flag = row[COL_NAMES['lensing_flag']].strip()
+                    entered_classification = row[COL_NAMES['classification']].strip()
+                    row_right_ascension = row[COL_NAMES['right_ascension']].strip()
+                    row_declination = row[COL_NAMES['declination']].strip()
+                    row_g_notes = row[COL_NAMES['g_notes']].strip()
 
-                        row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
-                        row_species = row[COL_NAMES['species']].strip()
-                        row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
-                        row_integrated_line_flux_uncertainty_positive = row[
-                            COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
-                        row_integrated_line_flux_uncertainty_negative = row[
-                            COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
-                        row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
-                        row_peak_line_flux_uncertainty_positive = row[
-                            COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
-                        row_peak_line_flux_uncertainty_negative = row[
-                            COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
-                        row_line_width = row[COL_NAMES['line_width']].strip()
-                        row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
-                        row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
-                        row_freq_type = row[COL_NAMES['freq_type']].strip()
-                        row_observed_line_redshift = row[COL_NAMES['observed_line_redshift']].strip()
-                        row_observed_line_redshift_uncertainty_positive = row[
-                            COL_NAMES['observed_line_redshift_uncertainty_positive']].strip()
-                        row_observed_line_redshift_uncertainty_negative = row[
-                            COL_NAMES['observed_line_redshift_uncertainty_negative']].strip()
-                        row_detection_type = row[COL_NAMES['detection_type']].strip()
-                        row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
-                        row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
-                        row_observed_beam_angle = row[COL_NAMES['observed_beam_angle']].strip()
-                        row_reference = row[COL_NAMES['reference']].strip()
-                        row_notes = row[COL_NAMES['l_notes']].strip()
+                    row_emitted_frequency = row[COL_NAMES['emitted_frequency']].strip()
+                    row_species = row[COL_NAMES['species']].strip()
+                    row_integrated_line_flux = row[COL_NAMES['integrated_line_flux']].strip()
+                    row_integrated_line_flux_uncertainty_positive = row[
+                        COL_NAMES['integrated_line_flux_uncertainty_positive']].strip()
+                    row_integrated_line_flux_uncertainty_negative = row[
+                        COL_NAMES['integrated_line_flux_uncertainty_negative']].strip()
+                    row_peak_line_flux = row[COL_NAMES['peak_line_flux']].strip()
+                    row_peak_line_flux_uncertainty_positive = row[
+                        COL_NAMES['peak_line_flux_uncertainty_positive']].strip()
+                    row_peak_line_flux_uncertainty_negative = row[
+                        COL_NAMES['peak_line_flux_uncertainty_negative']].strip()
+                    row_line_width = row[COL_NAMES['line_width']].strip()
+                    row_line_width_uncertainty_positive = row[COL_NAMES['line_width_uncertainty_positive']].strip()
+                    row_line_width_uncertainty_negative = row[COL_NAMES['line_width_uncertainty_negative']].strip()
+                    row_freq_type = row[COL_NAMES['freq_type']].strip()
+                    row_observed_line_redshift = row[COL_NAMES['observed_line_redshift']].strip()
+                    row_observed_line_redshift_uncertainty_positive = row[
+                        COL_NAMES['observed_line_redshift_uncertainty_positive']].strip()
+                    row_observed_line_redshift_uncertainty_negative = row[
+                        COL_NAMES['observed_line_redshift_uncertainty_negative']].strip()
+                    row_detection_type = row[COL_NAMES['detection_type']].strip()
+                    row_observed_beam_major = row[COL_NAMES['observed_beam_major']].strip()
+                    row_observed_beam_minor = row[COL_NAMES['observed_beam_minor']].strip()
+                    row_observed_beam_angle = row[COL_NAMES['observed_beam_angle']].strip()
+                    row_reference = row[COL_NAMES['reference']].strip()
+                    row_notes = row[COL_NAMES['l_notes']].strip()
 
-                        # Check whether the values pass the conditions
-                        if row_name == "":
+                    # Check whether the values pass the conditions
+                    if row_name == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Galaxy Name is Mandatory")
+                    if row_coordinate_system != "ICRS" and row_coordinate_system != "J2000":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
+                    if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "":
+                        if row_lensing_flag != "L" and row_lensing_flag != "U" and row_lensing_flag != "l" and row_lensing_flag != "u":
                             validated = False
-                            flash("Entry " + str(row_count) + ": Galaxy Name is Mandatory")
-                        if row_coordinate_system != "ICRS" and row_coordinate_system != "J2000":
+                            flash("Entry " + str(
+                                row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"L\", \"U\" under {}.".format(
+                                row_lensing_flag))
+
+                    if entered_classification == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Classification is Mandatory")
+                    row_classification = ""
+                    for key, value in classification_options.items():
+                        if key in entered_classification.upper() or key in entered_classification:
+                            row_classification = row_classification + "," + key
+                    if row_classification == "," or row_classification == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Please enter Correction Classifications")
+                    if row_right_ascension == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Right Ascension is Mandatory")
+                    if re.search(ra_reg_exp, row_right_ascension) == None:
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Enter Right Ascension in a proper format")
+                    if row_declination == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Declination is Mandatory")
+                    if re.search(dec_reg_exp, row_declination) == None:
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Enter Declination in a proper format")
+                    if row_emitted_frequency == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
+
+                    try:
+                        dict_frequency, message = test_frequency(row_species, row_emitted_frequency)
+                        if not dict_frequency:
+                            flash("Entry " + str(row_count) + message)
                             validated = False
-                            flash("Entry " + str(row_count) + ": Coordinate System can be ICRS or J2000 only.")
-                        if row_lensing_flag != "Lensed" and row_lensing_flag != "Unlensed" and row_lensing_flag != "":
-                            if row_lensing_flag != "L" and row_lensing_flag != "U" and row_lensing_flag != "l" and row_lensing_flag != "u":
+                    except:
+                        pass
+                    if row_species == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Please specify species")
+                    if row_integrated_line_flux == "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Integrated Line Flux is Mandatory")
+                    if row_integrated_line_flux_uncertainty_positive == "":
+                        validated = False
+                        flash(
+                            "Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
+                    else:
+                        try:
+                            if float(row_integrated_line_flux_uncertainty_positive) < 0:
                                 validated = False
                                 flash("Entry " + str(
-                                    row_count) + ": Please enter either \"Lensed\", \"Unlensed\" or \"L\", \"U\" under {}.".format(
-                                    row_lensing_flag))
-
-                        if entered_classification == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Classification is Mandatory")
-                        row_classification = ""
-                        for key, value in classification_options.items():
-                            if key in entered_classification.upper() or key in entered_classification:
-                                row_classification = row_classification + "," + key
-                        if row_classification == "," or row_classification == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Please enter Correction Classifications")
-                        if row_right_ascension == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Right Ascension is Mandatory")
-                        if re.search(ra_reg_exp, row_right_ascension) == None:
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Enter Right Ascension in a proper format")
-                        if row_declination == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Declination is Mandatory")
-                        if re.search(dec_reg_exp, row_declination) == None:
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Enter Declination in a proper format")
-                        if row_emitted_frequency == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Emitted Frequency is Mandatory")
-
-                        try:
-                            dict_frequency, message = test_frequency(row_species, row_emitted_frequency)
-                            if not dict_frequency:
-                                flash("Entry " + str(row_count) + message)
-                                validated = False
+                                    row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
                         except:
                             pass
-                        if row_species == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Please specify species")
-                        if row_integrated_line_flux == "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Integrated Line Flux is Mandatory")
-                        if row_integrated_line_flux_uncertainty_positive == "":
-                            validated = False
-                            flash(
-                                "Entry " + str(row_count) + ": Integrated Line Flux Positive Uncertainty is Mandatory")
-                        else:
-                            try:
-                                if float(row_integrated_line_flux_uncertainty_positive) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Integrated Line Flux Positive Uncertainty must be greater than 0")
-                            except:
-                                pass
-                        if row_integrated_line_flux_uncertainty_negative == "":
-                            if row_integrated_line_flux_uncertainty_positive != "":
-                                row_integrated_line_flux_uncertainty_negative = row_integrated_line_flux_uncertainty_positive
-                        else:
-                            try:
-                                if float(row_integrated_line_flux_uncertainty_negative) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
-                            except:
-                                pass
+                    if row_integrated_line_flux_uncertainty_negative == "":
+                        if row_integrated_line_flux_uncertainty_positive != "":
+                            row_integrated_line_flux_uncertainty_negative = row_integrated_line_flux_uncertainty_positive
+                    else:
+                        try:
+                            if float(row_integrated_line_flux_uncertainty_negative) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Integrated Line Flux Negative Uncertainty must be greater than 0")
+                        except:
+                            pass
 
-                        if row_peak_line_flux_uncertainty_positive != "":
-                            try:
-                                if float(row_peak_line_flux_uncertainty_positive) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Peak Line Flux Positive Uncertainty must be greater than 0")
-                            except:
-                                pass
-                        if row_peak_line_flux_uncertainty_negative != "":
-                            try:
-                                if float(row_peak_line_flux_uncertainty_negative) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Peak Line Flux Negative Uncertainty must be greater than 0")
-                            except:
-                                pass
-                        if row_line_width_uncertainty_positive != "":
-                            try:
-                                if float(row_line_width_uncertainty_positive) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Line Width Positive Uncertainty must be greater than 0")
-                            except:
-                                pass
-                        if row_line_width_uncertainty_negative != "":
-                            try:
-                                if float(row_line_width_uncertainty_negative) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Line Width Negative Uncertainty must be greater than 0")
-                            except:
-                                pass
-                        if row_freq_type != "z" and row_freq_type != "f" and row_freq_type != "":
-                            validated = False
-                            flash("Entry " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(
-                                row_freq_type))
-                        if row_observed_line_redshift_uncertainty_positive != "":
-                            try:
-                                if float(row_observed_line_redshift_uncertainty_positive) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
-                            except:
-                                pass
-                        if row_observed_line_redshift_uncertainty_negative != "":
-                            try:
-                                if float(row_observed_line_redshift_uncertainty_negative) < 0:
-                                    validated = False
-                                    flash("Entry " + str(
-                                        row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
-                            except:
-                                pass
+                    if row_peak_line_flux_uncertainty_positive != "":
+                        try:
+                            if float(row_peak_line_flux_uncertainty_positive) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Peak Line Flux Positive Uncertainty must be greater than 0")
+                        except:
+                            pass
+                    if row_peak_line_flux_uncertainty_negative != "":
+                        try:
+                            if float(row_peak_line_flux_uncertainty_negative) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Peak Line Flux Negative Uncertainty must be greater than 0")
+                        except:
+                            pass
+                    if row_line_width_uncertainty_positive != "":
+                        try:
+                            if float(row_line_width_uncertainty_positive) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Line Width Positive Uncertainty must be greater than 0")
+                        except:
+                            pass
+                    if row_line_width_uncertainty_negative != "":
+                        try:
+                            if float(row_line_width_uncertainty_negative) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Line Width Negative Uncertainty must be greater than 0")
+                        except:
+                            pass
+                    if row_freq_type != "z" and row_freq_type != "f" and row_freq_type != "":
+                        validated = False
+                        flash("Entry " + str(row_count) + ": Please enter either \"z\", \"f\" under {}.".format(
+                            row_freq_type))
+                    if row_observed_line_redshift_uncertainty_positive != "":
+                        try:
+                            if float(row_observed_line_redshift_uncertainty_positive) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Observed Line Frequency Positive Uncertainty must be greater than 0")
+                        except:
+                            pass
+                    if row_observed_line_redshift_uncertainty_negative != "":
+                        try:
+                            if float(row_observed_line_redshift_uncertainty_negative) < 0:
+                                validated = False
+                                flash("Entry " + str(
+                                    row_count) + ": Observed Line Frequency Negative Uncertainty must be greater than 0")
+                        except:
+                            pass
 
         # If passed all conditions
         if validated:

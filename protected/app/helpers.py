@@ -119,7 +119,7 @@ def ra_to_float(coordinates):
     return the corresponding float value.
 
     Parameters:
-        coordinates (str | float | int): A string representing a float or 00h00m00s format right ascension.
+        coordinates (str | float | int): A string representing a float or 00h00m00s or 00h00'00" format right ascension.
 
     Returns:
         coordinates (float): Float value of right ascension.
@@ -127,10 +127,13 @@ def ra_to_float(coordinates):
 
     if isinstance(coordinates, float) or isinstance(coordinates, int):
         coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
+    if ((coordinates.find('\"') != -1) or (coordinates.find('s') != -1)):
         h = float(coordinates[0:2])
         m = float(coordinates[3:5])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
+        if (coordinates.find('s') != -1):
+            s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
+        else:
+            s = float(coordinates[coordinates.find('\'') + 1:coordinates.find('\"')])
         return h * 15 + m / 4 + s / 240
     else:
         return float(coordinates)
@@ -142,18 +145,20 @@ def dec_to_float(coordinates):
     return the corresponding float value.
 
     Parameters:
-        coordinates (str | float | int): A string representing a float or +/-00d00m00s format declination.
+        coordinates (str | float | int): A string representing a float or +/-00d00m00s or +/-00d00\'00s\" format declination.
 
     Returns:
         coordinates (float): Float value of declination.
     """
-
     if isinstance(coordinates, float) or isinstance(coordinates, int):
         coordinates = str(coordinates)
-    if coordinates.find('s') != -1:
+    if ((coordinates.find('\"') != -1) or (coordinates.find('s') != -1)):
         d = float(coordinates[1:3])
         m = float(coordinates[4:6])
-        s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
+        if (coordinates.find('s') != -1):
+            s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
+        else:
+            s = float(coordinates[coordinates.find('\'') + 1:coordinates.find('\"')])
         if coordinates[0] == "-":
             return (-1) * (d + m / 60 + s / 3600)
         else:
