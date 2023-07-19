@@ -128,11 +128,13 @@ def ra_to_float(coordinates):
     if isinstance(coordinates, float) or isinstance(coordinates, int):
         coordinates = str(coordinates)
     if ((coordinates.find('\"') != -1) or (coordinates.find('s') != -1)):
-        h = float(coordinates[0:2])
-        m = float(coordinates[3:5])
-        if (coordinates.find('s') != -1):
+        if (coordinates.find('\"') != -1):
+            h = float(coordinates[0:coordinates.find('h')])
+            m = float(coordinates[coordinates.find('h')+ 1:coordinates.find('m')])
             s = float(coordinates[coordinates.find('m') + 1:coordinates.find('s')])
         else:
+            h = float(coordinates[0:coordinates.find('h')])
+            m = float(coordinates[coordinates.find('h')+ 1:coordinates.find('\'')])
             s = float(coordinates[coordinates.find('\'') + 1:coordinates.find('\"')])
         return h * 15 + m / 4 + s / 240
     else:
