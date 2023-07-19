@@ -295,15 +295,19 @@
          </div>
       </div>
 </form>
-   
 
+
+<button id="export-btn" class="btn btn-info" style="margin: 15px 40px; float: left; "
+   {% if galaxies is none or galaxies|length == 0 %}
+      disabled{% endif %}>Download Results as CSV
+</button>
 
 {% if form.galaxySearch.data %}
 <!--Supposed to desplay the results. In the development stage-->
 <table class = "table" id = "Galaxy">
    <thead>
       <tr>
-         <th>Name</th>
+         <th>Name</th> 
          <th>Right Ascension</th>
          <th>Declination</th>
          <th>Coordinate System</th>
@@ -338,6 +342,31 @@
    <table class = "table" id = "Line">
       <thead>
          <tr>
+            <!-- replacying the latex to allow export -->
+            <th>Galaxy Name</th>
+            <th><i>Species</i></th>
+            <th><i>f<sub>rest</sub> (GHz)</i></th>
+            <th><i>S Δv (Jy km s<sup>-1</sup>)</i></th>
+            <th><i>+σ<sub>S ΔV</sub> (Jy km s<sup>-1</sup>)</i></th>
+            <th><i>-σ<sub>S ΔV</sub> (Jy km s<sup>-1</sup>)</i></th>
+            <th><i>S<sub>max</sub> (mJy)</i></th>
+            <th><i>+σ<sub>S<sub>max</sub></sub> (mJy)</i></th>
+            <th><i>-σ<sub>S<sub>max</sub></sub> (mJy)</i></th>
+            <th><i>FWHM (kms<sup>-1</sup>)</i></th>
+            <th><i>+σ<sub>FWHM</sub> (kms<sup>-1</sup>)</i></th>
+            <th><i>-σ<sub>FWHM</sub> (kms<sup>-1</sup>)</i></th>
+            <th><i>z</i></th>
+            <th><i>+σ<sub>z</sub></i></th>
+            <th><i>-σ<sub>z</sub></i></th>
+            <th><i>Telescope Type</i></th>
+            <th><i>Beam Maj. FWHM ('')</i></th>
+            <th><i>Beam Min. FWHM ('')</i></th>
+            <th><i>Beam P.A. (*)</i></th>
+            <th><i>Reference</i></th>
+            <th><i>Notes</i></th>
+            <th style = "display: none"><i>Text</i></th>
+
+            <!-- Original tags 
             <th>Galaxy Name</th>
             <th>\( Species \)</th>
             <th>\( f_{rest} \) \( (GHz) \)</th>
@@ -359,7 +388,7 @@
             <th>\( Beam \ P.A. \) \( (*) \)</th>
             <th>\( Reference \)</th>
             <th>\( Notes \)</th>
-            <th style = "display: none">\( Text \) </th>
+            <th style = "display: none">\( Text \) </th> -->
          </tr>
       </thead>
       
@@ -431,6 +460,38 @@
                 $("#divGFG").append(p);
             });
         });
+           
+   // export to csv code
+   document.getElementById("export-btn").addEventListener("click", function(){
+    var rowCount = document.querySelectorAll("table tbody tr").length;
+    if (rowCount > 0) {
+        var data = [];
+        var headers = [];
+        document.querySelectorAll("table th").forEach(function(item){
+            headers.push(item.innerText);
+        });
+        data.push(headers.join(","));
+    
+        document.querySelectorAll("table tbody tr").forEach(function(row){
+            var rowData = [];
+            row.querySelectorAll("td").forEach(function(cell){
+                rowData.push(cell.innerText.replace(/,/g, ''));
+            });
+            data.push(rowData.join(","));
+        });
+    
+        var csvData = data.join("\n");
+        var blob = new Blob([csvData], {type: 'text/csv'});
+        var url = window.URL.createObjectURL(blob);
+    
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "Query Results.csv";
+        a.click();
+    } else {
+        alert('No results to download. Please perform a search');
+    }
+});
     </script>
     <div class="modal fade" 
          id="gfgmodal"

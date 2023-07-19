@@ -10,3 +10,21 @@
   -ms-user-select: none;
   user-select: none;
 }
+
+.pagination-link {
+  color: #007bff; 
+  padding: .5em .75em;
+  margin-left: .25em;
+  text-decoration: none;
+  border: 1px solid #dee2e6;
+}
+
+.pagination-link:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.pagination-link.active {
+  color: #fff;
+  background-color: #007bff;
+}

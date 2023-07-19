@@ -512,7 +512,8 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
-
+'''
+#Original main route
 @bp.route("/main", methods=['GET', 'POST'])
 def main():
     """
@@ -587,6 +588,64 @@ def main():
 
     return render_template("/main.html", galaxies=galaxies, lines=lines,
                            list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
+
+'''
+#new main route with pagination
+@bp.route("/main", methods=['GET', 'POST'])
+def main():
+    form = DynamicSearchForm()
+    if form.submit.data:
+        name = form.galaxy_name.data
+        galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+
+        return redirect(url_for("main.galaxy", name=galaxy.name))
+
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10)
+    if per_page == 'all':
+        per_page = Galaxy.query.count()
+    else:
+        per_page = int(per_page)
+
+    galaxies = Galaxy.query.order_by(Galaxy.name).paginate(page, per_page, False)
+
+    galaxies_count = galaxies.total 
+
+    count_list = list(range(galaxies_count))
+
+    list_of_lines_per_species = []
+    for galaxy in galaxies.items:
+        list_of_lines_per_species.append([])
+        id = galaxy.id
+        species = db.session.query(Line.species).filter(Line.galaxy_id == id).distinct()
+        if species is not None:
+            for s in species:
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s[0])).count()
+                list_of_lines_per_species[-1].append((s[0], lines_count))
+
+    # rounding redshift and uncertainties.
+    for galaxy in galaxies.items:
+        galaxy.redshift, galaxy.redshift_error, _ = round_redshift(
+            galaxy.redshift,
+            galaxy.redshift_error,
+            galaxy.redshift_error,
+            True,
+            False)
+
+        species = db.session.query(Line.species).filter(Line.galaxy_id == galaxy.id).distinct()
+        if species is not None:
+            for s in species:
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == galaxy.id) & (Line.species == s[0])).count()
+                if galaxy.lines_per_species:
+                    galaxy.lines_per_species = galaxy.lines_per_species + "{}: {}\n".format(s[0], lines_count)
+                else:
+                    galaxy.lines_per_species = "{}: {}\n".format(s[0], lines_count)
+
+    lines = db.session.query(Line.galaxy_id, Line.species).distinct().all()
+
+    return render_template("/main.html", min=min, galaxies=galaxies, lines=lines,
+                           list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
+
 
 
 @bp.route('/contribute', methods=['GET'])
