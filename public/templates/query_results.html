@@ -440,7 +440,7 @@
                <td>{{ l.observed_beam_major }}</td>
                <td>{{ l.observed_beam_minor }}</td>
                <td>{{ l.observed_beam_angle }}</td>
-               <td>{{ l.reference }}</td>
+               <td><a href="https://ui.adsabs.harvard.edu/abs/{{ l.reference }}" target="_blank">{{ l.reference }}</a></td>
                <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
                <td class = "notes" style = "display:none"> {{l.notes}} </td> 
             </tr>
