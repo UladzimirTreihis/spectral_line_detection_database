@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import FileField, FloatField, StringField, SubmitField, TextAreaField, SelectField, SelectMultipleField
 from wtforms.validators import Regexp, ValidationError, DataRequired, Length, URL, Optional, NumberRange
 from flask import request
-from config import dec_reg_exp, ra_reg_exp
+from config import dec_reg_exp, ra_reg_exp, ref_reg_exp
 from app.models import User
 from species import species
 
@@ -64,18 +64,18 @@ class AdvancedSearchForm(FlaskForm):
 
     name = StringField('Galaxy Name', validators=[Optional()])
     right_ascension_min = StringField('Right Ascension min:', validators=[
-        Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional()])
+        Regexp(ra_reg_exp, message="Input in the format 00h00m00s, 00h00\'00\", or as a float [-90, +90]"), Optional()])
     right_ascension_max = StringField('Right Ascension max:', validators=[
-        Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional()])
+        Regexp(ra_reg_exp, message="Input in the format 00h00m00s, 00h00\'00\", or as a float [-90, +90]"), Optional()])
     declination_min = StringField('Declination min:', validators=[
-        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), Optional()])
+        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s, (+/-)00d00\'00\", or as a float [0, 360]"), Optional()])
     declination_max = StringField('Declination max:', validators=[
-        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), Optional()])
+        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s, (+/-)00d00\'00\", or as a float [0, 360]"), Optional()])
 
     right_ascension_point = StringField('Right Ascension', validators=[
-        Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"), Optional()])
+        Regexp(ra_reg_exp, message="Input in the format 00h00m00s, 00h00\'00\", or as a float [-90, +90]"), Optional()])
     declination_point = StringField('Declination', validators=[
-        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), Optional()])
+        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s, (+/-)00d00\'00\", or as a float [0, 360]"), Optional()])
 
     radius_d = FloatField('deg', validators=[Optional(), NumberRange(min=0, max=180)])
     radius_m = FloatField('arcmin', validators=[Optional(), NumberRange(min=0, max=60)])
@@ -125,7 +125,7 @@ class AdvancedSearchForm(FlaskForm):
     observed_beam_minor_max = FloatField('Beam Minor Axis FWHM (arcsec) max:',
                                          validators=[Optional(), NumberRange(min=0)])
 
-    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Optional()])
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()]))
 
     galaxySearch = SubmitField(label='Search for Galaxies')
     lineSearch = SubmitField(label="Search for Lines")
@@ -134,10 +134,10 @@ class AdvancedSearchForm(FlaskForm):
 class AddGalaxyForm(FlaskForm):
     name = StringField('Galaxy Name', validators=[DataRequired()])
     right_ascension = StringField('Right Ascension',
-                                  validators=[Regexp(ra_reg_exp, message="Input in the format 00h00m00s or as a float"),
+                                  validators=[Regexp(ra_reg_exp, message="Input in the format 00h00m00s, 00h00\'00\", or as a float [-90, +90]"),
                                               DataRequired()])
     declination = StringField('Declination', validators=[
-        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s or as a float"), DataRequired()])
+        Regexp(dec_reg_exp, message="Input in the format (+/-)00d00m00s, (+/-)00d00\'00\", or as a float [0, 360]"), DataRequired()])
     submit_anyway = SubmitField('Submit Anyway')
     do_not_submit = SubmitField('No, go back to Home. ')
     coordinate_system = SelectField(u'Coordinate System', choices=[('J2000', 'J2000'), ('ICRS', 'ICRS')],
@@ -218,7 +218,7 @@ class AddLineForm(FlaskForm):
                                      validators=[Optional(), NumberRange(min=0)])
     observed_beam_angle = FloatField('Beam Position Angle (in degrees) (strongly recommended)',
                                      validators=[Optional()])
-    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[DataRequired()])
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()])
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')
 
@@ -260,7 +260,7 @@ class EditLineForm(FlaskForm):
                                      validators=[Optional(), NumberRange(min=0)])
     observed_beam_angle = FloatField('Observed Beam Position Angle in Degrees (strongly recommended) ',
                                      validators=[Optional()])
-    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[DataRequired()])
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()]))
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')
 
