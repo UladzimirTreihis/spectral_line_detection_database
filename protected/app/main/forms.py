@@ -125,7 +125,7 @@ class AdvancedSearchForm(FlaskForm):
     observed_beam_minor_max = FloatField('Beam Minor Axis FWHM (arcsec) max:',
                                          validators=[Optional(), NumberRange(min=0)])
 
-    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()]))
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()])
 
     galaxySearch = SubmitField(label='Search for Galaxies')
     lineSearch = SubmitField(label="Search for Lines")
@@ -260,7 +260,7 @@ class EditLineForm(FlaskForm):
                                      validators=[Optional(), NumberRange(min=0)])
     observed_beam_angle = FloatField('Observed Beam Position Angle in Degrees (strongly recommended) ',
                                      validators=[Optional()])
-    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()]))
+    reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()])
     notes = StringField('Notes', validators=[Optional()])
     submit = SubmitField('Submit')
 
