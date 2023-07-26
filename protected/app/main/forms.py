@@ -88,17 +88,20 @@ class AdvancedSearchForm(FlaskForm):
                                validate_choice=False)
     classification = SelectMultipleField(u'Include Classification',
                                          choices=classification_choices_w_all,
-                                         validate_choice=False)
+                                         validate_choice=False,
+                                         render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
     remove_classification = SelectMultipleField(u'Exclude Classification',
                                         choices=classification_choices_w_none,
-                                        validate_choice=False)
+                                        validate_choice=False,
+                                        render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
 
     # Line data
 
     emitted_frequency_min = FloatField('Emitted Frequency (GHz) min:', validators=[Optional(), NumberRange(min=0)])
     emitted_frequency_max = FloatField('Emitted Frequency (GHz) max:', validators=[Optional(), NumberRange(min=0)])
     species = SelectMultipleField(u'Select Species', choices=species,
-                          validate_choice=False)
+                          validate_choice=False,
+                          render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
     integrated_line_flux_min = FloatField('Integrated Line Flux (Jy*km/s) min:',
                                           validators=[Optional(), NumberRange(min=0)])
     integrated_line_flux_max = FloatField('Integrated Line Flux (Jy*km/s) max:',
