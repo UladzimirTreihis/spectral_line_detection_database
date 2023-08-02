@@ -167,6 +167,13 @@
                {% endfor %}
             </div>
             <div class="col-md-6">
+                {{ form.remove_species.label(class="form-label") }}
+                {{ form.remove_species(class="form-select") }}
+                {% for error in form.remove_species.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+             </div>
+            <div class="col-md-6">
                {{ form.detection_type.label(class="form-label") }}
                {{ form.detection_type(class="form-select") }}
                {% for error in form.detection_type.errors %}
@@ -287,23 +294,24 @@
                {{ form.galaxySearch(class="btn btn-info") }}
             </div>
          </div>
-
          <div class="col-md-6" style="padding: 10px 50px;">
             <div class="d-grid gap-2"> 
-               {{ form.lineSearch(class="btn btn-info") }}
+                <button id="export-btn" class="btn btn-info"
+                {% if galaxies is none or galaxies|length == 0 %}
+                   disabled{% endif %}>Download Results as CSV
+                </button>
+             
             </div>
          </div>
       </div>
 </form>
-   
-
 
 {% if form.galaxySearch.data %}
 <!--Supposed to desplay the results. In the development stage-->
 <table class = "table" id = "Galaxy">
    <thead>
       <tr>
-         <th>Name</th>
+         <th>Name</th> 
          <th>Right Ascension</th>
          <th>Declination</th>
          <th>Coordinate System</th>
@@ -331,94 +339,6 @@
       {% endfor %}
    </tbody>
 </table>
-
-{% endif %}
-{% if form.lineSearch.data %}
-<div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
-   <table class = "table" id = "Line">
-      <thead>
-         <tr>
-            <th>Galaxy Name</th>
-            <th>\( Species \)</th>
-            <th>\( f_{rest} \) \( (GHz) \)</th>
-            <th>\( S \Delta v \) \((Jy \ km \ s^{-1}) \)</th>
-            <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-            <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-            <th>\( S_{max} \) \( (mJy) \)</th>
-            <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
-            <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
-            <th>\( FWHM \) \( (kms^{-1}) \)</th>
-            <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-            <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-            <th>\( z \) </th>
-            <th>\( +\sigma_{z} \) </th>
-            <th>\( -\sigma_{z} \) </th>
-            <th>\( Telescope \) \( Type \)</th>
-            <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
-            <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
-            <th>\( Beam \ P.A. \) \( (*) \)</th>
-            <th>\( Reference \)</th>
-            <th>\( Notes \)</th>
-            <th style = "display: none">\( Text \) </th>
-         </tr>
-      </thead>
-      
-      <tbody>
-         {% for element in galaxies %}
-            {% set l = element[1] %}  
-            {% set g = element[0] %}
-            <tr>
-               <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-               <td>{{ l.species }}</td>
-               <td>{{ l.emitted_frequency }}</td>
-               <td>{{ l.integrated_line_flux }}</td>
-               <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-               <td>
-                  {% if l.integrated_line_flux_uncertainty_negative == None %}
-                     {{ l.integrated_line_flux_uncertainty_positive }}
-                  {% else %}
-                     {{ l.integrated_line_flux_uncertainty_negative }}
-                  {% endif %}
-               </td>
-               <td>{{ l.peak_line_flux }}</td>
-               <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-               <td>
-                  {% if l.peak_line_flux_uncertainty_negative == None %}
-                     {{ l.peak_line_flux_uncertainty_positive }}
-                  {% else %}
-                     {{ l.peak_line_flux_uncertainty_negative }}
-                  {% endif %}
-               </td>
-               <td>{{ l.line_width }}</td>
-               <td>{{ l.line_width_uncertainty_positive }}</td>
-               <td>
-                  {% if l.line_width_uncertainty_negative == None %}
-                     {{ l.line_width_uncertainty_positive }}
-                  {% else %}
-                     {{ l.line_width_uncertainty_negative }}
-                  {% endif %}
-               </td>
-               <td>{{ l.observed_line_redshift }}</td>
-               <td>{{ l.observed_line_redshift_uncertainty_positive }}</td>
-               <td>
-                  {% if l.observed_line_redshift_uncertainty_negative == None %}
-                     {{ l.observed_line_redshift_uncertainty_positive }}
-                  {% else %}
-                     {{ l.observed_line_redshift_uncertainty_negative }}
-                  {% endif %}
-               </td>                
-               <td>{{ l.detection_type }}</td>
-               <td>{{ l.observed_beam_major }}</td>
-               <td>{{ l.observed_beam_minor }}</td>
-               <td>{{ l.observed_beam_angle }}</td>
-               <td>{{ l.reference }}</td>
-               <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
-               <td class = "notes" style = "display:none"> {{l.notes}} </td> 
-            </tr>
-         {% endfor %}
-      </tbody>
-   </table> 
-</div>
 {% endif %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
     <script>
@@ -431,6 +351,38 @@
                 $("#divGFG").append(p);
             });
         });
+           
+   // export to csv code
+   document.getElementById("export-btn").addEventListener("click", function(){
+    var rowCount = document.querySelectorAll("table tbody tr").length;
+    if (rowCount > 0) {
+        var data = [];
+        var headers = [];
+        document.querySelectorAll("table th").forEach(function(item){
+            headers.push(item.innerText);
+        });
+        data.push(headers.join(","));
+    
+        document.querySelectorAll("table tbody tr").forEach(function(row){
+            var rowData = [];
+            row.querySelectorAll("td").forEach(function(cell){
+                rowData.push(cell.innerText.replace(/,/g, ''));
+            });
+            data.push(rowData.join(","));
+        });
+    
+        var csvData = data.join("\n");
+        var blob = new Blob([csvData], {type: 'text/csv'});
+        var url = window.URL.createObjectURL(blob);
+    
+        var a = document.createElement("a");
+        a.href = url;
+        a.download = "Query Results.csv";
+        a.click();
+    } else {
+        alert('No results to download. Please perform a search');
+    }
+});
     </script>
     <div class="modal fade" 
          id="gfgmodal"
@@ -463,4 +415,144 @@
             </div>
         </div>
     </div>
+    <script>
+        function MultiselectDropdown(options){
+        var config={
+            search:true,
+            height:'15rem',
+            placeholder:'select',
+            txtSelected:'selected',
+            txtAll:'All',
+            txtRemove: 'Remove',
+            txtSearch:'search',
+            ...options
+        };
+        function newEl(tag,attrs){
+            var e=document.createElement(tag);
+            if(attrs!==undefined) Object.keys(attrs).forEach(k=>{
+            if(k==='class') { Array.isArray(attrs[k]) ? attrs[k].forEach(o=>o!==''?e.classList.add(o):0) : (attrs[k]!==''?e.classList.add(attrs[k]):0)}
+            else if(k==='style'){  
+                Object.keys(attrs[k]).forEach(ks=>{
+                e.style[ks]=attrs[k][ks];
+                });
+            }
+            else if(k==='text'){attrs[k]===''?e.innerHTML='&nbsp;':e.innerText=attrs[k]}
+            else e[k]=attrs[k];
+            });
+            return e;
+        }
+
+        
+        document.querySelectorAll("select[multiple]").forEach((el,k)=>{
+            
+            var div=newEl('div',{class:'multiselect-dropdown',style:{width:config.style?.width??el.clientWidth+'px',padding:config.style?.padding??''}});
+            el.style.display='none';
+            el.parentNode.insertBefore(div,el.nextSibling);
+            var listWrap=newEl('div',{class:'multiselect-dropdown-list-wrapper'});
+            var list=newEl('div',{class:'multiselect-dropdown-list',style:{height:config.height}});
+            var search=newEl('input',{class:['multiselect-dropdown-search'].concat([config.searchInput?.class??'form-control']),style:{width:'100%',display:el.attributes['multiselect-search']?.value==='true'?'block':'none'},placeholder:config.txtSearch});
+            listWrap.appendChild(search);
+            div.appendChild(listWrap);
+            listWrap.appendChild(list);
+
+            el.loadOptions=()=>{
+            list.innerHTML='';
+            
+            if(el.attributes['multiselect-select-all']?.value=='true'){
+                var op=newEl('div',{class:'multiselect-dropdown-all-selector'})
+                var ic=newEl('input',{type:'checkbox'});
+                op.appendChild(ic);
+                op.appendChild(newEl('label',{text:config.txtAll}));
+        
+                op.addEventListener('click',()=>{
+                op.classList.toggle('checked');
+                op.querySelector("input").checked=!op.querySelector("input").checked;
+                
+                var ch=op.querySelector("input").checked;
+                list.querySelectorAll(":scope > div:not(.multiselect-dropdown-all-selector)")
+                    .forEach(i=>{if(i.style.display!=='none'){i.querySelector("input").checked=ch; i.optEl.selected=ch}});
+        
+                el.dispatchEvent(new Event('change'));
+                });
+                ic.addEventListener('click',(ev)=>{
+                ic.checked=!ic.checked;
+                });
+                el.addEventListener('change', (ev)=>{
+                let itms=Array.from(list.querySelectorAll(":scope > div:not(.multiselect-dropdown-all-selector)")).filter(e=>e.style.display!=='none')
+                let existsNotSelected=itms.find(i=>!i.querySelector("input").checked);
+                if(ic.checked && existsNotSelected) ic.checked=false;
+                else if(ic.checked==false && existsNotSelected===undefined) ic.checked=true;
+                });
+        
+                list.appendChild(op);
+            }
+
+            Array.from(el.options).map(o=>{
+                var op=newEl('div',{class:o.selected?'checked':'',optEl:o})
+                var ic=newEl('input',{type:'checkbox',checked:o.selected});
+                op.appendChild(ic);
+                op.appendChild(newEl('label',{text:o.text}));
+
+                op.addEventListener('click',()=>{
+                op.classList.toggle('checked');
+                op.querySelector("input").checked=!op.querySelector("input").checked;
+                op.optEl.selected=!!!op.optEl.selected;
+                el.dispatchEvent(new Event('change'));
+                });
+                ic.addEventListener('click',(ev)=>{
+                ic.checked=!ic.checked;
+                });
+                o.listitemEl=op;
+                list.appendChild(op);
+            });
+            div.listEl=listWrap;
+
+            div.refresh=()=>{
+                div.querySelectorAll('span.optext, span.placeholder').forEach(t=>div.removeChild(t));
+                var sels=Array.from(el.selectedOptions);
+                if(sels.length>(el.attributes['multiselect-max-items']?.value??5)){
+                div.appendChild(newEl('span',{class:['optext','maxselected'],text:sels.length+' '+config.txtSelected}));          
+                }
+                else{
+                sels.map(x=>{
+                    var c=newEl('span',{class:'optext',text:x.text, srcOption: x});
+                    if((el.attributes['multiselect-hide-x']?.value !== 'true'))
+                    c.appendChild(newEl('span',{class:'optdel',text:'🗙',title:config.txtRemove, onclick:(ev)=>{c.srcOption.listitemEl.dispatchEvent(new Event('click'));div.refresh();ev.stopPropagation();}}));
+
+                    div.appendChild(c);
+                });
+                }
+                if(0==el.selectedOptions.length) div.appendChild(newEl('span',{class:'placeholder',text:el.attributes['placeholder']?.value??config.placeholder}));
+            };
+            div.refresh();
+            }
+            el.loadOptions();
+            
+            search.addEventListener('input',()=>{
+            list.querySelectorAll(":scope div:not(.multiselect-dropdown-all-selector)").forEach(d=>{
+                var txt=d.querySelector("label").innerText.toUpperCase();
+                d.style.display=txt.includes(search.value.toUpperCase())?'block':'none';
+            });
+            });
+
+            div.addEventListener('click',()=>{
+            div.listEl.style.display='block';
+            search.focus();
+            search.select();
+            });
+            
+            document.addEventListener('click', function(event) {
+            if (!div.contains(event.target)) {
+                listWrap.style.display='none';
+                div.refresh();
+            }
+            });    
+        });
+        }
+
+        window.addEventListener('load',()=>{
+        MultiselectDropdown(window.MultiselectDropdownOptions);
+        });
+        
+    </script>
 {% endblock %}

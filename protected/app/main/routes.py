@@ -281,13 +281,14 @@ def classification_filter(galaxies, include, exclude):
     return galaxies
 
 
-def species_filter(galaxies, include):
+def species_filter(galaxies, include, exclude):
     """
     Filters out the query based on the lists of species to include from the search.
 
     Parameters:
         galaxies (db.session.query): the query object to filter.
         include (list[str]): list of the species to include in the search.
+        exclude (list[str]): list of the species to exclude in the search.
     Returns:
         galaxies (db.session.query): refined query.
     """
@@ -295,6 +296,10 @@ def species_filter(galaxies, include):
     if "All" not in include:
         galaxies = galaxies.filter((Line.species.in_(include) | (Line.species == None)) 
                                     | (Line.id == None))
+        
+    if "None" not in exclude:
+        galaxies = galaxies.filter(~Line.species.in_(exclude))
+    
     return galaxies
 
 
@@ -512,7 +517,8 @@ def edit_profile():
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', title='Edit Profile', form=form, user=user)
 
-
+'''
+#Original main route
 @bp.route("/main", methods=['GET', 'POST'])
 def main():
     """
@@ -587,6 +593,64 @@ def main():
 
     return render_template("/main.html", galaxies=galaxies, lines=lines,
                            list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
+
+'''
+#new main route with pagination
+@bp.route("/main", methods=['GET', 'POST'])
+def main():
+    form = DynamicSearchForm()
+    if form.submit.data:
+        name = form.galaxy_name.data
+        galaxy = Galaxy.query.filter_by(name=name).first_or_404()
+
+        return redirect(url_for("main.galaxy", name=galaxy.name))
+
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10)
+    if per_page == 'all':
+        per_page = Galaxy.query.count()
+    else:
+        per_page = int(per_page)
+
+    galaxies = Galaxy.query.order_by(Galaxy.name).paginate(page, per_page, False)
+
+    galaxies_count = galaxies.total 
+
+    count_list = list(range(galaxies_count))
+
+    list_of_lines_per_species = []
+    for galaxy in galaxies.items:
+        list_of_lines_per_species.append([])
+        id = galaxy.id
+        species = db.session.query(Line.species).filter(Line.galaxy_id == id).distinct()
+        if species is not None:
+            for s in species:
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == id) & (Line.species == s[0])).count()
+                list_of_lines_per_species[-1].append((s[0], lines_count))
+
+    # rounding redshift and uncertainties.
+    for galaxy in galaxies.items:
+        galaxy.redshift, galaxy.redshift_error, _ = round_redshift(
+            galaxy.redshift,
+            galaxy.redshift_error,
+            galaxy.redshift_error,
+            True,
+            False)
+
+        species = db.session.query(Line.species).filter(Line.galaxy_id == galaxy.id).distinct()
+        if species is not None:
+            for s in species:
+                lines_count = db.session.query(Line.id).filter((Line.galaxy_id == galaxy.id) & (Line.species == s[0])).count()
+                if galaxy.lines_per_species:
+                    galaxy.lines_per_species = galaxy.lines_per_species + "{}: {}\n".format(s[0], lines_count)
+                else:
+                    galaxy.lines_per_species = "{}: {}\n".format(s[0], lines_count)
+
+    lines = db.session.query(Line.galaxy_id, Line.species).distinct().all()
+
+    return render_template("/main.html", min=min, galaxies=galaxies, lines=lines,
+                           list_of_lines_per_species=list_of_lines_per_species, count_list=count_list, form=form)
+
 
 
 @bp.route('/contribute', methods=['GET'])
@@ -711,7 +775,7 @@ def query_results():
             galaxies = classification_filter(galaxies, form.classification.data, form.remove_classification.data)
 
             # Species filter
-            galaxies = species_filter(galaxies, form.species.data)
+            galaxies = species_filter(galaxies, form.species.data, form.remove_species.data)
 
             # Line parameters filter
             galaxies = line_filter(galaxies, form)
@@ -719,49 +783,50 @@ def query_results():
             # final query to be returned (if galaxy search)
             galaxies = galaxies.distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
 
-        # Query displaying lines based on the data from form
-        if form.lineSearch.data:
-            if (form.right_ascension_point.data != None) and (
-                    form.declination_point.data != None) and (
-                    (form.radius_d.data != None) or (form.radius_m.data != None) or (
-                    form.radius_s.data != None)):
-                distance = math.radians(
-                    to_zero(form.radius_d.data) + to_zero(form.radius_m.data) / 60 + to_zero(
-                        form.radius_s.data) / 3600)
-                galaxies = db.session.query(Galaxy, Line).outerjoin(Galaxy)
-                galaxies = within_distance(galaxies, form.right_ascension_point.data,
-                                           form.declination_point.data, distance=distance)
+        # # Query displaying lines based on the data from form
+        # if form.lineSearch.data:
+        #     if (form.right_ascension_point.data != None) and (
+        #             form.declination_point.data != None) and (
+        #             (form.radius_d.data != None) or (form.radius_m.data != None) or (
+        #             form.radius_s.data != None)):
+        #         distance = math.radians(
+        #             to_zero(form.radius_d.data) + to_zero(form.radius_m.data) / 60 + to_zero(
+        #                 form.radius_s.data) / 3600)
+        #         galaxies = db.session.query(Galaxy, Line).outerjoin(Galaxy)
+        #         galaxies = within_distance(galaxies, form.right_ascension_point.data,
+        #                                    form.declination_point.data, distance=distance)
 
-            else:
-                galaxies = session.query(Galaxy, Line).outerjoin(Galaxy)
+        #     else:
+        #         galaxies = session.query(Galaxy, Line).outerjoin(Galaxy)
 
-            # Galaxy filter
-            galaxies = galaxy_filter(galaxies, form)
+        #     # Galaxy filter
+        #     galaxies = galaxy_filter(galaxies, form)
 
-            # Check for classification
-            galaxies = classification_filter(galaxies, form.classification.data, form.remove_classification.data)
+        #     # Check for classification
+        #     galaxies = classification_filter(galaxies, form.classification.data, form.remove_classification.data)
             
-            # Species filter
-            galaxies = species_filter(galaxies, form.species.data)
+        #     # Species filter
+        #     galaxies = species_filter(galaxies, form.species.data)
             
-            # Filter based on line data
+        #     # Filter based on line data
 
-            galaxies = line_filter(galaxies, form)
+        #     galaxies = line_filter(galaxies, form)
 
-            # final query to be returned (if line search)
-            galaxies = galaxies.order_by(Galaxy.name).all()
+        #     # final query to be returned (if line search)
+        #     galaxies = galaxies.order_by(Galaxy.name).all()
             
-            # round values before we return query
-            for object in galaxies:
-                line = object[1]
-                line.observed_line_redshift,\
-                line.observed_line_redshift_uncertainty_positive,\
-                line.observed_line_redshift_uncertainty_negative = round_redshift(
-                    line.observed_line_redshift,
-                    line.observed_line_redshift_uncertainty_positive,
-                    line.observed_line_redshift_uncertainty_negative
-                )
-
+        #     # round values before we return query
+        #     for object in galaxies:
+        #         line = object[1]
+        #         line.observed_line_redshift,\
+        #         line.observed_line_redshift_uncertainty_positive,\
+        #         line.observed_line_redshift_uncertainty_negative = round_redshift(
+        #             line.observed_line_redshift,
+        #             line.observed_line_redshift_uncertainty_positive,
+        #             line.observed_line_redshift_uncertainty_negative
+        #         )
+        else:
+            galaxies = db.session.query(Galaxy, Line).outerjoin(Line).distinct(Galaxy.name).group_by(Galaxy.name).order_by(Galaxy.name).all()
         return render_template("/query_results.html", galaxies=galaxies, form=form)
 
     # Get method
