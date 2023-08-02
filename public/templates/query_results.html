@@ -167,6 +167,13 @@
                {% endfor %}
             </div>
             <div class="col-md-6">
+                {{ form.remove_species.label(class="form-label") }}
+                {{ form.remove_species(class="form-select") }}
+                {% for error in form.remove_species.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+             </div>
+            <div class="col-md-6">
                {{ form.detection_type.label(class="form-label") }}
                {{ form.detection_type(class="form-select") }}
                {% for error in form.detection_type.errors %}
@@ -287,20 +294,17 @@
                {{ form.galaxySearch(class="btn btn-info") }}
             </div>
          </div>
-
          <div class="col-md-6" style="padding: 10px 50px;">
             <div class="d-grid gap-2"> 
-               {{ form.lineSearch(class="btn btn-info") }}
+                <button id="export-btn" class="btn btn-info"
+                {% if galaxies is none or galaxies|length == 0 %}
+                   disabled{% endif %}>Download Results as CSV
+                </button>
+             
             </div>
          </div>
       </div>
 </form>
-
-
-<button id="export-btn" class="btn btn-info" style="margin: 15px 40px; float: left; "
-   {% if galaxies is none or galaxies|length == 0 %}
-      disabled{% endif %}>Download Results as CSV
-</button>
 
 {% if form.galaxySearch.data %}
 <!--Supposed to desplay the results. In the development stage-->
@@ -335,119 +339,6 @@
       {% endfor %}
    </tbody>
 </table>
-
-{% endif %}
-{% if form.lineSearch.data %}
-<div style="width:100%;height:500px;line-height:1em;overflow:auto;padding:5px;">
-   <table class = "table" id = "Line">
-      <thead>
-         <tr>
-            <!-- replacying the latex to allow export -->
-            <th>Galaxy Name</th>
-            <th><i>Species</i></th>
-            <th><i>f<sub>rest</sub> (GHz)</i></th>
-            <th><i>S Δv (Jy km s<sup>-1</sup>)</i></th>
-            <th><i>+σ<sub>S ΔV</sub> (Jy km s<sup>-1</sup>)</i></th>
-            <th><i>-σ<sub>S ΔV</sub> (Jy km s<sup>-1</sup>)</i></th>
-            <th><i>S<sub>max</sub> (mJy)</i></th>
-            <th><i>+σ<sub>S<sub>max</sub></sub> (mJy)</i></th>
-            <th><i>-σ<sub>S<sub>max</sub></sub> (mJy)</i></th>
-            <th><i>FWHM (kms<sup>-1</sup>)</i></th>
-            <th><i>+σ<sub>FWHM</sub> (kms<sup>-1</sup>)</i></th>
-            <th><i>-σ<sub>FWHM</sub> (kms<sup>-1</sup>)</i></th>
-            <th><i>z</i></th>
-            <th><i>+σ<sub>z</sub></i></th>
-            <th><i>-σ<sub>z</sub></i></th>
-            <th><i>Telescope Type</i></th>
-            <th><i>Beam Maj. FWHM ('')</i></th>
-            <th><i>Beam Min. FWHM ('')</i></th>
-            <th><i>Beam P.A. (*)</i></th>
-            <th><i>Reference</i></th>
-            <th><i>Notes</i></th>
-            <th style = "display: none"><i>Text</i></th>
-
-            <!-- Original tags 
-            <th>Galaxy Name</th>
-            <th>\( Species \)</th>
-            <th>\( f_{rest} \) \( (GHz) \)</th>
-            <th>\( S \Delta v \) \((Jy \ km \ s^{-1}) \)</th>
-            <th>\( +\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-            <th>\( -\sigma_{S \Delta V} \) \( (Jy \ km \ s^{-1}) \)</th>
-            <th>\( S_{max} \) \( (mJy) \)</th>
-            <th>\( +\sigma_{S_max} \) \( (mJy) \)</th>
-            <th>\( -\sigma_{S_max} \) \( (mJy) \)</th>
-            <th>\( FWHM \) \( (kms^{-1}) \)</th>
-            <th>\( +\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-            <th>\( -\sigma_{FWHM} \) \( (kms^{-1}) \)</th>
-            <th>\( z \) </th>
-            <th>\( +\sigma_{z} \) </th>
-            <th>\( -\sigma_{z} \) </th>
-            <th>\( Telescope \) \( Type \)</th>
-            <th>\( Beam \ Maj. \) \(FWHM ('') \)</th>
-            <th>\( Beam \ Min. \) \(FWHM ('') \)</th>
-            <th>\( Beam \ P.A. \) \( (*) \)</th>
-            <th>\( Reference \)</th>
-            <th>\( Notes \)</th>
-            <th style = "display: none">\( Text \) </th> -->
-         </tr>
-      </thead>
-      
-      <tbody>
-         {% for element in galaxies %}
-            {% set l = element[1] %}  
-            {% set g = element[0] %}
-            <tr>
-               <td><a href="{{ url_for('main.galaxy', name=g.name) }}">{{ g.name }}</a></td>
-               <td>{{ l.species }}</td>
-               <td>{{ l.emitted_frequency }}</td>
-               <td>{{ l.integrated_line_flux }}</td>
-               <td>{{ l.integrated_line_flux_uncertainty_positive }}</td>
-               <td>
-                  {% if l.integrated_line_flux_uncertainty_negative == None %}
-                     {{ l.integrated_line_flux_uncertainty_positive }}
-                  {% else %}
-                     {{ l.integrated_line_flux_uncertainty_negative }}
-                  {% endif %}
-               </td>
-               <td>{{ l.peak_line_flux }}</td>
-               <td>{{ l.peak_line_flux_uncertainty_positive }}</td>
-               <td>
-                  {% if l.peak_line_flux_uncertainty_negative == None %}
-                     {{ l.peak_line_flux_uncertainty_positive }}
-                  {% else %}
-                     {{ l.peak_line_flux_uncertainty_negative }}
-                  {% endif %}
-               </td>
-               <td>{{ l.line_width }}</td>
-               <td>{{ l.line_width_uncertainty_positive }}</td>
-               <td>
-                  {% if l.line_width_uncertainty_negative == None %}
-                     {{ l.line_width_uncertainty_positive }}
-                  {% else %}
-                     {{ l.line_width_uncertainty_negative }}
-                  {% endif %}
-               </td>
-               <td>{{ l.observed_line_redshift }}</td>
-               <td>{{ l.observed_line_redshift_uncertainty_positive }}</td>
-               <td>
-                  {% if l.observed_line_redshift_uncertainty_negative == None %}
-                     {{ l.observed_line_redshift_uncertainty_positive }}
-                  {% else %}
-                     {{ l.observed_line_redshift_uncertainty_negative }}
-                  {% endif %}
-               </td>                
-               <td>{{ l.detection_type }}</td>
-               <td>{{ l.observed_beam_major }}</td>
-               <td>{{ l.observed_beam_minor }}</td>
-               <td>{{ l.observed_beam_angle }}</td>
-               <td><a href="https://ui.adsabs.harvard.edu/abs/{{ l.reference }}" target="_blank">{{ l.reference }}</a></td>
-               <td> <button class="gfgselect btn btn-info" data-toggle="modal" data-target="#gfgmodal"> Show </button></td>   
-               <td class = "notes" style = "display:none"> {{l.notes}} </td> 
-            </tr>
-         {% endfor %}
-      </tbody>
-   </table> 
-</div>
 {% endif %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/coordinates.js') }}"></script>
     <script>

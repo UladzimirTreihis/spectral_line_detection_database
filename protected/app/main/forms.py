@@ -4,9 +4,7 @@ from wtforms.validators import Regexp, ValidationError, DataRequired, Length, UR
 from flask import request
 from config import dec_reg_exp, ra_reg_exp, ref_reg_exp
 from app.models import User
-from species import species
-
-species.insert(0, ('All', 'All'))
+from species import species as species_choices
 
 classification_choices = [('LBG', 'LBG (Lyman Break Galaxy)'),
                           ('MS', 'MS (Main Sequence Galaxy)'),
@@ -21,9 +19,6 @@ classification_choices = [('LBG', 'LBG (Lyman Break Galaxy)'),
                           ('RG', 'RG (Radio Galaxy)'),
                           ('BzK', 'BzK (BzK-selected Galaxy)'),
                           ('ERO', 'ERO (Extremely Red Object)')]
-
-classification_choices_w_none = [('None', 'None')] + classification_choices
-classification_choices_w_all = [('All', 'All')] + classification_choices
 
 
 class EditProfileForm(FlaskForm):
@@ -87,11 +82,11 @@ class AdvancedSearchForm(FlaskForm):
                                choices=[('Either', 'Either'), ('Lensed', 'Lensed'), ('Unlensed', 'Unlensed')],
                                validate_choice=False)
     classification = SelectMultipleField(u'Include Classification',
-                                         choices=classification_choices_w_all,
+                                         choices=classification_choices,
                                          validate_choice=False,
                                          render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
     remove_classification = SelectMultipleField(u'Exclude Classification',
-                                        choices=classification_choices_w_none,
+                                        choices=classification_choices,
                                         validate_choice=False,
                                         render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
 
@@ -99,9 +94,13 @@ class AdvancedSearchForm(FlaskForm):
 
     emitted_frequency_min = FloatField('Emitted Frequency (GHz) min:', validators=[Optional(), NumberRange(min=0)])
     emitted_frequency_max = FloatField('Emitted Frequency (GHz) max:', validators=[Optional(), NumberRange(min=0)])
-    species = SelectMultipleField(u'Select Species', choices=species,
+    species = SelectMultipleField(u'Select Species', choices=species_choices,
                           validate_choice=False,
                           render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
+    remove_species = SelectMultipleField(u'Exclude Species',
+                                        choices=species_choices,
+                                        validate_choice=False,
+                                        render_kw = {"multiselect-search":"true", "multiselect-select-all":"true"})
     integrated_line_flux_min = FloatField('Integrated Line Flux (Jy*km/s) min:',
                                           validators=[Optional(), NumberRange(min=0)])
     integrated_line_flux_max = FloatField('Integrated Line Flux (Jy*km/s) max:',
@@ -130,8 +129,8 @@ class AdvancedSearchForm(FlaskForm):
 
     reference = StringField('Citation (use ADS bibcode, example:  2019ApJ...879...52S)', validators=[Regexp(ref_reg_exp, message="Check Bibcode format"), Optional()])
 
-    galaxySearch = SubmitField(label='Search for Galaxies')
-    lineSearch = SubmitField(label="Search for Lines")
+    galaxySearch = SubmitField(label='Search')
+    # lineSearch = SubmitField(label="Search for Lines")
 
 
 class AddGalaxyForm(FlaskForm):
@@ -185,7 +184,7 @@ class AddLineForm(FlaskForm):
                               render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
     emitted_frequency = StringField('Emitted Frequency', validators=[DataRequired()])
-    species = SelectField(u'Select Species', choices=species, validators=[DataRequired()])
+    species = SelectField(u'Select Species', choices=species_choices, validators=[DataRequired()])
     right_ascension = StringField('Right Ascension', validators=[DataRequired()])
     declination = StringField('Declination', validators=[DataRequired()])
     integrated_line_flux = FloatField('Integrated Line Flux (in Jy*km/s)',
@@ -231,7 +230,7 @@ class EditLineForm(FlaskForm):
                               render_kw={"placeholder": "Search Galaxy Name"})
     galaxy_form = SubmitField('Add a New Galaxy ')
     emitted_frequency = FloatField('Emitted Frequency', validators=[DataRequired(), NumberRange(min=0)])
-    species = SelectField(u'Select Species', choices=species, validators=[DataRequired()])
+    species = SelectField(u'Select Species', choices=species_choices, validators=[DataRequired()])
     integrated_line_flux = FloatField('Integrated Line Flux', validators=[DataRequired(), NumberRange(min=0)])
     integrated_line_flux_uncertainty_positive = FloatField('Integrated Line Flux Positive Uncertainty',
                                                            validators=[DataRequired(), NumberRange(min=0)])
