@@ -21,7 +21,8 @@ from app.models import (
     Post,
     TempGalaxy,
     TempLine,
-    User
+    User,
+    Report
 )
 from app.main.forms import (
     AddGalaxyForm,
@@ -31,6 +32,7 @@ from app.main.forms import (
     EditLineForm,
     EditProfileForm,
     SearchForm,
+    SubmitReportForm,
     UploadFileForm,
     DynamicSearchForm
 )
@@ -2285,3 +2287,40 @@ def convert_to_CSV(table, identifier, to_frequency="0"):
             response.headers['Content-Disposition'] = cd
             response.mimetype = 'text/csv'
             return response
+
+@bp.route("/submit-report", methods=['GET', 'POST'])
+@login_required
+def submit_report():
+    """
+    Submit technical report form route. If users with to submit comments regarding technical issues
+    they will be able to do so through this route. Errors encountered when using the website will also be 
+    routed to this page.
+
+    On GET:
+        Parameters:
+            /submit-report
+
+        Returns:
+            form (FlaskForm): SubmitReportFrom
+            submit-report.html
+
+    On POST:
+        Parameters:
+            form (FlaskForm): Filled form with data to be committed.
+
+        Returns:
+            db commit.
+    """
+
+    form = SubmitReportForm()
+    session = Session()
+    if form.validate_on_submit():
+        if form.submit.data:
+            report = Report(subject=form.subject.data, desc=form.desc.data,
+                            user_submitted=current_user.username, user_email=current_user.email,
+                            time_submitted=datetime.utcnow())
+            db.session.add(report)
+            db.session.commit()
+            flash('Report has been noted. ')
+            return redirect(url_for('main.main'))
+    return render_template('submit_report.html', title='Submit Report Form', form=form)

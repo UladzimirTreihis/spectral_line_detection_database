@@ -12,5 +12,6 @@ __all__ = [
     'User',
     'Role',
     'Post',
+    'Report',
     ''
 ]

@@ -243,3 +243,13 @@ class EditLine(db.Model):
     galaxy_name = db.Column(db.String(128))
     right_ascension = db.Column(db.Float(32))
     declination = db.Column(db.Float(32))
+
+class Report(db.Model):
+    __tablename__ = 'reports'
+    __table_args__ = {'extend_existing': True}
+    id = db.Column(db.Integer, primary_key=True)
+    subject = db.Column(db.String(128))
+    desc = db.Column(db.String(128))
+    user_submitted = db.Column(db.String(128))
+    user_email = db.Column(db.String(128))
+    time_submitted = db.Column(db.DateTime, default=datetime.utcnow)
