@@ -270,3 +270,8 @@ class EditLineForm(FlaskForm):
 class UploadFileForm(FlaskForm):
     file = FileField('Choose File For Upload')
     submit = SubmitField('Submit')
+
+class SubmitReportForm(FlaskForm):
+    subject = StringField('Subject', validators=[DataRequired()])
+    desc = TextAreaField('Feedback and Description of Error', validators=[DataRequired()])
+    submit = SubmitField('Submit')

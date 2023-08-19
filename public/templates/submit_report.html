@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Submit Report Form
+{% endblock %}
+
+{% block page_content %}
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <h1>Submit Report</h1>
+    <br>
+    <p>
+        {{ form.subject.label(class="form-label") }}<br>
+        {{ form.subject(size=32, class="form-control") }}<br>
+        {% for error in form.subject.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.desc.label(class="form-label") }}<br>
+        {{ form.desc(cols=32, rows=6, class="form-control") }}<br>
+        {% for error in form.desc.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <div class="d-grid gap-2">{{ form.submit(class="btn btn-info") }}</div>
+</form>
+{% endblock %}

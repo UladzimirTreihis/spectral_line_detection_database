@@ -27,7 +27,8 @@ from app.models import (
     Post,
     EditGalaxy,
     EditLine,
-    Freq
+    Freq,
+    Report
 )
 from app import (
     db,
@@ -265,7 +266,6 @@ class TempGalaxyView(ModelView):
         for id in ids:
             approve_tempgalaxy(id)
             flash("Galaxy has been Added")
-
 
 class EditGalaxyView(ModelView):
 
@@ -838,6 +838,7 @@ admin.add_view(UserView(User, db.session))
 # admin.add_view(AdminView(Role, db.session))
 admin.add_view(AdminView(Galaxy, db.session))
 admin.add_view(AdminView(Line, db.session))
+admin.add_view(AdminView(Report, db.session))
 admin.add_view(PostsView(name='Submissions', endpoint='posts'))
 admin.add_view(AdminView(Post, db.session, category="For Developer Only"))
 admin.add_view(TempGalaxyView(TempGalaxy, db.session, category="For Developer Only"))
